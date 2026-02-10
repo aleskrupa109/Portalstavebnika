@@ -1,0 +1,1909 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ISSŘ - Záměry</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+    <style>
+        /* ===========================================
+           ISSŘ HLAVIČKA
+           =========================================== */
+        .issr-header {
+            background-color: #004289;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            padding: 0 24px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1), 0 2px 4px rgba(0,0,0,0.06);
+        }
+
+        .issr-header__logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: white;
+        }
+
+        .issr-header__logo-img {
+            height: 40px;
+            width: auto;
+        }
+
+        .issr-header__title {
+            font-size: 12px;
+            font-weight: 400;
+            color: white;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+
+        .issr-header__search {
+            flex: 1;
+            max-width: 500px;
+            margin: 0 40px;
+        }
+
+        .issr-header__search-input {
+            width: 100%;
+            height: 32px;
+            padding: 0 16px;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .issr-header__search-input::placeholder {
+            color: #adb5bd;
+        }
+
+        .issr-header__actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-left: auto;
+        }
+
+        .issr-header__notification {
+            position: relative;
+            color: white;
+            cursor: pointer;
+        }
+
+        .issr-header__notification-icon {
+            width: 20px;
+            height: 20px;
+        }
+
+        .issr-header__notification-badge {
+            position: absolute;
+            top: -6px;
+            right: -8px;
+            background-color: #0066cc;
+            color: white;
+            font-size: 10px;
+            font-weight: 600;
+            min-width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 4px;
+        }
+
+        .issr-header__user {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: white;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .issr-header__user-icon {
+            width: 16px;
+            height: 16px;
+        }
+
+        @media (max-width: 992px) {
+            .issr-header__search {
+                max-width: 300px;
+                margin: 0 20px;
+            }
+            
+            .issr-header__title {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .issr-header {
+                padding: 0 16px;
+            }
+            
+            .issr-header__search {
+                display: none;
+            }
+        }
+
+        /* ===========================================
+           ZÁKLADNÍ STYLY
+           =========================================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: 13px;
+            color: #333;
+            background: #fff;
+            line-height: 1.4;
+        }
+        /* Layout */
+        .app-container {
+            display: flex;
+            min-height: calc(100vh - 56px);
+        }
+
+        /* ===========================================
+           SVISLÉ NAVIGAČNÍ MENU (NAV RAIL)
+           =========================================== */
+        .nav-rail {
+            width: 56px;
+            min-width: 56px;
+            background: #1a1a1a;
+            border-right: 1px solid #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 12px 0;
+            gap: 4px;
+        }
+        
+        .nav-rail-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
+            border-radius: 8px;
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.15s;
+            position: relative;
+        }
+        
+        .nav-rail-item:hover {
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+        }
+        
+        .nav-rail-item.active {
+            background: rgba(255,255,255,0.15);
+            color: #fff;
+        }
+        
+        .nav-rail-item .material-icons-outlined {
+            font-size: 22px;
+        }
+        
+        .nav-rail-item-label {
+            font-size: 9px;
+            font-weight: 500;
+            margin-top: 2px;
+            text-align: center;
+        }
+        
+        .nav-rail-item.disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+        
+        .nav-rail-item.disabled:hover {
+            background: transparent;
+            color: rgba(255,255,255,0.7);
+        }
+        
+        .nav-rail-divider {
+            width: 32px;
+            height: 1px;
+            background: rgba(255,255,255,0.2);
+            margin: 8px 0;
+        }
+
+        /* ===========================================
+           SIDEBAR
+           =========================================== */
+        .sidebar {
+            width: 200px;
+            background: #f8f9fa;
+            border-right: 1px solid #e0e0e0;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        .sidebar-header {
+            padding: 16px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .sidebar-title {
+            font-size: 16px;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 12px;
+        }
+        .btn-new {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #004289;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-new:hover {
+            background: #1557b0;
+        }
+        .btn-new .material-icons-outlined {
+            font-size: 18px;
+        }
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #fff;
+            color: #333;
+            border: 1px solid #dadce0;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 8px;
+        }
+        .btn-secondary:hover {
+            background: #f1f3f4;
+            border-color: #c0c0c0;
+        }
+        .btn-secondary .material-icons-outlined {
+            font-size: 18px;
+        }
+        /* Navigation */
+        .nav-menu {
+            padding: 8px 0;
+            flex: 1;
+        }
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 16px;
+            color: #333;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+        .nav-item:hover {
+            background: #e8eaed;
+        }
+        .nav-item.active {
+            background: #e8f0fe;
+            color: #1a73e8;
+        }
+        .nav-item .material-icons-outlined {
+            font-size: 20px;
+            color: #5f6368;
+        }
+        .nav-item.active .material-icons-outlined {
+            color: #1a73e8;
+        }
+        .nav-item-text {
+            flex: 1;
+            font-size: 13px;
+        }
+        .nav-item-expand {
+            font-size: 20px !important;
+            transition: transform 0.2s;
+        }
+        .nav-item.expanded .nav-item-expand {
+            transform: rotate(180deg);
+        }
+        .nav-submenu {
+            display: none;
+            padding-left: 30px;
+        }
+        .nav-submenu.show {
+            display: block;
+        }
+        .nav-submenu .nav-item {
+            padding: 8px 16px;
+            font-size: 12px;
+        }
+
+        /* ===========================================
+           HLAVNÍ OBSAH
+           =========================================== */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+        /* Toolbar */
+        .toolbar {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            border-bottom: 1px solid #e0e0e0;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .toolbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-left: auto;
+        }
+        .toolbar-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border: 1px solid #dadce0;
+            border-radius: 4px;
+            background: #fff;
+            color: #5f6368;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .toolbar-btn:hover {
+            background: #f1f3f4;
+            border-color: #c0c0c0;
+        }
+        .toolbar-btn .material-icons-outlined {
+            font-size: 18px;
+        }
+        .filter-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: #e8f0fe;
+            color: #1a73e8;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        /* ===========================================
+           TABULKA
+           =========================================== */
+        .table-container {
+            flex: 1;
+            overflow: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+        th {
+            position: sticky;
+            top: 0;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e0e0e0;
+            padding: 10px 12px;
+            text-align: left;
+            font-weight: 500;
+            color: #5f6368;
+            white-space: nowrap;
+        }
+        th .material-icons-outlined {
+            font-size: 16px;
+            vertical-align: middle;
+            margin-left: 4px;
+            opacity: 0.5;
+        }
+        th.sortable {
+            cursor: pointer;
+        }
+        th.sortable:hover {
+            background: #e8eaed;
+        }
+        th.sorted {
+            color: #1a73e8;
+        }
+        th.sorted .material-icons-outlined {
+            opacity: 1;
+            color: #1a73e8;
+        }
+        td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #f0f0f0;
+            color: #333;
+            max-width: 300px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        tr {
+            cursor: pointer;
+            transition: background 0.1s;
+        }
+        tr:hover {
+            background: #f5f7fa;
+        }
+        .text-muted {
+            color: #80868b;
+        }
+        .link-primary {
+            color: #1a73e8;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .link-primary:hover {
+            text-decoration: underline;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+        .status-aktivni {
+            background: #e6f4ea;
+            color: #137333;
+        }
+        .status-dokoncene {
+            background: #e8eaed;
+            color: #5f6368;
+        }
+        .status-zrusene {
+            background: #fce8e6;
+            color: #c5221f;
+        }
+        .row-actions {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .row-action-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border: none;
+            border-radius: 4px;
+            background: transparent;
+            color: #5f6368;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .row-action-btn:hover {
+            background: #e8eaed;
+            color: #202124;
+        }
+        .row-action-btn .material-icons-outlined {
+            font-size: 18px;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 60px;
+            }
+            .sidebar-header {
+                padding: 12px;
+            }
+            .sidebar-title,
+            .nav-item-text,
+            .nav-item-expand {
+                display: none;
+            }
+            .nav-item {
+                justify-content: center;
+                padding: 12px;
+            }
+            
+            .btn-new span {
+                display: none;
+            }
+            
+            .btn-new {
+                padding: 8px;
+            }
+            
+            .btn-secondary span:not(.material-icons-outlined) {
+                display: none;
+            }
+            
+            .btn-secondary {
+                padding: 8px;
+            }
+        }
+        
+        /* ===========================================
+           HORIZONTÁLNÍ FILTR - ESHOP STYL
+           =========================================== */
+        .filter-bar {
+            background: #fff;
+            border-bottom: 1px solid #e0e0e0;
+            padding: 12px 16px;
+        }
+        
+        .filter-bar-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-dropdown {
+            position: relative;
+        }
+        
+        .filter-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 12px;
+            background: #fff;
+            border: 1px solid #dadce0;
+            border-radius: 20px;
+            font-size: 13px;
+            color: #3c4043;
+            cursor: pointer;
+            transition: all 0.15s;
+            white-space: nowrap;
+        }
+        
+        .filter-btn:hover {
+            background: #f1f3f4;
+            border-color: #c0c0c0;
+        }
+        
+        .filter-btn.active {
+            background: #e8f0fe;
+            border-color: #1a73e8;
+            color: #1a73e8;
+        }
+        
+        .filter-btn .material-icons-outlined {
+            font-size: 18px;
+        }
+        
+        .filter-btn-count {
+            background: #1a73e8;
+            color: #fff;
+            font-size: 11px;
+            font-weight: 500;
+            padding: 2px 6px;
+            border-radius: 10px;
+            margin-left: 4px;
+        }
+        
+        .filter-panel {
+            position: absolute;
+            top: calc(100% + 4px);
+            left: 0;
+            min-width: 280px;
+            background: #fff;
+            border: 1px solid #dadce0;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 100;
+            display: none;
+        }
+        
+        .filter-panel.open {
+            display: block;
+        }
+        
+        .filter-panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            border-bottom: 1px solid #e8eaed;
+        }
+        
+        .filter-panel-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: #202124;
+        }
+        
+        .filter-panel-clear {
+            font-size: 12px;
+            color: #1a73e8;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+        }
+        
+        .filter-panel-clear:hover {
+            text-decoration: underline;
+        }
+        
+        .filter-panel-body {
+            padding: 12px 16px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .filter-search {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #dadce0;
+            border-radius: 6px;
+            font-size: 13px;
+            margin-bottom: 12px;
+        }
+        
+        .filter-search:focus {
+            outline: none;
+            border-color: #1a73e8;
+            box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.2);
+        }
+        
+        .filter-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 0;
+            cursor: pointer;
+            transition: background 0.1s;
+        }
+        
+        .filter-option:hover {
+            background: #f8f9fa;
+            margin: 0 -16px;
+            padding: 8px 16px;
+        }
+        
+        .filter-option input[type="checkbox"],
+        .filter-option input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #1a73e8;
+            cursor: pointer;
+        }
+        
+        .filter-option-label {
+            flex: 1;
+            font-size: 13px;
+            color: #3c4043;
+        }
+        
+        .filter-option-count {
+            font-size: 12px;
+            color: #80868b;
+        }
+        
+        .filter-panel-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+            padding: 12px 16px;
+            border-top: 1px solid #e8eaed;
+        }
+        
+        .filter-panel-footer .btn-apply {
+            padding: 8px 16px;
+            background: #1a73e8;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        
+        .filter-panel-footer .btn-apply:hover {
+            background: #1557b0;
+        }
+        
+        /* Date range */
+        .filter-date-range {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .filter-date-input {
+            flex: 1;
+            padding: 8px 10px;
+            border: 1px solid #dadce0;
+            border-radius: 6px;
+            font-size: 13px;
+        }
+        
+        .filter-date-input:focus {
+            outline: none;
+            border-color: #1a73e8;
+        }
+        
+        .filter-date-separator {
+            color: #80868b;
+            font-size: 13px;
+        }
+        
+        /* Quick date buttons */
+        .filter-quick-dates {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 12px;
+        }
+        
+        .filter-quick-date {
+            padding: 4px 10px;
+            background: #f1f3f4;
+            border: none;
+            border-radius: 12px;
+            font-size: 11px;
+            color: #5f6368;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        
+        .filter-quick-date:hover {
+            background: #e8eaed;
+        }
+        
+        .filter-quick-date.active {
+            background: #e8f0fe;
+            color: #1a73e8;
+        }
+        
+        /* Active filters tags */
+        .active-filters {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            padding: 8px 16px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .active-filters:empty {
+            display: none;
+        }
+        
+        .active-filters-label {
+            font-size: 12px;
+            color: #5f6368;
+            font-weight: 500;
+        }
+        
+        .filter-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 8px 4px 10px;
+            background: #e8f0fe;
+            border-radius: 16px;
+            font-size: 12px;
+            color: #1a73e8;
+        }
+        
+        .filter-tag-remove {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 16px;
+            height: 16px;
+            background: none;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            color: #1a73e8;
+            padding: 0;
+        }
+        
+        .filter-tag-remove:hover {
+            background: rgba(26, 115, 232, 0.2);
+        }
+        
+        .filter-tag-remove .material-icons-outlined {
+            font-size: 14px;
+        }
+        
+        .clear-all-filters {
+            font-size: 12px;
+            color: #d93025;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px 8px;
+            margin-left: auto;
+        }
+        
+        .clear-all-filters:hover {
+            text-decoration: underline;
+        }
+        
+        /* Autocomplete dropdown */
+        .filter-autocomplete {
+            position: relative;
+        }
+        
+        .filter-autocomplete-list {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: #fff;
+            border: 1px solid #dadce0;
+            border-top: none;
+            border-radius: 0 0 6px 6px;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 10;
+            display: none;
+        }
+        
+        .filter-autocomplete-list.open {
+            display: block;
+        }
+        
+        .filter-autocomplete-item {
+            padding: 8px 12px;
+            font-size: 13px;
+            cursor: pointer;
+        }
+        
+        .filter-autocomplete-item:hover {
+            background: #f1f3f4;
+        }
+        
+        .filter-autocomplete-item mark {
+            background: #fff8c5;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- ISSŘ Hlavička -->
+    <header class="issr-header">
+        <a href="../index.html" class="issr-header__logo">
+            <img src="../images/logo-issr.png" alt="ISSŘ Logo" class="issr-header__logo-img">
+            <span class="issr-header__title">INFORMAČNÍ SYSTÉM STAVEBNÍHO ŘÍZENÍ</span>
+        </a>
+        
+        <div class="issr-header__search">
+            <input type="text" class="issr-header__search-input" placeholder="Hledat...">
+        </div>
+        
+        <div class="issr-header__actions">
+            <div class="issr-header__notification">
+                <svg class="issr-header__notification-icon" viewBox="0 0 16 16" fill="currentColor">
+                    <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2M8 1.918l-.797.161A4 4 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4 4 0 0 0-3.203-3.92zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5 5 0 0 1 13 6c0 .88.32 4.2 1.22 6"></path>
+                </svg>
+                <span class="issr-header__notification-badge">99+</span>
+            </div>
+            
+            <div class="issr-header__user">
+                <span>Aleš Krupa</span>
+                <svg class="issr-header__user-icon" viewBox="0 0 16 16" fill="currentColor">
+                    <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z"></path>
+                </svg>
+            </div>
+        </div>
+    </header>
+
+    <div class="app-container">
+        <!-- Svislé navigační menu -->
+        <nav class="nav-rail">
+            <a href="dashboard.html" class="nav-rail-item" title="Domů">
+                <span class="material-icons-outlined">home</span>
+                <span class="nav-rail-item-label">Domů</span>
+            </a>
+            
+            <div class="nav-rail-divider"></div>
+            
+            <a href="zamery.html" class="nav-rail-item active" title="Záměry">
+                <span class="material-icons-outlined">push_pin</span>
+                <span class="nav-rail-item-label">Záměry</span>
+            </a>
+            <a href="rizeni.html" class="nav-rail-item" title="Řízení">
+                <span class="material-icons-outlined">work</span>
+                <span class="nav-rail-item-label">Řízení</span>
+            </a>
+            <a href="dokumenty.html" class="nav-rail-item" title="Dokumenty">
+                <span class="material-icons-outlined">mail</span>
+                <span class="nav-rail-item-label">Dokumenty</span>
+            </a>
+            
+            <div class="nav-rail-divider"></div>
+            
+            <a href="#" class="nav-rail-item disabled" title="Šablony">
+                <span class="material-icons-outlined">description</span>
+                <span class="nav-rail-item-label">Šablony</span>
+            </a>
+            <a href="#" class="nav-rail-item disabled" title="Statistiky">
+                <span class="material-icons-outlined">bar_chart</span>
+                <span class="nav-rail-item-label">Statistiky</span>
+            </a>
+            <a href="#" class="nav-rail-item disabled" title="Nastavení">
+                <span class="material-icons-outlined">settings</span>
+                <span class="nav-rail-item-label">Nastavení</span>
+            </a>
+        </nav>
+        
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-title">Záměry</div>
+                <button class="btn-new">
+                    <span class="material-icons-outlined">add</span>
+                    <span>Nový záměr</span>
+                </button>
+                <button class="btn-secondary">
+                    <span class="material-icons-outlined">map</span>
+                    <span>Zobrazit na mapě</span>
+                </button>
+            </div>
+            
+            <nav class="nav-menu">
+                <div class="nav-group">
+                    <a href="#" class="expanded nav-item" data-toggle="cela-cr">
+                        <span class="material-icons-outlined">public</span>
+                        <span class="nav-item-text">Celá ČR</span>
+                        <span class="material-icons-outlined nav-item-expand">expand_more</span>
+                    </a>
+                    <div class="nav-submenu show" id="cela-cr">
+                        <a href="#" class="active nav-item">
+                            <span class="nav-item-text">Všechny</span>
+                        </a>
+                        <a href="#" class="nav-item">
+                            <span class="nav-item-text">Aktivní</span>
+                        </a>
+                        <a href="#" class="nav-item">
+                            <span class="nav-item-text">Dokončené</span>
+                        </a>
+                        <a href="#" class="nav-item">
+                            <span class="nav-item-text">Zrušené</span>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="nav-group">
+                    <a href="#" class="expanded nav-item" data-toggle="muj-urad">
+                        <span class="material-icons-outlined">account_balance</span>
+                        <span class="nav-item-text">Můj úřad</span>
+                        <span class="material-icons-outlined nav-item-expand">expand_more</span>
+                    </a>
+                    <div class="nav-submenu show" id="muj-urad">
+                        <a href="#" class="nav-item">
+                            <span class="nav-item-text">Všechny</span>
+                        </a>
+                        <a href="#" class="nav-item">
+                            <span class="nav-item-text">Aktivní</span>
+                        </a>
+                        <a href="#" class="nav-item">
+                            <span class="nav-item-text">Dokončené</span>
+                        </a>
+                        <a href="#" class="nav-item">
+                            <span class="nav-item-text">Zrušené</span>
+                        </a>
+                    </div>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Main content -->
+        <main class="main-content">
+            <!-- Horizontální filtr -->
+            <div class="filter-bar">
+                <div class="filter-bar-row">
+                    <!-- Stav -->
+                    <div class="filter-dropdown">
+                        <button class="filter-btn" onclick="toggleFilterPanel('stav')">
+                            <span class="material-icons-outlined">flag</span>
+                            Stav
+                            <span class="material-icons-outlined">expand_more</span>
+                        </button>
+                        <div class="filter-panel" id="filter-stav">
+                            <div class="filter-panel-header">
+                                <span class="filter-panel-title">Stav záměru</span>
+                                <button class="filter-panel-clear" onclick="clearFilter('stav')">Vymazat</button>
+                            </div>
+                            <div class="filter-panel-body">
+                                <label class="filter-option">
+                                    <input type="checkbox" name="stav" value="aktivni" checked>
+                                    <span class="filter-option-label">Aktivní</span>
+                                    <span class="filter-option-count">(2 847)</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="stav" value="dokoncene">
+                                    <span class="filter-option-label">Dokončené</span>
+                                    <span class="filter-option-count">(12 453)</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="stav" value="zrusene">
+                                    <span class="filter-option-label">Zrušené</span>
+                                    <span class="filter-option-count">(892)</span>
+                                </label>
+                            </div>
+                            <div class="filter-panel-footer">
+                                <button class="btn-apply" onclick="applyFilter('stav')">Použít</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Datum vytvoření -->
+                    <div class="filter-dropdown">
+                        <button class="filter-btn" onclick="toggleFilterPanel('datum')">
+                            <span class="material-icons-outlined">calendar_today</span>
+                            Datum vytvoření
+                            <span class="material-icons-outlined">expand_more</span>
+                        </button>
+                        <div class="filter-panel" id="filter-datum" style="min-width: 320px;">
+                            <div class="filter-panel-header">
+                                <span class="filter-panel-title">Datum vytvoření</span>
+                                <button class="filter-panel-clear" onclick="clearFilter('datum')">Vymazat</button>
+                            </div>
+                            <div class="filter-panel-body">
+                                <div class="filter-quick-dates">
+                                    <button class="filter-quick-date" onclick="setQuickDate('today')">Dnes</button>
+                                    <button class="filter-quick-date" onclick="setQuickDate('week')">Tento týden</button>
+                                    <button class="filter-quick-date" onclick="setQuickDate('month')">Tento měsíc</button>
+                                    <button class="filter-quick-date" onclick="setQuickDate('quarter')">Poslední 3 měsíce</button>
+                                    <button class="filter-quick-date" onclick="setQuickDate('year')">Tento rok</button>
+                                </div>
+                                <div class="filter-date-range">
+                                    <input type="date" class="filter-date-input" id="dateFrom" placeholder="Od">
+                                    <span class="filter-date-separator">—</span>
+                                    <input type="date" class="filter-date-input" id="dateTo" placeholder="Do">
+                                </div>
+                            </div>
+                            <div class="filter-panel-footer">
+                                <button class="btn-apply" onclick="applyFilter('datum')">Použít</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Katastrální území -->
+                    <div class="filter-dropdown">
+                        <button class="filter-btn" onclick="toggleFilterPanel('ku')">
+                            <span class="material-icons-outlined">place</span>
+                            Katastrální území
+                            <span class="material-icons-outlined">expand_more</span>
+                        </button>
+                        <div class="filter-panel" id="filter-ku">
+                            <div class="filter-panel-header">
+                                <span class="filter-panel-title">Katastrální území</span>
+                                <button class="filter-panel-clear" onclick="clearFilter('ku')">Vymazat</button>
+                            </div>
+                            <div class="filter-panel-body">
+                                <div class="filter-autocomplete">
+                                    <input type="text" class="filter-search" id="kuSearch" placeholder="Vyhledat k.ú. nebo obec..." oninput="searchKU(this.value)">
+                                    <div class="filter-autocomplete-list" id="kuAutocomplete"></div>
+                                </div>
+                                <div id="selectedKU" style="margin-top: 8px;"></div>
+                            </div>
+                            <div class="filter-panel-footer">
+                                <button class="btn-apply" onclick="applyFilter('ku')">Použít</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Vytvořil -->
+                    <div class="filter-dropdown">
+                        <button class="filter-btn" onclick="toggleFilterPanel('autor')">
+                            <span class="material-icons-outlined">person</span>
+                            Vytvořil
+                            <span class="material-icons-outlined">expand_more</span>
+                        </button>
+                        <div class="filter-panel" id="filter-autor">
+                            <div class="filter-panel-header">
+                                <span class="filter-panel-title">Vytvořil</span>
+                                <button class="filter-panel-clear" onclick="clearFilter('autor')">Vymazat</button>
+                            </div>
+                            <div class="filter-panel-body">
+                                <input type="text" class="filter-search" placeholder="Hledat podle jména...">
+                                <label class="filter-option">
+                                    <input type="checkbox" name="autor" value="vondruska">
+                                    <span class="filter-option-label">MAREK VONDRUŠKA</span>
+                                    <span class="filter-option-count">(156)</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="autor" value="hercik">
+                                    <span class="filter-option-label">RICHARD HERČÍK</span>
+                                    <span class="filter-option-count">(89)</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="autor" value="bures">
+                                    <span class="filter-option-label">JAKUB BUREŠ</span>
+                                    <span class="filter-option-count">(72)</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="autor" value="panek">
+                                    <span class="filter-option-label">ALEŠ PÁNEK</span>
+                                    <span class="filter-option-count">(64)</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="autor" value="dufkova">
+                                    <span class="filter-option-label">DANIELA DUFKOVÁ</span>
+                                    <span class="filter-option-count">(58)</span>
+                                </label>
+                            </div>
+                            <div class="filter-panel-footer">
+                                <button class="btn-apply" onclick="applyFilter('autor')">Použít</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Typ záměru -->
+                    <div class="filter-dropdown">
+                        <button class="filter-btn" onclick="toggleFilterPanel('typ')">
+                            <span class="material-icons-outlined">category</span>
+                            Typ záměru
+                            <span class="material-icons-outlined">expand_more</span>
+                        </button>
+                        <div class="filter-panel" id="filter-typ">
+                            <div class="filter-panel-header">
+                                <span class="filter-panel-title">Typ záměru</span>
+                                <button class="filter-panel-clear" onclick="clearFilter('typ')">Vymazat</button>
+                            </div>
+                            <div class="filter-panel-body">
+                                <label class="filter-option">
+                                    <input type="checkbox" name="typ" value="zeleznice">
+                                    <span class="filter-option-label">Železniční stavby</span>
+                                    <span class="filter-option-count">(1 245)</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="typ" value="energie">
+                                    <span class="filter-option-label">Energetické stavby</span>
+                                    <span class="filter-option-count">(892)</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="typ" value="letiste">
+                                    <span class="filter-option-label">Letištní stavby</span>
+                                    <span class="filter-option-count">(234)</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="typ" value="produktovody">
+                                    <span class="filter-option-label">Produktovody</span>
+                                    <span class="filter-option-count">(156)</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="typ" value="jaderny">
+                                    <span class="filter-option-label">Jaderná zařízení</span>
+                                    <span class="filter-option-count">(12)</span>
+                                </label>
+                            </div>
+                            <div class="filter-panel-footer">
+                                <button class="btn-apply" onclick="applyFilter('typ')">Použít</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Více filtrů -->
+                    <div class="filter-dropdown">
+                        <button class="filter-btn" onclick="toggleFilterPanel('vice')">
+                            <span class="material-icons-outlined">tune</span>
+                            Více filtrů
+                        </button>
+                        <div class="filter-panel" id="filter-vice" style="min-width: 350px;">
+                            <div class="filter-panel-header">
+                                <span class="filter-panel-title">Další filtry</span>
+                                <button class="filter-panel-clear" onclick="clearFilter('vice')">Vymazat vše</button>
+                            </div>
+                            <div class="filter-panel-body">
+                                <div style="margin-bottom: 16px;">
+                                    <label style="font-size: 12px; font-weight: 500; color: #5f6368; display: block; margin-bottom: 6px;">PID</label>
+                                    <input type="text" class="filter-search" placeholder="Zadejte PID..." style="margin-bottom: 0;">
+                                </div>
+                                <div style="margin-bottom: 16px;">
+                                    <label style="font-size: 12px; font-weight: 500; color: #5f6368; display: block; margin-bottom: 6px;">Číslo záměru</label>
+                                    <input type="text" class="filter-search" placeholder="Např. Z/2026/..." style="margin-bottom: 0;">
+                                </div>
+                                <div style="margin-bottom: 16px;">
+                                    <label style="font-size: 12px; font-weight: 500; color: #5f6368; display: block; margin-bottom: 6px;">ID dokumentace</label>
+                                    <input type="text" class="filter-search" placeholder="Zadejte ID..." style="margin-bottom: 0;">
+                                </div>
+                                <div>
+                                    <label style="font-size: 12px; font-weight: 500; color: #5f6368; display: block; margin-bottom: 6px;">Název (obsahuje)</label>
+                                    <input type="text" class="filter-search" placeholder="Hledat v názvu..." style="margin-bottom: 0;">
+                                </div>
+                            </div>
+                            <div class="filter-panel-footer">
+                                <button class="btn-apply" onclick="applyFilter('vice')">Použít filtry</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Spacer -->
+                    <div style="flex: 1;"></div>
+                    
+                    <!-- Reset a akce -->
+                    <button class="filter-btn" onclick="resetAllFilters()" style="color: #5f6368;">
+                        <span class="material-icons-outlined">refresh</span>
+                        Resetovat
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Aktivní filtry -->
+            <div class="active-filters" id="activeFilters">
+                <span class="active-filters-label">Aktivní filtry:</span>
+                <span class="filter-tag">
+                    Stav: Aktivní
+                    <button class="filter-tag-remove" onclick="removeFilter('stav-aktivni')">
+                        <span class="material-icons-outlined">close</span>
+                    </button>
+                </span>
+                <button class="clear-all-filters" onclick="clearAllFilters()">Zrušit vše</button>
+            </div>
+            
+            <!-- Toolbar s počtem výsledků -->
+            <div class="toolbar">
+                <div style="font-size: 13px; color: #5f6368;">
+                    Zobrazeno <strong>2 847</strong> záměrů
+                </div>
+                <div class="toolbar-actions">
+                    <button class="toolbar-btn" title="Zobrazení mřížky">
+                        <span class="material-icons-outlined">grid_view</span>
+                    </button>
+                    <button class="toolbar-btn" title="Obnovit">
+                        <span class="material-icons-outlined">refresh</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tabulka záměrů -->
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="sortable">PID <span class="material-icons-outlined">unfold_more</span></th>
+                            <th class="sortable">Číslo záměru <span class="material-icons-outlined">unfold_more</span></th>
+                            <th class="sortable">ID dokumentace <span class="material-icons-outlined">unfold_more</span></th>
+                            <th class="sortable">Název <span class="material-icons-outlined">unfold_more</span></th>
+                            <th class="sortable">Stav <span class="material-icons-outlined">unfold_more</span></th>
+                            <th class="sortable">Katastrální území <span class="material-icons-outlined">unfold_more</span></th>
+                            <th class="sortable">Vytvořil <span class="material-icons-outlined">unfold_more</span></th>
+                            <th class="sortable sorted">Datum vytvoření <span class="material-icons-outlined">arrow_downward</span></th>
+                            <th>Akce</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr onclick="window.location='detail-zameru.html'">
+                            <td>SR00X01HRT9X</td>
+                            <td>Z/2026/2409</td>
+                            <td>SR00X01HRTF3</td>
+                            <td>Odstranění železničního přejezdu P1532</td>
+                            <td><span class="status-badge status-aktivni">Aktivní</span></td>
+                            <td></td>
+                            <td>MAREK VONDRUŠKA</td>
+                            <td>7. 1. 2026 8:50:39</td>
+                            <td class="row-actions">
+                                <a href="detail-zameru.html" class="link-primary" onclick="event.stopPropagation()">Otevřít</a>
+                                <button class="row-action-btn" title="Více akcí" onclick="event.stopPropagation()">
+                                    <span class="material-icons-outlined">more_vert</span>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr onclick="window.location='detail-zameru.html'">
+                            <td>SR00X01HR90Q</td>
+                            <td>Z/2026/2369</td>
+                            <td>SR00X01HR9QG</td>
+                            <td>Odstranění železničního přejezdu P1531</td>
+                            <td><span class="status-badge status-aktivni">Aktivní</span></td>
+                            <td></td>
+                            <td>MAREK VONDRUŠKA</td>
+                            <td>7. 1. 2026 8:10:04</td>
+                            <td class="row-actions">
+                                <a href="detail-zameru.html" class="link-primary" onclick="event.stopPropagation()">Otevřít</a>
+                                <button class="row-action-btn" title="Více akcí" onclick="event.stopPropagation()">
+                                    <span class="material-icons-outlined">more_vert</span>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr onclick="window.location='detail-zameru.html'">
+                            <td>SR00X01HQUWW</td>
+                            <td>Z/2026/2347</td>
+                            <td>SR00X01HQUXR</td>
+                            <td>Odstranění železničního přejezdu P1529</td>
+                            <td><span class="status-badge status-aktivni">Aktivní</span></td>
+                            <td></td>
+                            <td>MAREK VONDRUŠKA</td>
+                            <td>7. 1. 2026 7:20:02</td>
+                            <td class="row-actions">
+                                <a href="detail-zameru.html" class="link-primary" onclick="event.stopPropagation()">Otevřít</a>
+                                <button class="row-action-btn" title="Více akcí" onclick="event.stopPropagation()">
+                                    <span class="material-icons-outlined">more_vert</span>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr onclick="window.location='detail-zameru.html'">
+                            <td>SR00X01HPTK4</td>
+                            <td>Z/2026/2150</td>
+                            <td></td>
+                            <td>Žádost o zavedení zkušebního provozu</td>
+                            <td><span class="status-badge status-aktivni">Aktivní</span></td>
+                            <td></td>
+                            <td>VERONIKA VLČKOVÁ</td>
+                            <td>6. 1. 2026 16:10:02</td>
+                            <td class="row-actions">
+                                <a href="detail-zameru.html" class="link-primary" onclick="event.stopPropagation()">Otevřít</a>
+                                <button class="row-action-btn" title="Více akcí" onclick="event.stopPropagation()">
+                                    <span class="material-icons-outlined">more_vert</span>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr onclick="window.location='detail-zameru.html'">
+                            <td>SR00X01HONN8</td>
+                            <td>Z/2026/1993</td>
+                            <td>SR00X01HONPY</td>
+                            <td>Úprava systému EPS v hangárové hale F</td>
+                            <td><span class="status-badge status-aktivni">Aktivní</span></td>
+                            <td>Ruzyně</td>
+                            <td>MARTINA RYŠAVÁ</td>
+                            <td>6. 1. 2026 14:11:01</td>
+                            <td class="row-actions">
+                                <a href="detail-zameru.html" class="link-primary" onclick="event.stopPropagation()">Otevřít</a>
+                                <button class="row-action-btn" title="Více akcí" onclick="event.stopPropagation()">
+                                    <span class="material-icons-outlined">more_vert</span>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr onclick="window.location='detail-zameru.html'">
+                            <td>SR00X01HLDQU</td>
+                            <td>Z/2026/1596</td>
+                            <td>SR00X01HLDRP</td>
+                            <td>Vypracování projektové dokumentace "Oprava zabezpečovacího zařízení v Žst. Doudleby n.O."</td>
+                            <td><span class="status-badge status-aktivni">Aktivní</span></td>
+                            <td>Kostelec nad Orlicí</td>
+                            <td>JANA MIKULOVÁ</td>
+                            <td>6. 1. 2026 10:21:40</td>
+                            <td class="row-actions">
+                                <a href="detail-zameru.html" class="link-primary" onclick="event.stopPropagation()">Otevřít</a>
+                                <button class="row-action-btn" title="Více akcí" onclick="event.stopPropagation()">
+                                    <span class="material-icons-outlined">more_vert</span>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr onclick="window.location='detail-zameru.html'">
+                            <td>SR00X01HLCKV</td>
+                            <td>Z/2026/1590</td>
+                            <td></td>
+                            <td>Překládka trakčních vedení kabelů k.ú. Teplice - Trnovany</td>
+                            <td><span class="status-badge status-aktivni">Aktivní</span></td>
+                            <td></td>
+                            <td>SIMONA ZAJÍCOVÁ</td>
+                            <td>6. 1. 2026 10:15:21</td>
+                            <td class="row-actions">
+                                <a href="detail-zameru.html" class="link-primary" onclick="event.stopPropagation()">Otevřít</a>
+                                <button class="row-action-btn" title="Více akcí" onclick="event.stopPropagation()">
+                                    <span class="material-icons-outlined">more_vert</span>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr onclick="window.location='detail-zameru.html'">
+                            <td>SR00X01HKOP7</td>
+                            <td>Z/2026/1510</td>
+                            <td>SR00X01HKOTN</td>
+                            <td>Společné dispečinkové pracoviště APOC - letiště Praha/Ruzyně</td>
+                            <td><span class="status-badge status-aktivni">Aktivní</span></td>
+                            <td>Ruzyně</td>
+                            <td>RICHARD HERČÍK</td>
+                            <td>6. 1. 2026 9:35:18</td>
+                            <td class="row-actions">
+                                <a href="detail-zameru.html" class="link-primary" onclick="event.stopPropagation()">Otevřít</a>
+                                <button class="row-action-btn" title="Více akcí" onclick="event.stopPropagation()">
+                                    <span class="material-icons-outlined">more_vert</span>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr onclick="window.location='detail-zameru.html'">
+                            <td>SR00X01HK606</td>
+                            <td>Z/2026/1457</td>
+                            <td>SR00X01HK611</td>
+                            <td>Odstranění části vlečky 2134 ŠKODA hlavní závod</td>
+                            <td><span class="status-badge status-aktivni">Aktivní</span></td>
+                            <td>Skvrňany</td>
+                            <td>LADISLAV ŠUPOL</td>
+                            <td>6. 1. 2026 9:05:04</td>
+                            <td class="row-actions">
+                                <a href="detail-zameru.html" class="link-primary" onclick="event.stopPropagation()">Otevřít</a>
+                                <button class="row-action-btn" title="Více akcí" onclick="event.stopPropagation()">
+                                    <span class="material-icons-outlined">more_vert</span>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr onclick="window.location='detail-zameru.html'">
+                            <td>SR00X01HDHI2</td>
+                            <td>Z/2026/866</td>
+                            <td></td>
+                            <td>PRE - T401 A TL401 výměna</td>
+                            <td><span class="status-badge status-aktivni">Aktivní</span></td>
+                            <td></td>
+                            <td>IVAN LOUTHAN</td>
+                            <td>5. 1. 2026 12:05:00</td>
+                            <td class="row-actions">
+                                <a href="detail-zameru.html" class="link-primary" onclick="event.stopPropagation()">Otevřít</a>
+                                <button class="row-action-btn" title="Více akcí" onclick="event.stopPropagation()">
+                                    <span class="material-icons-outlined">more_vert</span>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr onclick="window.location='detail-zameru.html'">
+                            <td>SR00X01HCMHL</td>
+                            <td>Z/2026/763</td>
+                            <td></td>
+                            <td>Rekonfigurace sektoru A2 a výměna nástupních mostů, T1 Letiště Praha-Ruzyně</td>
+                            <td><span class="status-badge status-aktivni">Aktivní</span></td>
+                            <td></td>
+                            <td>RICHARD HERČÍK</td>
+                            <td>5. 1. 2026 11:00:03</td>
+                            <td class="row-actions">
+                                <a href="detail-zameru.html" class="link-primary" onclick="event.stopPropagation()">Otevřít</a>
+                                <button class="row-action-btn" title="Více akcí" onclick="event.stopPropagation()">
+                                    <span class="material-icons-outlined">more_vert</span>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr onclick="window.location='detail-zameru.html'">
+                            <td>SR00X01HC1Z6</td>
+                            <td>Z/2026/695</td>
+                            <td></td>
+                            <td>FVE EDĚ I</td>
+                            <td><span class="status-badge status-aktivni">Aktivní</span></td>
+                            <td>Dětmarovice</td>
+                            <td>JAN JANÁK</td>
+                            <td>5. 1. 2026 10:20:02</td>
+                            <td class="row-actions">
+                                <a href="detail-zameru.html" class="link-primary" onclick="event.stopPropagation()">Otevřít</a>
+                                <button class="row-action-btn" title="Více akcí" onclick="event.stopPropagation()">
+                                    <span class="material-icons-outlined">more_vert</span>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr onclick="window.location='detail-zameru.html'">
+                            <td>SR00X01HBLTH</td>
+                            <td>Z/2026/660</td>
+                            <td>SR00X01HBLV7</td>
+                            <td>Kunovice - výpravní budova č.p.719 - částečná demolice</td>
+                            <td><span class="status-badge status-aktivni">Aktivní</span></td>
+                            <td></td>
+                            <td>ANTONÍN ŠNEJDRLA</td>
+                            <td>5. 1. 2026 9:46:24</td>
+                            <td class="row-actions">
+                                <a href="detail-zameru.html" class="link-primary" onclick="event.stopPropagation()">Otevřít</a>
+                                <button class="row-action-btn" title="Více akcí" onclick="event.stopPropagation()">
+                                    <span class="material-icons-outlined">more_vert</span>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr onclick="window.location='detail-zameru.html'">
+                            <td>SR00X01H979P</td>
+                            <td>Z/2026/331</td>
+                            <td></td>
+                            <td>Revitalizace trati Lovosice – Česká Lípa</td>
+                            <td><span class="status-badge status-aktivni">Aktivní</span></td>
+                            <td></td>
+                            <td>VRATISLAV ŽITNÝ</td>
+                            <td>3. 1. 2026 10:25:01</td>
+                            <td class="row-actions">
+                                <a href="detail-zameru.html" class="link-primary" onclick="event.stopPropagation()">Otevřít</a>
+                                <button class="row-action-btn" title="Více akcí" onclick="event.stopPropagation()">
+                                    <span class="material-icons-outlined">more_vert</span>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr onclick="window.location='detail-zameru.html'">
+                            <td>SR00X01H6B5K</td>
+                            <td>Z/2025/241429</td>
+                            <td>SR00X01H6B6F</td>
+                            <td>FVE a BESS Havraň</td>
+                            <td><span class="status-badge status-aktivni">Aktivní</span></td>
+                            <td>Havraň</td>
+                            <td>MICHAELA VAŇKOVÁ</td>
+                            <td>31. 12. 2025 19:55:02</td>
+                            <td class="row-actions">
+                                <a href="detail-zameru.html" class="link-primary" onclick="event.stopPropagation()">Otevřít</a>
+                                <button class="row-action-btn" title="Více akcí" onclick="event.stopPropagation()">
+                                    <span class="material-icons-outlined">more_vert</span>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr onclick="window.location='detail-zameru.html'">
+                            <td>SR00X01GX43X</td>
+                            <td>Z/2025/240041</td>
+                            <td>SR00X01GX44S</td>
+                            <td>INTENZIFIKACE STÁČIŠTĚ ŽC OBJEKT 362, SKLAD PHM STŘELICE</td>
+                            <td><span class="status-badge status-aktivni">Aktivní</span></td>
+                            <td></td>
+                            <td>JIŘÍ NEJEDLÝ</td>
+                            <td>28. 12. 2025 8:50:03</td>
+                            <td class="row-actions">
+                                <a href="detail-zameru.html" class="link-primary" onclick="event.stopPropagation()">Otevřít</a>
+                                <button class="row-action-btn" title="Více akcí" onclick="event.stopPropagation()">
+                                    <span class="material-icons-outlined">more_vert</span>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr onclick="window.location='detail-zameru.html'">
+                            <td>SR00X01GWULQ</td>
+                            <td>Z/2025/239967</td>
+                            <td></td>
+                            <td>Rekonstrukce žel.zast. Vnorovy na trati Veselí n/M - Sudoměřice</td>
+                            <td><span class="status-badge status-aktivni">Aktivní</span></td>
+                            <td></td>
+                            <td>JAKUB BUREŠ</td>
+                            <td>27. 12. 2025 13:05:06</td>
+                            <td class="row-actions">
+                                <a href="detail-zameru.html" class="link-primary" onclick="event.stopPropagation()">Otevřít</a>
+                                <button class="row-action-btn" title="Více akcí" onclick="event.stopPropagation()">
+                                    <span class="material-icons-outlined">more_vert</span>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr onclick="window.location='detail-zameru.html'">
+                            <td>SR00X01GWUI5</td>
+                            <td>Z/2025/239966</td>
+                            <td>SR00X01GWUJ0</td>
+                            <td>Rekonstrukce žel.zast. Vnorovy na trati Veselí n/M - Sudoměřice</td>
+                            <td><span class="status-badge status-aktivni">Aktivní</span></td>
+                            <td>Vnorovy</td>
+                            <td>JAKUB BUREŠ</td>
+                            <td>27. 12. 2025 13:05:04</td>
+                            <td class="row-actions">
+                                <a href="detail-zameru.html" class="link-primary" onclick="event.stopPropagation()">Otevřít</a>
+                                <button class="row-action-btn" title="Více akcí" onclick="event.stopPropagation()">
+                                    <span class="material-icons-outlined">more_vert</span>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr onclick="window.location='detail-zameru.html'">
+                            <td>SR00X01GW7DB</td>
+                            <td>Z/2025/239781</td>
+                            <td>SR00X01GW7E6</td>
+                            <td>Výstavba bateriového úložiště elektrické energie (BESS)</td>
+                            <td><span class="status-badge status-aktivni">Aktivní</span></td>
+                            <td>Trnávka</td>
+                            <td>ALEŠ PÁNEK</td>
+                            <td>24. 12. 2025 3:35:03</td>
+                            <td class="row-actions">
+                                <a href="detail-zameru.html" class="link-primary" onclick="event.stopPropagation()">Otevřít</a>
+                                <button class="row-action-btn" title="Více akcí" onclick="event.stopPropagation()">
+                                    <span class="material-icons-outlined">more_vert</span>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr onclick="window.location='detail-zameru.html'">
+                            <td>SR00X01GVYEA</td>
+                            <td>Z/2025/239701</td>
+                            <td>SR00X01GVYF5</td>
+                            <td>Vyvedení výkonu z bateriového úložiště a Výměna odpojovačů 400 kV bloku B4 s novým umístěním</td>
+                            <td><span class="status-badge status-aktivni">Aktivní</span></td>
+                            <td>Trnávka</td>
+                            <td>ALEŠ PÁNEK</td>
+                            <td>23. 12. 2025 16:55:01</td>
+                            <td class="row-actions">
+                                <a href="detail-zameru.html" class="link-primary" onclick="event.stopPropagation()">Otevřít</a>
+                                <button class="row-action-btn" title="Více akcí" onclick="event.stopPropagation()">
+                                    <span class="material-icons-outlined">more_vert</span>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr onclick="window.location='detail-zameru.html'">
+                            <td>SR00X01GVEWO</td>
+                            <td>Z/2025/239564</td>
+                            <td>SR00X01GVEYE</td>
+                            <td>Přípojka FVE Centrum II</td>
+                            <td><span class="status-badge status-aktivni">Aktivní</span></td>
+                            <td>Záluží u Litvínova</td>
+                            <td>DANIELA DUFKOVÁ</td>
+                            <td>23. 12. 2025 12:25:01</td>
+                            <td class="row-actions">
+                                <a href="detail-zameru.html" class="link-primary" onclick="event.stopPropagation()">Otevřít</a>
+                                <button class="row-action-btn" title="Více akcí" onclick="event.stopPropagation()">
+                                    <span class="material-icons-outlined">more_vert</span>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr onclick="window.location='detail-zameru.html'">
+                            <td>SR00X01GVDOZ</td>
+                            <td>Z/2025/239557</td>
+                            <td>SR00X01GVDQP</td>
+                            <td>FVE Centrum II</td>
+                            <td><span class="status-badge status-aktivni">Aktivní</span></td>
+                            <td>Záluží u Litvínova</td>
+                            <td>DANIELA DUFKOVÁ</td>
+                            <td>23. 12. 2025 12:10:52</td>
+                            <td class="row-actions">
+                                <a href="detail-zameru.html" class="link-primary" onclick="event.stopPropagation()">Otevřít</a>
+                                <button class="row-action-btn" title="Více akcí" onclick="event.stopPropagation()">
+                                    <span class="material-icons-outlined">more_vert</span>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr onclick="window.location='detail-zameru.html'">
+                            <td>SR00X01GV7YR</td>
+                            <td>Z/2025/239534</td>
+                            <td></td>
+                            <td>Oprava zabezpečovacího zařízení v ŽST Podlešín</td>
+                            <td><span class="status-badge status-aktivni">Aktivní</span></td>
+                            <td></td>
+                            <td>MILAN BĚLEHRAD</td>
+                            <td>23. 12. 2025 11:40:19</td>
+                            <td class="row-actions">
+                                <a href="detail-zameru.html" class="link-primary" onclick="event.stopPropagation()">Otevřít</a>
+                                <button class="row-action-btn" title="Více akcí" onclick="event.stopPropagation()">
+                                    <span class="material-icons-outlined">more_vert</span>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr onclick="window.location='detail-zameru.html'">
+                            <td>SR00X01GR2NP</td>
+                            <td>Z/2025/239016</td>
+                            <td>SR00X01GR2PF</td>
+                            <td>Rekonstrukce traťového úseku Nové Sedlo u Lokte (mimo) - Sokolov (mimo)</td>
+                            <td><span class="status-badge status-aktivni">Aktivní</span></td>
+                            <td></td>
+                            <td>MARTIN VYKYDAL</td>
+                            <td>22. 12. 2025 13:15:01</td>
+                            <td class="row-actions">
+                                <a href="detail-zameru.html" class="link-primary" onclick="event.stopPropagation()">Otevřít</a>
+                                <button class="row-action-btn" title="Více akcí" onclick="event.stopPropagation()">
+                                    <span class="material-icons-outlined">more_vert</span>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr onclick="window.location='detail-zameru.html'">
+                            <td>SR00X01GR27X</td>
+                            <td>Z/2025/239013</td>
+                            <td>SR00X01GR28S</td>
+                            <td>Rekonstrukce traťového úseku Nové Sedlo u Lokte (mimo) - Sokolov (mimo)</td>
+                            <td><span class="status-badge status-aktivni">Aktivní</span></td>
+                            <td>Královské Poříčí</td>
+                            <td>MARTIN VYKYDAL</td>
+                            <td>22. 12. 2025 13:10:09</td>
+                            <td class="row-actions">
+                                <a href="detail-zameru.html" class="link-primary" onclick="event.stopPropagation()">Otevřít</a>
+                                <button class="row-action-btn" title="Více akcí" onclick="event.stopPropagation()">
+                                    <span class="material-icons-outlined">more_vert</span>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Toggle navigation groups
+        document.querySelectorAll('.nav-item[data-toggle]').forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('data-toggle');
+                const submenu = document.getElementById(targetId);
+                
+                this.classList.toggle('expanded');
+                submenu.classList.toggle('show');
+            });
+        });
+        
+        // Filter panel toggle
+        function toggleFilterPanel(filterId) {
+            const panel = document.getElementById('filter-' + filterId);
+            const allPanels = document.querySelectorAll('.filter-panel');
+            
+            // Close all other panels
+            allPanels.forEach(p => {
+                if (p.id !== 'filter-' + filterId) {
+                    p.classList.remove('open');
+                }
+            });
+            
+            // Toggle current panel
+            panel.classList.toggle('open');
+            
+            // Update button active state
+            const btn = panel.previousElementSibling;
+            if (panel.classList.contains('open')) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        }
+        
+        // Close panels when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.filter-dropdown')) {
+                document.querySelectorAll('.filter-panel').forEach(p => p.classList.remove('open'));
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            }
+        });
+        
+        // Apply filter (simulation)
+        function applyFilter(filterId) {
+            const panel = document.getElementById('filter-' + filterId);
+            panel.classList.remove('open');
+            
+            // Update button to show it has active filters
+            const btn = panel.previousElementSibling;
+            const checkedInputs = panel.querySelectorAll('input:checked');
+            if (checkedInputs.length > 0) {
+                btn.classList.add('active');
+                // Add count badge if not exists
+                let badge = btn.querySelector('.filter-btn-count');
+                if (!badge) {
+                    badge = document.createElement('span');
+                    badge.className = 'filter-btn-count';
+                    btn.appendChild(badge);
+                }
+                badge.textContent = checkedInputs.length;
+            } else {
+                btn.classList.remove('active');
+                const badge = btn.querySelector('.filter-btn-count');
+                if (badge) badge.remove();
+            }
+        }
+        
+        // Clear filter
+        function clearFilter(filterId) {
+            const panel = document.getElementById('filter-' + filterId);
+            panel.querySelectorAll('input').forEach(input => {
+                if (input.type === 'checkbox' || input.type === 'radio') {
+                    input.checked = false;
+                } else {
+                    input.value = '';
+                }
+            });
+        }
+        
+        // Quick date selection
+        function setQuickDate(period) {
+            const today = new Date();
+            const dateFrom = document.getElementById('dateFrom');
+            const dateTo = document.getElementById('dateTo');
+            
+            dateTo.value = today.toISOString().split('T')[0];
+            
+            let fromDate = new Date();
+            switch(period) {
+                case 'today':
+                    fromDate = today;
+                    break;
+                case 'week':
+                    fromDate.setDate(today.getDate() - 7);
+                    break;
+                case 'month':
+                    fromDate.setMonth(today.getMonth() - 1);
+                    break;
+                case 'quarter':
+                    fromDate.setMonth(today.getMonth() - 3);
+                    break;
+                case 'year':
+                    fromDate.setFullYear(today.getFullYear(), 0, 1);
+                    break;
+            }
+            dateFrom.value = fromDate.toISOString().split('T')[0];
+            
+            // Highlight selected quick date button
+            document.querySelectorAll('.filter-quick-date').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+        
+        // KU autocomplete data
+        const kuData = [
+            'Ruzyně', 'Dětmarovice', 'Havraň', 'Skvrňany', 'Trnávka', 'Vnorovy', 
+            'Záluží u Litvínova', 'Královské Poříčí', 'Kostelec nad Orlicí',
+            'Praha-Holešovice', 'Praha-Vysočany', 'Brno-střed', 'Ostrava-Poruba'
+        ];
+        
+        let selectedKUs = [];
+        
+        function searchKU(value) {
+            const list = document.getElementById('kuAutocomplete');
+            if (value.length < 2) {
+                list.classList.remove('open');
+                return;
+            }
+            
+            const filtered = kuData.filter(ku => 
+                ku.toLowerCase().includes(value.toLowerCase())
+            );
+            
+            if (filtered.length > 0) {
+                list.innerHTML = filtered.map(ku => {
+                    const highlighted = ku.replace(new RegExp(value, 'gi'), match => `<mark>${match}</mark>`);
+                    return `<div class="filter-autocomplete-item" onclick="selectKU('${ku}')">${highlighted}</div>`;
+                }).join('');
+                list.classList.add('open');
+            } else {
+                list.classList.remove('open');
+            }
+        }
+        
+        function selectKU(ku) {
+            if (!selectedKUs.includes(ku)) {
+                selectedKUs.push(ku);
+                renderSelectedKUs();
+            }
+            document.getElementById('kuSearch').value = '';
+            document.getElementById('kuAutocomplete').classList.remove('open');
+        }
+        
+        function removeKU(ku) {
+            selectedKUs = selectedKUs.filter(k => k !== ku);
+            renderSelectedKUs();
+        }
+        
+        function renderSelectedKUs() {
+            const container = document.getElementById('selectedKU');
+            container.innerHTML = selectedKUs.map(ku => `
+                <span class="filter-tag" style="margin: 2px;">
+                    ${ku}
+                    <button class="filter-tag-remove" onclick="removeKU('${ku}')">
+                        <span class="material-icons-outlined">close</span>
+                    </button>
+                </span>
+            `).join('');
+        }
+        
+        // Remove single filter tag
+        function removeFilter(filterKey) {
+            const tag = event.target.closest('.filter-tag');
+            if (tag) tag.remove();
+            
+            // Check if any filters remain
+            const activeFilters = document.getElementById('activeFilters');
+            const tags = activeFilters.querySelectorAll('.filter-tag');
+            if (tags.length === 0) {
+                activeFilters.innerHTML = '';
+            }
+        }
+        
+        // Clear all filters
+        function clearAllFilters() {
+            document.getElementById('activeFilters').innerHTML = '';
+            document.querySelectorAll('.filter-panel input').forEach(input => {
+                if (input.type === 'checkbox' || input.type === 'radio') {
+                    input.checked = false;
+                } else {
+                    input.value = '';
+                }
+            });
+            document.querySelectorAll('.filter-btn-count').forEach(badge => badge.remove());
+            document.querySelectorAll('.filter-btn.active').forEach(btn => btn.classList.remove('active'));
+            selectedKUs = [];
+            renderSelectedKUs();
+        }
+        
+        // Reset all filters
+        function resetAllFilters() {
+            clearAllFilters();
+        }
+    </script>
+</body>
+</html>

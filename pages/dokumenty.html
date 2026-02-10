@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ISSŘ - Dokumenty</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+    <style>
+        /* ===========================================
+           ISSŘ HLAVIČKA
+           =========================================== */
+        .issr-header {
+            background-color: #004289;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            padding: 0 24px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1), 0 2px 4px rgba(0,0,0,0.06);
+        }
+
+        .issr-header__logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: white;
+        }
+
+        .issr-header__logo-img {
+            height: 40px;
+            width: auto;
+        }
+
+        .issr-header__title {
+            font-size: 12px;
+            font-weight: 400;
+            color: white;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+
+        .issr-header__search {
+            flex: 1;
+            max-width: 500px;
+            margin: 0 40px;
+        }
+
+        .issr-header__search-input {
+            width: 100%;
+            height: 32px;
+            padding: 0 16px;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .issr-header__search-input::placeholder {
+            color: #adb5bd;
+        }
+
+        .issr-header__actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-left: auto;
+        }
+
+        .issr-header__notification {
+            position: relative;
+            color: white;
+            cursor: pointer;
+        }
+
+        .issr-header__notification-icon {
+            width: 20px;
+            height: 20px;
+        }
+
+        .issr-header__notification-badge {
+            position: absolute;
+            top: -6px;
+            right: -8px;
+            background-color: #0066cc;
+            color: white;
+            font-size: 10px;
+            font-weight: 600;
+            min-width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 4px;
+        }
+
+        .issr-header__user {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: white;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .issr-header__user-icon {
+            width: 16px;
+            height: 16px;
+        }
+
+        @media (max-width: 992px) {
+            .issr-header__search {
+                max-width: 300px;
+                margin: 0 20px;
+            }
+            
+            .issr-header__title {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .issr-header {
+                padding: 0 16px;
+            }
+            
+            .issr-header__search {
+                display: none;
+            }
+        }
+
+        /* ===========================================
+           PŮVODNÍ STYLY DOKUMENTŮ
+           =========================================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: 13px;
+            color: #333;
+            background: #fff;
+            line-height: 1.4;
+        }
+        /* Layout */
+        .app-container {
+            display: flex;
+            min-height: calc(100vh - 56px);
+        }
+        /* Sidebar */
+        .sidebar {
+            width: 200px;
+            background: #f8f9fa;
+            border-right: 1px solid #e0e0e0;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        .sidebar-header {
+            padding: 16px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .sidebar-title {
+            font-size: 16px;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 12px;
+        }
+        .btn-new {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #004289;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-new:hover {
+            background: #1557b0;
+        }
+        .btn-new .material-icons-outlined {
+            font-size: 18px;
+        }
+        /* Navigation */
+        .nav-menu {
+            padding: 8px 0;
+            flex: 1;
+        }
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 16px;
+            color: #5f6368;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background 0.15s;
+            gap: 12px;
+        }
+        .nav-item:hover {
+            background: #e8eaed;
+        }
+        .nav-item.active {
+            background: #e8f0fe;
+            color: #1a73e8;
+        }
+        .nav-item .material-icons-outlined {
+            font-size: 20px;
+            color: #5f6368;
+        }
+        .nav-item.active .material-icons-outlined {
+            color: #1a73e8;
+        }
+        .nav-item-text {
+            font-size: 13px;
+        }
+        .nav-item-expand {
+            margin-left: auto;
+            font-size: 18px !important;
+            transition: transform 0.2s;
+        }
+        .nav-item.expanded .nav-item-expand {
+            transform: rotate(180deg);
+        }
+        .nav-submenu {
+            display: none;
+            background: #f1f3f4;
+        }
+        .nav-submenu.show {
+            display: block;
+        }
+        .nav-submenu .nav-item {
+            padding-left: 48px;
+            font-size: 12px;
+        }
+        /* Main content */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+        /* Toolbar */
+        .toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding: 8px 16px;
+            border-bottom: 1px solid #e0e0e0;
+            gap: 16px;
+        }
+        .toolbar-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            color: #5f6368;
+            font-size: 13px;
+        }
+        .toolbar-icon {
+            font-size: 20px;
+            color: #5f6368;
+            cursor: pointer;
+        }
+        .toolbar-icon:hover {
+            color: #1a73e8;
+        }
+        /* Table container */
+        .table-container {
+            flex: 1;
+            overflow: auto;
+        }
+        /* Table */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+        .data-table thead {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        .data-table th {
+            background: #f8f9fa;
+            border-bottom: 1px solid #e0e0e0;
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 500;
+            color: #5f6368;
+            white-space: nowrap;
+            cursor: pointer;
+            user-select: none;
+        }
+        .data-table th:hover {
+            background: #e8eaed;
+        }
+        .th-content {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .sort-icon {
+            font-size: 16px;
+            opacity: 0.5;
+        }
+        .data-table th.sorted .sort-icon {
+            opacity: 1;
+            color: #1a73e8;
+        }
+        .data-table tbody tr {
+            cursor: pointer;
+            transition: background 0.1s;
+        }
+        .data-table tbody tr:hover {
+            background: #f1f3f4;
+        }
+        .data-table tbody tr:nth-child(even) {
+            background: #fafafa;
+        }
+        .data-table tbody tr:nth-child(even):hover {
+            background: #f1f3f4;
+        }
+        .data-table td {
+            padding: 10px 16px;
+            border-bottom: 1px solid #f0f0f0;
+            color: #333;
+            max-width: 250px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .data-table td.col-date {
+            white-space: nowrap;
+            color: #5f6368;
+        }
+        .data-table td.col-pid {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 12px;
+            color: #5f6368;
+        }
+        .data-table td.col-name {
+            max-width: 280px;
+            font-weight: 400;
+        }
+        .data-table td.col-druh {
+            max-width: 200px;
+        }
+        .data-table td.col-zpracovatel {
+            color: #5f6368;
+        }
+        .data-table td.col-stav {
+            color: #5f6368;
+        }
+        .data-table td.col-iddok {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 12px;
+            color: #5f6368;
+        }
+        .data-table td.col-mimo {
+            text-align: center;
+        }
+        .link-open {
+            color: #1a73e8;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .link-open:hover {
+            text-decoration: underline;
+        }
+        .icon-link {
+            color: #5f6368;
+            font-size: 18px;
+            vertical-align: middle;
+            margin-left: 4px;
+            cursor: pointer;
+        }
+        .icon-link:hover {
+            color: #1a73e8;
+        }
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .sidebar {
+                width: 56px;
+            }
+            
+            .sidebar-title,
+            .nav-item-text,
+            .nav-item-expand,
+            .nav-submenu {
+                display: none;
+            }
+            
+            .nav-item {
+                justify-content: center;
+                padding: 12px;
+            }
+            
+            .btn-new span {
+                display: none;
+            }
+            
+            .btn-new {
+                padding: 8px;
+            }
+        }
+        
+        /* ===========================================
+           SVISLÉ NAVIGAČNÍ MENU (NAV RAIL)
+           =========================================== */
+        .nav-rail {
+            width: 56px;
+            min-width: 56px;
+            background: #1a1a1a;
+            border-right: 1px solid #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 12px 0;
+            gap: 4px;
+        }
+        
+        .nav-rail-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
+            border-radius: 8px;
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.15s;
+            position: relative;
+        }
+        
+        .nav-rail-item:hover {
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+        }
+        
+        .nav-rail-item.active {
+            background: rgba(255,255,255,0.15);
+            color: #fff;
+        }
+        
+        .nav-rail-item .material-icons-outlined {
+            font-size: 22px;
+        }
+        
+        .nav-rail-item-label {
+            font-size: 9px;
+            font-weight: 500;
+            margin-top: 2px;
+            text-align: center;
+        }
+        
+        .nav-rail-item.disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+        
+        .nav-rail-item.disabled:hover {
+            background: transparent;
+            color: rgba(255,255,255,0.7);
+        }
+        
+        .nav-rail-divider {
+            width: 32px;
+            height: 1px;
+            background: rgba(255,255,255,0.2);
+            margin: 8px 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- ISSŘ Hlavička -->
+    <header class="issr-header">
+        <a href="../index.html" class="issr-header__logo">
+            <img src="../images/logo-issr.png" alt="ISSŘ Logo" class="issr-header__logo-img">
+            <span class="issr-header__title">INFORMAČNÍ SYSTÉM STAVEBNÍHO ŘÍZENÍ</span>
+        </a>
+        
+        <div class="issr-header__search">
+            <input type="text" class="issr-header__search-input" placeholder="Hledat">
+        </div>
+        
+        <div class="issr-header__actions">
+            <div class="issr-header__notification">
+                <svg class="issr-header__notification-icon" viewBox="0 0 16 16" fill="currentColor">
+                    <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2M8 1.918l-.797.161A4 4 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4 4 0 0 0-3.203-3.92zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5 5 0 0 1 13 6c0 .88.32 4.2 1.22 6"></path>
+                </svg>
+                <span class="issr-header__notification-badge">2</span>
+            </div>
+            
+            <div class="issr-header__user">
+                <span>Aleš Krupa</span>
+                <svg class="issr-header__user-icon" viewBox="0 0 16 16" fill="currentColor">
+                    <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z"></path>
+                </svg>
+            </div>
+        </div>
+    </header>
+
+    <div class="app-container">
+        <!-- Svislé navigační menu -->
+        <nav class="nav-rail">
+            <a href="dashboard.html" class="nav-rail-item" title="Domů">
+                <span class="material-icons-outlined">home</span>
+                <span class="nav-rail-item-label">Domů</span>
+            </a>
+            
+            <div class="nav-rail-divider"></div>
+            
+            <a href="zamery.html" class="nav-rail-item" title="Záměry">
+                <span class="material-icons-outlined">push_pin</span>
+                <span class="nav-rail-item-label">Záměry</span>
+            </a>
+            <a href="rizeni.html" class="nav-rail-item" title="Řízení">
+                <span class="material-icons-outlined">work</span>
+                <span class="nav-rail-item-label">Řízení</span>
+            </a>
+            <a href="dokumenty.html" class="nav-rail-item active" title="Dokumenty">
+                <span class="material-icons-outlined">mail</span>
+                <span class="nav-rail-item-label">Dokumenty</span>
+            </a>
+            
+            <div class="nav-rail-divider"></div>
+            
+            <a href="#" class="nav-rail-item disabled" title="Šablony">
+                <span class="material-icons-outlined">description</span>
+                <span class="nav-rail-item-label">Šablony</span>
+            </a>
+            <a href="#" class="nav-rail-item disabled" title="Statistiky">
+                <span class="material-icons-outlined">bar_chart</span>
+                <span class="nav-rail-item-label">Statistiky</span>
+            </a>
+            <a href="#" class="nav-rail-item disabled" title="Nastavení">
+                <span class="material-icons-outlined">settings</span>
+                <span class="nav-rail-item-label">Nastavení</span>
+            </a>
+        </nav>
+        
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-title">Dokumenty</div>
+                <button class="btn-new">
+                    <span class="material-icons-outlined">add</span>
+                    <span>Nový dokument</span>
+                </button>
+            </div>
+            
+            <nav class="nav-menu">
+                <a href="#" class="nav-item">
+                    <span class="material-icons-outlined">edit_note</span>
+                    <span class="nav-item-text">Rozpracované</span>
+                </a>
+                
+                <div class="nav-group">
+                    <a href="#" class="expanded nav-item" data-toggle="dorucene">
+                        <span class="material-icons-outlined">inbox</span>
+                        <span class="nav-item-text">Doručené</span>
+                        <span class="material-icons-outlined nav-item-expand">expand_more</span>
+                    </a>
+                    <div class="nav-submenu show" id="dorucene">
+                        <a href="#" class="active nav-item">
+                            <span class="nav-item-text">Ke zpracování</span>
+                        </a>
+                        <a href="#" class="nav-item">
+                            <span class="nav-item-text">Zpracované</span>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="nav-group">
+                    <a href="#" class="expanded nav-item" data-toggle="vlastni">
+                        <span class="material-icons-outlined">folder</span>
+                        <span class="nav-item-text">Vlastní</span>
+                        <span class="material-icons-outlined nav-item-expand">expand_more</span>
+                    </a>
+                    <div class="nav-submenu show" id="vlastni">
+                        <a href="#" class="nav-item">
+                            <span class="nav-item-text">Ve schvalování</span>
+                        </a>
+                        <a href="#" class="nav-item">
+                            <span class="nav-item-text">Schválené</span>
+                        </a>
+                        <a href="#" class="nav-item">
+                            <span class="nav-item-text">K podpisu</span>
+                        </a>
+                        <a href="#" class="nav-item">
+                            <span class="nav-item-text">Podepsané</span>
+                        </a>
+                        <a href="#" class="nav-item">
+                            <span class="nav-item-text">Odeslané</span>
+                        </a>
+                    </div>
+                </div>
+                
+                <a href="#" class="nav-item">
+                    <span class="material-icons-outlined">cancel</span>
+                    <span class="nav-item-text">Zrušené</span>
+                </a>
+                
+                <a href="#" class="nav-item">
+                    <span class="material-icons-outlined">folder_open</span>
+                    <span class="nav-item-text">Všechny</span>
+                </a>
+            </nav>
+        </aside>
+        <!-- Main content -->
+        <main class="main-content">
+            <!-- Toolbar -->
+            <div class="toolbar">
+                <div class="toolbar-item">
+                    <span class="material-icons-outlined toolbar-icon">filter_list</span>
+                    <span>0</span>
+                </div>
+                <span class="material-icons-outlined toolbar-icon">view_list</span>
+                <span class="material-icons-outlined toolbar-icon">settings</span>
+            </div>
+            <!-- Table -->
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th class="sorted">
+                                <div class="th-content">
+                                    Datum vytvoření
+                                    <span class="material-icons-outlined sort-icon">arrow_downward</span>
+                                </div>
+                            </th>
+                            <th>
+                                <div class="th-content">
+                                    PID
+                                    <span class="material-icons-outlined sort-icon">unfold_more</span>
+                                </div>
+                            </th>
+                            <th>
+                                <div class="th-content">
+                                    Název
+                                    <span class="material-icons-outlined sort-icon">unfold_more</span>
+                                </div>
+                            </th>
+                            <th>
+                                <div class="th-content">
+                                    Druh
+                                    <span class="material-icons-outlined sort-icon">unfold_more</span>
+                                </div>
+                            </th>
+                            <th>
+                                <div class="th-content">
+                                    Zpracovatel
+                                    <span class="material-icons-outlined sort-icon">unfold_more</span>
+                                </div>
+                            </th>
+                            <th>
+                                <div class="th-content">
+                                    Datum úpravy
+                                    <span class="material-icons-outlined sort-icon">unfold_more</span>
+                                </div>
+                            </th>
+                            <th>
+                                <div class="th-content">
+                                    Stav
+                                    <span class="material-icons-outlined sort-icon">unfold_more</span>
+                                </div>
+                            </th>
+                            <th>
+                                <div class="th-content">
+                                    ID dokumentace
+                                    <span class="material-icons-outlined sort-icon">unfold_more</span>
+                                </div>
+                            </th>
+                            <th>
+                                <div class="th-content">
+                                    Zpracováno mimo ISSŘ
+                                    <span class="material-icons-outlined sort-icon">unfold_more</span>
+                                </div>
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr onclick="window.location='detail-dokumentu.html'">
+                            <td class="col-date">7. 1. 2026 11:13:17</td>
+                            <td class="col-pid">SR00X01HSU37</td>
+                            <td class="col-name">Odstranění železničního přejezdu P1533</td>
+                            <td class="col-druh">Žádost o povolení ods...</td>
+                            <td class="col-zpracovatel">Eva Čejchanová</td>
+                            <td class="col-date">7. 1. 2026 11:13:20</td>
+                            <td class="col-stav">Ke zpracování</td>
+                            <td class="col-iddok">SR00X01HSU0M</td>
+                            <td class="col-mimo">× Ne</td>
+                            <td>
+                                <a href="detail-dokumentu.html" class="link-open">Otevřít</a>
+                                <span class="icon-link material-icons-outlined">open_in_new</span>
+                            </td>
+                        </tr>
+                        <tr onclick="window.location='detail-dokumentu.html'">
+                            <td class="col-date">7. 1. 2026 10:44:14</td>
+                            <td class="col-pid">SR00X01HSLN6</td>
+                            <td class="col-name">D01xD48 zřízení a propojení DIS</td>
+                            <td class="col-druh">Žádost o předběžnou i...</td>
+                            <td class="col-zpracovatel">Eva Čejchanová</td>
+                            <td class="col-date">7. 1. 2026 10:44:17</td>
+                            <td class="col-stav">Ke zpracování</td>
+                            <td class="col-iddok">SR00X01HSLKL</td>
+                            <td class="col-mimo">× Ne</td>
+                            <td>
+                                <a href="detail-dokumentu.html" class="link-open">Otevřít</a>
+                                <span class="icon-link material-icons-outlined">open_in_new</span>
+                            </td>
+                        </tr>
+                        <tr onclick="window.location='detail-dokumentu.html'">
+                            <td class="col-date">7. 1. 2026 10:23:04</td>
+                            <td class="col-pid">SR00X01HSFWL</td>
+                            <td class="col-name">Test rozpracovaného dokumentu</td>
+                            <td class="col-druh">Žádost o změnu záme...</td>
+                            <td class="col-zpracovatel">Eva Čejchanová</td>
+                            <td class="col-date">7. 1. 2026 10:23:05</td>
+                            <td class="col-stav">Ke zpracování</td>
+                            <td class="col-iddok">SR00X01HSFUI</td>
+                            <td class="col-mimo">× Ne</td>
+                            <td>
+                                <a href="detail-dokumentu.html" class="link-open">Otevřít</a>
+                                <span class="icon-link material-icons-outlined">open_in_new</span>
+                            </td>
+                        </tr>
+                        <tr onclick="window.location='detail-dokumentu.html'">
+                            <td class="col-date">7. 1. 2026 9:47:37</td>
+                            <td class="col-pid">SR00X01HS6PQ</td>
+                            <td class="col-name">Vodovod Skalice</td>
+                            <td class="col-druh">Žádost o změnu záme...</td>
+                            <td class="col-zpracovatel">Eva Čejchanová</td>
+                            <td class="col-date">7. 1. 2026 9:47:39</td>
+                            <td class="col-stav">Ke zpracování</td>
+                            <td class="col-iddok">SR00X01HS6N2</td>
+                            <td class="col-mimo">× Ne</td>
+                            <td>
+                                <a href="detail-dokumentu.html" class="link-open">Otevřít</a>
+                                <span class="icon-link material-icons-outlined">open_in_new</span>
+                            </td>
+                        </tr>
+                        <tr onclick="window.location='detail-dokumentu.html'">
+                            <td class="col-date">6. 1. 2026 19:21:25</td>
+                            <td class="col-pid">SR00X01HNKRM</td>
+                            <td class="col-name">Výstavba haly v SÚ Havlíčkův Brod</td>
+                            <td class="col-druh">Žádost o změnu záme...</td>
+                            <td class="col-zpracovatel">Eva Čejchanová</td>
+                            <td class="col-date">6. 1. 2026 19:21:26</td>
+                            <td class="col-stav">Ke zpracování</td>
+                            <td class="col-iddok">SR00X01HNKN6</td>
+                            <td class="col-mimo">× Ne</td>
+                            <td>
+                                <a href="detail-dokumentu.html" class="link-open">Otevřít</a>
+                                <span class="icon-link material-icons-outlined">open_in_new</span>
+                            </td>
+                        </tr>
+                        <tr onclick="window.location='detail-dokumentu.html'">
+                            <td class="col-date">6. 1. 2026 16:45:59</td>
+                            <td class="col-pid">SR00X01HM1YP</td>
+                            <td class="col-name">ETU 1 - Oprava budovy BČOV</td>
+                            <td class="col-druh">Žádost o vydání kolau...</td>
+                            <td class="col-zpracovatel">Eva Čejchanová</td>
+                            <td class="col-date">6. 1. 2026 16:46:00</td>
+                            <td class="col-stav">Ke zpracování</td>
+                            <td class="col-iddok">SR00X0115XY6</td>
+                            <td class="col-mimo">× Ne</td>
+                            <td>
+                                <a href="detail-dokumentu.html" class="link-open">Otevřít</a>
+                                <span class="icon-link material-icons-outlined">open_in_new</span>
+                            </td>
+                        </tr>
+                        <tr onclick="window.location='detail-dokumentu.html'">
+                            <td class="col-date">6. 1. 2026 15:20:48</td>
+                            <td class="col-pid">SR00X01HLQ9O</td>
+                            <td class="col-name">zavedení zkušebního provozu</td>
+                            <td class="col-druh">Žádost o povolení zku...</td>
+                            <td class="col-zpracovatel">Eva Čejchanová</td>
+                            <td class="col-date">6. 1. 2026 15:20:48</td>
+                            <td class="col-stav">Ke zpracování</td>
+                            <td class="col-iddok"></td>
+                            <td class="col-mimo">× Ne</td>
+                            <td>
+                                <a href="detail-dokumentu.html" class="link-open">Otevřít</a>
+                                <span class="icon-link material-icons-outlined">open_in_new</span>
+                            </td>
+                        </tr>
+                        <tr onclick="window.location='detail-dokumentu.html'">
+                            <td class="col-date">6. 1. 2026 13:16:01</td>
+                            <td class="col-pid">SR00X01HLE5K</td>
+                            <td class="col-name">Vypracování projektové dokumentace "Oprava zabe...</td>
+                            <td class="col-druh">Žádost o vydání povol...</td>
+                            <td class="col-zpracovatel">Eva Čejchanová</td>
+                            <td class="col-date">6. 1. 2026 13:16:03</td>
+                            <td class="col-stav">Ke zpracování</td>
+                            <td class="col-iddok">SR00X01HLDRP</td>
+                            <td class="col-mimo">× Ne</td>
+                            <td>
+                                <a href="detail-dokumentu.html" class="link-open">Otevřít</a>
+                                <span class="icon-link material-icons-outlined">open_in_new</span>
+                            </td>
+                        </tr>
+                        <tr onclick="window.location='detail-dokumentu.html'">
+                            <td class="col-date">6. 1. 2026 13:14:40</td>
+                            <td class="col-pid">SR00X01HLCLQ</td>
+                            <td class="col-name">Přeložka trakčních vedení kabelů k.ú. Teplice - Trno...</td>
+                            <td class="col-druh">Žádost o změnu povol...</td>
+                            <td class="col-zpracovatel">Eva Čejchanová</td>
+                            <td class="col-date">6. 1. 2026 13:14:41</td>
+                            <td class="col-stav">Ke zpracování</td>
+                            <td class="col-iddok"></td>
+                            <td class="col-mimo">× Ne</td>
+                            <td>
+                                <a href="detail-dokumentu.html" class="link-open">Otevřít</a>
+                                <span class="icon-link material-icons-outlined">open_in_new</span>
+                            </td>
+                        </tr>
+                        <tr onclick="window.location='detail-dokumentu.html'">
+                            <td class="col-date">6. 1. 2026 12:21:52</td>
+                            <td class="col-pid">SR00X01HKOX3</td>
+                            <td class="col-name">Společné dispečinkové pracoviště APOC - letiště Pr...</td>
+                            <td class="col-druh">Žádost o vydání povol...</td>
+                            <td class="col-zpracovatel">Eva Čejchanová</td>
+                            <td class="col-date">6. 1. 2026 12:21:54</td>
+                            <td class="col-stav">Ke zpracování</td>
+                            <td class="col-iddok">SR00X01HKOTN</td>
+                            <td class="col-mimo">× Ne</td>
+                            <td>
+                                <a href="detail-dokumentu.html" class="link-open">Otevřít</a>
+                                <span class="icon-link material-icons-outlined">open_in_new</span>
+                            </td>
+                        </tr>
+                        <tr onclick="window.location='detail-dokumentu.html'">
+                            <td class="col-date">6. 1. 2026 7:50:48</td>
+                            <td class="col-pid">SR00X01HJDKE</td>
+                            <td class="col-name">Vypracování projektové dokumentace na opravu PZ...</td>
+                            <td class="col-druh">Doplnění žádosti či od...</td>
+                            <td class="col-zpracovatel">Eva Čejchanová</td>
+                            <td class="col-date">6. 1. 2026 7:50:50</td>
+                            <td class="col-stav">Ke zpracování</td>
+                            <td class="col-iddok">SR00X01HJDHT</td>
+                            <td class="col-mimo">× Ne</td>
+                            <td>
+                                <a href="detail-dokumentu.html" class="link-open">Otevřít</a>
+                                <span class="icon-link material-icons-outlined">open_in_new</span>
+                            </td>
+                        </tr>
+                        <tr onclick="window.location='detail-dokumentu.html'">
+                            <td class="col-date">5. 1. 2026 16:23:05</td>
+                            <td class="col-pid">SR00X01HDVAG</td>
+                            <td class="col-name">Rekonstrukce ŽST Čáslav</td>
+                            <td class="col-druh">Doplnění žádosti či od...</td>
+                            <td class="col-zpracovatel">Eva Čejchanová</td>
+                            <td class="col-date">6. 1. 2026 14:19:23</td>
+                            <td class="col-stav">Ke zpracování</td>
+                            <td class="col-iddok">SR00X01HDUE3</td>
+                            <td class="col-mimo">✓ Ano</td>
+                            <td>
+                                <a href="detail-dokumentu.html" class="link-open">Otevřít</a>
+                                <span class="icon-link material-icons-outlined">open_in_new</span>
+                            </td>
+                        </tr>
+                        <tr onclick="window.location='detail-dokumentu.html'">
+                            <td class="col-date">5. 1. 2026 15:24:37</td>
+                            <td class="col-pid">SR00X01HDHJX</td>
+                            <td class="col-name">PRE - T401 A TL401 výměna</td>
+                            <td class="col-druh">Žádost o vydání kolau...</td>
+                            <td class="col-zpracovatel">Eva Čejchanová</td>
+                            <td class="col-date">5. 1. 2026 15:24:38</td>
+                            <td class="col-stav">Ke zpracování</td>
+                            <td class="col-iddok"></td>
+                            <td class="col-mimo">× Ne</td>
+                            <td>
+                                <a href="detail-dokumentu.html" class="link-open">Otevřít</a>
+                                <span class="icon-link material-icons-outlined">open_in_new</span>
+                            </td>
+                        </tr>
+                        <tr onclick="window.location='detail-dokumentu.html'">
+                            <td class="col-date">5. 1. 2026 13:29:14</td>
+                            <td class="col-pid">SR00X01HD232</td>
+                            <td class="col-name">KOC – rozšíření skladové kapacity</td>
+                            <td class="col-druh">Žádost o vydání povol...</td>
+                            <td class="col-zpracovatel">Eva Čejchanová</td>
+                            <td class="col-date">5. 1. 2026 13:29:14</td>
+                            <td class="col-stav">Ke zpracování</td>
+                            <td class="col-iddok">SR00X018YL31</td>
+                            <td class="col-mimo">× Ne</td>
+                            <td>
+                                <a href="detail-dokumentu.html" class="link-open">Otevřít</a>
+                                <span class="icon-link material-icons-outlined">open_in_new</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+    <script>
+        // Toggle submenu
+        document.querySelectorAll('[data-toggle]').forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetId = item.getAttribute('data-toggle');
+                const submenu = document.getElementById(targetId);
+                
+                item.classList.toggle('expanded');
+                submenu.classList.toggle('show');
+            });
+        });
+        // Prevent row click when clicking on link
+        document.querySelectorAll('.link-open, .icon-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.stopPropagation();
+            });
+        });
+    </script>
+</body>
+</html>

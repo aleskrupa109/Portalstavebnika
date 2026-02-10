@@ -1,0 +1,3215 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ISSŘ - Projednání řízení</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+    <style>
+        /* ===========================================
+           ISSŘ HLAVIČKA
+           =========================================== */
+        .issr-header {
+            background-color: #004289;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            padding: 0 24px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1), 0 2px 4px rgba(0,0,0,0.06);
+        }
+
+        .issr-header__logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: white;
+        }
+
+        .issr-header__logo-img {
+            height: 40px;
+            width: auto;
+        }
+
+        .issr-header__title {
+            font-size: 12px;
+            font-weight: 400;
+            color: white;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+
+        .issr-header__search {
+            flex: 1;
+            max-width: 500px;
+            margin: 0 40px;
+        }
+
+        .issr-header__search-input {
+            width: 100%;
+            height: 32px;
+            padding: 0 16px;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .issr-header__search-input::placeholder {
+            color: #adb5bd;
+        }
+
+        .issr-header__actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-left: auto;
+        }
+
+        .issr-header__notification {
+            position: relative;
+            color: white;
+            cursor: pointer;
+        }
+
+        .issr-header__notification-icon {
+            width: 20px;
+            height: 20px;
+        }
+
+        .issr-header__notification-badge {
+            position: absolute;
+            top: -6px;
+            right: -8px;
+            background-color: #0066cc;
+            color: white;
+            font-size: 10px;
+            font-weight: 600;
+            min-width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 4px;
+        }
+
+        .issr-header__user {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: white;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .issr-header__user-icon {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* ===========================================
+           STYLY STRÁNKY
+           =========================================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif !important;
+            font-size: 13px !important;
+            color: #333 !important;
+            background: #f5f5f5 !important;
+            line-height: 1.5 !important;
+            text-align: left !important;
+        }
+
+        * {
+            text-align: left !important;
+        }
+
+        .btn, .btn-primary, .btn-secondary, .btn-back, .control-card-action {
+            text-align: center !important;
+        }
+
+        /* Main layout */
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            min-height: calc(100vh - 56px);
+        }
+
+        /* Case header - sticky */
+        .case-header {
+            background: #fff;
+            position: sticky;
+            top: 56px;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .case-header-main {
+            padding: 16px 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .case-header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border: 1px solid #dadce0;
+            border-radius: 8px;
+            background: #fff;
+            color: #5f6368;
+            cursor: pointer;
+            transition: all 0.15s;
+            text-decoration: none;
+        }
+
+        .btn-back:hover {
+            background: #f1f3f4;
+            border-color: #5f6368;
+        }
+
+        .case-info {
+            flex: 1;
+        }
+
+        .case-number {
+            font-size: 12px !important;
+            color: #5f6368 !important;
+            font-family: 'Roboto Mono', monospace !important;
+            margin-bottom: 2px !important;
+        }
+
+        .case-title {
+            font-size: 18px !important;
+            font-weight: 500 !important;
+            color: #202124 !important;
+            font-style: normal !important;
+        }
+
+        .case-meta {
+            display: flex !important;
+            align-items: center !important;
+            gap: 16px !important;
+            margin-top: 4px !important;
+        }
+
+        .case-meta-item {
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 4px !important;
+            font-size: 12px !important;
+            color: #5f6368 !important;
+        }
+
+        .case-meta-item .material-icons-outlined {
+            font-size: 16px;
+        }
+
+        .case-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .case-badge.active {
+            background: #e6f4ea;
+            color: #137333;
+        }
+
+        .case-badge.in-progress {
+            background: #e8f4fd;
+            color: #004289;
+        }
+
+        /* Document access buttons */
+        .document-access-buttons {
+            display: flex !important;
+            gap: 8px !important;
+            flex-wrap: nowrap !important;
+        }
+
+        .doc-access-btn {
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 6px !important;
+            padding: 6px 12px !important;
+            background: #fff !important;
+            border: 1px solid #dadce0 !important;
+            border-radius: 6px !important;
+            font-size: 12px !important;
+            font-weight: 400 !important;
+            color: #202124 !important;
+            cursor: pointer !important;
+            transition: all 0.15s !important;
+            text-decoration: none !important;
+            white-space: nowrap !important;
+        }
+
+        .doc-access-btn:hover {
+            background: #e8f4fd !important;
+            border-color: #004289 !important;
+            color: #004289 !important;
+        }
+
+        .doc-access-btn .material-icons-outlined {
+            font-size: 16px !important;
+            color: #5f6368 !important;
+        }
+
+        .doc-access-btn:hover .material-icons-outlined {
+            color: #004289 !important;
+        }
+
+        .doc-access-btn .badge {
+            background: #e8f4fd !important;
+            color: #004289 !important;
+            padding: 2px 6px !important;
+            border-radius: 10px !important;
+            font-size: 10px !important;
+            font-weight: 500 !important;
+        }
+
+        /* Workflow stepper */
+        .workflow-bar {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            padding: 12px 32px !important;
+            background: #f8f9fa !important;
+            flex-wrap: nowrap !important;
+        }
+
+        .workflow-stepper {
+            display: flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+            flex-wrap: nowrap !important;
+        }
+
+        .workflow-step {
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 6px !important;
+            padding: 6px 12px !important;
+            border-radius: 16px !important;
+            font-size: 12px !important;
+            font-weight: 400 !important;
+            background: #fff !important;
+            border: 1px solid #e0e0e0 !important;
+            color: #5f6368 !important;
+            white-space: nowrap !important;
+        }
+
+        .workflow-step.active {
+            background: #004289 !important;
+            border-color: #004289 !important;
+            color: #fff !important;
+        }
+
+        .workflow-step.completed {
+            background: #e6f4ea !important;
+            border-color: #ceead6 !important;
+            color: #137333 !important;
+        }
+
+        .workflow-step .step-number {
+            width: 20px !important;
+            height: 20px !important;
+            min-width: 20px !important;
+            border-radius: 50% !important;
+            background: #e0e0e0 !important;
+            color: #5f6368 !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            font-size: 11px !important;
+            font-weight: 500 !important;
+        }
+
+        .workflow-step.active .step-number {
+            background: rgba(255,255,255,0.2) !important;
+            color: #fff !important;
+        }
+
+        .workflow-step.completed .step-number {
+            background: #34a853 !important;
+            color: #fff !important;
+        }
+
+        .workflow-step-connector {
+            width: 24px !important;
+            height: 2px !important;
+            min-width: 24px !important;
+            background: #dadce0 !important;
+            flex-shrink: 0 !important;
+        }
+
+        /* Page content */
+        .page-content {
+            flex: 1;
+            padding: 24px 32px;
+        }
+
+        /* Info panel */
+        .info-panel {
+            background: #e8f4fd;
+            border: 1px solid #c5d9f0;
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .info-panel .material-icons-outlined {
+            font-size: 24px;
+            color: #004289;
+            flex-shrink: 0;
+        }
+
+        .info-panel-content {
+            flex: 1;
+        }
+
+        .info-panel-title {
+            font-size: 14px !important;
+            font-weight: 500 !important;
+            color: #004289 !important;
+            margin-bottom: 4px !important;
+            font-style: normal !important;
+        }
+
+        .info-panel-text {
+            font-size: 13px !important;
+            color: #333 !important;
+            font-style: normal !important;
+        }
+
+        .info-panel-meta {
+            display: flex;
+            gap: 24px;
+            margin-top: 8px;
+            font-size: 12px;
+            color: #5f6368;
+        }
+
+        .info-panel-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .info-panel-meta-item .material-icons-outlined {
+            font-size: 16px;
+            color: #5f6368;
+        }
+
+        /* Warning panel */
+        .warning-panel {
+            background: #fef7e0;
+            border: 1px solid #f5e6b3;
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .warning-panel .material-icons-outlined {
+            font-size: 24px;
+            color: #b06000;
+            flex-shrink: 0;
+        }
+
+        .warning-panel-content {
+            flex: 1;
+        }
+
+        .warning-panel-title {
+            font-size: 14px !important;
+            font-weight: 500 !important;
+            color: #b06000 !important;
+            margin-bottom: 4px !important;
+            font-style: normal !important;
+        }
+
+        .warning-panel-text {
+            font-size: 13px !important;
+            color: #7a4200 !important;
+            font-style: normal !important;
+        }
+
+        /* Section header */
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            display: flex !important;
+            align-items: center !important;
+            gap: 10px !important;
+            font-size: 16px !important;
+            font-weight: 500 !important;
+            color: #202124 !important;
+            font-style: normal !important;
+        }
+
+        .section-title .material-icons-outlined {
+            font-size: 24px !important;
+            color: #004289 !important;
+        }
+
+        .section-progress {
+            display: flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+            font-size: 13px !important;
+            color: #5f6368 !important;
+        }
+
+        .progress-bar {
+            width: 120px;
+            height: 6px;
+            background: #e0e0e0;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #34a853;
+            border-radius: 3px;
+            transition: width 0.3s;
+        }
+
+        /* Control cards grid */
+        .control-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .control-card {
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.15s;
+        }
+
+        .control-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        .control-card.disabled {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .control-card-header {
+            padding: 16px;
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .control-card-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .control-card-icon .material-icons-outlined {
+            font-size: 24px;
+        }
+
+        /* Status colors */
+        .status-waiting .control-card-icon {
+            background: #f5f5f5;
+            color: #9aa0a6;
+        }
+
+        .status-ready .control-card-icon {
+            background: #e8f4fd;
+            color: #004289;
+        }
+
+        .status-in-progress .control-card-icon {
+            background: #fef7e0;
+            color: #b06000;
+        }
+
+        .status-done .control-card-icon {
+            background: #e6f4ea;
+            color: #137333;
+        }
+
+        .status-problem .control-card-icon {
+            background: #fce8e6;
+            color: #c5221f;
+        }
+
+        .control-card-status {
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .status-waiting .control-card-status {
+            background: #f5f5f5;
+            color: #5f6368;
+        }
+
+        .status-ready .control-card-status {
+            background: #e8f4fd;
+            color: #004289;
+        }
+
+        .status-in-progress .control-card-status {
+            background: #fef7e0;
+            color: #b06000;
+        }
+
+        .status-done .control-card-status {
+            background: #e6f4ea;
+            color: #137333;
+        }
+
+        .status-problem .control-card-status {
+            background: #fce8e6;
+            color: #c5221f;
+        }
+
+        .control-card-body {
+            padding: 0 16px 16px !important;
+        }
+
+        .control-card-title {
+            font-size: 15px !important;
+            font-weight: 500 !important;
+            color: #202124 !important;
+            margin-bottom: 4px !important;
+            font-style: normal !important;
+        }
+
+        .control-card-desc {
+            font-size: 12px !important;
+            color: #5f6368 !important;
+            line-height: 1.4 !important;
+            margin-bottom: 12px !important;
+            font-style: normal !important;
+        }
+
+        .control-card-action {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.15s;
+            text-decoration: none;
+            border: none;
+        }
+
+        .status-waiting .control-card-action {
+            background: #f5f5f5;
+            color: #9aa0a6;
+            cursor: not-allowed;
+        }
+
+        .status-ready .control-card-action {
+            background: #004289;
+            color: #fff;
+        }
+
+        .status-ready .control-card-action:hover {
+            background: #003366;
+        }
+
+        .status-in-progress .control-card-action {
+            background: #b06000;
+            color: #fff;
+        }
+
+        .status-in-progress .control-card-action:hover {
+            background: #8c4d00;
+        }
+
+        .status-done .control-card-action {
+            background: #e6f4ea;
+            color: #137333;
+        }
+
+        .status-done .control-card-action:hover {
+            background: #ceead6;
+        }
+
+        .status-problem .control-card-action {
+            background: #fce8e6;
+            color: #c5221f;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.15s;
+            text-decoration: none;
+            border: 1px solid;
+            white-space: nowrap;
+        }
+
+        .btn-primary {
+            background: #004289;
+            color: #fff;
+            border-color: #004289;
+        }
+
+        .btn-primary:hover {
+            background: #003366;
+            border-color: #003366;
+        }
+
+        .btn-primary:disabled {
+            background: #dadce0;
+            border-color: #dadce0;
+            color: #9aa0a6;
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background: #fff;
+            color: #5f6368;
+            border-color: #dadce0;
+        }
+
+        .btn-secondary:hover {
+            background: #f5f5f5;
+            border-color: #5f6368;
+        }
+
+        .btn-success {
+            background: #137333;
+            color: #fff;
+            border-color: #137333;
+        }
+
+        .btn-success:hover {
+            background: #0d5c28;
+            border-color: #0d5c28;
+        }
+
+        .btn-save-draft {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 24px;
+            background: #fff;
+            color: #5f6368;
+            border: 1px solid #dadce0;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.15s;
+            white-space: nowrap;
+        }
+
+        .btn-save-draft:hover {
+            background: #f1f3f4;
+            border-color: #5f6368;
+        }
+
+        .btn .material-icons-outlined {
+            font-size: 18px;
+        }
+
+        /* Actions bar */
+        .actions-bar {
+            background: #fff;
+            border-top: 1px solid #e0e0e0;
+            padding: 16px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            bottom: 0;
+        }
+
+        .actions-left, .actions-right {
+            display: flex;
+            gap: 12px;
+        }
+
+        /* Control overlay */
+        .control-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #fff;
+            z-index: 1500;
+            display: none;
+            flex-direction: column;
+        }
+
+        .control-overlay.open {
+            display: flex;
+        }
+
+        .control-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 24px;
+            background: #fff;
+            border-bottom: 1px solid #e0e0e0;
+            flex-shrink: 0;
+        }
+
+        .control-header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .control-close {
+            width: 40px;
+            height: 40px;
+            border: 1px solid #dadce0;
+            border-radius: 8px;
+            background: #fff;
+            color: #5f6368;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.15s;
+        }
+
+        .control-close:hover {
+            background: #f1f3f4;
+            border-color: #5f6368;
+        }
+
+        .control-title {
+            font-size: 18px !important;
+            font-weight: 500 !important;
+            color: #202124 !important;
+            font-style: normal !important;
+        }
+
+        .control-content {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+        }
+
+        .control-form-panel {
+            width: 50%;
+            padding: 24px;
+            overflow-y: auto;
+            border-right: 1px solid #e0e0e0;
+        }
+
+        .control-viewer-panel {
+            width: 50%;
+            display: flex;
+            flex-direction: column;
+            background: #f8f9fa;
+        }
+
+        .control-form-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 24px;
+            border-top: 1px solid #e0e0e0;
+            background: #fff;
+            flex-shrink: 0;
+        }
+
+        .control-form-footer-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .control-form-footer-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        /* Form elements */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: #202124;
+            margin-bottom: 6px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #dadce0;
+            border-radius: 6px;
+            font-size: 14px;
+            color: #202124;
+            transition: border-color 0.15s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #004289;
+            box-shadow: 0 0 0 2px rgba(0, 66, 137, 0.1);
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #dadce0;
+            border-radius: 6px;
+            font-size: 14px;
+            color: #202124;
+            background: #fff;
+            cursor: pointer;
+        }
+
+        .form-select:focus {
+            outline: none;
+            border-color: #004289;
+        }
+
+        .form-textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #dadce0;
+            border-radius: 6px;
+            font-size: 14px;
+            color: #202124;
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-textarea:focus {
+            outline: none;
+            border-color: #004289;
+        }
+
+        .form-hint {
+            font-size: 12px;
+            color: #5f6368;
+            margin-top: 4px;
+        }
+
+        /* Alert banners */
+        .alert-banner {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: 8px;
+            border-left: 4px solid;
+        }
+
+        .alert-banner .material-icons-outlined {
+            font-size: 20px;
+            margin-top: 2px;
+        }
+
+        .alert-warning {
+            background-color: #fef7e0;
+            border-left-color: #f9ab00;
+            color: #7f4800;
+        }
+
+        .alert-warning .material-icons-outlined {
+            color: #f9ab00;
+        }
+
+        .alert-info {
+            background-color: #e8f4fd;
+            border-left-color: #1967d2;
+            color: #004289;
+        }
+
+        .alert-info .material-icons-outlined {
+            color: #1967d2;
+        }
+
+        /* Radio/Checkbox options */
+        .control-option {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .control-option:hover {
+            border-color: #004289;
+            background: #f8fbff;
+        }
+
+        .control-option.selected {
+            border-color: #004289;
+            background: #e8f4fd;
+        }
+
+        .control-option input {
+            margin-top: 2px;
+        }
+
+        .control-option-content {
+            flex: 1;
+        }
+
+        .control-option-title {
+            font-size: 14px !important;
+            font-weight: 500 !important;
+            color: #202124 !important;
+            font-style: normal !important;
+        }
+
+        .control-option-desc {
+            font-size: 12px !important;
+            color: #5f6368 !important;
+            margin-top: 2px !important;
+            font-style: normal !important;
+        }
+
+        /* Control sections */
+        .control-section {
+            margin-bottom: 24px;
+        }
+
+        .control-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .control-section-title {
+            font-size: 13px !important;
+            font-weight: 500 !important;
+            color: #202124 !important;
+            margin-bottom: 12px !important;
+            font-style: normal !important;
+        }
+
+        /* Viewer tabs */
+        .viewer-tabs {
+            display: flex;
+            gap: 4px;
+            padding: 12px 16px;
+            border-bottom: 1px solid #e0e0e0;
+            background: #fff;
+        }
+
+        .viewer-tab {
+            padding: 8px 16px;
+            border: none;
+            background: transparent;
+            color: #5f6368;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.15s;
+        }
+
+        .viewer-tab:hover {
+            background: #f1f3f4;
+        }
+
+        .viewer-tab.active {
+            background: #e8f4fd;
+            color: #004289;
+        }
+
+        .viewer-tab-content {
+            padding: 16px;
+        }
+
+        .viewer-content {
+            flex: 1;
+            padding: 0;
+            overflow-y: auto;
+        }
+
+        .viewer-placeholder {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #9aa0a6;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .viewer-placeholder .material-icons-outlined {
+            font-size: 64px;
+            margin-bottom: 16px;
+        }
+
+        /* Document preview */
+        .document-preview {
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 24px;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .document-preview h3 {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 16px;
+            text-align: center !important;
+        }
+
+        .document-preview p {
+            margin-bottom: 12px;
+        }
+
+        /* Data table */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 10px 12px;
+            text-align: left !important;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .data-table th {
+            font-weight: 500;
+            color: #5f6368;
+            font-size: 12px;
+            background: #f8f9fa;
+        }
+
+        .data-table td {
+            font-size: 13px;
+            color: #202124;
+        }
+
+        .data-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Participant list */
+        .participant-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .participant-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+        }
+
+        .participant-item.waived {
+            background: #e6f4ea;
+            border-color: #ceead6;
+        }
+
+        .participant-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #e8f4fd;
+            color: #004289;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .participant-icon .material-icons-outlined {
+            font-size: 18px;
+        }
+
+        .participant-info {
+            flex: 1;
+        }
+
+        .participant-name {
+            font-size: 14px;
+            font-weight: 500;
+            color: #202124;
+        }
+
+        .participant-role {
+            font-size: 12px;
+            color: #5f6368;
+        }
+
+        .participant-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Checkbox */
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            color: #202124;
+        }
+
+        .checkbox-label input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        /* Námitka item */
+        .namitka-item {
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+
+        .namitka-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .namitka-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+
+        .namitka-author {
+            font-size: 14px;
+            font-weight: 500;
+            color: #202124;
+        }
+
+        .namitka-date {
+            font-size: 12px;
+            color: #5f6368;
+        }
+
+        .namitka-status {
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .namitka-status.new {
+            background: #e8f4fd;
+            color: #004289;
+        }
+
+        .namitka-status.in-progress {
+            background: #fef7e0;
+            color: #b06000;
+        }
+
+        .namitka-status.resolved {
+            background: #e6f4ea;
+            color: #137333;
+        }
+
+        .namitka-content {
+            font-size: 13px;
+            color: #333;
+            margin-bottom: 12px;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 6px;
+        }
+
+        .namitka-resolution {
+            padding: 12px;
+            background: #e6f4ea;
+            border-radius: 6px;
+            font-size: 13px;
+            color: #137333;
+        }
+
+        .namitka-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        /* Lhůta progress */
+        .lhuta-display {
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .lhuta-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .lhuta-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: #202124;
+        }
+
+        .lhuta-countdown {
+            font-size: 24px;
+            font-weight: 500;
+            color: #004289;
+        }
+
+        .lhuta-bar {
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+
+        .lhuta-bar-fill {
+            height: 100%;
+            background: #004289;
+            border-radius: 4px;
+            transition: width 0.3s;
+        }
+
+        .lhuta-bar-fill.warning {
+            background: #b06000;
+        }
+
+        .lhuta-bar-fill.danger {
+            background: #c5221f;
+        }
+
+        .lhuta-dates {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #5f6368;
+        }
+
+        /* Modal overlay */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+
+        .modal-overlay.open {
+            display: flex;
+        }
+
+        .modal {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            border-bottom: 1px solid #e0e0e0;
+            flex-shrink: 0;
+        }
+
+        .modal-title {
+            display: flex !important;
+            align-items: center !important;
+            gap: 10px !important;
+            font-size: 16px !important;
+            font-weight: 500 !important;
+            color: #202124 !important;
+            font-style: normal !important;
+        }
+
+        .modal-title .material-icons-outlined {
+            font-size: 24px !important;
+            color: #004289 !important;
+        }
+
+        .modal-close {
+            width: 36px;
+            height: 36px;
+            border: none;
+            background: transparent;
+            color: #5f6368;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-close:hover {
+            background: #f1f3f4;
+        }
+
+        .modal-body {
+            padding: 20px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            padding: 16px 20px;
+            border-top: 1px solid #e0e0e0;
+            background: #fafafa;
+            flex-shrink: 0;
+        }
+
+        /* Summary card */
+        .summary-card {
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+
+        .summary-card-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: #202124;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .summary-card-title .material-icons-outlined {
+            font-size: 20px;
+            color: #004289;
+        }
+
+        .summary-stat {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .summary-stat:last-child {
+            border-bottom: none;
+        }
+
+        .summary-stat-label {
+            font-size: 13px;
+            color: #5f6368;
+        }
+
+        .summary-stat-value {
+            font-size: 13px;
+            font-weight: 500;
+            color: #202124;
+        }
+
+        /* Empty state */
+        .empty-state {
+            text-align: center !important;
+            padding: 40px 20px;
+            color: #5f6368;
+        }
+
+        .empty-state .material-icons-outlined {
+            font-size: 48px;
+            color: #dadce0;
+            margin-bottom: 12px;
+        }
+
+        .empty-state-text {
+            font-size: 14px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .control-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .control-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .control-content {
+                flex-direction: column;
+            }
+            
+            .control-form-panel,
+            .control-viewer-panel {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ISSŘ Hlavička -->
+    <header class="issr-header">
+        <a href="../index.html" class="issr-header__logo">
+            <img src="../images/logo-issr.png" alt="ISSŘ Logo" class="issr-header__logo-img">
+            <span class="issr-header__title">INFORMAČNÍ SYSTÉM STAVEBNÍHO ŘÍZENÍ</span>
+        </a>
+        
+        <div class="issr-header__search">
+            <input type="text" class="issr-header__search-input" placeholder="Hledat">
+        </div>
+        
+        <div class="issr-header__actions">
+            <div class="issr-header__notification">
+                <svg class="issr-header__notification-icon" viewBox="0 0 16 16" fill="currentColor">
+                    <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2M8 1.918l-.797.161A4 4 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4 4 0 0 0-3.203-3.92zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5 5 0 0 1 13 6c0 .88.32 4.2 1.22 6"></path>
+                </svg>
+                <span class="issr-header__notification-badge">2</span>
+            </div>
+            
+            <div class="issr-header__user">
+                <span>Aleš Krupa</span>
+                <svg class="issr-header__user-icon" viewBox="0 0 16 16" fill="currentColor">
+                    <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z"></path>
+                </svg>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <!-- Case header -->
+        <header class="case-header">
+            <div class="case-header-main">
+                <div class="case-header-left">
+                    <a href="povoleni-2.html" class="btn-back" title="Zpět">
+                        <span class="material-icons-outlined">arrow_back</span>
+                    </a>
+                    <div class="case-info">
+                        <div class="case-number">R/2026/000147</div>
+                        <h1 class="case-title">Novostavba RD včetně přípojek</h1>
+                        <div class="case-meta">
+                            <span class="case-meta-item">
+                                <span class="material-icons-outlined">gavel</span>
+                                Povolení stavby
+                            </span>
+                            <span class="case-meta-item">
+                                <span class="material-icons-outlined">home</span>
+                                Jednoduchá stavba
+                            </span>
+                            <span class="case-badge in-progress">
+                                <span class="material-icons-outlined" style="font-size: 14px;">hourglass_top</span>
+                                Probíhá projednání
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Workflow stepper + document access -->
+            <div class="workflow-bar">
+                <!-- Document access buttons - vlevo -->
+                <div class="document-access-buttons">
+                    <a href="#" class="doc-access-btn" onclick="openModal('zadostModal'); return false;">
+                        <span class="material-icons-outlined">description</span>
+                        Žádost
+                    </a>
+                    <a href="#" class="doc-access-btn" onclick="openModal('prilohyModal'); return false;">
+                        <span class="material-icons-outlined">attach_file</span>
+                        Přílohy
+                        <span class="badge">12</span>
+                    </a>
+                    <a href="#" class="doc-access-btn" onclick="openModal('eedModal'); return false;">
+                        <span class="material-icons-outlined">folder</span>
+                        El. dokumentace
+                    </a>
+                    <a href="#" class="doc-access-btn" onclick="openModal('dokladyModal'); return false;">
+                        <span class="material-icons-outlined">fact_check</span>
+                        Dokladová část
+                    </a>
+                </div>
+                <!-- Workflow stepper - vpravo -->
+                <div class="workflow-stepper">
+                    <div class="workflow-step completed">
+                        <span class="step-number">✓</span>
+                        <span>Založení řízení</span>
+                    </div>
+                    <div class="workflow-step-connector"></div>
+                    <div class="workflow-step completed">
+                        <span class="step-number">✓</span>
+                        <span>Kontrola a zahájení</span>
+                    </div>
+                    <div class="workflow-step-connector"></div>
+                    <div class="workflow-step active">
+                        <span class="step-number">3</span>
+                        <span>Projednání</span>
+                    </div>
+                    <div class="workflow-step-connector"></div>
+                    <div class="workflow-step">
+                        <span class="step-number">4</span>
+                        <span>Rozhodnutí</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Page content -->
+        <div class="page-content">
+            <!-- Info panel -->
+            <div class="info-panel" id="infoPanel">
+                <span class="material-icons-outlined">info</span>
+                <div class="info-panel-content">
+                    <div class="info-panel-title">Řízení zahájeno – standardní postup</div>
+                    <div class="info-panel-text">
+                        Zrychlené řízení nebylo možné (chybí souhlasy všech účastníků). Postupuje se dle § 188-192 SZ.
+                    </div>
+                    <div class="info-panel-meta">
+                        <div class="info-panel-meta-item">
+                            <span class="material-icons-outlined">event</span>
+                            Datum zahájení: 7. 1. 2026
+                        </div>
+                        <div class="info-panel-meta-item">
+                            <span class="material-icons-outlined">schedule</span>
+                            Lhůta pro rozhodnutí: 30 dnů (do 6. 2. 2026)
+                        </div>
+                        <div class="info-panel-meta-item">
+                            <span class="material-icons-outlined">groups</span>
+                            Účastníků: 8 (standardní počet)
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section header -->
+            <div class="section-header">
+                <div class="section-title">
+                    <span class="material-icons-outlined">forum</span>
+                    Projednání řízení
+                </div>
+                <div class="section-progress">
+                    <span id="progressText">0 ze 7 kroků</span>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Control cards -->
+            <div class="control-grid">
+                <!-- 1. Nastavení projednání -->
+                <div class="control-card status-ready" id="card-nastaveni">
+                    <div class="control-card-header">
+                        <div class="control-card-icon">
+                            <span class="material-icons-outlined">settings</span>
+                        </div>
+                        <span class="control-card-status">K provedení</span>
+                    </div>
+                    <div class="control-card-body">
+                        <div class="control-card-title">Nastavení projednání</div>
+                        <div class="control-card-desc">Typ doručování, rozhodnutí o ústním jednání</div>
+                        <button class="control-card-action" onclick="openControl('controlNastaveni')">
+                            <span class="material-icons-outlined">play_arrow</span>
+                            Nastavit
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 2. Předpis poplatku -->
+                <div class="control-card status-waiting disabled" id="card-poplatek">
+                    <div class="control-card-header">
+                        <div class="control-card-icon">
+                            <span class="material-icons-outlined">payments</span>
+                        </div>
+                        <span class="control-card-status">Čeká</span>
+                    </div>
+                    <div class="control-card-body">
+                        <div class="control-card-title">Předpis poplatku</div>
+                        <div class="control-card-desc">Generování předpisu správního poplatku</div>
+                        <button class="control-card-action">
+                            <span class="material-icons-outlined">lock</span>
+                            Nejprve nastavení
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 3. Vyrozumění o zahájení -->
+                <div class="control-card status-waiting disabled" id="card-vyrozumeni">
+                    <div class="control-card-header">
+                        <div class="control-card-icon">
+                            <span class="material-icons-outlined">send</span>
+                        </div>
+                        <span class="control-card-status">Čeká</span>
+                    </div>
+                    <div class="control-card-body">
+                        <div class="control-card-title">Vyrozumění o zahájení</div>
+                        <div class="control-card-desc">Generování a odeslání vyrozumění účastníkům</div>
+                        <button class="control-card-action">
+                            <span class="material-icons-outlined">lock</span>
+                            Nejprve poplatek
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 4. Lhůta pro námitky -->
+                <div class="control-card status-waiting disabled" id="card-lhuta">
+                    <div class="control-card-header">
+                        <div class="control-card-icon">
+                            <span class="material-icons-outlined">timer</span>
+                        </div>
+                        <span class="control-card-status">Čeká</span>
+                    </div>
+                    <div class="control-card-body">
+                        <div class="control-card-title">Lhůta pro námitky</div>
+                        <div class="control-card-desc">Sledování lhůty, vzdání se práva na námitky</div>
+                        <button class="control-card-action">
+                            <span class="material-icons-outlined">lock</span>
+                            Nejprve vyrozumění
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 5. Námitky a připomínky -->
+                <div class="control-card status-waiting disabled" id="card-namitky">
+                    <div class="control-card-header">
+                        <div class="control-card-icon">
+                            <span class="material-icons-outlined">feedback</span>
+                        </div>
+                        <span class="control-card-status">Čeká</span>
+                    </div>
+                    <div class="control-card-body">
+                        <div class="control-card-title">Námitky a připomínky</div>
+                        <div class="control-card-desc">Evidence a vypořádání námitek účastníků</div>
+                        <button class="control-card-action">
+                            <span class="material-icons-outlined">lock</span>
+                            Nejprve lhůta
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 6. Seznámení s podklady -->
+                <div class="control-card status-waiting disabled" id="card-seznameni">
+                    <div class="control-card-header">
+                        <div class="control-card-icon">
+                            <span class="material-icons-outlined">visibility</span>
+                        </div>
+                        <span class="control-card-status">Čeká</span>
+                    </div>
+                    <div class="control-card-body">
+                        <div class="control-card-title">Seznámení s podklady</div>
+                        <div class="control-card-desc">Opakované seznámení po vypořádání námitek</div>
+                        <button class="control-card-action">
+                            <span class="material-icons-outlined">lock</span>
+                            Podmíněně
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 7. Shrnutí projednání -->
+                <div class="control-card status-waiting disabled" id="card-shrnuti">
+                    <div class="control-card-header">
+                        <div class="control-card-icon">
+                            <span class="material-icons-outlined">summarize</span>
+                        </div>
+                        <span class="control-card-status">Čeká</span>
+                    </div>
+                    <div class="control-card-body">
+                        <div class="control-card-title">Shrnutí projednání</div>
+                        <div class="control-card-desc">Rekapitulace před přechodem na rozhodnutí</div>
+                        <button class="control-card-action">
+                            <span class="material-icons-outlined">lock</span>
+                            Nejprve námitky
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Actions bar -->
+        <div class="actions-bar">
+            <div class="actions-left">
+                <a href="povoleni-2.html" class="btn btn-secondary">
+                    <span class="material-icons-outlined">arrow_back</span>
+                    Zpět na kontrolu
+                </a>
+            </div>
+            <div class="actions-right">
+                <button class="btn btn-primary" id="btnPokracovat" disabled onclick="prejitNaRozhodnuti()">
+                    <span class="material-icons-outlined">arrow_forward</span>
+                    Přejít na rozhodnutí
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Control Overlay: Nastavení projednání -->
+    <div class="control-overlay" id="controlNastaveni">
+        <div class="control-header">
+            <div class="control-header-left">
+                <button class="control-close" onclick="closeControl('controlNastaveni')">
+                    <span class="material-icons-outlined">close</span>
+                </button>
+                <h2 class="control-title">Nastavení projednání</h2>
+            </div>
+        </div>
+        <div class="control-content">
+            <!-- Levý panel: Podklady -->
+            <div class="control-viewer-panel">
+                <div class="viewer-content">
+                    <div class="viewer-tabs">
+                        <button class="viewer-tab active" onclick="switchViewerTab(this, 'nastaveni-zadost')">Žádost</button>
+                        <button class="viewer-tab" onclick="switchViewerTab(this, 'nastaveni-dokumentace')">Dokumentace</button>
+                        <button class="viewer-tab" onclick="switchViewerTab(this, 'nastaveni-stanoviska')">Stanoviska DO</button>
+                    </div>
+                    <div class="viewer-tab-content" id="nastaveni-zadost">
+                        <div class="document-preview">
+                            <h3>ŽÁDOST O POVOLENÍ STAVBY</h3>
+                            <p><strong>Číslo jednací:</strong> P/2025/456789</p>
+                            <p><strong>Datum podání:</strong> 3. 1. 2026</p>
+                            <hr style="margin: 16px 0;">
+                            <p><strong>Žadatel:</strong> Jan Novák, Příčná 123, Praha 5</p>
+                            <p><strong>Stavba:</strong> Novostavba rodinného domu včetně přípojek</p>
+                            <p><strong>Místo stavby:</strong> parc. č. 1234/5, k.ú. Smíchov</p>
+                            <p style="margin-top: 16px;"><strong>Účel stavby:</strong> Výstavba trvalého bydlení pro rodinu 4 osob</p>
+                            <p style="margin-top: 16px;"><strong>Podklady:</strong></p>
+                            <ul style="margin-left: 20px; font-size: 13px; line-height: 1.8;">
+                                <li>Projektová dokumentace (arch. Svoboda)</li>
+                                <li>Stanovisko MČ Praha 5</li>
+                                <li>Stanovisko OŽP</li>
+                                <li>Stanovisko HZS</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="viewer-tab-content" id="nastaveni-dokumentace" style="display: none;">
+                        <div class="document-preview">
+                            <h3>PROJEKTOVÁ DOKUMENTACE</h3>
+                            <p><strong>Zpracovatel:</strong> Ing. arch. Petr Svoboda</p>
+                            <p><strong>Autorizace:</strong> ČKA 02345</p>
+                            <hr style="margin: 16px 0;">
+                            <p><strong>Obsah:</strong></p>
+                            <ul style="margin-left: 20px; font-size: 13px; line-height: 1.8;">
+                                <li>A. Průvodní zpráva</li>
+                                <li>B. Souhrnná technická zpráva</li>
+                                <li>C. Situační výkresy</li>
+                                <li>D. Architektonické řešení</li>
+                                <li>E. Stavební řešení</li>
+                                <li>F. Požárně bezpečnostní řešení</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="viewer-tab-content" id="nastaveni-stanoviska" style="display: none;">
+                        <div class="document-preview">
+                            <h3>PŘEHLED STANOVISEK</h3>
+                            <p style="margin-top: 16px;"><strong>✓ Kladná stanoviska:</strong></p>
+                            <ul style="margin-left: 20px; font-size: 13px; line-height: 1.8;">
+                                <li>MČ Praha 5 - bez připomínek</li>
+                                <li>OŽP - podmínka ochrana stromů</li>
+                                <li>HZS - bez připomínek</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Pravý panel: Formulář s nastavením -->
+            <div class="control-form-panel">
+                <!-- Upozornění na velký počet účastníků - zobrazí se pouze při překročení hranice -->
+                <!-- <div class="alert-banner alert-warning" style="margin-bottom: 20px;">
+                    <span class="material-icons-outlined">groups</span>
+                    <div>
+                        <div style="font-weight: 500;">Velký počet účastníků řízení (45)</div>
+                        <div style="font-size: 13px; margin-top: 4px;">Doručování bude probíhat veřejnou vyhláškou dle § 189 odst. 3 stavebního zákona</div>
+                    </div>
+                </div> -->
+                
+                <!-- Pro standardní počet účastníků - pouze diskrétní informace -->
+                <p class="form-hint" style="margin-bottom: 20px;">
+                    <span class="material-icons-outlined" style="font-size: 16px; vertical-align: text-bottom; color: #5f6368;">info</span>
+                    Počet účastníků řízení: <strong>8</strong> (doručování jednotlivě)
+                </p>
+
+                <div class="control-section">
+                    <div class="control-section-title">Ústní jednání</div>
+                    <label class="control-option selected" onclick="selectOption(this); toggleUstniJednani(false)">
+                        <input type="radio" name="ustni_jednani" value="ne" checked>
+                        <div class="control-option-content">
+                            <div class="control-option-title">Nenařídit ústní jednání</div>
+                            <div class="control-option-desc">Účastníci podají námitky písemně ve stanovené lhůtě (min. 15 dnů)</div>
+                        </div>
+                    </label>
+                    <label class="control-option" onclick="selectOption(this); toggleUstniJednani(true)">
+                        <input type="radio" name="ustni_jednani" value="ano">
+                        <div class="control-option-content">
+                            <div class="control-option-title">Nařídit ústní jednání</div>
+                            <div class="control-option-desc">Účastníci se vyjádří na ústním jednání</div>
+                        </div>
+                    </label>
+                </div>
+
+                <div class="control-section" id="ustniJednaniDetail" style="display: none;">
+                    <div class="control-section-title">Parametry ústního jednání</div>
+                    <div class="form-group">
+                        <label class="form-label">Typ jednání</label>
+                        <select class="form-select" id="typJednani">
+                            <option value="bezne">Běžné ústní jednání</option>
+                            <option value="verejne">Veřejné ústní jednání</option>
+                        </select>
+                        <p class="form-hint">Veřejné jednání je povinné u záměrů v území bez ÚP</p>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Datum a čas</label>
+                        <input type="datetime-local" class="form-input" id="datumJednani" value="2026-01-28T09:00">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Místo jednání</label>
+                        <input type="text" class="form-input" id="mistoJednani" value="Zasedací místnost SÚ, Husova 15, Praha 1">
+                    </div>
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="ohledani">
+                            Spojit s ohledáním na místě
+                        </label>
+                    </div>
+                </div>
+
+                <div class="control-section">
+                    <div class="control-section-title">Lhůta pro námitky</div>
+                    <div class="form-group">
+                        <label class="form-label">Délka lhůty (dny)</label>
+                        <input type="number" class="form-input" id="lhutaNamitky" value="15" min="15">
+                        <p class="form-hint">Minimální lhůta dle § 189 SZ je 15 dnů</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="control-form-footer">
+            <div class="control-form-footer-left"></div>
+            <div class="control-form-footer-right">
+                <button class="btn btn-secondary" onclick="closeControl('controlNastaveni')">Zrušit</button>
+                <button class="btn btn-primary" onclick="completeNastaveni()">
+                    <span class="material-icons-outlined">check</span>
+                    Potvrdit nastavení
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Control Overlay: Předpis poplatku -->
+    <div class="control-overlay" id="controlPoplatek">
+        <div class="control-header">
+            <div class="control-header-left">
+                <button class="control-close" onclick="closeControl('controlPoplatek')">
+                    <span class="material-icons-outlined">close</span>
+                </button>
+                <h2 class="control-title">Předpis poplatku</h2>
+            </div>
+        </div>
+        <div class="control-content">
+            <div class="control-form-panel">
+                <div class="control-section">
+                    <div class="control-section-title">Výpočet správního poplatku</div>
+                    <div class="summary-card">
+                        <div class="summary-stat">
+                            <span class="summary-stat-label">Typ stavby</span>
+                            <span class="summary-stat-value">Rodinný dům</span>
+                        </div>
+                        <div class="summary-stat">
+                            <span class="summary-stat-label">Kategorie</span>
+                            <span class="summary-stat-value">Jednoduchá stavba</span>
+                        </div>
+                        <div class="summary-stat">
+                            <span class="summary-stat-label">Sazba poplatku</span>
+                            <span class="summary-stat-value">5 000 Kč</span>
+                        </div>
+                        <div class="summary-stat">
+                            <span class="summary-stat-label">Přípojky (3×)</span>
+                            <span class="summary-stat-value">+ 1 500 Kč</span>
+                        </div>
+                        <div class="summary-stat" style="border-top: 2px solid #004289; padding-top: 12px; margin-top: 4px;">
+                            <span class="summary-stat-label" style="font-weight: 500; color: #202124;">Celkem k úhradě</span>
+                            <span class="summary-stat-value" style="font-size: 18px; color: #004289;">6 500 Kč</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="control-section">
+                    <div class="control-section-title">Splatnost</div>
+                    <div class="form-group">
+                        <label class="form-label">Lhůta splatnosti (dny)</label>
+                        <input type="number" class="form-input" id="splatnostPoplatku" value="15" min="7">
+                    </div>
+                </div>
+            </div>
+            <div class="control-viewer-panel">
+                <div class="viewer-content">
+                    <div class="document-preview">
+                        <h3>PŘEDPIS SPRÁVNÍHO POPLATKU</h3>
+                        <p><strong>Č.j.:</strong> R/2026/000147</p>
+                        <p><strong>Poplatník:</strong> Jan Novák, Příčná 123, Praha 5</p>
+                        <p><strong>Předmět:</strong> Žádost o povolení stavby - Novostavba RD včetně přípojek</p>
+                        <hr style="margin: 16px 0;">
+                        <p>Na základě zákona č. 634/2004 Sb., o správních poplatcích, Vám předepisuji správní poplatek:</p>
+                        <p style="font-size: 18px; font-weight: 500; text-align: center !important; margin: 20px 0;">6 500 Kč</p>
+                        <p>Poplatek je splatný do 15 dnů od doručení tohoto předpisu.</p>
+                        <p><strong>Způsob úhrady:</strong> bezhotovostně na účet č. 123456789/0100, VS: 2026000147</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="control-form-footer">
+            <div class="control-form-footer-left"></div>
+            <div class="control-form-footer-right">
+                <button class="btn btn-secondary" onclick="closeControl('controlPoplatek')">Zrušit</button>
+                <button class="btn btn-primary" onclick="completePoplatek()">
+                    <span class="material-icons-outlined">send</span>
+                    Předat ke schválení
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Control Overlay: Vyrozumění o zahájení -->
+    <div class="control-overlay" id="controlVyrozumeni">
+        <div class="control-header">
+            <div class="control-header-left">
+                <button class="control-close" onclick="closeControl('controlVyrozumeni')">
+                    <span class="material-icons-outlined">close</span>
+                </button>
+                <h2 class="control-title">Vyrozumění o zahájení řízení</h2>
+            </div>
+        </div>
+        <div class="control-content">
+            <div class="control-form-panel">
+                <div class="control-section">
+                    <div class="control-section-title">Příjemci vyrozumění (8)</div>
+                    <div class="participant-list">
+                        <div class="participant-item">
+                            <div class="participant-icon">
+                                <span class="material-icons-outlined">person</span>
+                            </div>
+                            <div class="participant-info">
+                                <div class="participant-name">Jan Novák</div>
+                                <div class="participant-role">Stavebník (žadatel)</div>
+                            </div>
+                        </div>
+                        <div class="participant-item">
+                            <div class="participant-icon">
+                                <span class="material-icons-outlined">location_city</span>
+                            </div>
+                            <div class="participant-info">
+                                <div class="participant-name">Městská část Praha 5</div>
+                                <div class="participant-role">Obec</div>
+                            </div>
+                        </div>
+                        <div class="participant-item">
+                            <div class="participant-icon">
+                                <span class="material-icons-outlined">person</span>
+                            </div>
+                            <div class="participant-info">
+                                <div class="participant-name">Marie Svobodová</div>
+                                <div class="participant-role">Vlastník sousedního pozemku</div>
+                            </div>
+                        </div>
+                        <div class="participant-item">
+                            <div class="participant-icon">
+                                <span class="material-icons-outlined">person</span>
+                            </div>
+                            <div class="participant-info">
+                                <div class="participant-name">Petr Dvořák</div>
+                                <div class="participant-role">Vlastník sousedního pozemku</div>
+                            </div>
+                        </div>
+                        <div class="participant-item">
+                            <div class="participant-icon">
+                                <span class="material-icons-outlined">business</span>
+                            </div>
+                            <div class="participant-info">
+                                <div class="participant-name">SVJ Příčná 125-127</div>
+                                <div class="participant-role">Vlastník sousední stavby</div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="form-hint" style="margin-top: 12px;">+ 3 další účastníci (dotčené orgány)</p>
+                </div>
+
+                <div class="control-section">
+                    <div class="control-section-title">Obsah vyrozumění</div>
+                    <div class="summary-card">
+                        <div class="summary-stat">
+                            <span class="summary-stat-label">Lhůta pro námitky</span>
+                            <span class="summary-stat-value">15 dnů</span>
+                        </div>
+                        <div class="summary-stat">
+                            <span class="summary-stat-label">Ústní jednání</span>
+                            <span class="summary-stat-value" id="vyrozumeniUstni">Nenařízeno</span>
+                        </div>
+                        <div class="summary-stat">
+                            <span class="summary-stat-label">Způsob seznámení</span>
+                            <span class="summary-stat-value">Nahlédnutím do spisu</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="control-viewer-panel">
+                <div class="viewer-content">
+                    <div class="document-preview">
+                        <h3>VYROZUMĚNÍ O ZAHÁJENÍ ŘÍZENÍ</h3>
+                        <p><strong>Č.j.:</strong> R/2026/000147</p>
+                        <p><strong>Datum:</strong> 8. 1. 2026</p>
+                        <hr style="margin: 16px 0;">
+                        <p>Stavební úřad Vám oznamuje, že dne 7. 1. 2026 bylo zahájeno řízení o žádosti o povolení stavby:</p>
+                        <p style="font-weight: 500; margin: 12px 0;">„Novostavba rodinného domu včetně přípojek"</p>
+                        <p>na pozemku parc. č. 1234/5 v k.ú. Smíchov.</p>
+                        <p style="margin-top: 16px;"><strong>Způsob seznámení se záměrem:</strong> nahlédnutím do spisu v úředních hodinách stavebního úřadu.</p>
+                        <p style="margin-top: 16px;"><strong>Námitky účastníků řízení:</strong> mohou být uplatněny nejpozději do <strong>23. 1. 2026</strong>.</p>
+                        <p style="margin-top: 16px;">Ústní jednání se nenařizuje.</p>
+                        
+                        <div style="margin-top: 24px; padding-top: 24px; border-top: 2px solid #e9ecef; text-align: center;">
+                            <p style="font-size: 14px; font-weight: 500; margin-bottom: 12px;">Nahlížení do spisu online</p>
+                            <div style="display: inline-block; padding: 16px; background-color: #f8f9fa; border-radius: 8px;">
+                                <svg width="120" height="120" viewBox="0 0 29 29" xmlns="http://www.w3.org/2000/svg">
+                                    <!-- QR kód jako dekorativní vzor -->
+                                    <rect width="29" height="29" fill="#ffffff"/>
+                                    
+                                    <!-- Rohové markery -->
+                                    <g fill="#000000">
+                                        <!-- Levý horní roh -->
+                                        <rect x="0" y="0" width="7" height="7"/>
+                                        <rect x="1" y="1" width="5" height="5" fill="#ffffff"/>
+                                        <rect x="2" y="2" width="3" height="3"/>
+                                        
+                                        <!-- Pravý horní roh -->
+                                        <rect x="22" y="0" width="7" height="7"/>
+                                        <rect x="23" y="1" width="5" height="5" fill="#ffffff"/>
+                                        <rect x="24" y="2" width="3" height="3"/>
+                                        
+                                        <!-- Levý dolní roh -->
+                                        <rect x="0" y="22" width="7" height="7"/>
+                                        <rect x="1" y="23" width="5" height="5" fill="#ffffff"/>
+                                        <rect x="2" y="24" width="3" height="3"/>
+                                        
+                                        <!-- Vzor dat (dekorativní) -->
+                                        <rect x="9" y="0" width="1" height="1"/>
+                                        <rect x="11" y="0" width="1" height="1"/>
+                                        <rect x="13" y="0" width="1" height="1"/>
+                                        <rect x="15" y="0" width="1" height="1"/>
+                                        <rect x="17" y="0" width="1" height="1"/>
+                                        <rect x="19" y="0" width="1" height="1"/>
+                                        
+                                        <rect x="8" y="2" width="1" height="1"/>
+                                        <rect x="10" y="2" width="1" height="1"/>
+                                        <rect x="12" y="2" width="1" height="1"/>
+                                        <rect x="14" y="2" width="1" height="1"/>
+                                        <rect x="16" y="2" width="1" height="1"/>
+                                        <rect x="18" y="2" width="1" height="1"/>
+                                        <rect x="20" y="2" width="1" height="1"/>
+                                        
+                                        <rect x="9" y="4" width="1" height="1"/>
+                                        <rect x="11" y="4" width="1" height="1"/>
+                                        <rect x="13" y="4" width="1" height="1"/>
+                                        <rect x="15" y="4" width="1" height="1"/>
+                                        <rect x="17" y="4" width="1" height="1"/>
+                                        <rect x="19" y="4" width="1" height="1"/>
+                                        
+                                        <rect x="8" y="6" width="1" height="1"/>
+                                        <rect x="10" y="6" width="1" height="1"/>
+                                        <rect x="12" y="6" width="1" height="1"/>
+                                        <rect x="14" y="6" width="1" height="1"/>
+                                        <rect x="16" y="6" width="1" height="1"/>
+                                        <rect x="18" y="6" width="1" height="1"/>
+                                        <rect x="20" y="6" width="1" height="1"/>
+                                        
+                                        <!-- Střední část -->
+                                        <rect x="0" y="9" width="1" height="1"/>
+                                        <rect x="2" y="9" width="1" height="1"/>
+                                        <rect x="4" y="9" width="1" height="1"/>
+                                        <rect x="6" y="9" width="1" height="1"/>
+                                        <rect x="9" y="9" width="1" height="1"/>
+                                        <rect x="11" y="9" width="1" height="1"/>
+                                        <rect x="13" y="9" width="1" height="1"/>
+                                        <rect x="15" y="9" width="1" height="1"/>
+                                        <rect x="17" y="9" width="1" height="1"/>
+                                        <rect x="19" y="9" width="1" height="1"/>
+                                        <rect x="22" y="9" width="1" height="1"/>
+                                        <rect x="24" y="9" width="1" height="1"/>
+                                        <rect x="26" y="9" width="1" height="1"/>
+                                        <rect x="28" y="9" width="1" height="1"/>
+                                        
+                                        <rect x="1" y="11" width="1" height="1"/>
+                                        <rect x="3" y="11" width="1" height="1"/>
+                                        <rect x="5" y="11" width="1" height="1"/>
+                                        <rect x="8" y="11" width="1" height="1"/>
+                                        <rect x="10" y="11" width="1" height="1"/>
+                                        <rect x="12" y="11" width="1" height="1"/>
+                                        <rect x="14" y="11" width="1" height="1"/>
+                                        <rect x="16" y="11" width="1" height="1"/>
+                                        <rect x="18" y="11" width="1" height="1"/>
+                                        <rect x="20" y="11" width="1" height="1"/>
+                                        <rect x="23" y="11" width="1" height="1"/>
+                                        <rect x="25" y="11" width="1" height="1"/>
+                                        <rect x="27" y="11" width="1" height="1"/>
+                                        
+                                        <rect x="0" y="13" width="1" height="1"/>
+                                        <rect x="2" y="13" width="1" height="1"/>
+                                        <rect x="4" y="13" width="1" height="1"/>
+                                        <rect x="6" y="13" width="1" height="1"/>
+                                        <rect x="9" y="13" width="1" height="1"/>
+                                        <rect x="11" y="13" width="1" height="1"/>
+                                        <rect x="13" y="13" width="1" height="1"/>
+                                        <rect x="15" y="13" width="1" height="1"/>
+                                        <rect x="17" y="13" width="1" height="1"/>
+                                        <rect x="19" y="13" width="1" height="1"/>
+                                        <rect x="22" y="13" width="1" height="1"/>
+                                        <rect x="24" y="13" width="1" height="1"/>
+                                        <rect x="26" y="13" width="1" height="1"/>
+                                        <rect x="28" y="13" width="1" height="1"/>
+                                        
+                                        <!-- Dolní část -->
+                                        <rect x="9" y="22" width="1" height="1"/>
+                                        <rect x="11" y="22" width="1" height="1"/>
+                                        <rect x="13" y="22" width="1" height="1"/>
+                                        <rect x="15" y="22" width="1" height="1"/>
+                                        <rect x="17" y="22" width="1" height="1"/>
+                                        <rect x="19" y="22" width="1" height="1"/>
+                                        <rect x="22" y="22" width="1" height="1"/>
+                                        <rect x="24" y="22" width="1" height="1"/>
+                                        <rect x="26" y="22" width="1" height="1"/>
+                                        <rect x="28" y="22" width="1" height="1"/>
+                                        
+                                        <rect x="8" y="24" width="1" height="1"/>
+                                        <rect x="10" y="24" width="1" height="1"/>
+                                        <rect x="12" y="24" width="1" height="1"/>
+                                        <rect x="14" y="24" width="1" height="1"/>
+                                        <rect x="16" y="24" width="1" height="1"/>
+                                        <rect x="18" y="24" width="1" height="1"/>
+                                        <rect x="20" y="24" width="1" height="1"/>
+                                        <rect x="23" y="24" width="1" height="1"/>
+                                        <rect x="25" y="24" width="1" height="1"/>
+                                        <rect x="27" y="24" width="1" height="1"/>
+                                        
+                                        <rect x="9" y="26" width="1" height="1"/>
+                                        <rect x="11" y="26" width="1" height="1"/>
+                                        <rect x="13" y="26" width="1" height="1"/>
+                                        <rect x="15" y="26" width="1" height="1"/>
+                                        <rect x="17" y="26" width="1" height="1"/>
+                                        <rect x="19" y="26" width="1" height="1"/>
+                                        <rect x="22" y="26" width="1" height="1"/>
+                                        <rect x="24" y="26" width="1" height="1"/>
+                                        <rect x="26" y="26" width="1" height="1"/>
+                                        <rect x="28" y="26" width="1" height="1"/>
+                                        
+                                        <rect x="8" y="28" width="1" height="1"/>
+                                        <rect x="10" y="28" width="1" height="1"/>
+                                        <rect x="12" y="28" width="1" height="1"/>
+                                        <rect x="14" y="28" width="1" height="1"/>
+                                        <rect x="16" y="28" width="1" height="1"/>
+                                        <rect x="18" y="28" width="1" height="1"/>
+                                        <rect x="20" y="28" width="1" height="1"/>
+                                        <rect x="23" y="28" width="1" height="1"/>
+                                        <rect x="25" y="28" width="1" height="1"/>
+                                        <rect x="27" y="28" width="1" height="1"/>
+                                    </g>
+                                </svg>
+                            </div>
+                            <p style="font-size: 12px; color: #6c757d; margin-top: 12px; line-height: 1.5;">
+                                Naskenováním QR kódu se po ověření Vaší identity<br>
+                                otevře možnost nahlížení do spisu na <strong>Portálu stavebníka</strong>
+                            </p>
+                            <p style="font-size: 11px; color: #adb5bd; margin-top: 8px;">
+                                URL: portal.stavebnik.cz/spis/R-2026-000147
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="control-form-footer">
+            <div class="control-form-footer-left"></div>
+            <div class="control-form-footer-right">
+                <button class="btn btn-secondary" onclick="closeControl('controlVyrozumeni')">Zrušit</button>
+                <button class="btn btn-primary" onclick="completeVyrozumeni()">
+                    <span class="material-icons-outlined">send</span>
+                    Předat ke schválení a odeslání
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Control Overlay: Lhůta pro námitky -->
+    <div class="control-overlay" id="controlLhuta">
+        <div class="control-header">
+            <div class="control-header-left">
+                <button class="control-close" onclick="closeControl('controlLhuta')">
+                    <span class="material-icons-outlined">close</span>
+                </button>
+                <h2 class="control-title">Lhůta pro námitky</h2>
+            </div>
+        </div>
+        <div class="control-content">
+            <div class="control-form-panel">
+                <div class="control-section">
+                    <div class="lhuta-display">
+                        <div class="lhuta-header">
+                            <div class="lhuta-title">Zbývá do konce lhůty</div>
+                            <div class="lhuta-countdown">12 dnů</div>
+                        </div>
+                        <div class="lhuta-bar">
+                            <div class="lhuta-bar-fill" style="width: 20%;"></div>
+                        </div>
+                        <div class="lhuta-dates">
+                            <span>Začátek: 8. 1. 2026</span>
+                            <span>Konec: 23. 1. 2026</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="control-section">
+                    <div class="control-section-title">Vzdání se práva na námitky</div>
+                    <p class="form-hint" style="margin-bottom: 12px;">Pokud se všichni účastníci vzdají práva podat námitky, lhůta končí předčasně.</p>
+                    
+                    <div class="participant-list">
+                        <div class="participant-item" id="participant-1">
+                            <div class="participant-icon">
+                                <span class="material-icons-outlined">person</span>
+                            </div>
+                            <div class="participant-info">
+                                <div class="participant-name">Jan Novák</div>
+                                <div class="participant-role">Stavebník</div>
+                            </div>
+                            <div class="participant-actions">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" onchange="checkVzdaliSe()">
+                                    Vzdal se
+                                </label>
+                            </div>
+                        </div>
+                        <div class="participant-item" id="participant-2">
+                            <div class="participant-icon">
+                                <span class="material-icons-outlined">location_city</span>
+                            </div>
+                            <div class="participant-info">
+                                <div class="participant-name">Městská část Praha 5</div>
+                                <div class="participant-role">Obec</div>
+                            </div>
+                            <div class="participant-actions">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" onchange="checkVzdaliSe()">
+                                    Vzdal se
+                                </label>
+                            </div>
+                        </div>
+                        <div class="participant-item" id="participant-3">
+                            <div class="participant-icon">
+                                <span class="material-icons-outlined">person</span>
+                            </div>
+                            <div class="participant-info">
+                                <div class="participant-name">Marie Svobodová</div>
+                                <div class="participant-role">Soused</div>
+                            </div>
+                            <div class="participant-actions">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" onchange="checkVzdaliSe()">
+                                    Vzdal se
+                                </label>
+                            </div>
+                        </div>
+                        <div class="participant-item" id="participant-4">
+                            <div class="participant-icon">
+                                <span class="material-icons-outlined">person</span>
+                            </div>
+                            <div class="participant-info">
+                                <div class="participant-name">Petr Dvořák</div>
+                                <div class="participant-role">Soused</div>
+                            </div>
+                            <div class="participant-actions">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" onchange="checkVzdaliSe()">
+                                    Vzdal se
+                                </label>
+                            </div>
+                        </div>
+                        <div class="participant-item" id="participant-5">
+                            <div class="participant-icon">
+                                <span class="material-icons-outlined">business</span>
+                            </div>
+                            <div class="participant-info">
+                                <div class="participant-name">SVJ Příčná 125-127</div>
+                                <div class="participant-role">Soused</div>
+                            </div>
+                            <div class="participant-actions">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" onchange="checkVzdaliSe()">
+                                    Vzdal se
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 16px; padding: 12px; background: #f8f9fa; border-radius: 8px;">
+                        <label class="checkbox-label" style="font-weight: 500;">
+                            <input type="checkbox" id="vzdaliSeVsichni" onchange="toggleVzdaliSeVsichni()" disabled>
+                            Vzdali se všichni účastníci
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="control-viewer-panel">
+                <div class="viewer-content">
+                    <div class="viewer-placeholder">
+                        <span class="material-icons-outlined">hourglass_empty</span>
+                        <p>Lhůta pro podání námitek běží.<br>Po jejím uplynutí nebo vzdání se všech účastníků<br>bude možné pokračovat.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="control-form-footer">
+            <div class="control-form-footer-left">
+                <span id="lhutaStatus" style="color: #5f6368; font-size: 13px;">Vzdalo se: 0 z 5 účastníků</span>
+            </div>
+            <div class="control-form-footer-right">
+                <button class="btn btn-secondary" onclick="closeControl('controlLhuta')">Zavřít</button>
+                <button class="btn btn-primary" id="btnUkoncitLhutu" onclick="completeLhuta()" disabled>
+                    <span class="material-icons-outlined">check</span>
+                    Ukončit lhůtu
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Control Overlay: Námitky a připomínky -->
+    <div class="control-overlay" id="controlNamitky">
+        <div class="control-header">
+            <div class="control-header-left">
+                <button class="control-close" onclick="closeControl('controlNamitky')">
+                    <span class="material-icons-outlined">close</span>
+                </button>
+                <h2 class="control-title">Námitky a připomínky</h2>
+            </div>
+            <button class="btn btn-primary" onclick="openModal('addNamitkaModal')">
+                <span class="material-icons-outlined">add</span>
+                Přidat námitku
+            </button>
+        </div>
+        <div class="control-content">
+            <div class="control-form-panel">
+                <div class="control-section">
+                    <div class="control-section-title">Evidence námitek</div>
+                    
+                    <div id="namitkyList">
+                        <div class="empty-state">
+                            <span class="material-icons-outlined">speaker_notes_off</span>
+                            <p class="empty-state-text">Žádné námitky nebyly podány</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="control-viewer-panel">
+                <div class="viewer-content">
+                    <div class="summary-card">
+                        <div class="summary-card-title">
+                            <span class="material-icons-outlined">analytics</span>
+                            Přehled námitek
+                        </div>
+                        <div class="summary-stat">
+                            <span class="summary-stat-label">Celkem námitek</span>
+                            <span class="summary-stat-value" id="namitkyCount">0</span>
+                        </div>
+                        <div class="summary-stat">
+                            <span class="summary-stat-label">K vypořádání</span>
+                            <span class="summary-stat-value" id="namitkyOpen">0</span>
+                        </div>
+                        <div class="summary-stat">
+                            <span class="summary-stat-label">Vypořádáno</span>
+                            <span class="summary-stat-value" id="namitkyResolved">0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="control-form-footer">
+            <div class="control-form-footer-left"></div>
+            <div class="control-form-footer-right">
+                <button class="btn btn-secondary" onclick="closeControl('controlNamitky')">Zavřít</button>
+                <button class="btn btn-primary" id="btnCompleteNamitky" onclick="completeNamitky()">
+                    <span class="material-icons-outlined">check</span>
+                    Potvrdit vypořádání
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Control Overlay: Shrnutí projednání -->
+    <div class="control-overlay" id="controlShrnuti">
+        <div class="control-header">
+            <div class="control-header-left">
+                <button class="control-close" onclick="closeControl('controlShrnuti')">
+                    <span class="material-icons-outlined">close</span>
+                </button>
+                <h2 class="control-title">Shrnutí projednání</h2>
+            </div>
+        </div>
+        <div class="control-content">
+            <div class="control-form-panel">
+                <div class="control-section">
+                    <div class="summary-card">
+                        <div class="summary-card-title">
+                            <span class="material-icons-outlined">groups</span>
+                            Účastníci řízení
+                        </div>
+                        <div class="summary-stat">
+                            <span class="summary-stat-label">Celkem účastníků</span>
+                            <span class="summary-stat-value">8</span>
+                        </div>
+                        <div class="summary-stat">
+                            <span class="summary-stat-label">Způsob doručení</span>
+                            <span class="summary-stat-value">Jednotlivě</span>
+                        </div>
+                    </div>
+
+                    <div class="summary-card">
+                        <div class="summary-card-title">
+                            <span class="material-icons-outlined">feedback</span>
+                            Námitky
+                        </div>
+                        <div class="summary-stat">
+                            <span class="summary-stat-label">Podáno námitek</span>
+                            <span class="summary-stat-value" id="shrnutiNamitky">0</span>
+                        </div>
+                        <div class="summary-stat">
+                            <span class="summary-stat-label">Důvodných</span>
+                            <span class="summary-stat-value" id="shrnutiDuvodne">0</span>
+                        </div>
+                        <div class="summary-stat">
+                            <span class="summary-stat-label">Nedůvodných</span>
+                            <span class="summary-stat-value" id="shrnutiNeduvodne">0</span>
+                        </div>
+                    </div>
+
+                    <div class="summary-card">
+                        <div class="summary-card-title">
+                            <span class="material-icons-outlined">schedule</span>
+                            Lhůty
+                        </div>
+                        <div class="summary-stat">
+                            <span class="summary-stat-label">Datum zahájení</span>
+                            <span class="summary-stat-value">7. 1. 2026</span>
+                        </div>
+                        <div class="summary-stat">
+                            <span class="summary-stat-label">Lhůta pro rozhodnutí</span>
+                            <span class="summary-stat-value">6. 2. 2026</span>
+                        </div>
+                        <div class="summary-stat">
+                            <span class="summary-stat-label">Zbývá dnů</span>
+                            <span class="summary-stat-value" style="color: #137333;">18 dnů</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="control-viewer-panel">
+                <div class="viewer-content">
+                    <div class="viewer-placeholder">
+                        <span class="material-icons-outlined">task_alt</span>
+                        <p>Projednání je připraveno k uzavření.<br>Po potvrzení bude možné přejít<br>na vydání rozhodnutí.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="control-form-footer">
+            <div class="control-form-footer-left"></div>
+            <div class="control-form-footer-right">
+                <button class="btn btn-secondary" onclick="closeControl('controlShrnuti')">Zavřít</button>
+                <button class="btn btn-success" onclick="completeShrnuti()">
+                    <span class="material-icons-outlined">check</span>
+                    Uzavřít projednání
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Přidat námitku -->
+    <div class="modal-overlay" id="addNamitkaModal" onclick="closeModal('addNamitkaModal', event)">
+        <div class="modal" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <span class="material-icons-outlined">add_comment</span>
+                    Přidat námitku / připomínku
+                </div>
+                <button class="modal-close" onclick="closeModal('addNamitkaModal')">
+                    <span class="material-icons-outlined">close</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Typ</label>
+                    <select class="form-select" id="namitkaTyp">
+                        <option value="namitka">Námitka účastníka řízení</option>
+                        <option value="pripominka">Připomínka veřejnosti</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Podatel</label>
+                    <select class="form-select" id="namitkaPodatel">
+                        <option value="">-- Vyberte --</option>
+                        <option value="Marie Svobodová">Marie Svobodová (soused)</option>
+                        <option value="Petr Dvořák">Petr Dvořák (soused)</option>
+                        <option value="SVJ Příčná 125-127">SVJ Příčná 125-127 (soused)</option>
+                        <option value="jiny">Jiný (veřejnost)</option>
+                    </select>
+                </div>
+                <div class="form-group" id="jinyPodatelGroup" style="display: none;">
+                    <label class="form-label">Jméno podatele</label>
+                    <input type="text" class="form-input" id="jinyPodatel" placeholder="Jméno a příjmení">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Datum podání</label>
+                    <input type="date" class="form-input" id="namitkaDatum" value="2026-01-15">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Obsah námitky / připomínky</label>
+                    <textarea class="form-textarea" id="namitkaObsah" rows="4" placeholder="Popište obsah námitky..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('addNamitkaModal')">Zrušit</button>
+                <button class="btn btn-primary" onclick="addNamitka()">
+                    <span class="material-icons-outlined">add</span>
+                    Přidat
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Vypořádat námitku -->
+    <div class="modal-overlay" id="resolveNamitkaModal" onclick="closeModal('resolveNamitkaModal', event)">
+        <div class="modal" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <span class="material-icons-outlined">rate_review</span>
+                    Vypořádání námitky
+                </div>
+                <button class="modal-close" onclick="closeModal('resolveNamitkaModal')">
+                    <span class="material-icons-outlined">close</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Hodnocení námitky</label>
+                    <label class="control-option selected" onclick="selectOption(this)">
+                        <input type="radio" name="namitka_hodnoceni" value="neduvodna" checked>
+                        <div class="control-option-content">
+                            <div class="control-option-title">Nedůvodná</div>
+                            <div class="control-option-desc">Námitka se zamítá</div>
+                        </div>
+                    </label>
+                    <label class="control-option" onclick="selectOption(this)">
+                        <input type="radio" name="namitka_hodnoceni" value="duvodna">
+                        <div class="control-option-content">
+                            <div class="control-option-title">Důvodná</div>
+                            <div class="control-option-desc">Námitce se vyhovuje</div>
+                        </div>
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Odůvodnění</label>
+                    <textarea class="form-textarea" id="namitkaOduvodneni" rows="4" placeholder="Odůvodněte rozhodnutí o námitce..."></textarea>
+                </div>
+                <div class="form-group" id="upravitZadostGroup" style="display: none;">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="upravitZadost">
+                        Vyžaduje úpravu žádosti (přerušení řízení)
+                    </label>
+                    <p class="form-hint">Pokud důvodná námitka vyžaduje úpravu žádosti, řízení bude přerušeno.</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('resolveNamitkaModal')">Zrušit</button>
+                <button class="btn btn-primary" onclick="resolveNamitka()">
+                    <span class="material-icons-outlined">check</span>
+                    Potvrdit
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modály pro dokumenty -->
+    <div class="modal-overlay" id="zadostModal" onclick="closeModal('zadostModal', event)">
+        <div class="modal" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <span class="material-icons-outlined">description</span>
+                    Žádost o povolení stavby
+                </div>
+                <button class="modal-close" onclick="closeModal('zadostModal')">
+                    <span class="material-icons-outlined">close</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="viewer-placeholder">
+                    <span class="material-icons-outlined">preview</span>
+                    <p>Náhled žádosti o povolení stavby</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('zadostModal')">Zavřít</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="prilohyModal" onclick="closeModal('prilohyModal', event)">
+        <div class="modal" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <span class="material-icons-outlined">attach_file</span>
+                    Přílohy žádosti
+                </div>
+                <button class="modal-close" onclick="closeModal('prilohyModal')">
+                    <span class="material-icons-outlined">close</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="viewer-placeholder">
+                    <span class="material-icons-outlined">folder_open</span>
+                    <p>Seznam příloh žádosti</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('prilohyModal')">Zavřít</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="eedModal" onclick="closeModal('eedModal', event)">
+        <div class="modal" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <span class="material-icons-outlined">folder</span>
+                    Elektronická dokumentace
+                </div>
+                <button class="modal-close" onclick="closeModal('eedModal')">
+                    <span class="material-icons-outlined">close</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="viewer-placeholder">
+                    <span class="material-icons-outlined">architecture</span>
+                    <p>Projektová dokumentace</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('eedModal')">Zavřít</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="dokladyModal" onclick="closeModal('dokladyModal', event)">
+        <div class="modal" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <span class="material-icons-outlined">fact_check</span>
+                    Dokladová část
+                </div>
+                <button class="modal-close" onclick="closeModal('dokladyModal')">
+                    <span class="material-icons-outlined">close</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="viewer-placeholder">
+                    <span class="material-icons-outlined">checklist</span>
+                    <p>Stanoviska DO a vyjádření správců sítí</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('dokladyModal')">Zavřít</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Stav aplikace
+        const state = {
+            nastaveni: { done: false, ustniJednani: false, lhutaDny: 15 },
+            poplatek: { done: false },
+            vyrozumeni: { done: false },
+            lhuta: { done: false, vzdaliSe: [] },
+            namitky: { done: false, list: [], currentResolveIndex: null },
+            seznameni: { done: false, required: false },
+            shrnuti: { done: false }
+        };
+
+        // Control overlay functions
+        function openControl(controlId) {
+            document.getElementById(controlId).classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeControl(controlId) {
+            document.getElementById(controlId).classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        // Modal functions
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(modalId, event) {
+            if (event && event.target !== event.currentTarget) return;
+            document.getElementById(modalId).classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        // Escape key closes overlays
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                document.querySelectorAll('.control-overlay.open').forEach(function(overlay) {
+                    overlay.classList.remove('open');
+                });
+                document.querySelectorAll('.modal-overlay.open').forEach(function(modal) {
+                    modal.classList.remove('open');
+                });
+                document.body.style.overflow = '';
+            }
+        });
+
+        // Option selection
+        function selectOption(element) {
+            const parent = element.parentElement;
+            parent.querySelectorAll('.control-option').forEach(opt => opt.classList.remove('selected'));
+            element.classList.add('selected');
+        }
+
+        // Toggle ústní jednání detail
+        function toggleUstniJednani(show) {
+            document.getElementById('ustniJednaniDetail').style.display = show ? 'block' : 'none';
+            state.nastaveni.ustniJednani = show;
+        }
+
+        // Complete functions
+        function completeNastaveni() {
+            state.nastaveni.done = true;
+            state.nastaveni.lhutaDny = parseInt(document.getElementById('lhutaNamitky').value) || 15;
+            closeControl('controlNastaveni');
+            updateUI();
+        }
+
+        function completePoplatek() {
+            state.poplatek.done = true;
+            closeControl('controlPoplatek');
+            updateUI();
+        }
+
+        function completeVyrozumeni() {
+            state.vyrozumeni.done = true;
+            closeControl('controlVyrozumeni');
+            updateUI();
+        }
+
+        function checkVzdaliSe() {
+            const checkboxes = document.querySelectorAll('#controlLhuta .participant-item input[type="checkbox"]');
+            let count = 0;
+            checkboxes.forEach(cb => {
+                if (cb.checked) count++;
+                const item = cb.closest('.participant-item');
+                if (cb.checked) {
+                    item.classList.add('waived');
+                } else {
+                    item.classList.remove('waived');
+                }
+            });
+            
+            document.getElementById('lhutaStatus').textContent = `Vzdalo se: ${count} z ${checkboxes.length} účastníků`;
+            
+            const allWaived = count === checkboxes.length;
+            document.getElementById('vzdaliSeVsichni').checked = allWaived;
+            document.getElementById('btnUkoncitLhutu').disabled = !allWaived;
+        }
+
+        function toggleVzdaliSeVsichni() {
+            const mainCheckbox = document.getElementById('vzdaliSeVsichni');
+            const checkboxes = document.querySelectorAll('#controlLhuta .participant-item input[type="checkbox"]');
+            checkboxes.forEach(cb => {
+                cb.checked = mainCheckbox.checked;
+            });
+            checkVzdaliSe();
+        }
+
+        function completeLhuta() {
+            state.lhuta.done = true;
+            closeControl('controlLhuta');
+            updateUI();
+        }
+
+        // Námitky functions
+        document.getElementById('namitkaPodatel').addEventListener('change', function() {
+            document.getElementById('jinyPodatelGroup').style.display = this.value === 'jiny' ? 'block' : 'none';
+        });
+
+        function addNamitka() {
+            const typ = document.getElementById('namitkaTyp').value;
+            const podatelSelect = document.getElementById('namitkaPodatel').value;
+            const podatel = podatelSelect === 'jiny' ? document.getElementById('jinyPodatel').value : podatelSelect;
+            const datum = document.getElementById('namitkaDatum').value;
+            const obsah = document.getElementById('namitkaObsah').value;
+
+            if (!podatel || !obsah) {
+                alert('Vyplňte všechna povinná pole.');
+                return;
+            }
+
+            state.namitky.list.push({
+                typ: typ,
+                podatel: podatel,
+                datum: datum,
+                obsah: obsah,
+                status: 'new',
+                hodnoceni: null,
+                oduvodneni: null
+            });
+
+            closeModal('addNamitkaModal');
+            renderNamitky();
+            
+            // Reset form
+            document.getElementById('namitkaPodatel').value = '';
+            document.getElementById('namitkaObsah').value = '';
+        }
+
+        function renderNamitky() {
+            const container = document.getElementById('namitkyList');
+            
+            if (state.namitky.list.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <span class="material-icons-outlined">speaker_notes_off</span>
+                        <p class="empty-state-text">Žádné námitky nebyly podány</p>
+                    </div>
+                `;
+            } else {
+                container.innerHTML = state.namitky.list.map((n, i) => `
+                    <div class="namitka-item">
+                        <div class="namitka-header">
+                            <div>
+                                <div class="namitka-author">${n.podatel}</div>
+                                <div class="namitka-date">${formatDate(n.datum)} • ${n.typ === 'namitka' ? 'Námitka' : 'Připomínka'}</div>
+                            </div>
+                            <span class="namitka-status ${n.status}">${getStatusLabel(n.status)}</span>
+                        </div>
+                        <div class="namitka-content">${n.obsah}</div>
+                        ${n.status === 'resolved' ? `
+                            <div class="namitka-resolution">
+                                <strong>${n.hodnoceni === 'duvodna' ? 'Důvodná' : 'Nedůvodná'}:</strong> ${n.oduvodneni}
+                            </div>
+                        ` : `
+                            <div class="namitka-actions">
+                                <button class="btn btn-primary" onclick="openResolveModal(${i})">
+                                    <span class="material-icons-outlined">rate_review</span>
+                                    Vypořádat
+                                </button>
+                            </div>
+                        `}
+                    </div>
+                `).join('');
+            }
+
+            // Update stats
+            const total = state.namitky.list.length;
+            const resolved = state.namitky.list.filter(n => n.status === 'resolved').length;
+            const open = total - resolved;
+
+            document.getElementById('namitkyCount').textContent = total;
+            document.getElementById('namitkyOpen').textContent = open;
+            document.getElementById('namitkyResolved').textContent = resolved;
+
+            // Enable/disable complete button
+            document.getElementById('btnCompleteNamitky').disabled = open > 0 && total > 0;
+        }
+
+        function formatDate(dateStr) {
+            const d = new Date(dateStr);
+            return d.toLocaleDateString('cs-CZ');
+        }
+
+        function getStatusLabel(status) {
+            switch(status) {
+                case 'new': return 'Nová';
+                case 'in-progress': return 'Rozpracovaná';
+                case 'resolved': return 'Vypořádána';
+                default: return status;
+            }
+        }
+
+        function openResolveModal(index) {
+            state.namitky.currentResolveIndex = index;
+            openModal('resolveNamitkaModal');
+        }
+
+        document.querySelectorAll('input[name="namitka_hodnoceni"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                document.getElementById('upravitZadostGroup').style.display = 
+                    this.value === 'duvodna' ? 'block' : 'none';
+            });
+        });
+
+        function resolveNamitka() {
+            const index = state.namitky.currentResolveIndex;
+            const hodnoceni = document.querySelector('input[name="namitka_hodnoceni"]:checked').value;
+            const oduvodneni = document.getElementById('namitkaOduvodneni').value;
+
+            if (!oduvodneni) {
+                alert('Vyplňte odůvodnění.');
+                return;
+            }
+
+            state.namitky.list[index].status = 'resolved';
+            state.namitky.list[index].hodnoceni = hodnoceni;
+            state.namitky.list[index].oduvodneni = oduvodneni;
+
+            if (hodnoceni === 'duvodna') {
+                state.seznameni.required = true;
+            }
+
+            closeModal('resolveNamitkaModal');
+            renderNamitky();
+            
+            // Reset form
+            document.getElementById('namitkaOduvodneni').value = '';
+        }
+
+        function completeNamitky() {
+            state.namitky.done = true;
+            closeControl('controlNamitky');
+            updateUI();
+        }
+
+        function completeShrnuti() {
+            state.shrnuti.done = true;
+            closeControl('controlShrnuti');
+            updateUI();
+        }
+
+        function prejitNaRozhodnuti() {
+            alert('Přechod na krok 4: Rozhodnutí\n\nV ostré verzi by se otevřela obrazovka pro přípravu rozhodnutí o povolení stavby.');
+            // window.location.href = 'povoleni-4.html';
+        }
+
+        // Update UI based on state
+        function updateUI() {
+            // Count completed steps
+            let completed = 0;
+            const steps = ['nastaveni', 'poplatek', 'vyrozumeni', 'lhuta', 'namitky', 'shrnuti'];
+            
+            steps.forEach(step => {
+                if (state[step].done) completed++;
+            });
+
+            // Update progress
+            document.getElementById('progressText').textContent = `${completed} ze 7 kroků`;
+            document.getElementById('progressFill').style.width = `${(completed / 7) * 100}%`;
+
+            // Update cards
+            updateCard('card-nastaveni', state.nastaveni.done ? 'done' : 'ready', 
+                state.nastaveni.done ? 'Hotovo' : 'K provedení',
+                state.nastaveni.done ? 'Zobrazit' : 'Nastavit');
+
+            updateCard('card-poplatek', 
+                state.poplatek.done ? 'done' : (state.nastaveni.done ? 'ready' : 'waiting'),
+                state.poplatek.done ? 'Odesláno' : (state.nastaveni.done ? 'K provedení' : 'Čeká'),
+                state.poplatek.done ? 'Zobrazit' : (state.nastaveni.done ? 'Generovat' : 'Nejprve nastavení'),
+                !state.nastaveni.done);
+
+            updateCard('card-vyrozumeni',
+                state.vyrozumeni.done ? 'done' : (state.poplatek.done ? 'ready' : 'waiting'),
+                state.vyrozumeni.done ? 'Odesláno' : (state.poplatek.done ? 'K provedení' : 'Čeká'),
+                state.vyrozumeni.done ? 'Zobrazit' : (state.poplatek.done ? 'Generovat' : 'Nejprve poplatek'),
+                !state.poplatek.done);
+
+            updateCard('card-lhuta',
+                state.lhuta.done ? 'done' : (state.vyrozumeni.done ? 'in-progress' : 'waiting'),
+                state.lhuta.done ? 'Ukončena' : (state.vyrozumeni.done ? 'Probíhá' : 'Čeká'),
+                state.lhuta.done ? 'Zobrazit' : (state.vyrozumeni.done ? 'Sledovat' : 'Nejprve vyrozumění'),
+                !state.vyrozumeni.done);
+
+            updateCard('card-namitky',
+                state.namitky.done ? 'done' : (state.lhuta.done ? 'ready' : 'waiting'),
+                state.namitky.done ? 'Vypořádáno' : (state.lhuta.done ? 'K provedení' : 'Čeká'),
+                state.namitky.done ? 'Zobrazit' : (state.lhuta.done ? 'Spravovat' : 'Nejprve lhůta'),
+                !state.lhuta.done);
+
+            // Seznámení s podklady - podmíněně
+            const seznameniRequired = state.seznameni.required && state.namitky.done;
+            updateCard('card-seznameni',
+                state.seznameni.done ? 'done' : (seznameniRequired ? 'ready' : 'waiting'),
+                state.seznameni.done ? 'Hotovo' : (seznameniRequired ? 'K provedení' : 'Podmíněně'),
+                state.seznameni.done ? 'Zobrazit' : (seznameniRequired ? 'Provést' : 'Podmíněně'),
+                !seznameniRequired);
+
+            // Shrnutí
+            const canShrnuti = state.namitky.done && (!state.seznameni.required || state.seznameni.done);
+            updateCard('card-shrnuti',
+                state.shrnuti.done ? 'done' : (canShrnuti ? 'ready' : 'waiting'),
+                state.shrnuti.done ? 'Hotovo' : (canShrnuti ? 'K provedení' : 'Čeká'),
+                state.shrnuti.done ? 'Zobrazit' : (canShrnuti ? 'Zobrazit' : 'Nejprve námitky'),
+                !canShrnuti);
+
+            // Update main button
+            document.getElementById('btnPokracovat').disabled = !state.shrnuti.done;
+
+            // Update shrnutí stats
+            document.getElementById('shrnutiNamitky').textContent = state.namitky.list.length;
+            document.getElementById('shrnutiDuvodne').textContent = state.namitky.list.filter(n => n.hodnoceni === 'duvodna').length;
+            document.getElementById('shrnutiNeduvodne').textContent = state.namitky.list.filter(n => n.hodnoceni === 'neduvodna').length;
+        }
+
+        function updateCard(cardId, status, statusText, actionText, disabled = false) {
+            const card = document.getElementById(cardId);
+            card.className = `control-card status-${status}`;
+            if (disabled) card.classList.add('disabled');
+            
+            card.querySelector('.control-card-status').textContent = statusText;
+            
+            const actionBtn = card.querySelector('.control-card-action');
+            const iconName = disabled ? 'lock' : (status === 'done' ? 'visibility' : 'play_arrow');
+            actionBtn.innerHTML = `<span class="material-icons-outlined">${iconName}</span>${actionText}`;
+            
+            // Set onclick
+            const controlMap = {
+                'card-nastaveni': 'controlNastaveni',
+                'card-poplatek': 'controlPoplatek',
+                'card-vyrozumeni': 'controlVyrozumeni',
+                'card-lhuta': 'controlLhuta',
+                'card-namitky': 'controlNamitky',
+                'card-seznameni': 'controlSeznami',
+                'card-shrnuti': 'controlShrnuti'
+            };
+            
+            if (!disabled) {
+                actionBtn.onclick = () => openControl(controlMap[cardId]);
+            } else {
+                actionBtn.onclick = null;
+            }
+        }
+
+        // Switch viewer tab
+        function switchViewerTab(button, tabId) {
+            // Remove active class from all tabs
+            button.parentElement.querySelectorAll('.viewer-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Add active class to clicked tab
+            button.classList.add('active');
+            
+            // Hide all tab contents
+            button.closest('.viewer-content').querySelectorAll('.viewer-tab-content').forEach(content => {
+                content.style.display = 'none';
+            });
+            
+            // Show selected tab content
+            document.getElementById(tabId).style.display = 'block';
+        }
+
+        // Initialize
+        updateUI();
+        renderNamitky();
+    </script>
+</body>
+</html>

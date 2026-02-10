@@ -1,0 +1,2040 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ISSŘ - Řízení</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+    <style>
+        /* ===========================================
+           BASE STYLES
+           =========================================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f5f5f5;
+            color: #202124;
+            min-height: 100vh;
+        }
+
+        /* ===========================================
+           ISSŘ HLAVIČKA
+           =========================================== */
+        .issr-header {
+            background-color: #004289;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            padding: 0 24px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .issr-header__logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: white;
+        }
+        .issr-header__logo-img {
+            height: 40px;
+            width: auto;
+        }
+        .issr-header__title {
+            font-size: 12px;
+            font-weight: 400;
+            color: white;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+        .issr-header__search {
+            flex: 1;
+            max-width: 500px;
+            margin: 0 40px;
+        }
+        .issr-header__search-input {
+            width: 100%;
+            height: 36px;
+            padding: 0 16px;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            background: #fff;
+            color: #202124;
+        }
+        .issr-header__search-input::placeholder {
+            color: #5f6368;
+        }
+        .issr-header__actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-left: auto;
+        }
+        .issr-header__notification {
+            position: relative;
+            cursor: pointer;
+        }
+        .issr-header__notification-icon {
+            width: 24px;
+            height: 24px;
+            color: white;
+        }
+        .issr-header__notification-badge {
+            position: absolute;
+            top: -6px;
+            right: -6px;
+            background: #ea4335;
+            color: white;
+            font-size: 10px;
+            padding: 2px 5px;
+            border-radius: 10px;
+            font-weight: 500;
+        }
+        .issr-header__user {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .issr-header__user-icon {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* ===========================================
+           MAIN LAYOUT
+           =========================================== */
+        .main-content {
+            display: flex;
+            min-height: calc(100vh - 56px);
+        }
+
+        /* ===========================================
+           NAV RAIL
+           =========================================== */
+        .nav-rail {
+            width: 72px;
+            background: #1a1a2e;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 16px 0;
+            gap: 8px;
+        }
+        .nav-rail-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 12px 8px;
+            border-radius: 12px;
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            font-size: 10px;
+            transition: all 0.15s;
+            width: 64px;
+            text-align: center;
+        }
+        .nav-rail-item:hover {
+            background: rgba(255,255,255,0.1);
+            color: white;
+        }
+        .nav-rail-item.active {
+            background: rgba(255,255,255,0.15);
+            color: white;
+        }
+        .nav-rail-item.disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+        .nav-rail-item.disabled:hover {
+            background: transparent;
+            color: rgba(255,255,255,0.7);
+        }
+        .nav-rail-item .material-icons-outlined {
+            font-size: 24px;
+        }
+        .nav-rail-item-label {
+            font-size: 10px;
+        }
+        .nav-rail-divider {
+            width: 40px;
+            height: 1px;
+            background: rgba(255,255,255,0.15);
+            margin: 8px 0;
+        }
+
+        /* ===========================================
+           PAGE CONTENT
+           =========================================== */
+        .page-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ===========================================
+           PAGE HEADER
+           =========================================== */
+        .page-header {
+            background: #fff;
+            border-bottom: 1px solid #e0e0e0;
+            padding: 20px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+        }
+        .page-header-left {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+        .page-title {
+            font-size: 24px;
+            font-weight: 500;
+            color: #202124;
+        }
+        .page-subtitle {
+            font-size: 13px;
+            color: #5f6368;
+            margin-top: 4px;
+        }
+        
+        /* View Toggle */
+        .view-toggle {
+            display: flex;
+            background: #e8eaed;
+            border-radius: 8px;
+            padding: 4px;
+        }
+        .view-toggle-btn {
+            padding: 10px 20px;
+            border: none;
+            background: transparent;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #5f6368;
+            cursor: pointer;
+            transition: all 0.15s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .view-toggle-btn:hover {
+            color: #202124;
+        }
+        .view-toggle-btn.active {
+            background: #fff;
+            color: #1a73e8;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .view-toggle-btn .material-icons-outlined {
+            font-size: 20px;
+        }
+        
+        .page-header-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: #004289;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background 0.15s;
+        }
+        .btn-primary:hover {
+            background: #003166;
+        }
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: #fff;
+            color: #3c4043;
+            border: 1px solid #dadce0;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.15s;
+        }
+        .btn-secondary:hover {
+            background: #f8f9fa;
+            border-color: #1a73e8;
+            color: #1a73e8;
+        }
+        .btn-secondary .material-icons-outlined,
+        .btn-primary .material-icons-outlined {
+            font-size: 20px;
+        }
+
+        /* ===========================================
+           STATS BAR
+           =========================================== */
+        .stats-bar {
+            background: #fff;
+            border-bottom: 1px solid #e0e0e0;
+            padding: 16px 24px;
+            display: flex;
+            gap: 32px;
+        }
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+        .stat-item:hover {
+            background: #f8f9fa;
+        }
+        .stat-item.active {
+            background: #e8f0fe;
+        }
+        .stat-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .stat-icon.blue { background: #e8f0fe; color: #1a73e8; }
+        .stat-icon.green { background: #e6f4ea; color: #137333; }
+        .stat-icon.orange { background: #fef7e0; color: #b06000; }
+        .stat-icon.red { background: #fce8e6; color: #c5221f; }
+        .stat-icon.purple { background: #f3e8fd; color: #9334e6; }
+        .stat-icon .material-icons-outlined {
+            font-size: 22px;
+        }
+        .stat-content {
+            display: flex;
+            flex-direction: column;
+        }
+        .stat-value {
+            font-size: 20px;
+            font-weight: 600;
+            color: #202124;
+        }
+        .stat-label {
+            font-size: 12px;
+            color: #5f6368;
+        }
+
+        /* ===========================================
+           FILTER BAR
+           =========================================== */
+        .filter-bar {
+            background: #fff;
+            border-bottom: 1px solid #e0e0e0;
+            padding: 12px 24px;
+        }
+        .filter-bar-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .filter-dropdown {
+            position: relative;
+        }
+        .filter-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            background: #fff;
+            border: 1px solid #dadce0;
+            border-radius: 20px;
+            font-size: 13px;
+            color: #3c4043;
+            cursor: pointer;
+            transition: all 0.15s;
+            white-space: nowrap;
+        }
+        .filter-btn:hover {
+            background: #f1f3f4;
+            border-color: #c0c0c0;
+        }
+        .filter-btn.active {
+            background: #e8f0fe;
+            border-color: #1a73e8;
+            color: #1a73e8;
+        }
+        .filter-btn .material-icons-outlined {
+            font-size: 18px;
+        }
+        .filter-btn-count {
+            background: #1a73e8;
+            color: #fff;
+            font-size: 11px;
+            font-weight: 500;
+            padding: 2px 6px;
+            border-radius: 10px;
+            margin-left: 4px;
+        }
+        
+        /* Quick filter chips */
+        .quick-filters {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-left: 16px;
+            padding-left: 16px;
+            border-left: 1px solid #e0e0e0;
+        }
+        .quick-filter-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: #fff;
+            border: 1px solid #dadce0;
+            border-radius: 16px;
+            font-size: 12px;
+            color: #5f6368;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .quick-filter-chip:hover {
+            background: #f8f9fa;
+        }
+        .quick-filter-chip.critical {
+            background: #fce8e6;
+            border-color: #ea4335;
+            color: #c5221f;
+        }
+        .quick-filter-chip.warning {
+            background: #fef7e0;
+            border-color: #f9ab00;
+            color: #b06000;
+        }
+        .quick-filter-chip.active {
+            background: #e8f0fe;
+            border-color: #1a73e8;
+            color: #1a73e8;
+        }
+        .quick-filter-chip .material-icons-outlined {
+            font-size: 16px;
+        }
+        .quick-filter-chip .chip-count {
+            font-weight: 600;
+        }
+        
+        /* Filter panel */
+        .filter-panel {
+            position: absolute;
+            top: calc(100% + 4px);
+            left: 0;
+            min-width: 280px;
+            background: #fff;
+            border: 1px solid #dadce0;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 100;
+            display: none;
+        }
+        .filter-panel.open {
+            display: block;
+        }
+        .filter-panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            border-bottom: 1px solid #e8eaed;
+        }
+        .filter-panel-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: #202124;
+        }
+        .filter-panel-clear {
+            font-size: 12px;
+            color: #1a73e8;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+        .filter-panel-body {
+            padding: 12px 16px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .filter-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 0;
+            cursor: pointer;
+        }
+        .filter-option input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #1a73e8;
+        }
+        .filter-option-label {
+            flex: 1;
+            font-size: 13px;
+            color: #3c4043;
+        }
+        .filter-option-count {
+            font-size: 12px;
+            color: #5f6368;
+        }
+
+        /* ===========================================
+           TABLE
+           =========================================== */
+        .table-container {
+            flex: 1;
+            padding: 16px 24px;
+            overflow-x: auto;
+        }
+        .data-table {
+            width: 100%;
+            background: #fff;
+            border-radius: 12px;
+            border: 1px solid #e0e0e0;
+            border-collapse: separate;
+            border-spacing: 0;
+            overflow: hidden;
+        }
+        .data-table th,
+        .data-table td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .data-table th {
+            background: #f8f9fa;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #5f6368;
+            position: sticky;
+            top: 0;
+            white-space: nowrap;
+        }
+        .data-table th.sortable {
+            cursor: pointer;
+            user-select: none;
+        }
+        .data-table th.sortable:hover {
+            background: #f1f3f4;
+        }
+        .data-table th .sort-icon {
+            font-size: 16px;
+            vertical-align: middle;
+            margin-left: 4px;
+            opacity: 0.5;
+        }
+        .data-table th.sorted .sort-icon {
+            opacity: 1;
+            color: #1a73e8;
+        }
+        .data-table tbody tr {
+            cursor: pointer;
+            transition: background 0.1s;
+        }
+        .data-table tbody tr:hover {
+            background: #f8f9fa;
+        }
+        .data-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+        .data-table tbody tr.critical {
+            background: #fef7f6;
+        }
+        .data-table tbody tr.critical:hover {
+            background: #fce8e6;
+        }
+
+        /* Cell styles */
+        .cell-main {
+            min-width: 280px;
+        }
+        .rizeni-name {
+            font-size: 14px;
+            font-weight: 500;
+            color: #202124;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .rizeni-name .priority-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        .rizeni-name .priority-indicator.high { background: #ea4335; }
+        .rizeni-name .priority-indicator.medium { background: #f9ab00; }
+        .rizeni-name .priority-indicator.low { background: #34a853; }
+        .rizeni-id {
+            font-size: 12px;
+            color: #5f6368;
+            font-family: 'Roboto Mono', monospace;
+        }
+        
+        /* Status badges */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+        .status-badge.running {
+            background: #e6f4ea;
+            color: #137333;
+        }
+        .status-badge.waiting {
+            background: #fef7e0;
+            color: #b06000;
+        }
+        .status-badge.paused {
+            background: #e8eaed;
+            color: #5f6368;
+        }
+        .status-badge.completed {
+            background: #e8f0fe;
+            color: #1a73e8;
+        }
+        .status-badge.critical {
+            background: #fce8e6;
+            color: #c5221f;
+        }
+        .status-badge .material-icons-outlined {
+            font-size: 14px;
+        }
+        
+        /* Priority */
+        .priority-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+        .priority-badge.high {
+            background: #fce8e6;
+            color: #c5221f;
+        }
+        .priority-badge.medium {
+            background: #fef7e0;
+            color: #b06000;
+        }
+        .priority-badge.low {
+            background: #e6f4ea;
+            color: #137333;
+        }
+        
+        /* Deadline */
+        .deadline {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+        }
+        .deadline .material-icons-outlined {
+            font-size: 18px;
+        }
+        .deadline.ok {
+            color: #5f6368;
+        }
+        .deadline.warning {
+            color: #f9ab00;
+            font-weight: 500;
+        }
+        .deadline.danger {
+            color: #ea4335;
+            font-weight: 500;
+        }
+        .deadline.overdue {
+            color: #c5221f;
+            font-weight: 600;
+        }
+        .deadline-date {
+            font-size: 11px;
+            color: #5f6368;
+        }
+        
+        /* Progress */
+        .progress-cell {
+            min-width: 100px;
+        }
+        .progress-bar-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .progress-bar {
+            flex: 1;
+            height: 6px;
+            background: #e8eaed;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            border-radius: 3px;
+            background: #1a73e8;
+            transition: width 0.3s;
+        }
+        .progress-fill.low { background: #ea4335; }
+        .progress-fill.medium { background: #f9ab00; }
+        .progress-fill.high { background: #34a853; }
+        .progress-label {
+            font-size: 12px;
+            color: #5f6368;
+            min-width: 35px;
+            text-align: right;
+        }
+        
+        /* Assignee */
+        .assignee {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .assignee-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: #1a73e8;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 500;
+        }
+        .assignee-name {
+            font-size: 13px;
+            color: #202124;
+        }
+        
+        /* Assignee column visibility */
+        .col-assignee {
+            transition: opacity 0.2s;
+        }
+        body.view-moje .col-assignee {
+            display: none;
+        }
+        body.view-moje .filter-zpracovatel {
+            display: none;
+        }
+        
+        /* Type badge */
+        .type-badge {
+            font-size: 12px;
+            color: #5f6368;
+            white-space: nowrap;
+        }
+        
+        /* Alert indicators */
+        .alerts-cell {
+            display: flex;
+            gap: 4px;
+        }
+        .alert-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+        .alert-icon.warning {
+            background: #fef7e0;
+            color: #f9ab00;
+        }
+        .alert-icon.danger {
+            background: #fce8e6;
+            color: #ea4335;
+        }
+        .alert-icon.info {
+            background: #e8f0fe;
+            color: #1a73e8;
+        }
+
+        /* ===========================================
+           PAGINATION
+           =========================================== */
+        .pagination {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 24px;
+            background: #fff;
+            border-top: 1px solid #e0e0e0;
+        }
+        .pagination-info {
+            font-size: 13px;
+            color: #5f6368;
+        }
+        .pagination-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .pagination-btn {
+            padding: 8px 12px;
+            background: #fff;
+            border: 1px solid #dadce0;
+            border-radius: 4px;
+            font-size: 13px;
+            color: #3c4043;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .pagination-btn:hover:not(:disabled) {
+            background: #f8f9fa;
+            border-color: #004289;
+        }
+        .pagination-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .pagination-btn.active {
+            background: #004289;
+            border-color: #004289;
+            color: #fff;
+        }
+
+        /* ===========================================
+           RESPONSIVE
+           =========================================== */
+        
+        /* Sloupec zpracovatele - skrytý v pohledu "Moje řízení" */
+        .data-table th.col-assignee,
+        .data-table td.col-assignee,
+        .filter-zpracovatel {
+            display: none;
+        }
+        body.view-all .data-table th.col-assignee,
+        body.view-all .data-table td.col-assignee,
+        body.view-all .filter-zpracovatel {
+            display: table-cell;
+        }
+        body.view-all .filter-zpracovatel {
+            display: block;
+        }
+        
+        @media (max-width: 1200px) {
+            .stats-bar {
+                flex-wrap: wrap;
+                gap: 16px;
+            }
+            .quick-filters {
+                display: none;
+            }
+        }
+        @media (max-width: 768px) {
+            .nav-rail {
+                display: none;
+            }
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .page-header-right {
+                width: 100%;
+                justify-content: flex-end;
+            }
+            .stats-bar {
+                overflow-x: auto;
+                flex-wrap: nowrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ISSŘ Hlavička -->
+    <header class="issr-header">
+        <a href="../index.html" class="issr-header__logo">
+            <img src="../images/logo-issr.png" alt="ISSŘ Logo" class="issr-header__logo-img">
+            <span class="issr-header__title">INFORMAČNÍ SYSTÉM STAVEBNÍHO ŘÍZENÍ</span>
+        </a>
+        
+        <div class="issr-header__search">
+            <input type="text" class="issr-header__search-input" placeholder="Hledat řízení, záměry, dokumenty...">
+        </div>
+        
+        <div class="issr-header__actions">
+            <div class="issr-header__notification">
+                <svg class="issr-header__notification-icon" viewBox="0 0 16 16" fill="currentColor">
+                    <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2M8 1.918l-.797.161A4 4 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4 4 0 0 0-3.203-3.92zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5 5 0 0 1 13 6c0 .88.32 4.2 1.22 6"></path>
+                </svg>
+                <span class="issr-header__notification-badge">5</span>
+            </div>
+            
+            <div class="issr-header__user">
+                <span>Aleš Krupa</span>
+                <svg class="issr-header__user-icon" viewBox="0 0 16 16" fill="currentColor">
+                    <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z"></path>
+                </svg>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-content">
+        <!-- Nav Rail -->
+        <nav class="nav-rail">
+            <a href="dashboard.html" class="nav-rail-item" title="Domů">
+                <span class="material-icons-outlined">home</span>
+                <span class="nav-rail-item-label">Domů</span>
+            </a>
+            
+            <div class="nav-rail-divider"></div>
+            
+            <a href="zamery.html" class="nav-rail-item" title="Záměry">
+                <span class="material-icons-outlined">push_pin</span>
+                <span class="nav-rail-item-label">Záměry</span>
+            </a>
+            <a href="rizeni.html" class="nav-rail-item active" title="Řízení">
+                <span class="material-icons-outlined">work</span>
+                <span class="nav-rail-item-label">Řízení</span>
+            </a>
+            <a href="dokumenty.html" class="nav-rail-item" title="Dokumenty">
+                <span class="material-icons-outlined">mail</span>
+                <span class="nav-rail-item-label">Dokumenty</span>
+            </a>
+            
+            <div class="nav-rail-divider"></div>
+            
+            <a href="#" class="nav-rail-item disabled" title="Šablony">
+                <span class="material-icons-outlined">description</span>
+                <span class="nav-rail-item-label">Šablony</span>
+            </a>
+            <a href="#" class="nav-rail-item disabled" title="Statistiky">
+                <span class="material-icons-outlined">bar_chart</span>
+                <span class="nav-rail-item-label">Statistiky</span>
+            </a>
+            <a href="#" class="nav-rail-item disabled" title="Nastavení">
+                <span class="material-icons-outlined">settings</span>
+                <span class="nav-rail-item-label">Nastavení</span>
+            </a>
+        </nav>
+
+        <!-- Page Content -->
+        <div class="page-wrapper">
+            <!-- Page Header -->
+            <div class="page-header">
+                <div class="page-header-left">
+                    <div>
+                        <h1 class="page-title">Řízení</h1>
+                        <p class="page-subtitle">Přehled stavebních řízení • Dopravní a energetický SÚ</p>
+                    </div>
+                    
+                    <!-- View Toggle -->
+                    <div class="view-toggle">
+                        <button class="view-toggle-btn active" onclick="switchView('moje')">
+                            <span class="material-icons-outlined">person</span>
+                            Moje řízení
+                        </button>
+                        <button class="view-toggle-btn" onclick="switchView('vsechna')">
+                            <span class="material-icons-outlined">groups</span>
+                            Všechna řízení
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="page-header-right">
+                    <button class="btn-secondary">
+                        <span class="material-icons-outlined">file_download</span>
+                        Export
+                    </button>
+                    <button class="btn-primary">
+                        <span class="material-icons-outlined">add</span>
+                        Nové řízení
+                    </button>
+                </div>
+            </div>
+
+            <!-- Stats Bar -->
+            <div class="stats-bar" id="statsBar">
+                <div class="stat-item active" onclick="filterByStat('all')">
+                    <div class="stat-icon blue">
+                        <span class="material-icons-outlined">folder_open</span>
+                    </div>
+                    <div class="stat-content">
+                        <span class="stat-value" id="statTotal">47</span>
+                        <span class="stat-label">Celkem aktivních</span>
+                    </div>
+                </div>
+                <div class="stat-item" onclick="filterByStat('running')">
+                    <div class="stat-icon green">
+                        <span class="material-icons-outlined">play_circle</span>
+                    </div>
+                    <div class="stat-content">
+                        <span class="stat-value" id="statRunning">32</span>
+                        <span class="stat-label">Probíhající</span>
+                    </div>
+                </div>
+                <div class="stat-item" onclick="filterByStat('waiting')">
+                    <div class="stat-icon orange">
+                        <span class="material-icons-outlined">hourglass_empty</span>
+                    </div>
+                    <div class="stat-content">
+                        <span class="stat-value" id="statWaiting">8</span>
+                        <span class="stat-label">Čeká na akci</span>
+                    </div>
+                </div>
+                <div class="stat-item" onclick="filterByStat('critical')">
+                    <div class="stat-icon red">
+                        <span class="material-icons-outlined">error</span>
+                    </div>
+                    <div class="stat-content">
+                        <span class="stat-value" id="statCritical">3</span>
+                        <span class="stat-label">Kritické</span>
+                    </div>
+                </div>
+                <div class="stat-item" onclick="filterByStat('paused')">
+                    <div class="stat-icon purple">
+                        <span class="material-icons-outlined">pause_circle</span>
+                    </div>
+                    <div class="stat-content">
+                        <span class="stat-value" id="statPaused">4</span>
+                        <span class="stat-label">Přerušeno</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filter Bar -->
+            <div class="filter-bar">
+                <div class="filter-bar-row">
+                    <!-- Stav -->
+                    <div class="filter-dropdown">
+                        <button class="filter-btn" onclick="toggleFilter('stav')">
+                            <span class="material-icons-outlined">flag</span>
+                            Stav
+                            <span class="material-icons-outlined">expand_more</span>
+                        </button>
+                        <div class="filter-panel" id="filter-stav">
+                            <div class="filter-panel-header">
+                                <span class="filter-panel-title">Stav řízení</span>
+                                <button class="filter-panel-clear">Vymazat</button>
+                            </div>
+                            <div class="filter-panel-body">
+                                <label class="filter-option">
+                                    <input type="checkbox" checked>
+                                    <span class="filter-option-label">Probíhající</span>
+                                    <span class="filter-option-count">32</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" checked>
+                                    <span class="filter-option-label">Čeká na akci</span>
+                                    <span class="filter-option-count">8</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox">
+                                    <span class="filter-option-label">Přerušeno</span>
+                                    <span class="filter-option-count">4</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox">
+                                    <span class="filter-option-label">Ukončeno</span>
+                                    <span class="filter-option-count">156</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Priorita -->
+                    <div class="filter-dropdown">
+                        <button class="filter-btn" onclick="toggleFilter('priorita')">
+                            <span class="material-icons-outlined">priority_high</span>
+                            Priorita
+                            <span class="material-icons-outlined">expand_more</span>
+                        </button>
+                        <div class="filter-panel" id="filter-priorita">
+                            <div class="filter-panel-header">
+                                <span class="filter-panel-title">Priorita</span>
+                                <button class="filter-panel-clear">Vymazat</button>
+                            </div>
+                            <div class="filter-panel-body">
+                                <label class="filter-option">
+                                    <input type="checkbox">
+                                    <span class="filter-option-label">🔴 Vysoká</span>
+                                    <span class="filter-option-count">5</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox">
+                                    <span class="filter-option-label">🟡 Střední</span>
+                                    <span class="filter-option-count">18</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox">
+                                    <span class="filter-option-label">🟢 Nízká</span>
+                                    <span class="filter-option-count">24</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Typ řízení -->
+                    <div class="filter-dropdown">
+                        <button class="filter-btn" onclick="toggleFilter('typ')">
+                            <span class="material-icons-outlined">category</span>
+                            Typ řízení
+                            <span class="material-icons-outlined">expand_more</span>
+                        </button>
+                        <div class="filter-panel" id="filter-typ">
+                            <div class="filter-panel-header">
+                                <span class="filter-panel-title">Typ řízení</span>
+                                <button class="filter-panel-clear">Vymazat</button>
+                            </div>
+                            <div class="filter-panel-body">
+                                <label class="filter-option">
+                                    <input type="checkbox">
+                                    <span class="filter-option-label">Povolení stavby</span>
+                                    <span class="filter-option-count">24</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox">
+                                    <span class="filter-option-label">Předběžná informace</span>
+                                    <span class="filter-option-count">12</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox">
+                                    <span class="filter-option-label">Kolaudace</span>
+                                    <span class="filter-option-count">7</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox">
+                                    <span class="filter-option-label">Odstranění stavby</span>
+                                    <span class="filter-option-count">4</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Lhůta -->
+                    <div class="filter-dropdown">
+                        <button class="filter-btn" onclick="toggleFilter('lhuta')">
+                            <span class="material-icons-outlined">schedule</span>
+                            Lhůta
+                            <span class="material-icons-outlined">expand_more</span>
+                        </button>
+                        <div class="filter-panel" id="filter-lhuta">
+                            <div class="filter-panel-header">
+                                <span class="filter-panel-title">Stav lhůty</span>
+                                <button class="filter-panel-clear">Vymazat</button>
+                            </div>
+                            <div class="filter-panel-body">
+                                <label class="filter-option">
+                                    <input type="checkbox">
+                                    <span class="filter-option-label">Překročená lhůta</span>
+                                    <span class="filter-option-count">2</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox">
+                                    <span class="filter-option-label">Do 3 dnů</span>
+                                    <span class="filter-option-count">4</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox">
+                                    <span class="filter-option-label">Do 7 dnů</span>
+                                    <span class="filter-option-count">8</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox">
+                                    <span class="filter-option-label">Do 14 dnů</span>
+                                    <span class="filter-option-count">12</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox">
+                                    <span class="filter-option-label">Více než 14 dnů</span>
+                                    <span class="filter-option-count">21</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Více filtrů -->
+                    <div class="filter-dropdown">
+                        <button class="filter-btn" onclick="toggleFilter('vice')">
+                            <span class="material-icons-outlined">tune</span>
+                            Více filtrů
+                        </button>
+                    </div>
+
+                    <!-- Zpracovatel (pouze pro vedoucí) -->
+                    <div class="filter-dropdown filter-zpracovatel">
+                        <button class="filter-btn" onclick="toggleFilter('zpracovatel')">
+                            <span class="material-icons-outlined">person</span>
+                            Zpracovatel
+                            <span class="material-icons-outlined">expand_more</span>
+                        </button>
+                        <div class="filter-panel" id="filter-zpracovatel">
+                            <div class="filter-panel-header">
+                                <span class="filter-panel-title">Zpracovatel</span>
+                                <button class="filter-panel-clear">Vymazat</button>
+                            </div>
+                            <div class="filter-panel-body">
+                                <label class="filter-option">
+                                    <input type="checkbox" checked>
+                                    <span class="filter-option-label">Ing. Jana Nováková</span>
+                                    <span class="filter-option-count">52</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" checked>
+                                    <span class="filter-option-label">Mgr. Petr Kovář</span>
+                                    <span class="filter-option-count">45</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" checked>
+                                    <span class="filter-option-label">Ing. Martin Horák</span>
+                                    <span class="filter-option-count">58</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" checked>
+                                    <span class="filter-option-label">Bc. Lucie Svobodová</span>
+                                    <span class="filter-option-count">41</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" checked>
+                                    <span class="filter-option-label">Ing. Tomáš Dvořák</span>
+                                    <span class="filter-option-count">38</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" checked>
+                                    <span class="filter-option-label">Mgr. Věra Králová</span>
+                                    <span class="filter-option-count">32</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" checked>
+                                    <span class="filter-option-label">Bc. Jakub Procházka</span>
+                                    <span class="filter-option-count">25</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" checked>
+                                    <span class="filter-option-label">Anna Veselá</span>
+                                    <span class="filter-option-count">21</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick filters -->
+                    <div class="quick-filters">
+                        <span style="font-size: 12px; color: #5f6368;">Rychlé filtry:</span>
+                        <button class="quick-filter-chip critical" onclick="quickFilter('overdue')">
+                            <span class="material-icons-outlined">warning</span>
+                            Překročená lhůta
+                            <span class="chip-count">2</span>
+                        </button>
+                        <button class="quick-filter-chip warning" onclick="quickFilter('urgent')">
+                            <span class="material-icons-outlined">schedule</span>
+                            Urgentní (do 3 dnů)
+                            <span class="chip-count">4</span>
+                        </button>
+                        <button class="quick-filter-chip" onclick="quickFilter('action')">
+                            <span class="material-icons-outlined">touch_app</span>
+                            Vyžaduje akci
+                            <span class="chip-count">8</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Table -->
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th class="sortable sorted">
+                                Lhůta
+                                <span class="material-icons-outlined sort-icon">arrow_upward</span>
+                            </th>
+                            <th class="sortable cell-main">
+                                Řízení
+                                <span class="material-icons-outlined sort-icon">unfold_more</span>
+                            </th>
+                            <th class="sortable">
+                                Typ
+                                <span class="material-icons-outlined sort-icon">unfold_more</span>
+                            </th>
+                            <th>Stav</th>
+                            <th>Priorita</th>
+                            <th class="sortable">
+                                Průběh
+                                <span class="material-icons-outlined sort-icon">unfold_more</span>
+                            </th>
+                            <th class="col-assignee sortable">
+                                Zpracovatel
+                                <span class="material-icons-outlined sort-icon">unfold_more</span>
+                            </th>
+                            <th>Upozornění</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Kritické řízení - překročená lhůta -->
+                        <tr class="critical" data-stav="critical" data-priorita="high" data-typ="povoleni" data-lhuta="-3" data-zpracovatel="jn" onclick="window.location='povoleni-2.html'">
+                            <td>
+                                <div class="deadline overdue">
+                                    <span class="material-icons-outlined">error</span>
+                                    <div>
+                                        <div>-3 dny</div>
+                                        <div class="deadline-date">Lhůta: 25. 1. 2026</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="cell-main">
+                                <div class="rizeni-name">
+                                    <span class="priority-indicator high"></span>
+                                    Doplnění závor na PZS v km 4,569 trati Šumperk
+                                </div>
+                                <div class="rizeni-id">R/2026/020930</div>
+                            </td>
+                            <td><span class="type-badge">Povolení stavby</span></td>
+                            <td><span class="status-badge critical"><span class="material-icons-outlined">error</span>Kritické</span></td>
+                            <td><span class="priority-badge high">Vysoká</span></td>
+                            <td class="progress-cell">
+                                <div class="progress-bar-container">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill low" style="width: 85%;"></div>
+                                    </div>
+                                    <span class="progress-label">85%</span>
+                                </div>
+                            </td>
+                            <td class="col-assignee">
+                                <div class="assignee">
+                                    <div class="assignee-avatar" style="background: #1a73e8;">JN</div>
+                                    <span class="assignee-name">Ing. Jana Nováková</span>
+                                </div>
+                            </td>
+                            <td class="alerts-cell">
+                                <div class="alert-icon danger" title="Překročená lhůta">
+                                    <span class="material-icons-outlined">schedule</span>
+                                </div>
+                                <div class="alert-icon warning" title="Čeká na doplnění">
+                                    <span class="material-icons-outlined">edit_note</span>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <!-- Urgentní - 2 dny do lhůty -->
+                        <tr data-stav="waiting" data-priorita="high" data-typ="povoleni" data-lhuta="2" data-zpracovatel="pk" onclick="window.location='povoleni-2.html'">
+                            <td>
+                                <div class="deadline danger">
+                                    <span class="material-icons-outlined">warning</span>
+                                    <div>
+                                        <div>2 dny</div>
+                                        <div class="deadline-date">Lhůta: 30. 1. 2026</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="cell-main">
+                                <div class="rizeni-name">
+                                    <span class="priority-indicator high"></span>
+                                    Přeložka VN vedení Plzeň-sever
+                                </div>
+                                <div class="rizeni-id">R/2026/000089</div>
+                            </td>
+                            <td><span class="type-badge">Povolení stavby</span></td>
+                            <td><span class="status-badge waiting"><span class="material-icons-outlined">hourglass_empty</span>Čeká na akci</span></td>
+                            <td><span class="priority-badge high">Vysoká</span></td>
+                            <td class="progress-cell">
+                                <div class="progress-bar-container">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill medium" style="width: 80%;"></div>
+                                    </div>
+                                    <span class="progress-label">80%</span>
+                                </div>
+                            </td>
+                            <td class="col-assignee">
+                                <div class="assignee">
+                                    <div class="assignee-avatar" style="background: #34a853;">PK</div>
+                                    <span class="assignee-name">Mgr. Petr Kovář</span>
+                                </div>
+                            </td>
+                            <td class="alerts-cell">
+                                <div class="alert-icon warning" title="Blíží se lhůta">
+                                    <span class="material-icons-outlined">schedule</span>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <!-- Normální řízení -->
+                        <tr data-stav="running" data-priorita="medium" data-typ="povoleni" data-lhuta="5" data-zpracovatel="mh" onclick="window.location='povoleni-2.html'">
+                            <td>
+                                <div class="deadline warning">
+                                    <span class="material-icons-outlined">schedule</span>
+                                    <div>
+                                        <div>5 dní</div>
+                                        <div class="deadline-date">Lhůta: 2. 2. 2026</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="cell-main">
+                                <div class="rizeni-name">
+                                    <span class="priority-indicator medium"></span>
+                                    Odstranění části vlečky ŠKODA hlavní závod
+                                </div>
+                                <div class="rizeni-id">R/2026/000147</div>
+                            </td>
+                            <td><span class="type-badge">Povolení stavby</span></td>
+                            <td><span class="status-badge running"><span class="material-icons-outlined">play_circle</span>Probíhá</span></td>
+                            <td><span class="priority-badge medium">Střední</span></td>
+                            <td class="progress-cell">
+                                <div class="progress-bar-container">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill medium" style="width: 65%;"></div>
+                                    </div>
+                                    <span class="progress-label">65%</span>
+                                </div>
+                            </td>
+                            <td class="col-assignee">
+                                <div class="assignee">
+                                    <div class="assignee-avatar" style="background: #9334e6;">MH</div>
+                                    <span class="assignee-name">Ing. Martin Horák</span>
+                                </div>
+                            </td>
+                            <td class="alerts-cell">
+                                <div class="alert-icon info" title="Nový dokument">
+                                    <span class="material-icons-outlined">description</span>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr data-stav="running" data-priorita="medium" data-typ="kolaudace" data-lhuta="14" data-zpracovatel="ls" onclick="window.location='povoleni-2.html'">
+                            <td>
+                                <div class="deadline ok">
+                                    <span class="material-icons-outlined">schedule</span>
+                                    <div>
+                                        <div>14 dní</div>
+                                        <div class="deadline-date">Lhůta: 11. 2. 2026</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="cell-main">
+                                <div class="rizeni-name">
+                                    <span class="priority-indicator medium"></span>
+                                    Rozvodna 110kV Hostivice - kolaudace
+                                </div>
+                                <div class="rizeni-id">R/2025/018742</div>
+                            </td>
+                            <td><span class="type-badge">Kolaudace</span></td>
+                            <td><span class="status-badge running"><span class="material-icons-outlined">play_circle</span>Probíhá</span></td>
+                            <td><span class="priority-badge medium">Střední</span></td>
+                            <td class="progress-cell">
+                                <div class="progress-bar-container">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill medium" style="width: 45%;"></div>
+                                    </div>
+                                    <span class="progress-label">45%</span>
+                                </div>
+                            </td>
+                            <td class="col-assignee">
+                                <div class="assignee">
+                                    <div class="assignee-avatar" style="background: #f9ab00;">LS</div>
+                                    <span class="assignee-name">Bc. Lucie Svobodová</span>
+                                </div>
+                            </td>
+                            <td class="alerts-cell"></td>
+                        </tr>
+
+                        <tr data-stav="running" data-priorita="low" data-typ="povoleni" data-lhuta="21" data-zpracovatel="td" onclick="window.location='povoleni-2.html'">
+                            <td>
+                                <div class="deadline ok">
+                                    <span class="material-icons-outlined">schedule</span>
+                                    <div>
+                                        <div>21 dní</div>
+                                        <div class="deadline-date">Lhůta: 18. 2. 2026</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="cell-main">
+                                <div class="rizeni-name">
+                                    <span class="priority-indicator low"></span>
+                                    Paroplynová elektrárna Mělník - I. etapa
+                                </div>
+                                <div class="rizeni-id">R/2025/015892</div>
+                            </td>
+                            <td><span class="type-badge">Povolení stavby</span></td>
+                            <td><span class="status-badge running"><span class="material-icons-outlined">play_circle</span>Probíhá</span></td>
+                            <td><span class="priority-badge low">Nízká</span></td>
+                            <td class="progress-cell">
+                                <div class="progress-bar-container">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill high" style="width: 30%;"></div>
+                                    </div>
+                                    <span class="progress-label">30%</span>
+                                </div>
+                            </td>
+                            <td class="col-assignee">
+                                <div class="assignee">
+                                    <div class="assignee-avatar" style="background: #00bcd4;">TD</div>
+                                    <span class="assignee-name">Ing. Tomáš Dvořák</span>
+                                </div>
+                            </td>
+                            <td class="alerts-cell"></td>
+                        </tr>
+
+                        <tr data-stav="running" data-priorita="low" data-typ="predbezna" data-lhuta="28" data-zpracovatel="vk" onclick="window.location='povoleni-2.html'">
+                            <td>
+                                <div class="deadline ok">
+                                    <span class="material-icons-outlined">schedule</span>
+                                    <div>
+                                        <div>28 dní</div>
+                                        <div class="deadline-date">Lhůta: 25. 2. 2026</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="cell-main">
+                                <div class="rizeni-name">
+                                    <span class="priority-indicator low"></span>
+                                    Fotovoltaická elektrárna Dětmarovice
+                                </div>
+                                <div class="rizeni-id">R/2026/000152</div>
+                            </td>
+                            <td><span class="type-badge">Předběžná info</span></td>
+                            <td><span class="status-badge running"><span class="material-icons-outlined">play_circle</span>Probíhá</span></td>
+                            <td><span class="priority-badge low">Nízká</span></td>
+                            <td class="progress-cell">
+                                <div class="progress-bar-container">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill high" style="width: 15%;"></div>
+                                    </div>
+                                    <span class="progress-label">15%</span>
+                                </div>
+                            </td>
+                            <td class="col-assignee">
+                                <div class="assignee">
+                                    <div class="assignee-avatar" style="background: #607d8b;">VK</div>
+                                    <span class="assignee-name">Mgr. Věra Králová</span>
+                                </div>
+                            </td>
+                            <td class="alerts-cell"></td>
+                        </tr>
+
+                        <!-- Přerušené řízení -->
+                        <tr data-stav="paused" data-priorita="medium" data-typ="povoleni" data-lhuta="999" data-zpracovatel="jp" onclick="window.location='povoleni-2.html'">
+                            <td>
+                                <div class="deadline ok">
+                                    <span class="material-icons-outlined">pause</span>
+                                    <div>
+                                        <div>Přerušeno</div>
+                                        <div class="deadline-date">Do: 15. 3. 2026</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="cell-main">
+                                <div class="rizeni-name">
+                                    <span class="priority-indicator medium"></span>
+                                    Elektrizace trati Šumperk - Zábřeh na Moravě
+                                </div>
+                                <div class="rizeni-id">R/2025/014523</div>
+                            </td>
+                            <td><span class="type-badge">Povolení stavby</span></td>
+                            <td><span class="status-badge paused"><span class="material-icons-outlined">pause_circle</span>Přerušeno</span></td>
+                            <td><span class="priority-badge medium">Střední</span></td>
+                            <td class="progress-cell">
+                                <div class="progress-bar-container">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 55%;"></div>
+                                    </div>
+                                    <span class="progress-label">55%</span>
+                                </div>
+                            </td>
+                            <td class="col-assignee">
+                                <div class="assignee">
+                                    <div class="assignee-avatar" style="background: #ff5722;">JP</div>
+                                    <span class="assignee-name">Bc. Jakub Procházka</span>
+                                </div>
+                            </td>
+                            <td class="alerts-cell">
+                                <div class="alert-icon info" title="Čeká na doplnění žadatele">
+                                    <span class="material-icons-outlined">person</span>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr data-stav="waiting" data-priorita="medium" data-typ="povoleni" data-lhuta="7" data-zpracovatel="av" onclick="window.location='povoleni-2.html'">
+                            <td>
+                                <div class="deadline warning">
+                                    <span class="material-icons-outlined">schedule</span>
+                                    <div>
+                                        <div>7 dní</div>
+                                        <div class="deadline-date">Lhůta: 4. 2. 2026</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="cell-main">
+                                <div class="rizeni-name">
+                                    <span class="priority-indicator medium"></span>
+                                    Opatření na D1 pro NTK - NJZ Dukovany
+                                </div>
+                                <div class="rizeni-id">R/2026/020738</div>
+                            </td>
+                            <td><span class="type-badge">Povolení stavby</span></td>
+                            <td><span class="status-badge waiting"><span class="material-icons-outlined">hourglass_empty</span>Čeká na akci</span></td>
+                            <td><span class="priority-badge medium">Střední</span></td>
+                            <td class="progress-cell">
+                                <div class="progress-bar-container">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill medium" style="width: 70%;"></div>
+                                    </div>
+                                    <span class="progress-label">70%</span>
+                                </div>
+                            </td>
+                            <td class="col-assignee">
+                                <div class="assignee">
+                                    <div class="assignee-avatar" style="background: #795548;">AV</div>
+                                    <span class="assignee-name">Anna Veselá</span>
+                                </div>
+                            </td>
+                            <td class="alerts-cell">
+                                <div class="alert-icon warning" title="Čeká na vyjádření DO">
+                                    <span class="material-icons-outlined">comment</span>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr class="critical" data-stav="critical" data-priorita="high" data-typ="odstraneni" data-lhuta="-1" data-zpracovatel="jn" onclick="window.location='povoleni-2.html'">
+                            <td>
+                                <div class="deadline overdue">
+                                    <span class="material-icons-outlined">error</span>
+                                    <div>
+                                        <div>-1 den</div>
+                                        <div class="deadline-date">Lhůta: 27. 1. 2026</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="cell-main">
+                                <div class="rizeni-name">
+                                    <span class="priority-indicator high"></span>
+                                    Odstranění vlečky - VLEČKA A.S. ZZ PLZEŇ
+                                </div>
+                                <div class="rizeni-id">R/2026/019203</div>
+                            </td>
+                            <td><span class="type-badge">Povolení odstranění</span></td>
+                            <td><span class="status-badge critical"><span class="material-icons-outlined">error</span>Kritické</span></td>
+                            <td><span class="priority-badge high">Vysoká</span></td>
+                            <td class="progress-cell">
+                                <div class="progress-bar-container">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill low" style="width: 90%;"></div>
+                                    </div>
+                                    <span class="progress-label">90%</span>
+                                </div>
+                            </td>
+                            <td class="col-assignee">
+                                <div class="assignee">
+                                    <div class="assignee-avatar" style="background: #1a73e8;">JN</div>
+                                    <span class="assignee-name">Ing. Jana Nováková</span>
+                                </div>
+                            </td>
+                            <td class="alerts-cell">
+                                <div class="alert-icon danger" title="Překročená lhůta">
+                                    <span class="material-icons-outlined">schedule</span>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr data-stav="running" data-priorita="low" data-typ="predbezna" data-lhuta="35" data-zpracovatel="mh" onclick="window.location='povoleni-2.html'">
+                            <td>
+                                <div class="deadline ok">
+                                    <span class="material-icons-outlined">schedule</span>
+                                    <div>
+                                        <div>35 dní</div>
+                                        <div class="deadline-date">Lhůta: 4. 3. 2026</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="cell-main">
+                                <div class="rizeni-name">
+                                    <span class="priority-indicator low"></span>
+                                    ZPP Elektrizace trati Šumperk – Libina
+                                </div>
+                                <div class="rizeni-id">R/2026/020245</div>
+                            </td>
+                            <td><span class="type-badge">Předběžná info</span></td>
+                            <td><span class="status-badge running"><span class="material-icons-outlined">play_circle</span>Probíhá</span></td>
+                            <td><span class="priority-badge low">Nízká</span></td>
+                            <td class="progress-cell">
+                                <div class="progress-bar-container">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill high" style="width: 20%;"></div>
+                                    </div>
+                                    <span class="progress-label">20%</span>
+                                </div>
+                            </td>
+                            <td class="col-assignee">
+                                <div class="assignee">
+                                    <div class="assignee-avatar" style="background: #9334e6;">MH</div>
+                                    <span class="assignee-name">Ing. Martin Horák</span>
+                                </div>
+                            </td>
+                            <td class="alerts-cell"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination">
+                <div class="pagination-info">
+                    Zobrazeno 1–10 z 47 řízení
+                </div>
+                <div class="pagination-controls">
+                    <button class="pagination-btn" disabled>
+                        <span class="material-icons-outlined" style="font-size: 18px;">chevron_left</span>
+                    </button>
+                    <button class="pagination-btn active">1</button>
+                    <button class="pagination-btn">2</button>
+                    <button class="pagination-btn">3</button>
+                    <button class="pagination-btn">4</button>
+                    <button class="pagination-btn">5</button>
+                    <button class="pagination-btn">
+                        <span class="material-icons-outlined" style="font-size: 18px;">chevron_right</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Filter state
+        const filterState = {
+            stav: [],
+            priorita: [],
+            typ: [],
+            lhuta: [],
+            zpracovatel: [],
+            quickFilter: null
+        };
+
+        // Initialize filters on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add change listeners to all filter checkboxes
+            document.querySelectorAll('.filter-panel input[type="checkbox"]').forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    updateFilterState();
+                    applyFilters();
+                });
+            });
+            
+            // Add clear button functionality
+            document.querySelectorAll('.filter-panel-clear').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const panel = this.closest('.filter-panel');
+                    panel.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+                    updateFilterState();
+                    applyFilters();
+                });
+            });
+        });
+
+        // Switch view between "Moje řízení" and "Všechna řízení"
+        function switchView(view) {
+            const buttons = document.querySelectorAll('.view-toggle-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            if (view === 'moje') {
+                buttons[0].classList.add('active');
+                document.body.classList.remove('view-all');
+                updateStats({
+                    total: 47,
+                    running: 32,
+                    waiting: 8,
+                    critical: 3,
+                    paused: 4
+                });
+            } else {
+                buttons[1].classList.add('active');
+                document.body.classList.add('view-all');
+                updateStats({
+                    total: 312,
+                    running: 189,
+                    waiting: 45,
+                    critical: 12,
+                    paused: 23
+                });
+            }
+            applyFilters();
+        }
+        
+        // Update stats display
+        function updateStats(data) {
+            document.getElementById('statTotal').textContent = data.total;
+            document.getElementById('statRunning').textContent = data.running;
+            document.getElementById('statWaiting').textContent = data.waiting;
+            document.getElementById('statCritical').textContent = data.critical;
+            document.getElementById('statPaused').textContent = data.paused;
+        }
+        
+        // Toggle filter panel
+        function toggleFilter(filterId) {
+            const panel = document.getElementById('filter-' + filterId);
+            const allPanels = document.querySelectorAll('.filter-panel');
+            
+            allPanels.forEach(p => {
+                if (p !== panel) p.classList.remove('open');
+            });
+            
+            if (panel) {
+                panel.classList.toggle('open');
+            }
+        }
+
+        // Update filter state from checkboxes
+        function updateFilterState() {
+            // Stav filter
+            filterState.stav = [];
+            document.querySelectorAll('#filter-stav input:checked').forEach(cb => {
+                const label = cb.closest('.filter-option').querySelector('.filter-option-label').textContent.trim();
+                if (label === 'Probíhající') filterState.stav.push('running');
+                if (label === 'Čeká na akci') filterState.stav.push('waiting');
+                if (label === 'Přerušeno') filterState.stav.push('paused');
+                if (label === 'Ukončeno') filterState.stav.push('completed');
+            });
+
+            // Priorita filter
+            filterState.priorita = [];
+            document.querySelectorAll('#filter-priorita input:checked').forEach(cb => {
+                const label = cb.closest('.filter-option').querySelector('.filter-option-label').textContent.trim();
+                if (label.includes('Vysoká')) filterState.priorita.push('high');
+                if (label.includes('Střední')) filterState.priorita.push('medium');
+                if (label.includes('Nízká')) filterState.priorita.push('low');
+            });
+
+            // Typ filter
+            filterState.typ = [];
+            document.querySelectorAll('#filter-typ input:checked').forEach(cb => {
+                const label = cb.closest('.filter-option').querySelector('.filter-option-label').textContent.trim();
+                if (label === 'Povolení stavby') filterState.typ.push('povoleni');
+                if (label === 'Předběžná informace') filterState.typ.push('predbezna');
+                if (label === 'Kolaudace') filterState.typ.push('kolaudace');
+                if (label === 'Odstranění stavby') filterState.typ.push('odstraneni');
+            });
+
+            // Lhuta filter
+            filterState.lhuta = [];
+            document.querySelectorAll('#filter-lhuta input:checked').forEach(cb => {
+                const label = cb.closest('.filter-option').querySelector('.filter-option-label').textContent.trim();
+                if (label === 'Překročená lhůta') filterState.lhuta.push('overdue');
+                if (label === 'Do 3 dnů') filterState.lhuta.push('3');
+                if (label === 'Do 7 dnů') filterState.lhuta.push('7');
+                if (label === 'Do 14 dnů') filterState.lhuta.push('14');
+                if (label === 'Více než 14 dnů') filterState.lhuta.push('14+');
+            });
+
+            // Zpracovatel filter
+            filterState.zpracovatel = [];
+            document.querySelectorAll('#filter-zpracovatel input:checked').forEach(cb => {
+                const label = cb.closest('.filter-option').querySelector('.filter-option-label').textContent.trim();
+                if (label.includes('Jana Nováková')) filterState.zpracovatel.push('jn');
+                if (label.includes('Petr Kovář')) filterState.zpracovatel.push('pk');
+                if (label.includes('Martin Horák')) filterState.zpracovatel.push('mh');
+                if (label.includes('Lucie Svobodová')) filterState.zpracovatel.push('ls');
+                if (label.includes('Tomáš Dvořák')) filterState.zpracovatel.push('td');
+                if (label.includes('Věra Králová')) filterState.zpracovatel.push('vk');
+                if (label.includes('Jakub Procházka')) filterState.zpracovatel.push('jp');
+                if (label.includes('Anna Veselá')) filterState.zpracovatel.push('av');
+            });
+
+            updateFilterButtonStates();
+        }
+
+        // Update filter button active states
+        function updateFilterButtonStates() {
+            const filters = ['stav', 'priorita', 'typ', 'lhuta'];
+            filters.forEach(filterId => {
+                const btn = document.querySelector('[onclick="toggleFilter(\'' + filterId + '\')"]');
+                if (!btn) return;
+                
+                const count = filterState[filterId].length;
+                if (count > 0) {
+                    btn.classList.add('active');
+                    let countSpan = btn.querySelector('.filter-btn-count');
+                    if (!countSpan) {
+                        countSpan = document.createElement('span');
+                        countSpan.className = 'filter-btn-count';
+                        btn.appendChild(countSpan);
+                    }
+                    countSpan.textContent = count;
+                } else {
+                    btn.classList.remove('active');
+                    const countSpan = btn.querySelector('.filter-btn-count');
+                    if (countSpan) countSpan.remove();
+                }
+            });
+        }
+
+        // Apply filters to table
+        function applyFilters() {
+            const rows = document.querySelectorAll('.data-table tbody tr');
+            let visibleCount = 0;
+
+            rows.forEach(row => {
+                let visible = true;
+                const rowStav = row.dataset.stav;
+                const rowPriorita = row.dataset.priorita;
+                const rowTyp = row.dataset.typ;
+                const rowLhuta = parseInt(row.dataset.lhuta);
+                const rowZpracovatel = row.dataset.zpracovatel;
+
+                // Check stav filter
+                if (filterState.stav.length > 0) {
+                    // Critical rows match both 'critical' stav and also count as running/waiting
+                    if (rowStav === 'critical') {
+                        if (!filterState.stav.includes('critical') && !filterState.stav.includes('running') && !filterState.stav.includes('waiting')) {
+                            visible = false;
+                        }
+                    } else if (!filterState.stav.includes(rowStav)) {
+                        visible = false;
+                    }
+                }
+
+                // Check priorita filter
+                if (visible && filterState.priorita.length > 0) {
+                    if (!filterState.priorita.includes(rowPriorita)) {
+                        visible = false;
+                    }
+                }
+
+                // Check typ filter
+                if (visible && filterState.typ.length > 0) {
+                    if (!filterState.typ.includes(rowTyp)) {
+                        visible = false;
+                    }
+                }
+
+                // Check lhuta filter
+                if (visible && filterState.lhuta.length > 0) {
+                    let lhutaMatch = false;
+                    filterState.lhuta.forEach(filter => {
+                        if (filter === 'overdue' && rowLhuta < 0) lhutaMatch = true;
+                        if (filter === '3' && rowLhuta >= 0 && rowLhuta <= 3) lhutaMatch = true;
+                        if (filter === '7' && rowLhuta >= 0 && rowLhuta <= 7) lhutaMatch = true;
+                        if (filter === '14' && rowLhuta >= 0 && rowLhuta <= 14) lhutaMatch = true;
+                        if (filter === '14+' && rowLhuta > 14) lhutaMatch = true;
+                    });
+                    if (!lhutaMatch) visible = false;
+                }
+
+                // Check zpracovatel filter (only in "all" view)
+                if (visible && document.body.classList.contains('view-all') && filterState.zpracovatel.length > 0) {
+                    if (!filterState.zpracovatel.includes(rowZpracovatel)) {
+                        visible = false;
+                    }
+                }
+
+                // Check quick filter
+                if (visible && filterState.quickFilter) {
+                    if (filterState.quickFilter === 'overdue' && rowLhuta >= 0) visible = false;
+                    if (filterState.quickFilter === 'urgent' && (rowLhuta < 0 || rowLhuta > 3)) visible = false;
+                    if (filterState.quickFilter === 'action' && rowStav !== 'waiting') visible = false;
+                }
+
+                // Apply visibility
+                row.style.display = visible ? '' : 'none';
+                if (visible) visibleCount++;
+            });
+
+            // Update pagination info
+            const totalCount = document.body.classList.contains('view-all') ? 312 : 47;
+            document.querySelector('.pagination-info').textContent = 
+                'Zobrazeno ' + visibleCount + ' z ' + totalCount + ' řízení';
+        }
+        
+        // Filter by stat card
+        function filterByStat(stat) {
+            const items = document.querySelectorAll('.stat-item');
+            items.forEach(item => item.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+            
+            // Clear quick filter
+            filterState.quickFilter = null;
+            document.querySelectorAll('.quick-filter-chip').forEach(c => c.classList.remove('active'));
+            
+            // Clear all filters first
+            document.querySelectorAll('.filter-panel input[type="checkbox"]').forEach(cb => cb.checked = false);
+
+            // Apply specific filter based on stat
+            if (stat === 'all') {
+                // No filter - show all
+            } else if (stat === 'running') {
+                document.querySelector('#filter-stav .filter-option:nth-child(1) input').checked = true;
+            } else if (stat === 'waiting') {
+                document.querySelector('#filter-stav .filter-option:nth-child(2) input').checked = true;
+            } else if (stat === 'critical') {
+                filterState.quickFilter = 'overdue';
+                document.querySelector('.quick-filter-chip.critical').classList.add('active');
+            } else if (stat === 'paused') {
+                document.querySelector('#filter-stav .filter-option:nth-child(3) input').checked = true;
+            }
+
+            updateFilterState();
+            applyFilters();
+        }
+        
+        // Quick filter
+        function quickFilter(type) {
+            const chips = document.querySelectorAll('.quick-filter-chip');
+            const clickedChip = event.currentTarget;
+            
+            // Toggle - if already active, deactivate
+            if (clickedChip.classList.contains('active')) {
+                clickedChip.classList.remove('active');
+                filterState.quickFilter = null;
+            } else {
+                chips.forEach(chip => chip.classList.remove('active'));
+                clickedChip.classList.add('active');
+                filterState.quickFilter = type;
+            }
+            
+            // Clear stat selection
+            document.querySelectorAll('.stat-item').forEach(item => item.classList.remove('active'));
+            
+            applyFilters();
+        }
+        
+        // Close filter panels on outside click
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.filter-dropdown')) {
+                document.querySelectorAll('.filter-panel').forEach(p => p.classList.remove('open'));
+            }
+        });
+    </script>
+</body>
+</html>
