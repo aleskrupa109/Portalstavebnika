@@ -1,0 +1,1193 @@
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif !important;
+            background-color: #f5f7fa;
+            color: #1a1a1a !important;
+            line-height: 1.5 !important;
+            padding: 40px 20px;
+            text-align: left !important;
+            font-style: normal !important;
+            font-weight: 400 !important;
+        }
+        * {
+            color: inherit;
+            font-style: normal !important;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: left !important;
+        }
+        .container * {
+            text-align: left;
+            font-style: normal !important;
+        }
+        .container .btn {
+            text-align: center;
+        }
+        /* Breadcrumb */
+        .breadcrumb {
+            margin-bottom: 20px;
+            font-size: 14px !important;
+            text-align: left !important;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif !important;
+            font-style: normal !important;
+        }
+        .breadcrumb a {
+            color: #2362A2;
+            text-decoration: none;
+            text-align: left !important;
+            font-size: 14px !important;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif !important;
+            font-style: normal !important;
+            font-weight: 400 !important;
+        }
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+        .breadcrumb span {
+            color: #666;
+            text-align: left !important;
+            font-size: 14px !important;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif !important;
+            font-style: normal !important;
+        }
+        .section-header {
+            margin-bottom: 24px;
+            text-align: left !important;
+        }
+        .section-header h1 {
+            font-size: 28px !important;
+            font-weight: 600 !important;
+            color: #1a1a1a !important;
+            margin-bottom: 8px;
+            font-style: normal !important;
+            text-align: left !important;
+        }
+        .section-header .meta {
+            font-size: 15px !important;
+            color: #555 !important;
+            font-style: normal !important;
+            font-weight: 400 !important;
+            text-align: left !important;
+        }
+        .section-header .meta strong {
+            color: #333 !important;
+            font-weight: 600 !important;
+            font-style: normal !important;
+        }
+        /* Accordion */
+        .accordion {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .accordion-item {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+            overflow: hidden;
+        }
+        .accordion-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 24px;
+            cursor: pointer;
+            user-select: none;
+            transition: background-color 0.2s;
+        }
+        .accordion-header:hover {
+            background-color: #fafbfc;
+        }
+        .accordion-header h2 {
+            font-size: 16px !important;
+            font-weight: 600 !important;
+            color: #1a1a1a !important;
+            font-style: normal !important;
+        }
+        .accordion-header .status {
+            font-size: 13px !important;
+            color: #22a06b !important;
+            font-weight: 500 !important;
+            margin-left: 12px;
+            font-style: normal !important;
+        }
+        .accordion-icon {
+            font-size: 20px;
+            color: #666;
+            transition: transform 0.3s;
+        }
+        .accordion-item.active .accordion-icon {
+            transform: rotate(45deg);
+        }
+        .accordion-content {
+            display: none;
+            padding: 0 24px 24px 24px;
+            border-top: 1px solid #eee;
+            color: #1a1a1a !important;
+            text-align: left !important;
+            font-style: normal !important;
+        }
+        .accordion-item.active .accordion-content {
+            display: block;
+            text-align: left !important;
+        }
+        .accordion-content > * {
+            text-align: left !important;
+            font-style: normal !important;
+        }
+        /* Form elements */
+        .form-intro {
+            color: #2362A2 !important;
+            font-size: 16px !important;
+            margin: 20px 0 16px 0;
+            text-align: left !important;
+            font-style: normal !important;
+            font-weight: 400 !important;
+        }
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+            width: 100%;
+            max-width: 500px;
+        }
+        .form-label {
+            display: block;
+            font-size: 14px !important;
+            font-weight: 500 !important;
+            color: #333 !important;
+            margin-bottom: 6px;
+            text-align: left !important;
+            font-style: normal !important;
+        }
+        .form-label .required {
+            color: #dc3545;
+        }
+        .form-select, .form-input {
+            width: 100%;
+            max-width: 500px;
+            padding: 12px 16px;
+            font-size: 16px !important;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            background: #fff;
+            color: #1a1a1a !important;
+            transition: border-color 0.2s;
+            text-align: left !important;
+            margin-left: 0;
+            margin-right: auto;
+            display: block;
+            font-style: normal !important;
+            font-weight: 400 !important;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif !important;
+        }
+        .form-select option {
+            color: #1a1a1a;
+        }
+        .form-input::placeholder {
+            color: #999;
+        }
+        .form-select:focus, .form-input:focus {
+            outline: none;
+            border-color: #2362A2;
+            box-shadow: 0 0 0 2px rgba(35, 98, 162, 0.2);
+        }
+        .form-input-inline {
+            display: inline-flex !important;
+            gap: 0;
+            align-items: stretch;
+        }
+        .form-input-inline .form-input {
+            display: inline-block !important;
+            width: 180px !important;
+            max-width: 180px !important;
+            border-radius: 6px 0 0 6px !important;
+            margin-right: 0 !important;
+            border-right: none !important;
+        }
+        .form-input-inline .btn {
+            border-radius: 0 6px 6px 0 !important;
+            white-space: nowrap;
+            height: auto;
+        }
+        /* Info boxes */
+        .info-box {
+            padding: 16px 20px;
+            border-radius: 6px;
+            margin: 16px 0;
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            text-align: left;
+            margin-left: 0;
+            margin-right: auto;
+            max-width: 100%;
+        }
+        .info-box.blue {
+            background: #e8f4fd;
+            border-left: 4px solid #2362A2;
+        }
+        .info-box.yellow {
+            background: #fef9e6;
+            border-left: 4px solid #f0b429;
+        }
+        .info-box-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        .info-box.blue .info-box-icon {
+            background: #2362A2;
+            color: #fff;
+        }
+        .info-box.yellow .info-box-icon {
+            background: #f0b429;
+            color: #fff;
+        }
+        .info-box-content {
+            font-size: 14px !important;
+            color: #333 !important;
+            line-height: 1.6 !important;
+            text-align: left !important;
+            font-style: normal !important;
+            font-weight: 400 !important;
+        }
+        .info-box-content strong {
+            color: #1a1a1a !important;
+            font-weight: 600 !important;
+            font-style: normal !important;
+        }
+        /* Radio & Checkbox */
+        .radio-group, .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            text-align: left;
+        }
+        .radio-group.horizontal {
+            flex-direction: row;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .radio-item, .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            text-align: left;
+        }
+        .radio-item input, .checkbox-item input {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: #2362A2;
+        }
+        .radio-item label, .checkbox-item label {
+            font-size: 16px !important;
+            cursor: pointer;
+            color: #1a1a1a !important;
+            font-style: normal !important;
+            font-weight: 400 !important;
+        }
+        /* Link */
+        .link {
+            color: #2362A2 !important;
+            text-decoration: none;
+            display: inline-block;
+            text-align: left !important;
+            font-style: normal !important;
+			font-size: 14px !important;
+            font-weight: 400 !important;
+        }
+        .link:hover {
+            text-decoration: underline;
+        }
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 24px;
+            font-size: 15px !important;
+            font-weight: 500 !important;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            font-style: normal !important;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif !important;
+        }
+        .btn-primary {
+            background: #2362A2 !important;
+            color: #fff !important;
+        }
+        .btn-primary:hover {
+            background: #1a4f85 !important;
+        }
+        .btn-secondary {
+            background: #fff !important;
+            color: #2362A2 !important;
+            border: 1px solid #2362A2 !important;
+        }
+        .btn-secondary:hover {
+            background: #f0f4f8 !important;
+        }
+        .btn-sm {
+            padding: 8px 16px;
+            font-size: 14px;
+        }
+        /* Data display - tabulkový layout */
+        .data-table {
+            width: 100%;
+            margin: 16px 0;
+            border-collapse: collapse;
+            text-align: left;
+        }
+        .data-table tr {
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .data-table tr:last-child {
+            border-bottom: none;
+        }
+        .data-table td {
+            padding: 10px 0;
+            vertical-align: top;
+            text-align: left;
+        }
+        .data-table .label {
+            color: #666 !important;
+            font-size: 14px !important;
+            width: 180px;
+            padding-right: 16px;
+            text-align: left !important;
+            font-style: normal !important;
+            font-weight: 400 !important;
+        }
+        .data-table .value {
+            font-weight: 600 !important;
+            font-size: 14px !important;
+            color: #1a1a1a !important;
+            text-align: left !important;
+            font-style: normal !important;
+        }
+        /* Verification result */
+        .verification-result {
+            background: #e8f5e9;
+            border: 1px solid #a5d6a7;
+            border-radius: 6px;
+            padding: 16px;
+            margin-top: 12px;
+            display: none;
+        }
+        .verification-result.show {
+            display: block;
+        }
+        .verification-result h4 {
+            color: #2e7d32 !important;
+            font-size: 14px !important;
+            margin-bottom: 12px;
+            font-style: normal !important;
+            font-weight: 600 !important;
+        }
+        /* Table for záměry */
+        .table-container {
+            margin-top: 16px;
+            overflow-x: auto;
+        }
+        table.zamery-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px !important;
+        }
+        table.zamery-table th, 
+        table.zamery-table td {
+            text-align: left !important;
+            padding: 12px 16px;
+            border-bottom: 1px solid #eee;
+            font-style: normal !important;
+        }
+        table.zamery-table th {
+            background: #f8f9fa;
+            font-weight: 600 !important;
+            color: #555 !important;
+            font-style: normal !important;
+        }
+        table.zamery-table td {
+            font-weight: 400 !important;
+            color: #1a1a1a !important;
+        }
+        /* Záměry section */
+        .zamery-section {
+            display: none;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        .zamery-section.show {
+            display: block;
+        }
+        .zamery-subsection {
+            margin-bottom: 24px;
+        }
+        .zamery-subsection h4 {
+            color: #2362A2 !important;
+            font-size: 16px !important;
+            margin-bottom: 12px;
+            font-style: normal !important;
+            font-weight: 600 !important;
+        }
+        /* Summary section */
+        .summary-section {
+            padding: 20px 0;
+            border-bottom: 1px solid #eee;
+            text-align: left;
+        }
+        /* Compact summary for rekapitulace */
+        .summary-compact {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+        .summary-row {
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .summary-row:last-child {
+            border-bottom: none;
+        }
+        .summary-row-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 4px;
+        }
+        .summary-row-header strong {
+            font-size: 14px !important;
+            color: #333 !important;
+            font-style: normal !important;
+            font-weight: 600 !important;
+        }
+        .summary-row-content {
+            font-size: 14px !important;
+            color: #1a1a1a !important;
+            font-style: normal !important;
+            font-weight: 400 !important;
+        }
+        .btn-link {
+            background: none !important;
+            border: none !important;
+            color: #2362A2 !important;
+            font-size: 14px !important;
+            cursor: pointer;
+            padding: 0;
+            font-style: normal !important;
+            font-weight: 400 !important;
+        }
+        .btn-link:hover {
+            text-decoration: underline;
+        }
+        /* Inline loading spinner */
+        .loading-spinner-inline {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #e0e0e0;
+            border-top-color: #2362A2;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            vertical-align: middle;
+            margin-right: 8px;
+        }
+        .summary-section:last-of-type {
+            border-bottom: none;
+        }
+        .summary-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+        .summary-header h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+        }
+        /* Date inputs */
+        .date-inputs {
+            display: none;
+            margin-top: 16px;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+        .date-inputs.show {
+            display: flex;
+        }
+        .date-inputs .form-group {
+            margin-bottom: 0;
+        }
+        /* Step navigation */
+        .step-nav {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+        /* Hidden */
+        .hidden {
+            display: none !important;
+        }
+        /* Action buttons */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+        /* Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        .modal-overlay.show {
+            display: flex;
+        }
+        .modal {
+            background: #fff;
+            border-radius: 12px;
+            padding: 32px;
+            max-width: 400px;
+            text-align: center;
+        }
+        .modal h3 {
+            margin-bottom: 16px;
+            color: #1a1a1a;
+        }
+        .modal p {
+            color: #666;
+            margin-bottom: 24px;
+        }
+        .spinner {
+            width: 48px;
+            height: 48px;
+            border: 4px solid #eee;
+            border-top-color: #2362A2;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+    <div class="container">
+        <!-- Breadcrumb -->
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+            <a href="REZA_setup.html">Plné moci a zastoupení</a>
+            <span> › </span>
+            <span>Nová plná moc</span>
+        </nav>
+        <div class="section-header">
+            <h1>Nová plná moc</h1>
+            <div class="meta">
+                Zastupovaný: <strong>Ing. Aleš Krupa, IČO: 15104418</strong>
+            </div>
+        </div>
+        <div class="accordion">
+            <!-- Krok 1: Rozsah plné moci -->
+            <div class="accordion-item active" data-step="1">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <div style="display: flex; align-items: center;">
+                        <h2>1. Rozsah plné moci</h2>
+                        <span class="status" id="status-1"></span>
+                    </div>
+                    <span class="accordion-icon">+</span>
+                </div>
+                <div class="accordion-content">
+                    <p class="form-intro">Zvolte rozsah plné moci pro vaše zastupování nejen na Portálu stavebníka</p>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Rozsah plné moci</label>
+                        <select class="form-select" id="rozsah-select" onchange="updateRozsahInfo()">
+                            <option value="">Vyberte rozsah...</option>
+                            <option value="poverena">Osoba pověřená pro úkony na Portálu stavebníka</option>
+                            <option value="zastupce">Zástupce stavebníka ve správním řízení (včetně úkonů na Portálu stavebníka)</option>
+                            <option value="administrator">Administrátor plných mocí</option>
+                        </select>
+                    </div>
+                    <div class="blue info-box" id="rozsah-info" style="display: none;">
+                        <div class="info-box-icon">i</div>
+                        <div class="info-box-content" id="rozsah-info-text"></div>
+                    </div>
+                    <a href="#" class="link">📄 Podrobné informace k rozsahu zastoupení (1,3 MB, pdf)</a>
+                    <div class="checkbox-item" style="margin-top: 16px;">
+                        <input type="checkbox" id="rozsah-souhlas">
+                        <label for="rozsah-souhlas">Rozumím rozsahu plné moci a právním důsledkům jejího udělení <span class="required">*</span></label>
+                    </div>
+                    <div class="step-nav">
+                        <button class="btn btn-primary" onclick="completeStep(1)">Pokračovat</button>
+                    </div>
+                </div>
+            </div>
+            <!-- Krok 2: Údaje o zastupovaném -->
+            <div class="accordion-item" data-step="2">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <div style="display: flex; align-items: center;">
+                        <h2>2. Údaje o zastupovaném</h2>
+                        <span class="status" id="status-2"></span>
+                    </div>
+                    <span class="accordion-icon">+</span>
+                </div>
+                <div class="accordion-content">
+                    <p class="form-intro">Jedná se o vaše údaje, které jsou automaticky vyplněny ze státní evidence. Pokud údaje neodpovídají skutečnosti, můžete navrhnout podnět k jejich úpravě prostřednictvím <a href="#" class="link">Portálu občana</a>.</p>
+                    
+                    <table class="data-table">
+                        <tbody><tr>
+                            <td class="label">Jméno a příjmení:</td>
+                            <td class="value">Ing. Aleš Krupa</td>
+                        </tr>
+                        <tr>
+                            <td class="label">IČO:</td>
+                            <td class="value">15104418</td>
+                        </tr>
+                        <tr>
+                            <td class="label">Adresa:</td>
+                            <td class="value">Okrsek 591, 289 22 Lysá nad Labem</td>
+                        </tr>
+                    </tbody></table>
+                    <div class="step-nav">
+                        <button class="btn btn-primary" onclick="completeStep(2)">Pokračovat</button>
+                    </div>
+                </div>
+            </div>
+            <!-- Krok 3: Údaje o zástupci -->
+            <div class="accordion-item" data-step="3">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <div style="display: flex; align-items: center;">
+                        <h2>3. Údaje o zástupci</h2>
+                        <span class="status" id="status-3"></span>
+                    </div>
+                    <span class="accordion-icon">+</span>
+                </div>
+                <div class="accordion-content">
+                    <p class="form-intro">Vyberte, zda vás zastoupí fyzická, právnická nebo podnikající fyzická osoba.</p>
+                    
+                    <div class="horizontal radio-group" style="margin-bottom: 20px;">
+                        <div class="radio-item">
+                            <input type="radio" name="zastupce-typ" id="zastupce-fo" value="fo" onchange="switchZastupceTyp('fo')">
+                            <label for="zastupce-fo">Fyzická osoba</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" name="zastupce-typ" id="zastupce-po" value="po" onchange="switchZastupceTyp('po')">
+                            <label for="zastupce-po">Právnická osoba / OSVČ</label>
+                        </div>
+                    </div>
+                    <!-- FO formulář -->
+                    <div id="zastupce-fo-form" class="hidden u-block-5b78-11" style="">
+                        <div class="form-group">
+                            <label class="form-label">Jméno <span class="required">*</span></label>
+                            <input type="text" class="form-input" placeholder="Uveďte jméno zástupce" id="zastupce-jmeno">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Příjmení <span class="required">*</span></label>
+                            <input type="text" class="form-input" placeholder="Uveďte příjmení zástupce" id="zastupce-prijmeni">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Typ průkazu <span class="required">*</span></label>
+                            <select class="form-select" id="zastupce-prukaz-typ">
+                                <option value="">Vyberte typ průkazu...</option>
+                                <option value="op">Občanský průkaz</option>
+                                <option value="pas">Cestovní pas</option>
+                                <option value="pobyt">Povolení k pobytu</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Číslo průkazu <span class="required">*</span></label>
+                            <input type="text" class="form-input" placeholder="Uveďte číslo průkazu zástupce" id="zastupce-prukaz-cislo">
+                        </div>
+                    </div>
+                    <!-- PO/OSVČ formulář -->
+                    <div id="zastupce-po-form" class="hidden u-block-5b78-12" style="">
+                        <div class="form-group">
+                            <label class="form-label">IČO <span class="required">*</span></label>
+                            <div class="form-input-inline">
+                                <input type="text" class="form-input" placeholder="Zadejte IČO" id="zastupce-ico">
+                                <button class="btn btn-primary btn-sm" onclick="verifyICO()">Ověřit</button>
+                            </div>
+                        </div>
+                        <div class="verification-result" id="ico-verification">
+                            <h4>✓ Údaje ověřeny v ROS</h4>
+                            <table class="data-table">
+                                <tbody><tr>
+                                    <td class="label">Název:</td>
+                                    <td class="value" id="verified-nazev">ALMANI s.r.o.</td>
+                                </tr>
+                                <tr>
+                                    <td class="label">Sídlo:</td>
+                                    <td class="value" id="verified-sidlo">Počernická 264, 250 73 Radonice</td>
+                                </tr>
+                            </tbody></table>
+                        </div>
+                    </div>
+                    <div class="step-nav">
+                        <button class="btn btn-primary" onclick="completeStep(3)">Pokračovat</button>
+                    </div>
+                </div>
+            </div>
+            <!-- Krok 4: Výběr záměru -->
+            <div class="accordion-item" data-step="4">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <div style="display: flex; align-items: center;">
+                        <h2>4. Výběr záměru</h2>
+                        <span class="status" id="status-4"></span>
+                    </div>
+                    <span class="accordion-icon">+</span>
+                </div>
+                <div class="accordion-content">
+                    <p class="form-intro">Zvolte omezení plné moci na jednotlivé záměry nebo ponechte bez omezení</p>
+                    
+                    <div class="radio-group">
+                        <div class="radio-item">
+                            <input type="radio" name="zamer-omezeni" id="zamer-bez" value="bez" checked="" onchange="toggleZamerySection()">
+                            <label for="zamer-bez">Bez omezení</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" name="zamer-omezeni" id="zamer-vybrat" value="vybrat" onchange="toggleZamerySection()">
+                            <label for="zamer-vybrat">Vybrat záměry</label>
+                        </div>
+                    </div>
+                    <div class="info-box yellow" id="zamer-info-bez">
+                        <div class="info-box-icon">i</div>
+                        <div class="info-box-content">
+                            Volba <strong>bez omezení</strong> záměrů je vhodná <strong>pro stavebníky s jedním záměrem</strong>, případně nízkými jednotkami záměrů.<br>
+                            V případě <strong>více záměrů</strong> doporučujeme <strong>vždy vybrat konkrétní záměr nebo záměry</strong>, kterých se plná moc bude týkat.
+                        </div>
+                    </div>
+                    <div class="zamery-section" id="zamery-section">
+                        <p class="form-intro">Vyberte existující záměr nebo vytvořte nový. Lze vybrat více záměrů a kombinovat existující s novými.</p>
+                        
+                        <div class="zamery-subsection">
+                            <h4>Existující záměr</h4>
+                            <div class="form-group">
+                                <select class="form-select" id="existujici-zamer">
+                                    <option value="">Vyberte záměr...</option>
+                                    <option value="z1">Z/2025/173247 - Rekonstrukce a prodloužení nástupišť v ŽST Hnojník</option>
+                                    <option value="z2">Z/2025/169822 - Modernizace distribuční transformovny ve stanici metra Kačerov</option>
+                                </select>
+                            </div>
+                            <button class="btn btn-primary btn-sm" onclick="addExistingZamer()">Vybrat záměr</button>
+                        </div>
+                        <div class="zamery-subsection">
+                            <h4>Nový záměr</h4>
+                            <div class="form-group">
+                                <label class="form-label">Název nového záměru</label>
+                                <input type="text" class="form-input" placeholder="Název nového záměru" id="novy-zamer-nazev">
+                            </div>
+                            <div id="novy-zamer-loading" style="display: none; margin-bottom: 12px; color: #2362A2;">
+                                <span class="loading-spinner-inline"></span> Komunikace se systémem...
+                            </div>
+                            <button class="btn btn-primary btn-sm" id="btn-zalozit-zamer" onclick="createNewZamer()">Založit nový záměr</button>
+                        </div>
+                        <div class="zamery-subsection">
+                            <h4>Přehled vybraných záměrů</h4>
+                            <div class="table-container">
+                                <table class="zamery-table" id="zamery-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Číslo záměru</th>
+                                            <th>Název záměru</th>
+                                            <th>Stav</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="zamery-tbody">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="step-nav">
+                        <button class="btn btn-primary" onclick="completeStep(4)">Pokračovat</button>
+                    </div>
+                </div>
+            </div>
+            <!-- Krok 5: Možnost postoupení plné moci -->
+            <div class="accordion-item" data-step="5">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <div style="display: flex; align-items: center;">
+                        <h2>5. Možnost postoupení plné moci</h2>
+                        <span class="status" id="status-5"></span>
+                    </div>
+                    <span class="accordion-icon">+</span>
+                </div>
+                <div class="accordion-content">
+                    <div class="info-box yellow">
+                        <div class="info-box-icon">i</div>
+                        <div class="info-box-content">
+                            Možnost postoupení plné moci znamená, že se váš zástupce může nechat zastoupit jinou osobou.<br><br>
+                            <strong>Zaškrtnutí může být důležité</strong>, např. pokud zaměstnavatel potřebuje pověřit svého zaměstnance, aby vaši věc vyřídil.
+                        </div>
+                    </div>
+                    <div class="checkbox-item" style="margin-top: 16px;">
+                        <input type="checkbox" id="postoupeni-souhlas">
+                        <label for="postoupeni-souhlas">Souhlasím s možností postoupení plné moci</label>
+                    </div>
+                    <div class="step-nav">
+                        <button class="btn btn-primary" onclick="completeStep(5)">Pokračovat</button>
+                    </div>
+                </div>
+            </div>
+            <!-- Krok 6: Platnost -->
+            <div class="accordion-item" data-step="6">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <div style="display: flex; align-items: center;">
+                        <h2>6. Platnost</h2>
+                        <span class="status" id="status-6"></span>
+                    </div>
+                    <span class="accordion-icon">+</span>
+                </div>
+                <div class="accordion-content">
+                    <div class="radio-group">
+                        <div class="radio-item">
+                            <input type="radio" name="platnost" id="platnost-neomezena" value="neomezena" checked="" onchange="toggleDateInputs()">
+                            <label for="platnost-neomezena">Časově neomezená plná moc</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" name="platnost" id="platnost-omezena" value="omezena" onchange="toggleDateInputs()">
+                            <label for="platnost-omezena">Zvolit začátek a konec platnosti plné moci</label>
+                        </div>
+                    </div>
+                    <div class="date-inputs" id="date-inputs">
+                        <div class="form-group">
+                            <label class="form-label">Začátek platnosti <span class="required">*</span></label>
+                            <input type="date" class="form-input" id="platnost-od" style="max-width: 200px;">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Konec platnosti <span class="required">*</span></label>
+                            <input type="date" class="form-input" id="platnost-do" style="max-width: 200px;">
+                        </div>
+                    </div>
+                    <div class="step-nav">
+                        <button class="btn btn-primary" onclick="completeStep(6)">Pokračovat</button>
+                    </div>
+                </div>
+            </div>
+            <!-- Krok 7: Rekapitulace -->
+            <div class="accordion-item" data-step="7">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <div style="display: flex; align-items: center;">
+                        <h2>7. Rekapitulace</h2>
+                        <span class="status" id="status-7"></span>
+                    </div>
+                    <span class="accordion-icon">+</span>
+                </div>
+                <div class="accordion-content">
+                    <div class="summary-compact">
+                        <div class="summary-row">
+                            <div class="summary-row-header">
+                                <strong>Rozsah plné moci</strong>
+                                <button class="btn-link" onclick="goToStep(1)">Upravit</button>
+                            </div>
+                            <div class="summary-row-content" id="summary-rozsah">Nevyplněno</div>
+                        </div>
+                        <div class="summary-row">
+                            <div class="summary-row-header">
+                                <strong>Údaje o zastupovaném</strong>
+                                <button class="btn-link" onclick="goToStep(2)">Upravit</button>
+                            </div>
+                            <div class="summary-row-content">Ing. Aleš Krupa, IČO: 15104418, Okrsek 591, 289 22 Lysá nad Labem</div>
+                        </div>
+                        <div class="summary-row">
+                            <div class="summary-row-header">
+                                <strong>Údaje o zástupci</strong>
+                                <button class="btn-link" onclick="goToStep(3)">Upravit</button>
+                            </div>
+                            <div class="summary-row-content" id="summary-zastupce">Nevyplněno</div>
+                        </div>
+                        <div class="summary-row">
+                            <div class="summary-row-header">
+                                <strong>Výběr záměru</strong>
+                                <button class="btn-link" onclick="goToStep(4)">Upravit</button>
+                            </div>
+                            <div class="summary-row-content" id="summary-zamery">Bez omezení</div>
+                        </div>
+                        <div class="summary-row">
+                            <div class="summary-row-header">
+                                <strong>Možnost postoupení</strong>
+                                <button class="btn-link" onclick="goToStep(5)">Upravit</button>
+                            </div>
+                            <div class="summary-row-content" id="summary-postoupeni">Ne</div>
+                        </div>
+                        <div class="summary-row">
+                            <div class="summary-row-header">
+                                <strong>Platnost</strong>
+                                <button class="btn-link" onclick="goToStep(6)">Upravit</button>
+                            </div>
+                            <div class="summary-row-content" id="summary-platnost">Časově neomezená</div>
+                        </div>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="btn btn-secondary" aria-label="Stáhnout rozsah plné moci ve formátu PDF" onclick="downloadPM()">Stáhnout rozsah PM</button>
+                        <button class="btn btn-primary" aria-label="Vytvořit a odeslat plnou moc do REZA" onclick="createPM()">Vytvořit plnou moc</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal pro simulaci odesílání -->
+    <div class="modal-overlay" id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <div class="modal">
+            <div class="spinner" aria-hidden="true"></div>
+            <h3 id="modal-title">Odesílání do REZA</h3>
+            <p>Probíhá vytváření plné moci a její registrace v centrálním systému REZA...</p>
+        </div>
+    </div>
+    <script>
+        let selectedZamery = [];
+        let formData = {
+            rozsah: '',
+            zastupceTyp: '',
+            zastupce: {},
+            zameryOmezeni: 'bez',
+            postoupeni: false,
+            platnost: 'neomezena',
+            platnostOd: '',
+            platnostDo: ''
+        };
+        function toggleAccordion(header) {
+            const item = header.parentElement;
+            const wasActive = item.classList.contains('active');
+            document.querySelectorAll('.accordion-item').forEach(i => i.classList.remove('active'));
+            if (!wasActive) {
+                item.classList.add('active');
+            }
+        }
+        function goToStep(step) {
+            document.querySelectorAll('.accordion-item').forEach(i => i.classList.remove('active'));
+            document.querySelector(`[data-step="${step}"]`).classList.add('active');
+        }
+        function completeStep(step) {
+            document.getElementById(`status-${step}`).textContent = '✓ Vyplněno';
+            updateFormData(step);
+            if (step === 6) {
+                updateSummary();
+            }
+            if (step < 7) {
+                goToStep(step + 1);
+            }
+        }
+        function updateFormData(step) {
+            switch(step) {
+                case 1:
+                    formData.rozsah = document.getElementById('rozsah-select').value;
+                    break;
+                case 3:
+                    if (formData.zastupceTyp === 'fo') {
+                        formData.zastupce = {
+                            jmeno: document.getElementById('zastupce-jmeno').value,
+                            prijmeni: document.getElementById('zastupce-prijmeni').value,
+                            prukazTyp: document.getElementById('zastupce-prukaz-typ').value,
+                            prukazCislo: document.getElementById('zastupce-prukaz-cislo').value
+                        };
+                    } else {
+                        formData.zastupce = {
+                            ico: document.getElementById('zastupce-ico').value,
+                            nazev: document.getElementById('verified-nazev').textContent,
+                            sidlo: document.getElementById('verified-sidlo').textContent
+                        };
+                    }
+                    break;
+                case 4:
+                    formData.zameryOmezeni = document.querySelector('input[name="zamer-omezeni"]:checked').value;
+                    break;
+                case 5:
+                    formData.postoupeni = document.getElementById('postoupeni-souhlas').checked;
+                    break;
+                case 6:
+                    formData.platnost = document.querySelector('input[name="platnost"]:checked').value;
+                    if (formData.platnost === 'omezena') {
+                        formData.platnostOd = document.getElementById('platnost-od').value;
+                        formData.platnostDo = document.getElementById('platnost-do').value;
+                    }
+                    break;
+            }
+        }
+        function updateRozsahInfo() {
+            const select = document.getElementById('rozsah-select');
+            const infoBox = document.getElementById('rozsah-info');
+            const infoText = document.getElementById('rozsah-info-text');
+            
+            const texts = {
+                'poverena': 'Plná moc pro osobu pověřenou stavebníkem nebo zástupcem stavebníka ke všem elektronickým úkonům prostřednictvím Portálu stavebníka, jako je například technické podání žádosti nebo nahrání dokumentace.<br><br><strong>Pověřená osoba nepůsobí jako zástupce stavebníka ve správním řízení.</strong>',
+                'zastupce': 'Plná moc pro zástupce stavebníka ve správním řízení. Zástupce jedná za stavebníka v celém rozsahu řízení, je mu doručováno a může činit veškeré procesní úkony.<br><br><strong>Zástupce může rovněž provádět úkony na Portálu stavebníka.</strong>',
+                'administrator': 'Plná moc pro administrátora plných mocí. Administrátor může za zastupovaného zakládat, upravovat a ukončovat plné moci.<br><br><strong>Administrátor sám nevystupuje jako zástupce ve správním řízení.</strong>'
+            };
+            
+            if (select.value && texts[select.value]) {
+                infoText.innerHTML = texts[select.value];
+                infoBox.style.display = 'flex';
+            } else {
+                infoBox.style.display = 'none';
+            }
+        }
+        function switchZastupceTyp(typ) {
+            formData.zastupceTyp = typ;
+            document.getElementById('zastupce-fo-form').classList.toggle('hidden', typ !== 'fo');
+            document.getElementById('zastupce-po-form').classList.toggle('hidden', typ !== 'po');
+            document.getElementById('ico-verification').classList.remove('show');
+        }
+        function verifyICO() {
+            const ico = document.getElementById('zastupce-ico').value;
+            if (ico === '27408043') {
+                document.getElementById('verified-nazev').textContent = 'ALMANI s.r.o.';
+                document.getElementById('verified-sidlo').textContent = 'Počernická 264, 250 73 Radonice';
+                document.getElementById('ico-verification').classList.add('show');
+            } else if (ico) {
+                alert('IČO nebylo nalezeno v ROS. Zkontrolujte prosím zadané údaje.');
+            }
+        }
+        function toggleZamerySection() {
+            const value = document.querySelector('input[name="zamer-omezeni"]:checked').value;
+            document.getElementById('zamery-section').classList.toggle('show', value === 'vybrat');
+            document.getElementById('zamer-info-bez').style.display = value === 'bez' ? 'flex' : 'none';
+        }
+        function addExistingZamer() {
+            const select = document.getElementById('existujici-zamer');
+            if (!select.value) return;
+            const option = select.options[select.selectedIndex];
+            const text = option.text;
+            const parts = text.split(' - ');
+            const zamer = { cislo: parts[0], nazev: parts[1], stav: 'Existující' };
+            if (!selectedZamery.find(z => z.cislo === zamer.cislo)) {
+                selectedZamery.push(zamer);
+                renderZameryTable();
+            }
+            select.value = '';
+        }
+        function createNewZamer() {
+            const nazev = document.getElementById('novy-zamer-nazev').value;
+            if (!nazev) {
+                alert('Zadejte název záměru');
+                return;
+            }
+            
+            // Show loading
+            document.getElementById('novy-zamer-loading').style.display = 'block';
+            document.getElementById('btn-zalozit-zamer').disabled = true;
+            
+            // Simulate server communication
+            setTimeout(() => {
+                // Generate random number for záměr
+                const randomNum = Math.floor(Math.random() * 900000) + 100000;
+                const cisloZameru = 'Z/2025/' + randomNum;
+                
+                // Hide loading
+                document.getElementById('novy-zamer-loading').style.display = 'none';
+                document.getElementById('btn-zalozit-zamer').disabled = false;
+                
+                // Add to list
+                const zamer = { cislo: cisloZameru, nazev: nazev, stav: 'Nový' };
+                selectedZamery.push(zamer);
+                renderZameryTable();
+                
+                // Clear input
+                document.getElementById('novy-zamer-nazev').value = '';
+            }, 1500);
+        }
+        function renderZameryTable() {
+            const tbody = document.getElementById('zamery-tbody');
+            tbody.innerHTML = selectedZamery.map((z, i) => `
+                <tr>
+                    <td>${z.cislo}</td>
+                    <td>${z.nazev}</td>
+                    <td>${z.stav}</td>
+                    <td><button class="btn btn-secondary btn-sm" onclick="removeZamer(${i})">Odebrat</button></td>
+                </tr>
+            `).join('');
+        }
+        function removeZamer(index) {
+            selectedZamery.splice(index, 1);
+            renderZameryTable();
+        }
+        function toggleDateInputs() {
+            const value = document.querySelector('input[name="platnost"]:checked').value;
+            document.getElementById('date-inputs').classList.toggle('show', value === 'omezena');
+        }
+        function updateSummary() {
+            const rozsahTexts = {
+                'poverena': 'Osoba pověřená pro úkony na Portálu stavebníka',
+                'zastupce': 'Zástupce stavebníka ve správním řízení',
+                'administrator': 'Administrátor plných mocí'
+            };
+            document.getElementById('summary-rozsah').textContent = rozsahTexts[formData.rozsah] || 'Nevyplněno';
+            
+            // Zástupce - compact format
+            let zastupceText = 'Nevyplněno';
+            if (formData.zastupceTyp === 'fo') {
+                const prukazTypes = {'op': 'občanský průkaz', 'pas': 'cestovní pas', 'pobyt': 'povolení k pobytu'};
+                zastupceText = `${formData.zastupce.jmeno || ''} ${formData.zastupce.prijmeni || ''}, ${prukazTypes[formData.zastupce.prukazTyp] || ''} č. ${formData.zastupce.prukazCislo || ''}`;
+            } else if (formData.zastupceTyp === 'po') {
+                zastupceText = `${formData.zastupce.nazev || ''}, IČO: ${formData.zastupce.ico || ''}`;
+            }
+            document.getElementById('summary-zastupce').textContent = zastupceText;
+            
+            // Záměry - compact format
+            const zameryContainer = document.getElementById('summary-zamery');
+            if (formData.zameryOmezeni === 'bez') {
+                zameryContainer.textContent = 'Bez omezení';
+            } else if (selectedZamery.length > 0) {
+                zameryContainer.textContent = selectedZamery.map(z => `${z.cislo} – ${z.nazev}`).join('; ');
+            } else {
+                zameryContainer.textContent = 'Žádné záměry nevybrány';
+            }
+            
+            // Postoupení
+            document.getElementById('summary-postoupeni').textContent = formData.postoupeni ? 'Ano' : 'Ne';
+            
+            // Platnost - compact format
+            const platnostContainer = document.getElementById('summary-platnost');
+            if (formData.platnost === 'neomezena') {
+                platnostContainer.textContent = 'Časově neomezená';
+            } else {
+                platnostContainer.textContent = `${formatDate(formData.platnostOd)} – ${formatDate(formData.platnostDo)}`;
+            }
+        }
+        function formatDate(dateStr) {
+            if (!dateStr) return '-';
+            const date = new Date(dateStr);
+            return date.toLocaleDateString('cs-CZ');
+        }
+        function downloadPM() {
+            alert('Stahování rozsahu plné moci...');
+        }
+        function createPM() {
+            const modal = document.getElementById('modal');
+            modal.classList.add('show');
+            setTimeout(() => {
+                modal.classList.remove('show');
+                window.location.href = 'REZA_setup.html';
+            }, 2500);
+        }
+    </script>
