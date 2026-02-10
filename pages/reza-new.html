@@ -121,6 +121,45 @@
             width: 20px;
             height: 20px;
         }
+		  /* User menu */
+        .gov-header-user {
+            position: relative;
+        }
+
+        .gov-header-user-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 20px;
+            background: transparent;
+            border: 1px solid var(--gov-text-light);
+            border-radius: 4px;
+            color: var(--gov-text-light);
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .gov-header-user-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .gov-header-user-btn svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .gov-header-user-btn .chevron {
+            width: 12px;
+            height: 12px;
+            transition: transform 0.2s ease;
+        }
+
+        .gov-header-user-btn.active .chevron {
+            transform: rotate(180deg);
+        }
         /* Breadcrumb */
         .breadcrumb {
             margin-bottom: 20px;
@@ -717,6 +756,31 @@
                 </svg>
             </div>
         </div>
+		 <!-- Navigační menu -->
+        <nav class="gov-header-nav">
+            <ul class="gov-nav-menu">
+                <li class="gov-nav-item">
+                    <a href="uvod.html" class="gov-nav-link">Úvod</a>
+                </li>
+                <li class="gov-nav-item">
+                    <a href="#" class="gov-nav-link">Záměry</a>
+                </li>
+                <li class="gov-nav-item">
+                    <a href="#" class="gov-nav-link">Řízení</a>
+                </li>
+                <li class="gov-nav-item">
+                    <a href="#" class="gov-nav-link">Žádosti</a>
+                </li>
+                <li class="gov-nav-item">
+                    <a href="#" class="gov-nav-link">Stavby</a>
+                </li>
+                <li class="gov-nav-item">
+                    <a href="#" class="gov-nav-link">Dokumentace</a>
+                </li>
+                <li class="gov-nav-item">
+                    <a href="reza_1.html" class="gov-nav-link">Plné moci a zastoupení</a>
+                </li>
+            </ul>
     </header>
     <div class="container">
         <!-- Breadcrumb -->
