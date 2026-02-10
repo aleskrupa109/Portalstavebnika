@@ -7,12 +7,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --gov-primary: #2362a2;
-            --gov-primary-dark: #1a4a7a;
-            --gov-primary-darker: #143d66;
+            --gov-primary: #2c5a8c;
             --gov-text-light: #ffffff;
             --gov-yellow: #f5a623;
-            --gov-border: rgba(255, 255, 255, 0.15);
         }
 
         * {
@@ -29,11 +26,10 @@
         }
 
         /* ===========================================
-           HLAVIČKA - GOV.CZ STYL
+           HLAVIČKA - JEDNOTNÝ STYL
            =========================================== */
         .gov-header {
-            background: linear-gradient(180deg, var(--gov-primary) 0%, var(--gov-primary-dark) 100%);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            background: var(--gov-primary);
             position: sticky;
             top: 0;
             z-index: 1000;
@@ -41,35 +37,34 @@
 
         /* Horní lišta */
         .gov-header-top {
+            padding: 14px 40px;
+        }
+
+        .gov-header-top-content {
+            max-width: 1200px;
+            margin: 0 auto;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 12px 40px;
-            border-bottom: 1px solid var(--gov-border);
         }
 
         .gov-header-brand {
             display: flex;
             align-items: center;
-            gap: 16px;
+            gap: 14px;
             text-decoration: none;
             color: var(--gov-text-light);
-            transition: opacity 0.2s ease;
-        }
-
-        .gov-header-brand:hover {
-            opacity: 0.9;
         }
 
         .gov-header-logo {
-            height: 36px;
+            height: 38px;
             width: auto;
         }
 
         .gov-header-title {
             font-size: 18px;
-            font-weight: 500;
-            letter-spacing: 0.5px;
+            font-weight: 400;
+            letter-spacing: 0.3px;
             color: var(--gov-text-light);
         }
 
@@ -84,33 +79,53 @@
             gap: 10px;
             padding: 8px 16px;
             background: transparent;
-            border: 1px solid var(--gov-text-light);
+            border: 1px solid rgba(255, 255, 255, 0.5);
             border-radius: 4px;
             color: var(--gov-text-light);
-            font-size: 14px;
-            font-weight: 500;
-            letter-spacing: 0.5px;
+            font-size: 13px;
             cursor: pointer;
             transition: all 0.2s ease;
         }
 
         .gov-header-user-btn:hover {
             background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.8);
         }
 
-        .gov-header-user-btn svg {
+        .gov-header-user-btn svg.user-icon {
             width: 18px;
             height: 18px;
+            flex-shrink: 0;
         }
 
         .gov-header-user-btn .chevron {
             width: 12px;
             height: 12px;
             transition: transform 0.2s ease;
+            flex-shrink: 0;
         }
 
         .gov-header-user-btn.active .chevron {
             transform: rotate(180deg);
+        }
+
+        /* User info v tlačítku */
+        .gov-header-user-info {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            line-height: 1.25;
+            text-align: left;
+        }
+
+        .gov-header-user-name {
+            font-weight: 500;
+            font-size: 13px;
+        }
+
+        .gov-header-user-detail {
+            font-size: 11px;
+            opacity: 0.85;
         }
 
         /* User dropdown */
@@ -118,7 +133,7 @@
             position: absolute;
             top: calc(100% + 8px);
             right: 0;
-            min-width: 220px;
+            min-width: 280px;
             background: white;
             border-radius: 8px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
@@ -135,6 +150,36 @@
             transform: translateY(0);
         }
 
+        .gov-header-user-dropdown-header {
+            padding: 16px;
+            border-bottom: 1px solid #eee;
+            background: #f9fafb;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .gov-header-user-dropdown-name {
+            font-weight: 600;
+            color: #1a1a1a;
+            font-size: 14px;
+        }
+
+        .gov-header-user-dropdown-detail {
+            font-size: 12px;
+            color: #666;
+            margin-top: 2px;
+        }
+
+        .gov-header-user-dropdown-badge {
+            display: inline-block;
+            background: #e8f4fc;
+            color: #2362a2;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 500;
+            margin-top: 6px;
+        }
+
         .gov-header-user-dropdown a {
             display: flex;
             align-items: center;
@@ -144,10 +189,6 @@
             text-decoration: none;
             font-size: 14px;
             transition: background 0.15s ease;
-        }
-
-        .gov-header-user-dropdown a:first-child {
-            border-radius: 8px 8px 0 0;
         }
 
         .gov-header-user-dropdown a:last-child {
@@ -172,11 +213,15 @@
 
         /* ===== NAVIGACE ===== */
         .gov-header-nav {
+            padding: 0 40px;
+        }
+
+        .gov-header-nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 40px;
-            background: rgba(0, 0, 0, 0.1);
         }
 
         .gov-nav-menu {
@@ -197,94 +242,43 @@
             text-decoration: none;
             font-size: 13px;
             font-weight: 500;
-            letter-spacing: 0.8px;
+            letter-spacing: 0.5px;
             text-transform: uppercase;
             transition: all 0.2s ease;
-            border-bottom: 3px solid transparent;
+            border-top: 3px solid transparent;
         }
 
         .gov-nav-link:hover {
             background: rgba(255, 255, 255, 0.1);
-            border-bottom-color: rgba(255, 255, 255, 0.5);
         }
 
         .gov-nav-link.active {
-            background: rgba(255, 255, 255, 0.1);
-            border-bottom-color: var(--gov-yellow);
+            border-top-color: var(--gov-text-light);
         }
 
-        /* CTA tlačítko */
+        /* CTA tlačítko vpravo */
         .gov-nav-cta {
             display: flex;
             align-items: center;
             gap: 8px;
-            padding: 10px 20px;
+            padding: 8px 16px;
             background: transparent;
-            border: 1px solid var(--gov-text-light);
-            border-radius: 4px;
+            border: none;
             color: var(--gov-text-light);
             text-decoration: none;
             font-size: 13px;
-            font-weight: 600;
+            font-weight: 500;
             letter-spacing: 0.5px;
             transition: all 0.2s ease;
         }
 
         .gov-nav-cta:hover {
-            background: var(--gov-text-light);
-            color: var(--gov-primary);
+            opacity: 0.8;
         }
 
         .gov-nav-cta svg {
             width: 18px;
             height: 18px;
-        }
-
-        /* ===========================================
-           IDENTITY BAR - zobrazení vybrané identity
-           =========================================== */
-        .identity-bar {
-            background: #e8f4fc;
-            border-bottom: 1px solid #c5e2f6;
-            padding: 10px 40px;
-        }
-
-        .identity-bar-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 14px;
-        }
-
-        .identity-bar-label {
-            color: #666;
-        }
-
-        .identity-bar-value {
-            color: #2362a2;
-            font-weight: 600;
-        }
-
-        .identity-bar-badge {
-            background: #2362a2;
-            color: white;
-            padding: 2px 10px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: 500;
-        }
-
-        .identity-bar-change {
-            margin-left: auto;
-            color: #2362a2;
-            text-decoration: none;
-            font-size: 13px;
-        }
-
-        .identity-bar-change:hover {
-            text-decoration: underline;
         }
 
         /* ===========================================
@@ -331,88 +325,91 @@
     <header class="gov-header">
         <!-- Horní lišta -->
         <div class="gov-header-top">
-            <a href="../index.html" class="gov-header-brand">
-                <img src="../images/logo-lev.png" alt="Státní znak" class="gov-header-logo">
-                <span class="gov-header-title">Portál stavebníka</span>
-            </a>
+            <div class="gov-header-top-content">
+                <a href="../index.html" class="gov-header-brand">
+                    <img src="https://krupaal.github.io/Pr0toREZA/images/logo-lev-white.png" alt="Státní znak" class="gov-header-logo">
+                    <span class="gov-header-title">Portál stavebníka</span>
+                </a>
 
-            <div class="gov-header-user">
-                <button class="gov-header-user-btn" onclick="toggleUserMenu()">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-                    </svg>
-                    <span id="userName">ALEŠ KRUPA</span>
-                    <svg class="chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                    </svg>
-                </button>
-                <div class="gov-header-user-dropdown" id="userDropdown">
-                    <a href="#">
-                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="gov-header-user">
+                    <button class="gov-header-user-btn" onclick="toggleUserMenu()">
+                        <svg class="user-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                         </svg>
-                        Můj profil
-                    </a>
-                    <a href="reza_implicitni.html">
-                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/>
+                        <div class="gov-header-user-info">
+                            <span class="gov-header-user-name" id="userDisplayName">ALEŠ KRUPA</span>
+                            <span class="gov-header-user-detail" id="userDisplayDetail">OSVČ · IČO: 15104418</span>
+                        </div>
+                        <svg class="chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
                         </svg>
-                        Změnit postavení
-                    </a>
-                    <a href="../index.html">
-                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
-                        </svg>
-                        Odhlásit se
-                    </a>
+                    </button>
+                    <div class="gov-header-user-dropdown" id="userDropdown">
+                        <div class="gov-header-user-dropdown-header">
+                            <div class="gov-header-user-dropdown-name" id="dropdownName">Ing. Aleš Krupa</div>
+                            <div class="gov-header-user-dropdown-detail" id="dropdownDetail">IČO: 15104418</div>
+                            <div class="gov-header-user-dropdown-badge" id="dropdownBadge">Fyzická osoba podnikající</div>
+                        </div>
+                        <a href="reza_implicitni.html">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/>
+                            </svg>
+                            Změnit postavení
+                        </a>
+                        <a href="#">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                            </svg>
+                            Nastavení
+                        </a>
+                        <a href="../index.html">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                            </svg>
+                            Odhlásit se
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
 
         <!-- Navigace -->
         <nav class="gov-header-nav">
-            <ul class="gov-nav-menu">
-                <li class="gov-nav-item">
-                    <a href="#" class="gov-nav-link">Úvod</a>
-                </li>
-                <li class="gov-nav-item">
-                    <a href="#" class="gov-nav-link active">Záměry</a>
-                </li>
-                <li class="gov-nav-item">
-                    <a href="#" class="gov-nav-link">Řízení</a>
-                </li>
-                <li class="gov-nav-item">
-                    <a href="#" class="gov-nav-link">Žádosti</a>
-                </li>
-                <li class="gov-nav-item">
-                    <a href="#" class="gov-nav-link">Stavby</a>
-                </li>
-                <li class="gov-nav-item">
-                    <a href="#" class="gov-nav-link">Dokumentace</a>
-                </li>
-                <li class="gov-nav-item">
-                    <a href="reza_1.html" class="gov-nav-link">Plné moci a zastoupení</a>
-                </li>
-            </ul>
+            <div class="gov-header-nav-content">
+                <ul class="gov-nav-menu">
+                    <li class="gov-nav-item">
+                        <a href="#" class="gov-nav-link">Úvod</a>
+                    </li>
+                    <li class="gov-nav-item">
+                        <a href="#" class="gov-nav-link active">Záměry</a>
+                    </li>
+                    <li class="gov-nav-item">
+                        <a href="#" class="gov-nav-link">Řízení</a>
+                    </li>
+                    <li class="gov-nav-item">
+                        <a href="#" class="gov-nav-link">Žádosti</a>
+                    </li>
+                    <li class="gov-nav-item">
+                        <a href="#" class="gov-nav-link">Stavby</a>
+                    </li>
+                    <li class="gov-nav-item">
+                        <a href="#" class="gov-nav-link">Dokumentace</a>
+                    </li>
+                    <li class="gov-nav-item">
+                        <a href="#" class="gov-nav-link">Plné moci</a>
+                    </li>
+                </ul>
 
-            <a href="reza-new.html" class="gov-nav-cta">
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                </svg>
-                NOVÁ ŽÁDOST
-            </a>
+                <a href="reza-new.html" class="gov-nav-cta">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                    </svg>
+                    NOVÁ ŽÁDOST
+                </a>
+            </div>
         </nav>
     </header>
-
-    <!-- ===== IDENTITY BAR ===== -->
-    <div class="identity-bar">
-        <div class="identity-bar-content">
-            <span class="identity-bar-label">Jednáte jako:</span>
-            <span class="identity-bar-value" id="identityDisplay">Ing. Aleš Krupa, IČO: 15104418</span>
-            <span class="identity-bar-badge" id="identityBadge">OSVČ</span>
-            <a href="reza_implicitni.html" class="identity-bar-change">Změnit</a>
-        </div>
-    </div>
 
     <!-- ===== OBSAH ===== -->
     <div class="container">
@@ -432,12 +429,20 @@
             if (stored) {
                 const identity = JSON.parse(stored);
                 
-                // Aktualizace hlavičky
-                document.getElementById('userName').textContent = identity.name.toUpperCase();
+                // Aktualizace hlavičky - jméno v tlačítku
+                document.getElementById('userDisplayName').textContent = identity.name.toUpperCase();
                 
-                // Aktualizace identity baru
-                document.getElementById('identityDisplay').textContent = identity.display;
-                document.getElementById('identityBadge').textContent = identity.type;
+                // Sestavení detailu pro hlavičku (typ + IČO/datum narození)
+                let detailText = identity.type;
+                if (identity.detail) {
+                    detailText += ' · ' + identity.detail;
+                }
+                document.getElementById('userDisplayDetail').textContent = detailText;
+                
+                // Aktualizace dropdown menu
+                document.getElementById('dropdownName').textContent = identity.name;
+                document.getElementById('dropdownDetail').textContent = identity.detail;
+                document.getElementById('dropdownBadge').textContent = identity.badge;
                 
                 console.log('Načtena identita:', identity);
             } else {
