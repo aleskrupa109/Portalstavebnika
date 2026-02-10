@@ -683,6 +683,14 @@
                 </select>
             </div>
 
+            <div class="filter-group">
+                <label class="filter-label">Stavebník</label>
+                <select class="filter-select" id="stavebnikSelect" onchange="filterZamery()">
+                    <option value="">Všichni</option>
+                    <!-- Dynamicky naplněno -->
+                </select>
+            </div>
+
             <div class="view-toggle">
                 <span class="view-toggle-label">Zobrazení</span>
                 <button class="view-btn active" title="Mřížka">
@@ -712,6 +720,7 @@
                 {
                     id: "Z/2025/35201",
                     nazev: "Rodinný dům Modřany",
+                    stavebnik: "Aleš Krupa",
                     stav: "Aktivní",
                     dokumentace: "SR00X005MK4D",
                     datum: "15. 1. 2026",
@@ -720,6 +729,7 @@
                 {
                     id: "Z/2025/34890",
                     nazev: "Přístavba garáže",
+                    stavebnik: "Aleš Krupa",
                     stav: "Aktivní",
                     dokumentace: "SR00X005LK2A",
                     datum: "8. 12. 2025",
@@ -728,6 +738,7 @@
                 {
                     id: "Z/2024/28765",
                     nazev: "Rekonstrukce koupelny",
+                    stavebnik: "Aleš Krupa",
                     stav: "Ukončený",
                     dokumentace: "SR00X004RK1B",
                     datum: "3. 5. 2024",
@@ -740,6 +751,7 @@
                 {
                     id: "Z/2025/35126",
                     nazev: "Revize formuláře 1",
+                    stavebnik: "Ing. Aleš Krupa",
                     stav: "Aktivní",
                     dokumentace: "SR00X005MK4D",
                     datum: "4. 2. 2026",
@@ -748,6 +760,7 @@
                 {
                     id: "Z/2025/35134",
                     nazev: "Test přidávání pozemků",
+                    stavebnik: "Jan Novák",
                     stav: "Aktivní",
                     dokumentace: "SR00X005MJT3",
                     datum: "4. 2. 2026",
@@ -756,6 +769,7 @@
                 {
                     id: "Z/2025/35105",
                     nazev: "Test Verifikátoru 13_11_25",
+                    stavebnik: "Marie Svobodová",
                     stav: "Aktivní",
                     dokumentace: "SR00X005LKWU",
                     datum: "12. 1. 2026",
@@ -764,6 +778,7 @@
                 {
                     id: "Z/2025/35104",
                     nazev: "Test verifikátoru a pozemků",
+                    stavebnik: "Petr Dvořák",
                     stav: "Aktivní",
                     dokumentace: "SR00X005JXRQ",
                     datum: "13. 11. 2025",
@@ -772,6 +787,7 @@
                 {
                     id: "Z/2025/34013",
                     nazev: "Test validátor 15_10_25",
+                    stavebnik: "Jan Novák",
                     stav: "Aktivní",
                     dokumentace: "SR00X005JOF5",
                     datum: "4. 11. 2025",
@@ -780,6 +796,7 @@
                 {
                     id: "Z/2025/34565",
                     nazev: "Test účastníka 21.10.25",
+                    stavebnik: "Eva Černá",
                     stav: "Aktivní",
                     dokumentace: "SR00X005I88L",
                     datum: "21. 10. 2025",
@@ -792,6 +809,7 @@
                 {
                     id: "Z/2025/35180",
                     nazev: "Bytový dům Vinohrady",
+                    stavebnik: "ALMANI s.r.o.",
                     stav: "Aktivní",
                     dokumentace: "SR00X005BDVH",
                     datum: "28. 1. 2026",
@@ -800,6 +818,7 @@
                 {
                     id: "Z/2025/34998",
                     nazev: "Polyfunkční objekt Karlín",
+                    stavebnik: "ALMANI s.r.o.",
                     stav: "Aktivní",
                     dokumentace: "SR00X005POK1",
                     datum: "15. 12. 2025",
@@ -808,6 +827,7 @@
                 {
                     id: "Z/2025/34756",
                     nazev: "Rekonstrukce činžovního domu",
+                    stavebnik: "ALMANI s.r.o.",
                     stav: "Aktivní",
                     dokumentace: "SR00X005RCD2",
                     datum: "22. 11. 2025",
@@ -816,6 +836,7 @@
                 {
                     id: "Z/2025/33890",
                     nazev: "Parkovací dům Smíchov",
+                    stavebnik: "ALMANI s.r.o.",
                     stav: "Aktivní",
                     dokumentace: "SR00X005PDS3",
                     datum: "5. 10. 2025",
@@ -824,6 +845,7 @@
                 {
                     id: "Z/2024/31245",
                     nazev: "BD Holešovice - etapa 1",
+                    stavebnik: "ALMANI s.r.o.",
                     stav: "Ukončený",
                     dokumentace: "SR00X004BDH1",
                     datum: "18. 6. 2024",
@@ -836,6 +858,7 @@
                 {
                     id: "Z/2025/35210",
                     nazev: "Administrativní budova ABC",
+                    stavebnik: "ABC Development s.r.o.",
                     stav: "Aktivní",
                     dokumentace: "SR00X005AB01",
                     datum: "1. 2. 2026",
@@ -844,6 +867,7 @@
                 {
                     id: "Z/2025/35198",
                     nazev: "Skladová hala Průmyslová",
+                    stavebnik: "Logistika CZ a.s.",
                     stav: "Aktivní",
                     dokumentace: "SR00X005SHP1",
                     datum: "25. 1. 2026",
@@ -852,6 +876,7 @@
                 {
                     id: "Z/2025/35156",
                     nazev: "Výrobní závod AutoParts",
+                    stavebnik: "AutoParts Manufacturing s.r.o.",
                     stav: "Aktivní",
                     dokumentace: "SR00X005VZA1",
                     datum: "18. 1. 2026",
@@ -860,6 +885,7 @@
                 {
                     id: "Z/2025/35089",
                     nazev: "Logistické centrum East",
+                    stavebnik: "Logistika CZ a.s.",
                     stav: "Aktivní",
                     dokumentace: "SR00X005LCE1",
                     datum: "8. 1. 2026",
@@ -868,6 +894,7 @@
                 {
                     id: "Z/2025/34876",
                     nazev: "Hotel Riverside",
+                    stavebnik: "Riverside Hotels s.r.o.",
                     stav: "Aktivní",
                     dokumentace: "SR00X005HRS1",
                     datum: "5. 12. 2025",
@@ -876,6 +903,7 @@
                 {
                     id: "Z/2025/34654",
                     nazev: "Obchodní centrum Plaza",
+                    stavebnik: "Plaza Retail a.s.",
                     stav: "Aktivní",
                     dokumentace: "SR00X005OCP1",
                     datum: "15. 11. 2025",
@@ -884,6 +912,7 @@
                 {
                     id: "Z/2025/33009",
                     nazev: "Test dvojího zpracování",
+                    stavebnik: "TestCorp s.r.o.",
                     stav: "Aktivní",
                     dokumentace: "SR00X005E9VN",
                     datum: "10. 9. 2025",
@@ -892,6 +921,7 @@
                 {
                     id: "Z/2025/32697",
                     nazev: "Test 3 informace pro žadatele",
+                    stavebnik: "ABC Development s.r.o.",
                     stav: "Aktivní",
                     dokumentace: "-",
                     datum: "25. 8. 2025",
@@ -900,6 +930,7 @@
                 {
                     id: "Z/2025/32696",
                     nazev: "Test informace pro žadatele",
+                    stavebnik: "Riverside Hotels s.r.o.",
                     stav: "Aktivní",
                     dokumentace: "SR00X005DOKM",
                     datum: "25. 8. 2025",
@@ -957,7 +988,19 @@
             }
             
             const zamery = zameryData[dataKey] || [];
+            
+            // Naplnění selectu stavebníků
+            populateStavebnikFilter(zamery);
+            
             renderZamery(zamery);
+        }
+
+        function populateStavebnikFilter(zamery) {
+            const select = document.getElementById('stavebnikSelect');
+            const uniqueStavebnici = [...new Set(zamery.map(z => z.stavebnik))].sort((a, b) => a.localeCompare(b, 'cs'));
+            
+            select.innerHTML = '<option value="">Všichni</option>' + 
+                uniqueStavebnici.map(s => `<option value="${s}">${s}</option>`).join('');
         }
 
         function renderZamery(zamery) {
@@ -979,6 +1022,10 @@
                     <div class="zamer-row">
                         <span class="zamer-label">Název záměru:</span>
                         <span class="zamer-value truncate" title="${zamer.nazev}"><strong>${zamer.nazev}</strong></span>
+                    </div>
+                    <div class="zamer-row">
+                        <span class="zamer-label">Stavebník:</span>
+                        <span class="zamer-value truncate" title="${zamer.stavebnik}">${zamer.stavebnik}</span>
                     </div>
                     <div class="zamer-row">
                         <span class="zamer-label">Stav záměru:</span>
@@ -1015,6 +1062,7 @@
             const sortBy = document.getElementById('sortSelect').value;
             const stavFilter = document.getElementById('stavSelect').value;
             const roleFilter = document.getElementById('roleSelect').value;
+            const stavebnikFilter = document.getElementById('stavebnikSelect').value;
             
             const stored = localStorage.getItem('selectedIdentity');
             let identity = stored ? JSON.parse(stored) : { type: "FO" };
@@ -1035,7 +1083,8 @@
                 zamery = zamery.filter(z => 
                     z.id.toLowerCase().includes(searchTerm) ||
                     z.nazev.toLowerCase().includes(searchTerm) ||
-                    z.dokumentace.toLowerCase().includes(searchTerm)
+                    z.dokumentace.toLowerCase().includes(searchTerm) ||
+                    z.stavebnik.toLowerCase().includes(searchTerm)
                 );
             }
             
@@ -1047,6 +1096,11 @@
             // Filtrování podle role
             if (roleFilter) {
                 zamery = zamery.filter(z => z.role === roleFilter);
+            }
+            
+            // Filtrování podle stavebníka
+            if (stavebnikFilter) {
+                zamery = zamery.filter(z => z.stavebnik === stavebnikFilter);
             }
             
             // Řazení
