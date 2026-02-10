@@ -8,8 +8,11 @@
     <style>
         :root {
             --gov-primary: #2c5a8c;
+            --gov-primary-light: #3a7ab8;
             --gov-text-light: #ffffff;
             --gov-yellow: #f5a623;
+            --gov-bg: #f5f7fa;
+            --gov-border: #e0e0e0;
         }
 
         * {
@@ -20,13 +23,13 @@
 
         body {
             font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background-color: #f5f7fa;
+            background-color: var(--gov-bg);
             color: #1a1a1a;
             line-height: 1.5;
         }
 
         /* ===========================================
-           HLAVIČKA - JEDNOTNÝ STYL
+           HLAVIČKA
            =========================================== */
         .gov-header {
             background: var(--gov-primary);
@@ -35,7 +38,6 @@
             z-index: 1000;
         }
 
-        /* Horní lišta */
         .gov-header-top {
             padding: 14px 40px;
         }
@@ -68,7 +70,6 @@
             color: var(--gov-text-light);
         }
 
-        /* User section */
         .gov-header-user {
             position: relative;
         }
@@ -109,7 +110,6 @@
             transform: rotate(180deg);
         }
 
-        /* User info v tlačítku */
         .gov-header-user-info {
             display: flex;
             flex-direction: column;
@@ -128,7 +128,6 @@
             opacity: 0.85;
         }
 
-        /* User dropdown */
         .gov-header-user-dropdown {
             position: absolute;
             top: calc(100% + 8px);
@@ -231,10 +230,6 @@
             list-style: none;
         }
 
-        .gov-nav-item {
-            position: relative;
-        }
-
         .gov-nav-link {
             display: block;
             padding: 14px 20px;
@@ -256,7 +251,6 @@
             border-top-color: var(--gov-text-light);
         }
 
-        /* CTA tlačítko vpravo */
         .gov-nav-cta {
             display: flex;
             align-items: center;
@@ -287,43 +281,295 @@
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 32px 40px;
+            padding: 24px 40px;
         }
 
-        .page-title {
-            font-size: 28px;
-            font-weight: 600;
-            color: #1a1a1a;
+        /* ===== FILTRY ===== */
+        .filters-bar {
+            display: flex;
+            align-items: flex-end;
+            gap: 24px;
             margin-bottom: 24px;
+            flex-wrap: wrap;
         }
 
-        /* Placeholder content */
-        .placeholder-content {
-            background: white;
-            border-radius: 12px;
-            padding: 48px;
-            text-align: center;
-            color: #666;
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
         }
 
-        .placeholder-content h2 {
-            font-size: 20px;
+        .filter-group.search {
+            flex: 1;
+            min-width: 250px;
+            max-width: 400px;
+        }
+
+        .filter-label {
+            font-size: 13px;
             font-weight: 500;
-            margin-bottom: 12px;
             color: #333;
         }
 
-        .placeholder-content p {
+        .filter-input {
+            position: relative;
+        }
+
+        .filter-input input {
+            width: 100%;
+            padding: 10px 14px 10px 38px;
+            border: 1px solid var(--gov-border);
+            border-radius: 4px;
             font-size: 14px;
-            max-width: 400px;
-            margin: 0 auto;
+            background: white;
+        }
+
+        .filter-input input:focus {
+            outline: none;
+            border-color: var(--gov-primary);
+        }
+
+        .filter-input input::placeholder {
+            color: #999;
+        }
+
+        .filter-input svg {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 18px;
+            height: 18px;
+            color: #999;
+        }
+
+        .filter-select {
+            padding: 10px 36px 10px 14px;
+            border: 1px solid var(--gov-border);
+            border-radius: 4px;
+            font-size: 14px;
+            background: white url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23666'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E") no-repeat right 10px center;
+            background-size: 16px;
+            appearance: none;
+            cursor: pointer;
+            min-width: 160px;
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: var(--gov-primary);
+        }
+
+        .view-toggle {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            margin-left: auto;
+        }
+
+        .view-toggle-label {
+            font-size: 13px;
+            font-weight: 500;
+            color: #333;
+            margin-right: 10px;
+        }
+
+        .view-btn {
+            padding: 8px 12px;
+            border: 1px solid var(--gov-border);
+            background: white;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .view-btn:first-of-type {
+            border-radius: 4px 0 0 4px;
+        }
+
+        .view-btn:last-of-type {
+            border-radius: 0 4px 4px 0;
+            border-left: none;
+        }
+
+        .view-btn.active {
+            background: var(--gov-primary);
+            border-color: var(--gov-primary);
+            color: white;
+        }
+
+        .view-btn svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* ===== ZÁMĚRY GRID ===== */
+        .zamery-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .zamer-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .zamer-id {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--gov-primary);
+            margin-bottom: 12px;
+            text-decoration: none;
+        }
+
+        .zamer-id:hover {
+            text-decoration: underline;
+        }
+
+        .zamer-row {
+            display: flex;
+            margin-bottom: 6px;
+            font-size: 13px;
+        }
+
+        .zamer-label {
+            color: #666;
+            min-width: 120px;
+            flex-shrink: 0;
+        }
+
+        .zamer-value {
+            color: #1a1a1a;
+            font-weight: 500;
+        }
+
+        .zamer-value.truncate {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 180px;
+        }
+
+        .zamer-value a {
+            color: var(--gov-primary);
+            text-decoration: none;
+        }
+
+        .zamer-value a:hover {
+            text-decoration: underline;
+        }
+
+        .zamer-value .info-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 16px;
+            height: 16px;
+            margin-left: 4px;
+            color: #999;
+            cursor: help;
+        }
+
+        .zamer-value .info-icon svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        /* Role badge */
+        .zamer-role {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 500;
+            margin-top: 8px;
+            margin-bottom: 12px;
+        }
+
+        .zamer-role.stavebnik {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .zamer-role.zastupce {
+            background: #e3f2fd;
+            color: #1565c0;
+        }
+
+        .zamer-role.povereny {
+            background: #fff3e0;
+            color: #e65100;
+        }
+
+        .zamer-btn {
+            margin-top: auto;
+            padding: 12px 20px;
+            background: var(--gov-primary);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+
+        .zamer-btn:hover {
+            background: var(--gov-primary-light);
+        }
+
+        /* Empty state */
+        .empty-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 60px 40px;
+            background: white;
+            border-radius: 8px;
+        }
+
+        .empty-state h3 {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .empty-state p {
+            font-size: 14px;
+            color: #666;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .zamery-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .zamery-grid {
+                grid-template-columns: 1fr;
+            }
+            .filters-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .filter-group.search {
+                max-width: none;
+            }
+            .view-toggle {
+                margin-left: 0;
+            }
         }
     </style>
 </head>
 <body>
     <!-- ===== HLAVIČKA ===== -->
     <header class="gov-header">
-        <!-- Horní lišta -->
         <div class="gov-header-top">
             <div class="gov-header-top-content">
                 <a href="../index.html" class="gov-header-brand">
@@ -338,7 +584,7 @@
                         </svg>
                         <div class="gov-header-user-info">
                             <span class="gov-header-user-name" id="userDisplayName">ALEŠ KRUPA</span>
-                            <span class="gov-header-user-detail" id="userDisplayDetail">OSVČ · IČO: 15104418</span>
+                            <span class="gov-header-user-detail" id="userDisplayDetail">FO · Nar.: 19.04.1968</span>
                         </div>
                         <svg class="chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
@@ -346,9 +592,9 @@
                     </button>
                     <div class="gov-header-user-dropdown" id="userDropdown">
                         <div class="gov-header-user-dropdown-header">
-                            <div class="gov-header-user-dropdown-name" id="dropdownName">Ing. Aleš Krupa</div>
-                            <div class="gov-header-user-dropdown-detail" id="dropdownDetail">IČO: 15104418</div>
-                            <div class="gov-header-user-dropdown-badge" id="dropdownBadge">Fyzická osoba podnikající</div>
+                            <div class="gov-header-user-dropdown-name" id="dropdownName">Aleš Krupa</div>
+                            <div class="gov-header-user-dropdown-detail" id="dropdownDetail">Nar.: 19.04.1968</div>
+                            <div class="gov-header-user-dropdown-badge" id="dropdownBadge">Fyzická osoba</div>
                         </div>
                         <a href="reza_implicitni.html">
                             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -374,33 +620,17 @@
             </div>
         </div>
 
-        <!-- Navigace -->
         <nav class="gov-header-nav">
             <div class="gov-header-nav-content">
                 <ul class="gov-nav-menu">
-                    <li class="gov-nav-item">
-                        <a href="#" class="gov-nav-link">Úvod</a>
-                    </li>
-                    <li class="gov-nav-item">
-                        <a href="#" class="gov-nav-link active">Záměry</a>
-                    </li>
-                    <li class="gov-nav-item">
-                        <a href="#" class="gov-nav-link">Řízení</a>
-                    </li>
-                    <li class="gov-nav-item">
-                        <a href="#" class="gov-nav-link">Žádosti</a>
-                    </li>
-                    <li class="gov-nav-item">
-                        <a href="#" class="gov-nav-link">Stavby</a>
-                    </li>
-                    <li class="gov-nav-item">
-                        <a href="#" class="gov-nav-link">Dokumentace</a>
-                    </li>
-                    <li class="gov-nav-item">
-                        <a href="#" class="gov-nav-link">Plné moci</a>
-                    </li>
+                    <li class="gov-nav-item"><a href="#" class="gov-nav-link">Úvod</a></li>
+                    <li class="gov-nav-item"><a href="#" class="gov-nav-link active">Záměry</a></li>
+                    <li class="gov-nav-item"><a href="#" class="gov-nav-link">Řízení</a></li>
+                    <li class="gov-nav-item"><a href="#" class="gov-nav-link">Žádosti</a></li>
+                    <li class="gov-nav-item"><a href="#" class="gov-nav-link">Stavby</a></li>
+                    <li class="gov-nav-item"><a href="#" class="gov-nav-link">Dokumentace</a></li>
+                    <li class="gov-nav-item"><a href="#" class="gov-nav-link">Plné moci</a></li>
                 </ul>
-
                 <a href="reza-new.html" class="gov-nav-cta">
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
@@ -413,26 +643,278 @@
 
     <!-- ===== OBSAH ===== -->
     <div class="container">
-        <h1 class="page-title">Přehled záměrů</h1>
+        <!-- Filtry -->
+        <div class="filters-bar">
+            <div class="filter-group search">
+                <label class="filter-label">Filtrovat</label>
+                <div class="filter-input">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                    </svg>
+                    <input type="text" placeholder="Dle názvu/čísla záměru, dokumentace" id="searchInput" oninput="filterZamery()">
+                </div>
+            </div>
 
-        <div class="placeholder-content">
-            <h2>🏗️ Přehled vašich stavebních záměrů</h2>
-            <p>Zde se zobrazí seznam vašich stavebních záměrů. Tato stránka bude doplněna v dalších krocích prototypu.</p>
+            <div class="filter-group">
+                <label class="filter-label">Řadit</label>
+                <select class="filter-select" id="sortSelect" onchange="filterZamery()">
+                    <option value="newest">Od nejnovějších</option>
+                    <option value="oldest">Od nejstarších</option>
+                    <option value="name">Podle názvu</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label class="filter-label">Stav</label>
+                <select class="filter-select" id="stavSelect" onchange="filterZamery()">
+                    <option value="">Nezáleží</option>
+                    <option value="Aktivní">Aktivní</option>
+                    <option value="Ukončený">Ukončený</option>
+                </select>
+            </div>
+
+            <div class="view-toggle">
+                <span class="view-toggle-label">Zobrazení</span>
+                <button class="view-btn active" title="Mřížka">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/>
+                    </svg>
+                </button>
+                <button class="view-btn" title="Seznam">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Grid záměrů -->
+        <div class="zamery-grid" id="zameryGrid">
+            <!-- Dynamicky generováno JavaScriptem -->
         </div>
     </div>
 
     <script>
-        // ===== NAČTENÍ IDENTITY Z LOCALSTORAGE =====
+        // ===== MOCK DATA - ZÁMĚRY PRO RŮZNÉ IDENTITY =====
+        const zameryData = {
+            // Fyzická osoba - Aleš Krupa (soukromé záměry jako stavebník)
+            "FO": [
+                {
+                    id: "Z/2025/35201",
+                    nazev: "Rodinný dům Modřany",
+                    stav: "Aktivní",
+                    dokumentace: "SR00X005MK4D",
+                    datum: "15. 1. 2026",
+                    role: "stavebnik"
+                },
+                {
+                    id: "Z/2025/34890",
+                    nazev: "Přístavba garáže",
+                    stav: "Aktivní",
+                    dokumentace: "SR00X005LK2A",
+                    datum: "8. 12. 2025",
+                    role: "stavebnik"
+                },
+                {
+                    id: "Z/2024/28765",
+                    nazev: "Rekonstrukce koupelny",
+                    stav: "Ukončený",
+                    dokumentace: "SR00X004RK1B",
+                    datum: "3. 5. 2024",
+                    role: "stavebnik"
+                }
+            ],
+
+            // OSVČ - Ing. Aleš Krupa (vlastní záměry + zastupování klientů)
+            "OSVČ": [
+                {
+                    id: "Z/2025/35126",
+                    nazev: "Revize formuláře 1",
+                    stav: "Aktivní",
+                    dokumentace: "SR00X005MK4D",
+                    datum: "4. 2. 2026",
+                    role: "stavebnik"
+                },
+                {
+                    id: "Z/2025/35134",
+                    nazev: "Test přidávání pozemků",
+                    stav: "Aktivní",
+                    dokumentace: "SR00X005MJT3",
+                    datum: "4. 2. 2026",
+                    role: "zastupce"
+                },
+                {
+                    id: "Z/2025/35105",
+                    nazev: "Test Verifikátoru 13_11_25",
+                    stav: "Aktivní",
+                    dokumentace: "SR00X005LKWU",
+                    datum: "12. 1. 2026",
+                    role: "zastupce"
+                },
+                {
+                    id: "Z/2025/35104",
+                    nazev: "Test verifikátoru a pozemků",
+                    stav: "Aktivní",
+                    dokumentace: "SR00X005JXRQ",
+                    datum: "13. 11. 2025",
+                    role: "povereny"
+                },
+                {
+                    id: "Z/2025/34013",
+                    nazev: "Test validátor 15_10_25",
+                    stav: "Aktivní",
+                    dokumentace: "SR00X005JOF5",
+                    datum: "4. 11. 2025",
+                    role: "zastupce"
+                },
+                {
+                    id: "Z/2025/34565",
+                    nazev: "Test účastníka 21.10.25",
+                    stav: "Aktivní",
+                    dokumentace: "SR00X005I88L",
+                    datum: "21. 10. 2025",
+                    role: "zastupce"
+                }
+            ],
+
+            // PO - ALMANI s.r.o. (developer - vlastní projekty)
+            "PO_ALMANI": [
+                {
+                    id: "Z/2025/35180",
+                    nazev: "Bytový dům Vinohrady",
+                    stav: "Aktivní",
+                    dokumentace: "SR00X005BDVH",
+                    datum: "28. 1. 2026",
+                    role: "stavebnik"
+                },
+                {
+                    id: "Z/2025/34998",
+                    nazev: "Polyfunkční objekt Karlín",
+                    stav: "Aktivní",
+                    dokumentace: "SR00X005POK1",
+                    datum: "15. 12. 2025",
+                    role: "stavebnik"
+                },
+                {
+                    id: "Z/2025/34756",
+                    nazev: "Rekonstrukce činžovního domu",
+                    stav: "Aktivní",
+                    dokumentace: "SR00X005RCD2",
+                    datum: "22. 11. 2025",
+                    role: "stavebnik"
+                },
+                {
+                    id: "Z/2025/33890",
+                    nazev: "Parkovací dům Smíchov",
+                    stav: "Aktivní",
+                    dokumentace: "SR00X005PDS3",
+                    datum: "5. 10. 2025",
+                    role: "stavebnik"
+                },
+                {
+                    id: "Z/2024/31245",
+                    nazev: "BD Holešovice - etapa 1",
+                    stav: "Ukončený",
+                    dokumentace: "SR00X004BDH1",
+                    datum: "18. 6. 2024",
+                    role: "stavebnik"
+                }
+            ],
+
+            // PO - První projektová a.s. (projekční kancelář - zastupuje klienty)
+            "PO_PRVNI": [
+                {
+                    id: "Z/2025/35210",
+                    nazev: "Administrativní budova ABC",
+                    stav: "Aktivní",
+                    dokumentace: "SR00X005AB01",
+                    datum: "1. 2. 2026",
+                    role: "zastupce"
+                },
+                {
+                    id: "Z/2025/35198",
+                    nazev: "Skladová hala Průmyslová",
+                    stav: "Aktivní",
+                    dokumentace: "SR00X005SHP1",
+                    datum: "25. 1. 2026",
+                    role: "zastupce"
+                },
+                {
+                    id: "Z/2025/35156",
+                    nazev: "Výrobní závod AutoParts",
+                    stav: "Aktivní",
+                    dokumentace: "SR00X005VZA1",
+                    datum: "18. 1. 2026",
+                    role: "povereny"
+                },
+                {
+                    id: "Z/2025/35089",
+                    nazev: "Logistické centrum East",
+                    stav: "Aktivní",
+                    dokumentace: "SR00X005LCE1",
+                    datum: "8. 1. 2026",
+                    role: "zastupce"
+                },
+                {
+                    id: "Z/2025/34876",
+                    nazev: "Hotel Riverside",
+                    stav: "Aktivní",
+                    dokumentace: "SR00X005HRS1",
+                    datum: "5. 12. 2025",
+                    role: "zastupce"
+                },
+                {
+                    id: "Z/2025/34654",
+                    nazev: "Obchodní centrum Plaza",
+                    stav: "Aktivní",
+                    dokumentace: "SR00X005OCP1",
+                    datum: "15. 11. 2025",
+                    role: "zastupce"
+                },
+                {
+                    id: "Z/2025/33009",
+                    nazev: "Test dvojího zpracování",
+                    stav: "Aktivní",
+                    dokumentace: "SR00X005E9VN",
+                    datum: "10. 9. 2025",
+                    role: "povereny"
+                },
+                {
+                    id: "Z/2025/32697",
+                    nazev: "Test 3 informace pro žadatele",
+                    stav: "Aktivní",
+                    dokumentace: "-",
+                    datum: "25. 8. 2025",
+                    role: "zastupce"
+                },
+                {
+                    id: "Z/2025/32696",
+                    nazev: "Test informace pro žadatele",
+                    stav: "Aktivní",
+                    dokumentace: "SR00X005DOKM",
+                    datum: "25. 8. 2025",
+                    role: "zastupce"
+                }
+            ]
+        };
+
+        // Mapování typu identity na klíč v datech
+        const identityToDataKey = {
+            "FO": "FO",
+            "OSVČ": "OSVČ",
+            "PO": null // Bude určeno podle názvu
+        };
+
+        // ===== FUNKCE =====
+        
         function loadIdentity() {
             const stored = localStorage.getItem('selectedIdentity');
             
             if (stored) {
                 const identity = JSON.parse(stored);
                 
-                // Aktualizace hlavičky - jméno v tlačítku
+                // Aktualizace hlavičky
                 document.getElementById('userDisplayName').textContent = identity.name.toUpperCase();
-                
-                // Sestavení detailu pro hlavičku (typ + IČO/datum narození)
                 let detailText = identity.type;
                 if (identity.detail) {
                     detailText += ' · ' + identity.detail;
@@ -444,10 +926,132 @@
                 document.getElementById('dropdownDetail').textContent = identity.detail;
                 document.getElementById('dropdownBadge').textContent = identity.badge;
                 
-                console.log('Načtena identita:', identity);
+                // Načtení záměrů pro danou identitu
+                loadZamery(identity);
             } else {
-                console.log('Žádná identita není uložena');
+                // Výchozí - FO
+                loadZamery({ type: "FO", name: "Aleš Krupa" });
             }
+        }
+
+        function loadZamery(identity) {
+            let dataKey = identity.type;
+            
+            // Pro PO určit konkrétní společnost
+            if (identity.type === "PO") {
+                if (identity.name.includes("ALMANI")) {
+                    dataKey = "PO_ALMANI";
+                } else if (identity.name.includes("První projektová")) {
+                    dataKey = "PO_PRVNI";
+                }
+            }
+            
+            const zamery = zameryData[dataKey] || [];
+            renderZamery(zamery);
+        }
+
+        function renderZamery(zamery) {
+            const grid = document.getElementById('zameryGrid');
+            
+            if (zamery.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state">
+                        <h3>Žádné záměry</h3>
+                        <p>Pro tuto identitu nejsou evidovány žádné stavební záměry.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = zamery.map(zamer => `
+                <div class="zamer-card">
+                    <a href="#" class="zamer-id">${zamer.id}</a>
+                    <div class="zamer-row">
+                        <span class="zamer-label">Název záměru:</span>
+                        <span class="zamer-value truncate" title="${zamer.nazev}"><strong>${zamer.nazev}</strong></span>
+                    </div>
+                    <div class="zamer-row">
+                        <span class="zamer-label">Stav záměru:</span>
+                        <span class="zamer-value">${zamer.stav}</span>
+                    </div>
+                    <div class="zamer-row">
+                        <span class="zamer-label">ID dokumentace:</span>
+                        <span class="zamer-value">
+                            ${zamer.dokumentace !== '-' ? `<a href="#">${zamer.dokumentace}</a>` : '-'}
+                            ${zamer.dokumentace !== '-' ? `<span class="info-icon" title="Zobrazit dokumentaci"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2"/><path stroke-linecap="round" stroke-width="2" d="M12 16v-4M12 8h.01"/></svg></span>` : ''}
+                        </span>
+                    </div>
+                    <div class="zamer-row">
+                        <span class="zamer-label">Datum vytvoření:</span>
+                        <span class="zamer-value">${zamer.datum}</span>
+                    </div>
+                    <span class="zamer-role ${zamer.role}">${getRoleLabel(zamer.role)}</span>
+                    <a href="#" class="zamer-btn">Zobrazit detail</a>
+                </div>
+            `).join('');
+        }
+
+        function getRoleLabel(role) {
+            switch(role) {
+                case 'stavebnik': return 'Stavebník';
+                case 'zastupce': return 'Zástupce';
+                case 'povereny': return 'Pověřená osoba';
+                default: return role;
+            }
+        }
+
+        function filterZamery() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const sortBy = document.getElementById('sortSelect').value;
+            const stavFilter = document.getElementById('stavSelect').value;
+            
+            const stored = localStorage.getItem('selectedIdentity');
+            let identity = stored ? JSON.parse(stored) : { type: "FO" };
+            
+            let dataKey = identity.type;
+            if (identity.type === "PO") {
+                if (identity.name && identity.name.includes("ALMANI")) {
+                    dataKey = "PO_ALMANI";
+                } else if (identity.name && identity.name.includes("První projektová")) {
+                    dataKey = "PO_PRVNI";
+                }
+            }
+            
+            let zamery = [...(zameryData[dataKey] || [])];
+            
+            // Filtrování podle vyhledávání
+            if (searchTerm) {
+                zamery = zamery.filter(z => 
+                    z.id.toLowerCase().includes(searchTerm) ||
+                    z.nazev.toLowerCase().includes(searchTerm) ||
+                    z.dokumentace.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            // Filtrování podle stavu
+            if (stavFilter) {
+                zamery = zamery.filter(z => z.stav === stavFilter);
+            }
+            
+            // Řazení
+            zamery.sort((a, b) => {
+                if (sortBy === 'newest') {
+                    return new Date(parseDate(b.datum)) - new Date(parseDate(a.datum));
+                } else if (sortBy === 'oldest') {
+                    return new Date(parseDate(a.datum)) - new Date(parseDate(b.datum));
+                } else if (sortBy === 'name') {
+                    return a.nazev.localeCompare(b.nazev, 'cs');
+                }
+                return 0;
+            });
+            
+            renderZamery(zamery);
+        }
+
+        function parseDate(dateStr) {
+            // Převod "15. 1. 2026" na Date objekt
+            const parts = dateStr.split('. ');
+            return new Date(parts[2], parseInt(parts[1]) - 1, parts[0]);
         }
 
         // ===== USER MENU =====
@@ -458,7 +1062,6 @@
             dropdown.classList.toggle('show');
         }
 
-        // Close dropdown when clicking outside
         document.addEventListener('click', function(e) {
             const userSection = document.querySelector('.gov-header-user');
             if (userSection && !userSection.contains(e.target)) {
@@ -467,7 +1070,7 @@
             }
         });
 
-        // Načtení identity při startu
+        // Inicializace
         document.addEventListener('DOMContentLoaded', loadIdentity);
     </script>
 </body>
