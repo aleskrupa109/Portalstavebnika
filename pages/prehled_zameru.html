@@ -673,6 +673,16 @@
                 </select>
             </div>
 
+            <div class="filter-group">
+                <label class="filter-label">Role</label>
+                <select class="filter-select" id="roleSelect" onchange="filterZamery()">
+                    <option value="">Všechny</option>
+                    <option value="stavebnik">Stavebník</option>
+                    <option value="zastupce">Zástupce</option>
+                    <option value="povereny">Pověřená osoba</option>
+                </select>
+            </div>
+
             <div class="view-toggle">
                 <span class="view-toggle-label">Zobrazení</span>
                 <button class="view-btn active" title="Mřížka">
@@ -1004,6 +1014,7 @@
             const searchTerm = document.getElementById('searchInput').value.toLowerCase();
             const sortBy = document.getElementById('sortSelect').value;
             const stavFilter = document.getElementById('stavSelect').value;
+            const roleFilter = document.getElementById('roleSelect').value;
             
             const stored = localStorage.getItem('selectedIdentity');
             let identity = stored ? JSON.parse(stored) : { type: "FO" };
@@ -1031,6 +1042,11 @@
             // Filtrování podle stavu
             if (stavFilter) {
                 zamery = zamery.filter(z => z.stav === stavFilter);
+            }
+            
+            // Filtrování podle role
+            if (roleFilter) {
+                zamery = zamery.filter(z => z.role === roleFilter);
             }
             
             // Řazení
