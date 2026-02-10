@@ -1,27 +1,399 @@
-<!-- ISSŘ Hlavička -->
-<header class="issr-header">
-    <a href="index.html" class="issr-header__logo">
-        <img src="images/logo-issr.png" alt="ISSŘ Logo" class="issr-header__logo-img">
-        <span class="issr-header__title">INFORMAČNÍ SYSTÉM STAVEBNÍHO ŘÍZENÍ</span>
-    </a>
-    
-    <div class="issr-header__search">
-        <input type="text" class="issr-header__search-input" placeholder="Hledat">
-    </div>
-    
-    <div class="issr-header__actions">
-        <div class="issr-header__notification">
-            <svg class="issr-header__notification-icon" viewBox="0 0 16 16" fill="currentColor">
-                <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2M8 1.918l-.797.161A4 4 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4 4 0 0 0-3.203-3.92zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5 5 0 0 1 13 6c0 .88.32 4.2 1.22 6"></path>
-            </svg>
-            <span class="issr-header__notification-badge">2</span>
+<!-- ============================================
+     HLAVIČKA PORTÁLU STAVEBNÍKA
+     Komponenta pro použití ve všech stránkách REZA prototypu
+     ============================================ -->
+
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portál stavební správy</title>
+    <style>
+        /* ===== RESET & BASE ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background-color: #f5f7fa;
+            min-height: 100vh;
+        }
+
+        /* ===== CSS PROMĚNNÉ ===== */
+        :root {
+            --gov-primary: #2362a2;
+            --gov-primary-dark: #1a4a7a;
+            --gov-primary-darker: #143d66;
+            --gov-secondary: #e9ecef;
+            --gov-text-light: #ffffff;
+            --gov-text-muted: rgba(255, 255, 255, 0.7);
+            --gov-yellow: #f5a623;
+            --gov-border: rgba(255, 255, 255, 0.15);
+            --header-height: 120px;
+        }
+
+        /* ===== HEADER CONTAINER ===== */
+        .gov-header {
+            background: linear-gradient(180deg, var(--gov-primary) 0%, var(--gov-primary-dark) 100%);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        /* ===== HORNÍ LIŠTA ===== */
+        .gov-header-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 40px;
+            border-bottom: 1px solid var(--gov-border);
+        }
+
+        /* Logo a název */
+        .gov-header-brand {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            text-decoration: none;
+            color: var(--gov-text-light);
+            transition: opacity 0.2s ease;
+        }
+
+        .gov-header-brand:hover {
+            opacity: 0.9;
+        }
+
+        .gov-header-logo {
+            width: auto;
+            height: 52px;
+            object-fit: contain;
+        }
+
+        .gov-header-title {
+            font-size: 20px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            color: var(--gov-text-light);
+        }
+
+        /* User menu */
+        .gov-header-user {
+            position: relative;
+        }
+
+        .gov-header-user-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 20px;
+            background: transparent;
+            border: 1px solid var(--gov-text-light);
+            border-radius: 4px;
+            color: var(--gov-text-light);
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .gov-header-user-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .gov-header-user-btn svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .gov-header-user-btn .chevron {
+            width: 12px;
+            height: 12px;
+            transition: transform 0.2s ease;
+        }
+
+        .gov-header-user-btn.active .chevron {
+            transform: rotate(180deg);
+        }
+
+        /* User dropdown */
+        .gov-header-user-dropdown {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            min-width: 220px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.2s ease;
+            z-index: 100;
+        }
+
+        .gov-header-user-dropdown.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .gov-header-user-dropdown a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            color: #333;
+            text-decoration: none;
+            font-size: 14px;
+            transition: background 0.15s ease;
+        }
+
+        .gov-header-user-dropdown a:first-child {
+            border-radius: 8px 8px 0 0;
+        }
+
+        .gov-header-user-dropdown a:last-child {
+            border-radius: 0 0 8px 8px;
+            border-top: 1px solid #eee;
+            color: #c53030;
+        }
+
+        .gov-header-user-dropdown a:hover {
+            background: #f5f7fa;
+        }
+
+        .gov-header-user-dropdown svg {
+            width: 18px;
+            height: 18px;
+            color: #666;
+        }
+
+        .gov-header-user-dropdown a:last-child svg {
+            color: #c53030;
+        }
+
+        /* ===== NAVIGACE ===== */
+        .gov-header-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+        }
+
+        .gov-nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            list-style: none;
+        }
+
+        .gov-nav-item {
+            position: relative;
+        }
+
+        .gov-nav-link {
+            display: block;
+            padding: 16px 24px;
+            color: var(--gov-text-light);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: all 0.2s ease;
+            border-bottom: 3px solid transparent;
+        }
+
+        .gov-nav-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-bottom-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .gov-nav-link.active {
+            background: rgba(255, 255, 255, 0.1);
+            border-bottom-color: var(--gov-yellow);
+        }
+
+        /* Nová žádost - CTA tlačítko */
+        .gov-nav-cta {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 24px;
+            background: transparent;
+            border: 1px solid var(--gov-text-light);
+            border-radius: 4px;
+            color: var(--gov-text-light);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            transition: all 0.2s ease;
+        }
+
+        .gov-nav-cta:hover {
+            background: var(--gov-text-light);
+            color: var(--gov-primary);
+        }
+
+        .gov-nav-cta svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* ===== DEMO OBSAH ===== */
+        .demo-content {
+            padding: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .demo-content h1 {
+            color: var(--gov-primary);
+            margin-bottom: 16px;
+        }
+
+        .demo-content p {
+            color: #666;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <!-- ===== HEADER START ===== -->
+    <header class="gov-header">
+        <!-- Horní lišta s logem a uživatelem -->
+        <div class="gov-header-top">
+            <a href="../index.html" class="gov-header-brand">
+                <!-- Český lev - PNG -->
+                <img src="../images/logo-lev.png" alt="Státní znak" class="gov-header-logo">
+                <span class="gov-header-title">Portál stavební správy</span>
+            </a>
+
+            <!-- User menu -->
+            <div class="gov-header-user">
+                <button class="gov-header-user-btn" onclick="toggleUserMenu()">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                    </svg>
+                    <span>ALEŠ KRUPA</span>
+                    <svg class="chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </button>
+                <div class="gov-header-user-dropdown" id="userDropdown">
+                    <a href="#">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                        </svg>
+                        Můj profil
+                    </a>
+                    <a href="#">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                        </svg>
+                        Nastavení
+                    </a>
+                    <a href="#">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/>
+                        </svg>
+                        Změnit roli
+                    </a>
+                    <a href="../index.html">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                        </svg>
+                        Odhlásit se
+                    </a>
+                </div>
+            </div>
         </div>
-        
-        <div class="issr-header__user">
-            <span>Aleš Krupa</span>
-            <svg class="issr-header__user-icon" viewBox="0 0 16 16" fill="currentColor">
-                <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z"></path>
-            </svg>
-        </div>
-    </div>
-</header>
+
+        <!-- Navigační menu -->
+        <nav class="gov-header-nav">
+            <ul class="gov-nav-menu">
+                <li class="gov-nav-item">
+                    <a href="uvod.html" class="gov-nav-link">Úvod</a>
+                </li>
+                <li class="gov-nav-item">
+                    <a href="#" class="gov-nav-link">Záměry</a>
+                </li>
+                <li class="gov-nav-item">
+                    <a href="#" class="gov-nav-link">Řízení</a>
+                </li>
+                <li class="gov-nav-item">
+                    <a href="#" class="gov-nav-link">Žádosti</a>
+                </li>
+                <li class="gov-nav-item">
+                    <a href="#" class="gov-nav-link">Stavby</a>
+                </li>
+                <li class="gov-nav-item">
+                    <a href="#" class="gov-nav-link">Dokumentace</a>
+                </li>
+                <li class="gov-nav-item">
+                    <a href="reza_1.html" class="gov-nav-link">Plné moci a zastoupení</a>
+                </li>
+            </ul>
+
+            <!-- CTA tlačítko Nová žádost -->
+            <a href="zadost.html" class="gov-nav-cta">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                </svg>
+                NOVÁ ŽÁDOST
+            </a>
+        </nav>
+    </header>
+    <!-- ===== HEADER END ===== -->
+
+    <!-- Demo obsah pro testování -->
+    <main class="demo-content">
+        <h1>Hlavička Portálu stavební správy</h1>
+        <p>Toto je ukázková stránka s hlavičkou. Hlavička obsahuje:</p>
+        <ul style="margin: 16px 0 0 24px; color: #666; line-height: 1.8;">
+            <li><strong>Logo (lev)</strong> - odkaz na index.html</li>
+            <li><strong>Úvod</strong> - odkaz na pages/uvod.html</li>
+            <li><strong>Plné moci a zastoupení</strong> - odkaz na pages/reza_1.html</li>
+            <li><strong>Nová žádost</strong> - odkaz na pages/zadost.html</li>
+            <li><strong>User menu</strong> - rozbalovací menu s profilem a odhlášením</li>
+        </ul>
+    </main>
+
+    <script>
+        // Toggle user dropdown
+        function toggleUserMenu() {
+            const btn = document.querySelector('.gov-header-user-btn');
+            const dropdown = document.getElementById('userDropdown');
+            btn.classList.toggle('active');
+            dropdown.classList.toggle('show');
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            const userSection = document.querySelector('.gov-header-user');
+            if (!userSection.contains(e.target)) {
+                document.querySelector('.gov-header-user-btn').classList.remove('active');
+                document.getElementById('userDropdown').classList.remove('show');
+            }
+        });
+
+        // Mark active nav item based on current page
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentPage = window.location.pathname.split('/').pop();
+            document.querySelectorAll('.gov-nav-link').forEach(link => {
+                if (link.getAttribute('href').includes(currentPage)) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
