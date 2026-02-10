@@ -160,6 +160,47 @@
         .gov-header-user-btn.active .chevron {
             transform: rotate(180deg);
         }
+		/* ===== NAVIGACE ===== */
+        .gov-header-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+        }
+
+        .gov-nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            list-style: none;
+        }
+
+        .gov-nav-item {
+            position: relative;
+        }
+
+        .gov-nav-link {
+            display: block;
+            padding: 16px 24px;
+            color: var(--gov-text-light);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: all 0.2s ease;
+            border-bottom: 3px solid transparent;
+        }
+
+        .gov-nav-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-bottom-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .gov-nav-link.active {
+            background: rgba(255, 255, 255, 0.1);
+            border-bottom-color: var(--gov-yellow);
+        }
         /* Breadcrumb */
         .breadcrumb {
             margin-bottom: 20px;
