@@ -80,6 +80,11 @@
             border-radius: 4px;
             color: var(--gov-text-light);
             font-size: 13px;
+            cursor: pointer;
+        }
+
+        .gov-header-user:hover {
+            background: rgba(255,255,255,0.1);
         }
 
         .gov-header-user-info {
@@ -147,7 +152,6 @@
             padding: 40px 20px;
         }
 
-        /* Breadcrumb */
         .breadcrumb {
             margin-bottom: 20px;
             font-size: 14px;
@@ -166,7 +170,6 @@
             color: #666;
         }
 
-        /* Header sekce */
         .section-header {
             margin-bottom: 24px;
         }
@@ -202,10 +205,9 @@
             color: #155724;
         }
 
-        .info-box svg, .info-box .material-icons-outlined {
+        .info-box .material-icons-outlined {
             flex-shrink: 0;
-            width: 20px;
-            height: 20px;
+            font-size: 20px;
             margin-top: 2px;
         }
 
@@ -216,6 +218,76 @@
         .info-box-title {
             font-weight: 600;
             margin-bottom: 4px;
+        }
+
+        /* Identity box */
+        .identity-box {
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 16px 20px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .identity-box-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: #e8f4fc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .identity-box-icon .material-icons-outlined {
+            font-size: 24px;
+            color: #2362A2;
+        }
+
+        .identity-box-content {
+            flex: 1;
+        }
+
+        .identity-box-label {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 2px;
+        }
+
+        .identity-box-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .identity-box-detail {
+            font-size: 13px;
+            color: #666;
+        }
+
+        .identity-box-badge {
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .identity-box-badge.fo { background: #e8f4fc; color: #2362A2; }
+        .identity-box-badge.osvc { background: #fff3e0; color: #e65100; }
+        .identity-box-badge.po { background: #f3e5f5; color: #7b1fa2; }
+
+        .identity-box-change {
+            color: #2362A2;
+            text-decoration: none;
+            font-size: 13px;
+        }
+
+        .identity-box-change:hover {
+            text-decoration: underline;
         }
 
         /* Wizard steps */
@@ -241,21 +313,9 @@
             transition: all 0.2s;
         }
 
-        .wizard-step.active {
-            background: #2362A2;
-            color: #fff;
-        }
-
-        .wizard-step.completed {
-            background: #d4edda;
-            color: #155724;
-        }
-
-        .wizard-step.skipped {
-            background: #e0e0e0;
-            color: #999;
-            text-decoration: line-through;
-        }
+        .wizard-step.active { background: #2362A2; color: #fff; }
+        .wizard-step.completed { background: #d4edda; color: #155724; }
+        .wizard-step.skipped { background: #e0e0e0; color: #999; text-decoration: line-through; }
 
         .wizard-step-number {
             width: 24px;
@@ -269,14 +329,9 @@
             font-size: 12px;
         }
 
-        .wizard-step.active .wizard-step-number {
-            background: rgba(255,255,255,0.2);
-        }
-
-        .wizard-step.completed .wizard-step-number {
-            background: #28a745;
-            color: #fff;
-        }
+        .wizard-step.active .wizard-step-number { background: rgba(255,255,255,0.2); }
+        .wizard-step.completed .wizard-step-number { background: #28a745; color: #fff; }
+        .wizard-step.skipped .wizard-step-number { text-decoration: none; }
 
         .wizard-step-connector {
             flex: 1;
@@ -320,9 +375,7 @@
         }
 
         /* Form elements */
-        .form-group {
-            margin-bottom: 20px;
-        }
+        .form-group { margin-bottom: 20px; }
 
         .form-label {
             display: block;
@@ -332,12 +385,9 @@
             margin-bottom: 8px;
         }
 
-        .form-label .required {
-            color: #dc3545;
-        }
+        .form-label .required { color: #dc3545; }
 
-        .form-input,
-        .form-select {
+        .form-input, .form-select {
             width: 100%;
             padding: 12px 16px;
             font-size: 14px;
@@ -347,17 +397,10 @@
             transition: border-color 0.2s, box-shadow 0.2s;
         }
 
-        .form-input:focus,
-        .form-select:focus {
+        .form-input:focus, .form-select:focus {
             outline: none;
             border-color: #2362A2;
             box-shadow: 0 0 0 3px rgba(35, 98, 162, 0.1);
-        }
-
-        .form-input:disabled,
-        .form-select:disabled {
-            background: #f5f5f5;
-            color: #666;
         }
 
         /* Radio options */
@@ -378,29 +421,13 @@
             transition: all 0.2s;
         }
 
-        .radio-option:hover {
-            border-color: #2362A2;
-            background: #f8fafc;
-        }
+        .radio-option:hover { border-color: #2362A2; background: #f8fafc; }
+        .radio-option.selected { border-color: #2362A2; background: #f0f7ff; }
+        .radio-option.disabled { opacity: 0.5; cursor: not-allowed; pointer-events: none; }
 
-        .radio-option.selected {
-            border-color: #2362A2;
-            background: #f0f7ff;
-        }
+        .radio-option input[type="radio"] { margin-top: 2px; }
 
-        .radio-option.disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            pointer-events: none;
-        }
-
-        .radio-option input[type="radio"] {
-            margin-top: 2px;
-        }
-
-        .radio-option-content {
-            flex: 1;
-        }
+        .radio-option-content { flex: 1; }
 
         .radio-option-title {
             font-weight: 500;
@@ -422,15 +449,7 @@
             margin-left: 8px;
         }
 
-        .radio-option-badge.reza {
-            background: #e8f4fd;
-            color: #2362A2;
-        }
-
-        .radio-option-badge.new {
-            background: #d4edda;
-            color: #155724;
-        }
+        .radio-option-badge.reza { background: #e8f4fd; color: #2362A2; }
 
         /* REZA select box */
         .reza-select-box {
@@ -442,9 +461,7 @@
             display: none;
         }
 
-        .reza-select-box.show {
-            display: block;
-        }
+        .reza-select-box.show { display: block; }
 
         .reza-select-header {
             display: flex;
@@ -473,29 +490,12 @@
             transition: all 0.2s;
         }
 
-        .reza-pm-item:hover {
-            border-color: #2362A2;
-            background: #f0f7ff;
-        }
+        .reza-pm-item:hover { border-color: #2362A2; background: #f0f7ff; }
+        .reza-pm-item.selected { border-color: #2362A2; background: #e8f4fd; }
 
-        .reza-pm-item.selected {
-            border-color: #2362A2;
-            background: #e8f4fd;
-        }
-
-        .reza-pm-item-content {
-            flex: 1;
-        }
-
-        .reza-pm-item-name {
-            font-weight: 500;
-            color: #333;
-        }
-
-        .reza-pm-item-detail {
-            font-size: 12px;
-            color: #666;
-        }
+        .reza-pm-item-content { flex: 1; }
+        .reza-pm-item-name { font-weight: 500; color: #333; }
+        .reza-pm-item-detail { font-size: 12px; color: #666; }
 
         .reza-pm-item-scope {
             font-size: 11px;
@@ -503,6 +503,7 @@
             border-radius: 4px;
             background: #e8f4fd;
             color: #2362A2;
+            white-space: nowrap;
         }
 
         /* Paper PM upload */
@@ -515,9 +516,7 @@
             display: none;
         }
 
-        .paper-pm-box.show {
-            display: block;
-        }
+        .paper-pm-box.show { display: block; }
 
         .paper-pm-header {
             display: flex;
@@ -552,9 +551,7 @@
             border-bottom: 1px solid #eee;
         }
 
-        .summary-row:last-child {
-            border-bottom: none;
-        }
+        .summary-row:last-child { border-bottom: none; }
 
         .summary-label {
             min-width: 180px;
@@ -577,15 +574,8 @@
             margin-left: 8px;
         }
 
-        .summary-value .badge.reza {
-            background: #e8f4fd;
-            color: #2362A2;
-        }
-
-        .summary-value .badge.paper {
-            background: #fff3cd;
-            color: #856404;
-        }
+        .summary-value .badge.reza { background: #e8f4fd; color: #2362A2; }
+        .summary-value .badge.paper { background: #fff3cd; color: #856404; }
 
         /* Buttons */
         .btn {
@@ -604,24 +594,15 @@
             text-decoration: none;
         }
 
-        .btn-primary {
-            background: #2362A2;
-            color: #fff;
-        }
-
-        .btn-primary:hover {
-            background: #1a4f85;
-        }
+        .btn-primary { background: #2362A2; color: #fff; }
+        .btn-primary:hover { background: #1a4f85; }
 
         .btn-secondary {
             background: #fff;
             color: #2362A2;
             border: 1px solid #2362A2;
         }
-
-        .btn-secondary:hover {
-            background: #f0f4f8;
-        }
+        .btn-secondary:hover { background: #f0f4f8; }
 
         .form-actions {
             display: flex;
@@ -632,10 +613,7 @@
             border-top: 1px solid #eee;
         }
 
-        /* Hidden */
-        .hidden {
-            display: none !important;
-        }
+        .hidden { display: none !important; }
 
         /* ==========================================
            SIMULAČNÍ PANEL
@@ -653,9 +631,7 @@
             transition: all 0.3s ease;
         }
 
-        .sim-panel.minimized .sim-panel-body {
-            display: none;
-        }
+        .sim-panel.minimized .sim-panel-body { display: none; }
 
         .sim-panel-header {
             display: flex;
@@ -676,18 +652,14 @@
             font-size: 13px;
         }
 
-        .sim-panel-title .material-icons-outlined {
-            font-size: 18px;
-        }
+        .sim-panel-title .material-icons-outlined { font-size: 18px; }
 
         .sim-panel-toggle {
             color: #666;
             transition: transform 0.3s;
         }
 
-        .sim-panel.minimized .sim-panel-toggle {
-            transform: rotate(180deg);
-        }
+        .sim-panel.minimized .sim-panel-toggle { transform: rotate(180deg); }
 
         .sim-panel-body {
             padding: 16px;
@@ -695,13 +667,8 @@
             overflow-y: auto;
         }
 
-        .sim-section {
-            margin-bottom: 16px;
-        }
-
-        .sim-section:last-child {
-            margin-bottom: 0;
-        }
+        .sim-section { margin-bottom: 16px; }
+        .sim-section:last-child { margin-bottom: 0; }
 
         .sim-section-title {
             font-size: 10px;
@@ -729,13 +696,8 @@
             transition: all 0.15s;
         }
 
-        .sim-radio:hover {
-            background: #1f2b47;
-        }
-
-        .sim-radio input {
-            margin-top: 3px;
-        }
+        .sim-radio:hover { background: #1f2b47; }
+        .sim-radio input { margin-top: 3px; }
 
         .sim-radio-label {
             display: flex;
@@ -744,15 +706,8 @@
             font-size: 12px;
         }
 
-        .sim-radio-label strong {
-            font-weight: 500;
-        }
-
-        .sim-radio-label small {
-            color: #888;
-            font-size: 10px;
-            margin-top: 2px;
-        }
+        .sim-radio-label strong { font-weight: 500; }
+        .sim-radio-label small { color: #888; font-size: 10px; margin-top: 2px; }
 
         .sim-info {
             background: #16213e;
@@ -767,19 +722,10 @@
             font-size: 11px;
         }
 
-        .sim-info-label {
-            color: #888;
-        }
+        .sim-info-label { color: #888; }
+        .sim-info-value { color: #00d9ff; font-weight: 500; }
 
-        .sim-info-value {
-            color: #00d9ff;
-            font-weight: 500;
-        }
-
-        .sim-actions {
-            display: flex;
-            gap: 8px;
-        }
+        .sim-actions { display: flex; gap: 8px; }
 
         .sim-btn {
             flex: 1;
@@ -797,14 +743,8 @@
             transition: all 0.15s;
         }
 
-        .sim-btn:hover {
-            background: #1f2b47;
-            color: #fff;
-        }
-
-        .sim-btn .material-icons-outlined {
-            font-size: 14px;
-        }
+        .sim-btn:hover { background: #1f2b47; color: #fff; }
+        .sim-btn .material-icons-outlined { font-size: 14px; }
 
         .sim-toast {
             position: fixed;
@@ -836,7 +776,7 @@
                     <span class="gov-header-title">Portál stavebníka</span>
                 </a>
 
-                <div class="gov-header-user" id="headerUser">
+                <div class="gov-header-user" onclick="window.location.href='reza_implicitni.html'">
                     <span class="material-icons-outlined" style="font-size: 18px;">person</span>
                     <div class="gov-header-user-info">
                         <span class="gov-header-user-name" id="headerUserName">ALEŠ KRUPA</span>
@@ -863,20 +803,32 @@
 
     <!-- ===== OBSAH ===== -->
     <div class="container">
-        <!-- Breadcrumb -->
-        <nav class="breadcrumb" aria-label="Breadcrumb">
+        <nav class="breadcrumb">
             <a href="#">Žádosti</a>
             <span> › </span>
             <span>Nová žádost</span>
         </nav>
 
-        <!-- Header sekce -->
         <div class="section-header">
             <h1>Nová žádost</h1>
             <div class="meta">Žádost o povolení stavby nebo zařízení</div>
         </div>
 
-        <!-- Info box pro zjednodušený průchod -->
+        <!-- Identity box -->
+        <div class="identity-box">
+            <div class="identity-box-icon">
+                <span class="material-icons-outlined" id="identityIcon">person</span>
+            </div>
+            <div class="identity-box-content">
+                <div class="identity-box-label">Jednám jako</div>
+                <div class="identity-box-name" id="identityName">Aleš Krupa</div>
+                <div class="identity-box-detail" id="identityDetail">Nar.: 19.04.1968</div>
+            </div>
+            <span class="identity-box-badge fo" id="identityBadge">Fyzická osoba</span>
+            <a href="reza_implicitni.html" class="identity-box-change">Změnit →</a>
+        </div>
+
+        <!-- Info boxy -->
         <div class="info-box simplified" id="simplifiedInfoBox">
             <span class="material-icons-outlined">check_circle</span>
             <div class="info-box-content">
@@ -885,69 +837,43 @@
             </div>
         </div>
 
-        <!-- Info box pro profesionála -->
         <div class="info-box hidden" id="professionalInfoBox">
             <span class="material-icons-outlined">business_center</span>
             <div class="info-box-content">
                 <div class="info-box-title">Profesionální režim</div>
-                <div>Máte přístup k rozšířeným možnostem zastupování. Postupně vyplňte kroky 1–4.</div>
+                <div>Máte možnost zastupovat klienty. Postupně vyplňte kroky identifikace.</div>
             </div>
         </div>
 
         <!-- Wizard steps -->
-        <div class="wizard-steps" id="wizardSteps">
-            <div class="wizard-step skipped" data-step="1" id="wizardStep1">
+        <div class="wizard-steps">
+            <div class="wizard-step skipped" id="wizardStep1">
                 <span class="wizard-step-number">1</span>
-                <span>Jako kdo jednám</span>
-            </div>
-            <div class="wizard-step-connector"></div>
-            <div class="wizard-step skipped" data-step="2" id="wizardStep2">
-                <span class="wizard-step-number">2</span>
                 <span>V jaké roli</span>
             </div>
             <div class="wizard-step-connector"></div>
-            <div class="wizard-step skipped" data-step="3" id="wizardStep3">
-                <span class="wizard-step-number">3</span>
+            <div class="wizard-step skipped" id="wizardStep2">
+                <span class="wizard-step-number">2</span>
                 <span>Za koho jednám</span>
             </div>
             <div class="wizard-step-connector"></div>
-            <div class="wizard-step skipped" data-step="4" id="wizardStep4">
-                <span class="wizard-step-number">4</span>
+            <div class="wizard-step skipped" id="wizardStep3">
+                <span class="wizard-step-number">3</span>
                 <span>Na základě čeho</span>
             </div>
             <div class="wizard-step-connector"></div>
-            <div class="wizard-step active" data-step="5" id="wizardStep5">
-                <span class="wizard-step-number">5</span>
+            <div class="wizard-step active" id="wizardStep4">
+                <span class="wizard-step-number">4</span>
                 <span>Záměr</span>
             </div>
         </div>
 
-        <!-- KROK 1: Jako kdo jednám -->
+        <!-- KROK 1: V jaké roli -->
         <div class="form-card hidden" id="step1Card">
-            <div class="form-card-header">
-                <span class="material-icons-outlined">badge</span>
-                <div>
-                    <div class="form-card-title">Krok 1: Jako kdo jednám</div>
-                    <div class="form-card-subtitle">Vyberte svou identitu z registrů</div>
-                </div>
-            </div>
-
-            <div class="radio-group" id="identityOptions">
-                <!-- Dynamicky generované podle scénáře -->
-            </div>
-
-            <div class="form-actions">
-                <div></div>
-                <button class="btn btn-primary" onclick="completeStep(1)">Pokračovat →</button>
-            </div>
-        </div>
-
-        <!-- KROK 2: V jaké roli jednám -->
-        <div class="form-card hidden" id="step2Card">
             <div class="form-card-header">
                 <span class="material-icons-outlined">person_outline</span>
                 <div>
-                    <div class="form-card-title">Krok 2: V jaké roli jednám</div>
+                    <div class="form-card-title">Krok 1: V jaké roli jednám</div>
                     <div class="form-card-subtitle">Vyberte svou roli v řízení</div>
                 </div>
             </div>
@@ -977,17 +903,17 @@
             </div>
 
             <div class="form-actions">
-                <button class="btn btn-secondary" onclick="goToStep(1)">← Zpět</button>
-                <button class="btn btn-primary" onclick="completeStep(2)">Pokračovat →</button>
+                <div></div>
+                <button class="btn btn-primary" onclick="completeStep(1)">Pokračovat →</button>
             </div>
         </div>
 
-        <!-- KROK 3: Za koho jednám -->
-        <div class="form-card hidden" id="step3Card">
+        <!-- KROK 2: Za koho jednám -->
+        <div class="form-card hidden" id="step2Card">
             <div class="form-card-header">
                 <span class="material-icons-outlined">groups</span>
                 <div>
-                    <div class="form-card-title">Krok 3: Za koho jednám</div>
+                    <div class="form-card-title">Krok 2: Za koho jednám</div>
                     <div class="form-card-subtitle">Koho zastupuji nebo pro koho činím úkony</div>
                 </div>
             </div>
@@ -1010,17 +936,17 @@
             </div>
 
             <div class="form-actions">
-                <button class="btn btn-secondary" onclick="goToStep(2)">← Zpět</button>
-                <button class="btn btn-primary" onclick="completeStep(3)">Pokračovat →</button>
+                <button class="btn btn-secondary" onclick="goToStep(1)">← Zpět</button>
+                <button class="btn btn-primary" onclick="completeStep(2)">Pokračovat →</button>
             </div>
         </div>
 
-        <!-- KROK 4: Na základě čeho -->
-        <div class="form-card hidden" id="step4Card">
+        <!-- KROK 3: Na základě čeho -->
+        <div class="form-card hidden" id="step3Card">
             <div class="form-card-header">
                 <span class="material-icons-outlined">verified</span>
                 <div>
-                    <div class="form-card-title">Krok 4: Na základě čeho</div>
+                    <div class="form-card-title">Krok 3: Na základě čeho</div>
                     <div class="form-card-subtitle">Právní titul pro zastupování</div>
                 </div>
             </div>
@@ -1045,18 +971,14 @@
                 </label>
             </div>
 
-            <!-- REZA výběr -->
             <div class="reza-select-box" id="rezaSelectBox">
                 <div class="reza-select-header">
                     <span class="material-icons-outlined">list_alt</span>
                     Vyberte plnou moc z REZA
                 </div>
-                <div class="reza-pm-list" id="rezaPmList">
-                    <!-- Dynamicky generované -->
-                </div>
+                <div class="reza-pm-list" id="rezaPmList"></div>
             </div>
 
-            <!-- Papírová PM -->
             <div class="paper-pm-box" id="paperPmBox">
                 <div class="paper-pm-header">
                     <span class="material-icons-outlined">upload_file</span>
@@ -1064,7 +986,7 @@
                 </div>
                 <div class="form-group">
                     <label class="form-label">Typ subjektu <span class="required">*</span></label>
-                    <select class="form-select" id="paperSubjectType">
+                    <select class="form-select">
                         <option value="">— Vyberte —</option>
                         <option value="fo">Fyzická osoba</option>
                         <option value="fo-podnikatel">Fyzická osoba podnikající</option>
@@ -1073,11 +995,11 @@
                 </div>
                 <div class="form-group">
                     <label class="form-label">Jméno / Název <span class="required">*</span></label>
-                    <input type="text" class="form-input" id="paperName" placeholder="Jan Novák / ABC s.r.o.">
+                    <input type="text" class="form-input" placeholder="Jan Novák / ABC s.r.o.">
                 </div>
                 <div class="form-group">
                     <label class="form-label">IČO / Datum narození</label>
-                    <input type="text" class="form-input" id="paperIdentifier" placeholder="12345678 / 01.01.1980">
+                    <input type="text" class="form-input" placeholder="12345678 / 01.01.1980">
                 </div>
                 <div class="form-group">
                     <label class="form-label">Plná moc (PDF) <span class="required">*</span></label>
@@ -1086,22 +1008,21 @@
             </div>
 
             <div class="form-actions">
-                <button class="btn btn-secondary" onclick="goToStep(3)">← Zpět</button>
-                <button class="btn btn-primary" onclick="completeStep(4)">Pokračovat →</button>
+                <button class="btn btn-secondary" onclick="goToStep(2)">← Zpět</button>
+                <button class="btn btn-primary" onclick="completeStep(3)">Pokračovat →</button>
             </div>
         </div>
 
-        <!-- KROK 5: Záměr (zjednodušený) -->
-        <div class="form-card" id="step5Card">
+        <!-- KROK 4: Záměr -->
+        <div class="form-card" id="step4Card">
             <div class="form-card-header">
                 <span class="material-icons-outlined">home_work</span>
                 <div>
-                    <div class="form-card-title">Krok 5: Záměr</div>
+                    <div class="form-card-title">Krok 4: Záměr</div>
                     <div class="form-card-subtitle">Vyberte existující záměr nebo vytvořte nový</div>
                 </div>
             </div>
 
-            <!-- Souhrn kroků 1-4 -->
             <div class="summary-box" id="identitySummary">
                 <div class="summary-box-title">
                     <span class="material-icons-outlined" style="font-size: 18px;">summarize</span>
@@ -1143,16 +1064,14 @@
             </div>
 
             <div class="form-actions">
-                <button class="btn btn-secondary" id="backFromStep5" onclick="goToStep(4)" style="display: none;">← Zpět</button>
+                <button class="btn btn-secondary" id="backFromStep4" onclick="goToStep(3)" style="display: none;">← Zpět</button>
                 <div id="backPlaceholder"></div>
                 <button class="btn btn-primary" onclick="continueToForm()">Pokračovat na formulář →</button>
             </div>
         </div>
     </div>
 
-    <!-- ==========================================
-         SIMULAČNÍ PANEL
-         ========================================== -->
+    <!-- SIMULAČNÍ PANEL -->
     <div class="sim-panel minimized" id="simPanel">
         <div class="sim-panel-header" onclick="toggleSimPanel()">
             <div class="sim-panel-title">
@@ -1160,66 +1079,66 @@
                 <span>Simulace scénářů</span>
             </div>
             <div class="sim-panel-toggle">
-                <span class="material-icons-outlined" id="simPanelToggleIcon">expand_more</span>
+                <span class="material-icons-outlined">expand_more</span>
             </div>
         </div>
-        <div class="sim-panel-body" id="simPanelBody">
+        <div class="sim-panel-body">
             <div class="sim-section">
-                <div class="sim-section-title">Typ uživatele</div>
+                <div class="sim-section-title">Vyberte identitu a scénář</div>
                 <div class="sim-scenarios">
                     <label class="sim-radio">
-                        <input type="radio" name="scenar" value="zakladni" checked onchange="applyScenario(this.value)">
+                        <input type="radio" name="scenar" value="fo-zakladni" checked onchange="applyScenario(this.value)">
                         <span class="sim-radio-label">
-                            <strong>Základní</strong>
-                            <small>FO staví sám za sebe, bez PM</small>
+                            <strong>FO — základní</strong>
+                            <small>Aleš Krupa staví sám za sebe</small>
                         </span>
                     </label>
                     <label class="sim-radio">
-                        <input type="radio" name="scenar" value="osvc" onchange="applyScenario(this.value)">
+                        <input type="radio" name="scenar" value="osvc-zakladni" onchange="applyScenario(this.value)">
                         <span class="sim-radio-label">
-                            <strong>OSVČ</strong>
-                            <small>OSVČ staví sám za sebe</small>
+                            <strong>OSVČ — základní</strong>
+                            <small>Ing. Aleš Krupa staví sám za sebe</small>
                         </span>
                     </label>
                     <label class="sim-radio">
-                        <input type="radio" name="scenar" value="po-statutar" onchange="applyScenario(this.value)">
+                        <input type="radio" name="scenar" value="almani-statutar" onchange="applyScenario(this.value)">
                         <span class="sim-radio-label">
-                            <strong>PO (statutár)</strong>
-                            <small>Právnická osoba, přihlášen statutár</small>
+                            <strong>ALMANI s.r.o. — statutár</strong>
+                            <small>PO staví sama za sebe</small>
                         </span>
                     </label>
                     <label class="sim-radio">
-                        <input type="radio" name="scenar" value="zastupce-reza" onchange="applyScenario(this.value)">
+                        <input type="radio" name="scenar" value="prvni-zastupce" onchange="applyScenario(this.value)">
                         <span class="sim-radio-label">
-                            <strong>Zástupce — REZA</strong>
-                            <small>FO zastupuje klienta, digitální PM</small>
+                            <strong>První projektová — zástupce</strong>
+                            <small>PO zastupuje více klientů (REZA)</small>
                         </span>
                     </label>
                     <label class="sim-radio">
-                        <input type="radio" name="scenar" value="zastupce-papir" onchange="applyScenario(this.value)">
+                        <input type="radio" name="scenar" value="osvc-zastupce-reza" onchange="applyScenario(this.value)">
                         <span class="sim-radio-label">
-                            <strong>Zástupce — papír</strong>
-                            <small>FO zastupuje klienta, papírová PM</small>
+                            <strong>OSVČ — zástupce REZA</strong>
+                            <small>Ing. Aleš Krupa zastupuje klienta</small>
                         </span>
                     </label>
                     <label class="sim-radio">
-                        <input type="radio" name="scenar" value="poverena-reza" onchange="applyScenario(this.value)">
+                        <input type="radio" name="scenar" value="fo-zastupce-papir" onchange="applyScenario(this.value)">
                         <span class="sim-radio-label">
-                            <strong>Pověřená osoba — REZA</strong>
-                            <small>Pověřená osoba s digitálním pověřením</small>
+                            <strong>FO — zástupce papír</strong>
+                            <small>Aleš Krupa s papírovou PM</small>
                         </span>
                     </label>
                     <label class="sim-radio">
-                        <input type="radio" name="scenar" value="projekcni-kancelar" onchange="applyScenario(this.value)">
+                        <input type="radio" name="scenar" value="fo-poverena" onchange="applyScenario(this.value)">
                         <span class="sim-radio-label">
-                            <strong>Projekční kancelář</strong>
-                            <small>PO zastupuje více klientů</small>
+                            <strong>FO — pověřená osoba</strong>
+                            <small>Aleš Krupa pověřen firmou</small>
                         </span>
                     </label>
                     <label class="sim-radio">
-                        <input type="radio" name="scenar" value="retezeni" onchange="applyScenario(this.value)">
+                        <input type="radio" name="scenar" value="fo-retezeni" onchange="applyScenario(this.value)">
                         <span class="sim-radio-label">
-                            <strong>Řetězení</strong>
+                            <strong>FO — řetězení</strong>
                             <small>Pověřená osoba zástupce stavebníka</small>
                         </span>
                     </label>
@@ -1260,378 +1179,159 @@
     </div>
 
     <script>
-        // ==========================================
-        // DATA - Scénáře
-        // ==========================================
+        // Identity (konzistentní s reza_implicitni)
+        const identities = {
+            'FO': { name: 'Aleš Krupa', detail: 'Nar.: 19.04.1968', badge: 'Fyzická osoba', badgeClass: 'fo', icon: 'person', headerName: 'ALEŠ KRUPA', headerDetail: 'FO · Nar.: 19.04.1968' },
+            'OSVČ': { name: 'Ing. Aleš Krupa', detail: 'IČO: 15104418', badge: 'Fyzická osoba podnikající', badgeClass: 'osvc', icon: 'business_center', headerName: 'ING. ALEŠ KRUPA', headerDetail: 'OSVČ · IČO: 15104418' },
+            'PO_ALMANI': { name: 'ALMANI s.r.o.', detail: 'IČO: 28765432 · Jednatel', badge: 'Právnická osoba', badgeClass: 'po', icon: 'business', headerName: 'ALMANI S.R.O.', headerDetail: 'Statutár · IČO: 28765432' },
+            'PO_PRVNI': { name: 'První projektová a.s.', detail: 'IČO: 45678901 · Člen představenstva', badge: 'Právnická osoba', badgeClass: 'po', icon: 'business', headerName: 'PRVNÍ PROJEKTOVÁ A.S.', headerDetail: 'Statutár · IČO: 45678901' }
+        };
+
+        // Scénáře
         const scenarios = {
-            'zakladni': {
-                nazev: 'Základní',
-                typUzivatele: 'jednorazovy',
-                identity: [
-                    { id: 'fo', name: 'Aleš Krupa', type: 'FO', detail: 'Nar.: 19.04.1968' }
-                ],
-                defaultIdentity: 'fo',
-                defaultRole: 'stavebnik',
-                skipSteps: [1, 2, 3, 4],
-                headerName: 'ALEŠ KRUPA',
-                headerDetail: 'FO · Nar.: 19.04.1968'
-            },
-            'osvc': {
-                nazev: 'OSVČ',
-                typUzivatele: 'jednorazovy',
-                identity: [
-                    { id: 'fo', name: 'Aleš Krupa', type: 'FO', detail: 'Nar.: 19.04.1968' },
-                    { id: 'osvc', name: 'Ing. Aleš Krupa', type: 'OSVČ', detail: 'IČO: 15104418' }
-                ],
-                defaultIdentity: 'osvc',
-                defaultRole: 'stavebnik',
-                skipSteps: [2, 3, 4],
-                headerName: 'ING. ALEŠ KRUPA',
-                headerDetail: 'OSVČ · IČO: 15104418'
-            },
-            'po-statutar': {
-                nazev: 'PO (statutár)',
-                typUzivatele: 'jednorazovy',
-                identity: [
-                    { id: 'fo', name: 'Aleš Krupa', type: 'FO', detail: 'Nar.: 19.04.1968' },
-                    { id: 'po', name: 'SUDOP PRAHA a.s.', type: 'PO', detail: 'IČO: 25793349', badge: 'Statutár' }
-                ],
-                defaultIdentity: 'po',
-                defaultRole: 'stavebnik',
-                skipSteps: [2, 3, 4],
-                headerName: 'SUDOP PRAHA A.S.',
-                headerDetail: 'Statutár · IČO: 25793349'
-            },
-            'zastupce-reza': {
-                nazev: 'Zástupce — REZA',
-                typUzivatele: 'profesional',
-                identity: [
-                    { id: 'fo', name: 'Aleš Krupa', type: 'FO', detail: 'Nar.: 19.04.1968' },
-                    { id: 'osvc', name: 'Ing. Aleš Krupa', type: 'OSVČ', detail: 'IČO: 15104418' }
-                ],
-                defaultIdentity: 'osvc',
-                defaultRole: 'zastupce',
-                defaultZaKoho: 'stavebnika',
-                defaultZaklad: 'reza',
-                skipSteps: [],
+            'fo-zakladni': { nazev: 'FO — základní', identity: 'FO', typUzivatele: 'jednorazovy', defaultRole: 'stavebnik', skipSteps: [1, 2, 3] },
+            'osvc-zakladni': { nazev: 'OSVČ — základní', identity: 'OSVČ', typUzivatele: 'jednorazovy', defaultRole: 'stavebnik', skipSteps: [1, 2, 3] },
+            'almani-statutar': { nazev: 'ALMANI s.r.o. — statutár', identity: 'PO_ALMANI', typUzivatele: 'jednorazovy', defaultRole: 'stavebnik', skipSteps: [1, 2, 3] },
+            'prvni-zastupce': { nazev: 'První projektová — zástupce', identity: 'PO_PRVNI', typUzivatele: 'profesional', defaultRole: 'zastupce', defaultZaKoho: 'stavebnika', defaultZaklad: 'reza', skipSteps: [],
                 rezaPM: [
-                    { id: 'pm1', name: 'Jan Novák', type: 'FO', scope: 'Zástupce ve správním řízení', validity: 'do 31.12.2026' },
-                    { id: 'pm2', name: 'ABC Development s.r.o.', type: 'PO', ico: '12345678', scope: 'Zástupce ve správním řízení', validity: 'Neomezená' }
-                ],
-                headerName: 'ING. ALEŠ KRUPA',
-                headerDetail: 'OSVČ · IČO: 15104418'
+                    { id: 'pm1', name: 'Město Beroun', type: 'PO', ico: '00233129', scope: 'Zástupce', validity: 'do 31.12.2027' },
+                    { id: 'pm2', name: 'ABC Development s.r.o.', type: 'PO', ico: '12345678', scope: 'Zástupce', validity: 'Neomezená' },
+                    { id: 'pm3', name: 'Jan Novák', type: 'FO', scope: 'Zástupce', validity: 'do 31.12.2026' }
+                ]
             },
-            'zastupce-papir': {
-                nazev: 'Zástupce — papír',
-                typUzivatele: 'profesional',
-                identity: [
-                    { id: 'fo', name: 'Aleš Krupa', type: 'FO', detail: 'Nar.: 19.04.1968' }
-                ],
-                defaultIdentity: 'fo',
-                defaultRole: 'zastupce',
-                defaultZaKoho: 'stavebnika',
-                defaultZaklad: 'papir',
-                skipSteps: [],
-                headerName: 'ALEŠ KRUPA',
-                headerDetail: 'FO · Nar.: 19.04.1968'
-            },
-            'poverena-reza': {
-                nazev: 'Pověřená osoba — REZA',
-                typUzivatele: 'profesional',
-                identity: [
-                    { id: 'fo', name: 'Aleš Krupa', type: 'FO', detail: 'Nar.: 19.04.1968' }
-                ],
-                defaultIdentity: 'fo',
-                defaultRole: 'poverena',
-                defaultZaKoho: 'stavebnika',
-                defaultZaklad: 'reza',
-                skipSteps: [],
+            'osvc-zastupce-reza': { nazev: 'OSVČ — zástupce REZA', identity: 'OSVČ', typUzivatele: 'profesional', defaultRole: 'zastupce', defaultZaKoho: 'stavebnika', defaultZaklad: 'reza', skipSteps: [],
                 rezaPM: [
-                    { id: 'pm1', name: 'METROPROJEKT Praha a.s.', type: 'PO', ico: '45271895', scope: 'Pověřená osoba', validity: 'Neomezená' }
-                ],
-                headerName: 'ALEŠ KRUPA',
-                headerDetail: 'FO · Nar.: 19.04.1968'
+                    { id: 'pm1', name: 'Jan Novák', type: 'FO', scope: 'Zástupce', validity: 'do 31.12.2026' },
+                    { id: 'pm2', name: 'ABC Development s.r.o.', type: 'PO', ico: '12345678', scope: 'Zástupce', validity: 'Neomezená' }
+                ]
             },
-            'projekcni-kancelar': {
-                nazev: 'Projekční kancelář',
-                typUzivatele: 'profesional',
-                identity: [
-                    { id: 'fo', name: 'Aleš Krupa', type: 'FO', detail: 'Nar.: 19.04.1968' },
-                    { id: 'po', name: 'SUDOP PRAHA a.s.', type: 'PO', detail: 'IČO: 25793349', badge: 'Statutár' }
-                ],
-                defaultIdentity: 'po',
-                defaultRole: 'zastupce',
-                defaultZaKoho: 'stavebnika',
-                defaultZaklad: 'reza',
-                skipSteps: [],
-                rezaPM: [
-                    { id: 'pm1', name: 'Město Beroun', type: 'PO', ico: '00233129', scope: 'Zástupce ve správním řízení', validity: 'do 31.12.2027' },
-                    { id: 'pm2', name: 'ABC Development s.r.o.', type: 'PO', ico: '12345678', scope: 'Zástupce ve správním řízení', validity: 'Neomezená' },
-                    { id: 'pm3', name: 'Jan Novák', type: 'FO', scope: 'Zástupce ve správním řízení', validity: 'do 31.12.2026' }
-                ],
-                headerName: 'SUDOP PRAHA A.S.',
-                headerDetail: 'Statutár · IČO: 25793349'
+            'fo-zastupce-papir': { nazev: 'FO — zástupce papír', identity: 'FO', typUzivatele: 'profesional', defaultRole: 'zastupce', defaultZaKoho: 'stavebnika', defaultZaklad: 'papir', skipSteps: [] },
+            'fo-poverena': { nazev: 'FO — pověřená osoba', identity: 'FO', typUzivatele: 'profesional', defaultRole: 'poverena', defaultZaKoho: 'stavebnika', defaultZaklad: 'reza', skipSteps: [],
+                rezaPM: [{ id: 'pm1', name: 'METROPROJEKT Praha a.s.', type: 'PO', ico: '45271895', scope: 'Pověřená osoba', validity: 'Neomezená' }]
             },
-            'retezeni': {
-                nazev: 'Řetězení',
-                typUzivatele: 'profesional',
-                identity: [
-                    { id: 'fo', name: 'Aleš Krupa', type: 'FO', detail: 'Nar.: 19.04.1968' }
-                ],
-                defaultIdentity: 'fo',
-                defaultRole: 'poverena',
-                defaultZaKoho: 'zastupce',
-                defaultZaklad: 'reza',
-                skipSteps: [],
-                rezaPM: [
-                    { id: 'pm1', name: 'SUDOP PRAHA a.s.', type: 'PO', ico: '25793349', scope: 'Pověřená osoba', validity: 'Neomezená', zastupuje: 'ABC Development s.r.o.' }
-                ],
-                headerName: 'ALEŠ KRUPA',
-                headerDetail: 'FO · Nar.: 19.04.1968'
+            'fo-retezeni': { nazev: 'FO — řetězení', identity: 'FO', typUzivatele: 'profesional', defaultRole: 'poverena', defaultZaKoho: 'zastupce', defaultZaklad: 'reza', skipSteps: [],
+                rezaPM: [{ id: 'pm1', name: 'První projektová a.s.', type: 'PO', ico: '45678901', scope: 'Pověřená osoba', validity: 'Neomezená', zastupuje: 'ABC Development s.r.o.' }]
             }
         };
 
-        // ==========================================
-        // STATE
-        // ==========================================
-        let currentScenario = 'zakladni';
-        let currentStep = 5;
-        let formData = {
-            identity: null,
-            role: null,
-            zaKoho: null,
-            zaklad: null,
-            selectedPM: null
-        };
+        let currentScenario = 'fo-zakladni';
+        let currentStep = 4;
+        let formData = { identity: 'FO', role: 'stavebnik', zaKoho: null, zaklad: null, selectedPM: null };
 
-        // ==========================================
-        // SIMULAČNÍ PANEL
-        // ==========================================
-        function toggleSimPanel() {
-            document.getElementById('simPanel').classList.toggle('minimized');
-        }
+        function toggleSimPanel() { document.getElementById('simPanel').classList.toggle('minimized'); }
 
         function applyScenario(scenarioId) {
             currentScenario = scenarioId;
             const scenario = scenarios[scenarioId];
             if (!scenario) return;
+            const identity = identities[scenario.identity];
 
-            // Update header
-            document.getElementById('headerUserName').textContent = scenario.headerName;
-            document.getElementById('headerUserDetail').textContent = scenario.headerDetail;
+            // Update UI
+            document.getElementById('headerUserName').textContent = identity.headerName;
+            document.getElementById('headerUserDetail').textContent = identity.headerDetail;
+            document.getElementById('identityIcon').textContent = identity.icon;
+            document.getElementById('identityName').textContent = identity.name;
+            document.getElementById('identityDetail').textContent = identity.detail;
+            document.getElementById('identityBadge').textContent = identity.badge;
+            document.getElementById('identityBadge').className = 'identity-box-badge ' + identity.badgeClass;
 
-            // Update sim info
-            document.getElementById('simInfoIdentita').textContent = scenario.identity[scenario.identity.length - 1].type;
+            document.getElementById('simInfoIdentita').textContent = identity.badge;
             document.getElementById('simInfoRole').textContent = getRoleName(scenario.defaultRole);
             document.getElementById('simInfoZastupovani').textContent = scenario.defaultZaKoho ? getZaKohoName(scenario.defaultZaKoho) : '—';
             document.getElementById('simInfoTitul').textContent = scenario.defaultZaklad ? getZakladName(scenario.defaultZaklad) : '—';
 
-            // Reset form data
-            formData = {
-                identity: scenario.defaultIdentity,
-                role: scenario.defaultRole,
-                zaKoho: scenario.defaultZaKoho || null,
-                zaklad: scenario.defaultZaklad || null,
-                selectedPM: null
-            };
+            formData = { identity: scenario.identity, role: scenario.defaultRole, zaKoho: scenario.defaultZaKoho || null, zaklad: scenario.defaultZaklad || null, selectedPM: null };
 
-            // Update wizard steps
             updateWizardSteps(scenario);
 
-            // Update info boxes
-            if (scenario.typUzivatele === 'jednorazovy') {
-                document.getElementById('simplifiedInfoBox').classList.remove('hidden');
-                document.getElementById('professionalInfoBox').classList.add('hidden');
-            } else {
-                document.getElementById('simplifiedInfoBox').classList.add('hidden');
-                document.getElementById('professionalInfoBox').classList.remove('hidden');
-            }
+            document.getElementById('simplifiedInfoBox').classList.toggle('hidden', scenario.typUzivatele !== 'jednorazovy');
+            document.getElementById('professionalInfoBox').classList.toggle('hidden', scenario.typUzivatele === 'jednorazovy');
 
-            // Generate identity options for step 1
-            generateIdentityOptions(scenario);
-
-            // Generate REZA PM list for step 4
-            if (scenario.rezaPM) {
-                generateRezaPMList(scenario.rezaPM);
-            }
-
-            // Show/hide cards based on skip steps
+            if (scenario.rezaPM) generateRezaPMList(scenario.rezaPM);
             updateCardsVisibility(scenario);
-
-            // Update summary
             updateSummary();
-
-            // Show toast
             showSimToast(`Scénář: ${scenario.nazev}`);
 
-            // Update URL
             const url = new URL(window.location);
             url.searchParams.set('scenar', scenarioId);
             history.replaceState(null, '', url);
         }
 
         function updateWizardSteps(scenario) {
-            for (let i = 1; i <= 5; i++) {
+            for (let i = 1; i <= 4; i++) {
                 const step = document.getElementById(`wizardStep${i}`);
                 step.classList.remove('active', 'completed', 'skipped');
-                
-                if (scenario.skipSteps.includes(i)) {
-                    step.classList.add('skipped');
-                } else if (i < currentStep) {
-                    step.classList.add('completed');
-                } else if (i === currentStep) {
-                    step.classList.add('active');
-                }
+                if (scenario.skipSteps.includes(i)) step.classList.add('skipped');
+                else if (i < currentStep) step.classList.add('completed');
+                else if (i === currentStep) step.classList.add('active');
             }
         }
 
         function updateCardsVisibility(scenario) {
-            // Hide all cards first
-            for (let i = 1; i <= 4; i++) {
-                document.getElementById(`step${i}Card`).classList.add('hidden');
-            }
+            for (let i = 1; i <= 3; i++) document.getElementById(`step${i}Card`).classList.add('hidden');
+            document.getElementById('step4Card').classList.remove('hidden');
 
-            // Show step 5
-            document.getElementById('step5Card').classList.remove('hidden');
+            const backBtn = document.getElementById('backFromStep4');
+            backBtn.style.display = scenario.skipSteps.length < 3 ? 'inline-flex' : 'none';
+            document.getElementById('backPlaceholder').style.display = scenario.skipSteps.length < 3 ? 'none' : 'block';
 
-            // Show back button if not all steps are skipped
-            const backBtn = document.getElementById('backFromStep5');
-            if (scenario.skipSteps.length < 4) {
-                backBtn.style.display = 'inline-flex';
-                document.getElementById('backPlaceholder').style.display = 'none';
-            } else {
-                backBtn.style.display = 'none';
-                document.getElementById('backPlaceholder').style.display = 'block';
-            }
-
-            // Determine first active step
             if (scenario.typUzivatele === 'profesional') {
                 currentStep = 1;
-                for (let i = 1; i <= 4; i++) {
-                    if (!scenario.skipSteps.includes(i)) {
-                        currentStep = i;
-                        break;
-                    }
-                }
+                for (let i = 1; i <= 3; i++) { if (!scenario.skipSteps.includes(i)) { currentStep = i; break; } }
                 goToStep(currentStep);
             } else {
-                currentStep = 5;
+                currentStep = 4;
             }
-        }
-
-        function generateIdentityOptions(scenario) {
-            const container = document.getElementById('identityOptions');
-            container.innerHTML = '';
-            
-            scenario.identity.forEach(id => {
-                const selected = id.id === scenario.defaultIdentity ? 'selected' : '';
-                const badge = id.badge ? `<span class="radio-option-badge new">${id.badge}</span>` : '';
-                
-                container.innerHTML += `
-                    <label class="radio-option ${selected}" onclick="selectIdentity('${id.id}')">
-                        <input type="radio" name="identity" value="${id.id}" ${selected ? 'checked' : ''}>
-                        <div class="radio-option-content">
-                            <div class="radio-option-title">${id.name} ${badge}</div>
-                            <div class="radio-option-description">${id.type} · ${id.detail}</div>
-                        </div>
-                    </label>
-                `;
-            });
         }
 
         function generateRezaPMList(pmList) {
             const container = document.getElementById('rezaPmList');
-            container.innerHTML = '';
-            
-            pmList.forEach(pm => {
-                const icoText = pm.ico ? ` · IČO: ${pm.ico}` : '';
-                const zastupujeText = pm.zastupuje ? `<br><small style="color: #666;">→ zastupuje: ${pm.zastupuje}</small>` : '';
-                
-                container.innerHTML += `
-                    <div class="reza-pm-item" onclick="selectRezaPM('${pm.id}', '${pm.name}')">
-                        <input type="radio" name="rezapm" value="${pm.id}">
-                        <div class="reza-pm-item-content">
-                            <div class="reza-pm-item-name">${pm.name}</div>
-                            <div class="reza-pm-item-detail">${pm.type}${icoText} · Platnost: ${pm.validity}${zastupujeText}</div>
-                        </div>
-                        <span class="reza-pm-item-scope">${pm.scope}</span>
+            container.innerHTML = pmList.map(pm => `
+                <div class="reza-pm-item" onclick="selectRezaPM('${pm.id}', '${pm.name}')">
+                    <input type="radio" name="rezapm" value="${pm.id}">
+                    <div class="reza-pm-item-content">
+                        <div class="reza-pm-item-name">${pm.name}</div>
+                        <div class="reza-pm-item-detail">${pm.type}${pm.ico ? ' · IČO: ' + pm.ico : ''} · Platnost: ${pm.validity}${pm.zastupuje ? '<br><small style="color:#666">→ zastupuje: ' + pm.zastupuje + '</small>' : ''}</div>
                     </div>
-                `;
-            });
+                    <span class="reza-pm-item-scope">${pm.scope}</span>
+                </div>
+            `).join('');
         }
 
-        // ==========================================
-        // FORM NAVIGATION
-        // ==========================================
         function goToStep(step) {
-            const scenario = scenarios[currentScenario];
-            
-            // Hide all cards
-            for (let i = 1; i <= 5; i++) {
-                document.getElementById(`step${i}Card`).classList.add('hidden');
-            }
-            
-            // Show target card
+            for (let i = 1; i <= 4; i++) document.getElementById(`step${i}Card`).classList.add('hidden');
             document.getElementById(`step${step}Card`).classList.remove('hidden');
-            
-            // Update wizard
             currentStep = step;
-            updateWizardSteps(scenario);
+            updateWizardSteps(scenarios[currentScenario]);
         }
 
         function completeStep(step) {
             const scenario = scenarios[currentScenario];
-            
-            // Find next non-skipped step
             let nextStep = step + 1;
-            while (nextStep <= 5 && scenario.skipSteps.includes(nextStep)) {
-                nextStep++;
-            }
-            
+            while (nextStep <= 4 && scenario.skipSteps.includes(nextStep)) nextStep++;
             goToStep(nextStep);
             updateSummary();
         }
 
-        function selectIdentity(id) {
-            formData.identity = id;
-            document.querySelectorAll('#identityOptions .radio-option').forEach(opt => {
-                opt.classList.remove('selected');
-                if (opt.querySelector(`input[value="${id}"]`)) {
-                    opt.classList.add('selected');
-                }
-            });
-        }
-
         function selectRole(role) {
             formData.role = role;
-            document.querySelectorAll('#step2Card .radio-option').forEach(opt => {
-                opt.classList.remove('selected');
-                if (opt.querySelector(`input[value="${role}"]`)) {
-                    opt.classList.add('selected');
-                }
+            document.querySelectorAll('#step1Card .radio-option').forEach(opt => {
+                opt.classList.toggle('selected', opt.querySelector(`input[value="${role}"]`));
             });
         }
 
         function selectZaKoho(zaKoho) {
             formData.zaKoho = zaKoho;
-            document.querySelectorAll('#step3Card .radio-option').forEach(opt => {
-                opt.classList.remove('selected');
-                if (opt.querySelector(`input[value="${zaKoho}"]`)) {
-                    opt.classList.add('selected');
-                }
+            document.querySelectorAll('#step2Card .radio-option').forEach(opt => {
+                opt.classList.toggle('selected', opt.querySelector(`input[value="${zaKoho}"]`));
             });
         }
 
         function selectZaklad(zaklad) {
             formData.zaklad = zaklad;
-            document.querySelectorAll('#step4Card .radio-group > .radio-option').forEach(opt => {
-                opt.classList.remove('selected');
-                if (opt.querySelector(`input[value="${zaklad}"]`)) {
-                    opt.classList.add('selected');
-                }
+            document.querySelectorAll('#step3Card .radio-group > .radio-option').forEach(opt => {
+                opt.classList.toggle('selected', opt.querySelector(`input[value="${zaklad}"]`));
             });
-            
-            // Show/hide boxes
             document.getElementById('rezaSelectBox').classList.toggle('show', zaklad === 'reza');
             document.getElementById('paperPmBox').classList.toggle('show', zaklad === 'papir');
         }
@@ -1639,121 +1339,63 @@
         function selectRezaPM(id, name) {
             formData.selectedPM = { id, name };
             document.querySelectorAll('.reza-pm-item').forEach(item => {
-                item.classList.remove('selected');
-                if (item.querySelector(`input[value="${id}"]`)) {
-                    item.classList.add('selected');
-                }
+                item.classList.toggle('selected', item.querySelector(`input[value="${id}"]`));
             });
         }
 
         function selectZamer(type) {
-            document.querySelectorAll('#step5Card .radio-group .radio-option').forEach(opt => {
-                opt.classList.remove('selected');
-                if (opt.querySelector(`input[value="${type}"]`)) {
-                    opt.classList.add('selected');
-                }
+            document.querySelectorAll('#step4Card .radio-group .radio-option').forEach(opt => {
+                opt.classList.toggle('selected', opt.querySelector(`input[value="${type}"]`));
             });
         }
 
         function updateSummary() {
-            const scenario = scenarios[currentScenario];
-            const identity = scenario.identity.find(i => i.id === formData.identity) || scenario.identity[0];
-            
-            document.getElementById('summaryIdentity').textContent = `${identity.name} (${identity.type})`;
+            const identity = identities[formData.identity];
+            document.getElementById('summaryIdentity').textContent = `${identity.name} (${identity.badge})`;
             document.getElementById('summaryRole').textContent = getRoleName(formData.role);
-            
-            // Show/hide za koho row
+
             const zaKohoRow = document.getElementById('summaryZaKohoRow');
             if (formData.role !== 'stavebnik' && formData.zaKoho) {
                 zaKohoRow.style.display = 'flex';
                 document.getElementById('summaryZaKoho').textContent = getZaKohoName(formData.zaKoho);
-            } else {
-                zaKohoRow.style.display = 'none';
-            }
-            
-            // Show/hide zaklad row
+            } else zaKohoRow.style.display = 'none';
+
             const zakladRow = document.getElementById('summaryZakladRow');
             if (formData.role !== 'stavebnik' && formData.zaklad) {
                 zakladRow.style.display = 'flex';
                 let zakladText = getZakladName(formData.zaklad);
-                if (formData.zaklad === 'reza' && formData.selectedPM) {
-                    zakladText += ` → ${formData.selectedPM.name}`;
-                }
+                if (formData.zaklad === 'reza' && formData.selectedPM) zakladText += ` → ${formData.selectedPM.name}`;
                 const badge = formData.zaklad === 'reza' ? '<span class="badge reza">REZA</span>' : '<span class="badge paper">Papír</span>';
                 document.getElementById('summaryZaklad').innerHTML = zakladText + ' ' + badge;
-            } else {
-                zakladRow.style.display = 'none';
-            }
+            } else zakladRow.style.display = 'none';
         }
 
-        function continueToForm() {
-            alert('Pokračování na formulář žádosti...\n\nV reálné aplikaci by se zde zobrazil formulář žádosti o povolení stavby.');
-        }
+        function continueToForm() { alert('Pokračování na formulář žádosti...'); }
 
-        // ==========================================
-        // HELPERS
-        // ==========================================
-        function getRoleName(role) {
-            const names = {
-                'stavebnik': 'Stavebník',
-                'zastupce': 'Zástupce',
-                'poverena': 'Pověřená osoba'
-            };
-            return names[role] || '—';
-        }
+        function getRoleName(role) { return { 'stavebnik': 'Stavebník', 'zastupce': 'Zástupce', 'poverena': 'Pověřená osoba' }[role] || '—'; }
+        function getZaKohoName(zaKoho) { return { 'stavebnika': 'Stavebníka (přímo)', 'zastupce': 'Zástupce stavebníka' }[zaKoho] || '—'; }
+        function getZakladName(zaklad) { return { 'reza': 'Digitální PM z REZA', 'papir': 'Papírová PM' }[zaklad] || '—'; }
 
-        function getZaKohoName(zaKoho) {
-            const names = {
-                'stavebnika': 'Stavebníka (přímo)',
-                'zastupce': 'Zástupce stavebníka'
-            };
-            return names[zaKoho] || '—';
-        }
-
-        function getZakladName(zaklad) {
-            const names = {
-                'reza': 'Digitální PM z REZA',
-                'papir': 'Papírová PM'
-            };
-            return names[zaklad] || '—';
-        }
-
-        function copyScenarioUrl() {
-            navigator.clipboard.writeText(window.location.href).then(() => {
-                showSimToast('URL zkopírována');
-            });
-        }
-
-        function resetScenario() {
-            document.querySelector('input[name="scenar"][value="zakladni"]').checked = true;
-            applyScenario('zakladni');
-        }
+        function copyScenarioUrl() { navigator.clipboard.writeText(window.location.href).then(() => showSimToast('URL zkopírována')); }
+        function resetScenario() { document.querySelector('input[name="scenar"][value="fo-zakladni"]').checked = true; applyScenario('fo-zakladni'); }
 
         function showSimToast(message) {
             const existing = document.querySelector('.sim-toast');
             if (existing) existing.remove();
-            
             const toast = document.createElement('div');
             toast.className = 'sim-toast';
             toast.textContent = message;
             document.body.appendChild(toast);
-            
             setTimeout(() => toast.remove(), 2000);
         }
 
-        // ==========================================
-        // INIT
-        // ==========================================
         document.addEventListener('DOMContentLoaded', function() {
-            // Check URL for scenario
             const urlParams = new URLSearchParams(window.location.search);
             const scenarFromUrl = urlParams.get('scenar');
-            
             if (scenarFromUrl && scenarios[scenarFromUrl]) {
                 currentScenario = scenarFromUrl;
                 document.querySelector(`input[name="scenar"][value="${scenarFromUrl}"]`).checked = true;
             }
-            
             applyScenario(currentScenario);
         });
     </script>
