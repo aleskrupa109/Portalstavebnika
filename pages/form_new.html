@@ -233,6 +233,18 @@
         .gov-detail-tag { display: inline-block; padding: 3px 10px; border-radius: 4px; font-size: 12px; font-weight: 500; }
         .gov-detail-tag-povereni { background: var(--gov-primary-100); color: var(--gov-primary-700); }
         .gov-detail-tag-plna-moc { background: #f3e5f5; color: #7b1fa2; }
+        .gov-detail-tag-postoupena { background: #fff3e0; color: #e65100; }
+        .gov-detail-zamery-list { display: flex; flex-direction: column; gap: 6px; }
+        .gov-detail-zamer { display: flex; align-items: center; gap: 8px; padding: 6px 10px; background: var(--gov-neutral-50); border-radius: var(--gov-radius); font-size: 13px; }
+        .gov-detail-zamer-id { color: var(--gov-primary-600); font-weight: 500; }
+        .gov-detail-zamer-nazev { color: var(--gov-neutral-700); }
+        .gov-detail-chain { padding: 12px; background: #fff3e0; border-radius: var(--gov-radius); border-left: 3px solid #e65100; }
+        .gov-detail-chain-title { font-size: 12px; font-weight: 600; color: #e65100; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .gov-detail-chain-item { font-size: 13px; color: var(--gov-neutral-700); }
+        .gov-detail-chain-item strong { color: var(--gov-neutral-900); }
+        .gov-reza-card-postoupena { display: none; align-items: center; gap: 4px; font-size: 10px; color: #e65100; background: #fff3e0; padding: 2px 6px; border-radius: 4px; }
+        .gov-reza-card-postoupena.visible { display: inline-flex; }
+        .gov-reza-card-postoupena svg { width: 12px; height: 12px; }
         .gov-modal-footer { padding: 16px 24px; border-top: 1px solid var(--gov-neutral-100); display: flex; justify-content: flex-end; gap: 12px; }
 
         .sim-panel { position: fixed; bottom: 20px; right: 20px; width: 280px; background: #1a1a2e; border-radius: 12px; box-shadow: 0 8px 32px rgba(0,0,0,0.3); z-index: 9999; overflow: hidden; }
@@ -427,19 +439,19 @@
         var rezaData = {
             'FO': [],
             'OSVC': [
-                { id: 'reza1', zmocnitel: { name: 'Jan Novak', birthDate: '1985-03-15', address: 'Kvetna 12, Praha 3' }, typZmocneni: 'plna_moc', platnostDo: '2026-12-31', udeleno: '2024-01-15' },
-                { id: 'reza2', zmocnitel: { name: 'ABC Development s.r.o.', ico: '12345678', address: 'Prazska 123, Praha 1' }, typZmocneni: 'povereni', platnostDo: null, udeleno: '2023-06-01' }
+                { id: 'reza1', zmocnitel: { name: 'Jan Novak', birthDate: '1985-03-15', address: 'Kvetna 12, Praha 3' }, typZmocneni: 'plna_moc', platnostDo: '2026-12-31', udeleno: '2024-01-15', rolesah: 'general', zamery: null, jePostoupena: false },
+                { id: 'reza2', zmocnitel: { name: 'ABC Development s.r.o.', ico: '12345678', address: 'Prazska 123, Praha 1' }, typZmocneni: 'povereni', platnostDo: null, udeleno: '2023-06-01', rozsah: 'general', zamery: null, jePostoupena: false }
             ],
             'PO_ALMANI': [],
             'PO_PRVNI': [
-                { id: 'reza1', zmocnitel: { name: 'Mesto Beroun', ico: '00233129', address: 'Husovo nam. 68, Beroun' }, typZmocneni: 'plna_moc', platnostDo: '2027-12-31', udeleno: '2024-01-01' },
-                { id: 'reza2', zmocnitel: { name: 'ABC Development s.r.o.', ico: '12345678', address: 'Prazska 123, Praha 1' }, typZmocneni: 'plna_moc', platnostDo: null, udeleno: '2023-08-15' },
-                { id: 'reza3', zmocnitel: { name: 'Jan Novak', birthDate: '1985-03-15', address: 'Kvetna 12, Praha 3' }, typZmocneni: 'povereni', platnostDo: '2026-12-31', udeleno: '2024-02-01' },
-                { id: 'reza4', zmocnitel: { name: 'XYZ Stavby a.s.', ico: '87654321', address: 'Brnenska 456, Brno' }, typZmocneni: 'plna_moc', platnostDo: '2025-06-30', udeleno: '2023-07-01' },
-                { id: 'reza5', zmocnitel: { name: 'Obec Karlstejn', ico: '00234001', address: 'Karlstejn 185' }, typZmocneni: 'povereni', platnostDo: '2026-03-15', udeleno: '2024-03-15' },
-                { id: 'reza6', zmocnitel: { name: 'Marie Svobodova', birthDate: '1990-07-22', address: 'Lipova 45, Plzen' }, typZmocneni: 'plna_moc', platnostDo: '2025-12-31', udeleno: '2024-01-20' },
-                { id: 'reza7', zmocnitel: { name: 'Technicke sluzby Kladno s.r.o.', ico: '25612345', address: 'Prumyslova 789, Kladno' }, typZmocneni: 'povereni', platnostDo: null, udeleno: '2023-09-01' },
-                { id: 'reza8', zmocnitel: { name: 'Petr Dvorak', birthDate: '1978-11-03', address: 'Zahradni 56, Hradec Kralove' }, typZmocneni: 'plna_moc', platnostDo: '2026-08-15', udeleno: '2024-02-15' }
+                { id: 'reza1', zmocnitel: { name: 'Mesto Beroun', ico: '00233129', address: 'Husovo nam. 68, Beroun' }, typZmocneni: 'plna_moc', platnostDo: '2027-12-31', udeleno: '2024-01-01', rozsah: 'general', zamery: null, jePostoupena: false },
+                { id: 'reza2', zmocnitel: { name: 'ABC Development s.r.o.', ico: '12345678', address: 'Prazska 123, Praha 1' }, typZmocneni: 'plna_moc', platnostDo: null, udeleno: '2023-08-15', rozsah: 'general', zamery: null, jePostoupena: false },
+                { id: 'reza3', zmocnitel: { name: 'Jan Novak', birthDate: '1985-03-15', address: 'Kvetna 12, Praha 3' }, typZmocneni: 'povereni', platnostDo: '2026-12-31', udeleno: '2024-02-01', rozsah: 'general', zamery: null, jePostoupena: false },
+                { id: 'reza4', zmocnitel: { name: 'XYZ Stavby a.s.', ico: '87654321', address: 'Brnenska 456, Brno' }, typZmocneni: 'plna_moc', platnostDo: '2025-06-30', udeleno: '2023-07-01', rozsah: 'limited', zamery: [{ id: 'Z-2024-001', nazev: 'Novostavba RD Beroun' }, { id: 'Z-2024-002', nazev: 'Rekonstrukce bytoveho domu' }], jePostoupena: false },
+                { id: 'reza5', zmocnitel: { name: 'Obec Karlstejn', ico: '00234001', address: 'Karlstejn 185' }, typZmocneni: 'povereni', platnostDo: '2026-03-15', udeleno: '2024-03-15', rozsah: 'general', zamery: null, jePostoupena: false },
+                { id: 'reza6', zmocnitel: { name: 'Marie Svobodova', birthDate: '1990-07-22', address: 'Lipova 45, Plzen' }, typZmocneni: 'plna_moc', platnostDo: '2025-12-31', udeleno: '2024-01-20', rozsah: 'limited', zamery: [{ id: 'Z-2023-089', nazev: 'Stavba garaze - Plzen' }], jePostoupena: false },
+                { id: 'reza7', zmocnitel: { name: 'METROPROJEKT Praha a.s.', ico: '25793349', address: 'Argentinska 1621/4, Praha 7' }, typZmocneni: 'plna_moc', platnostDo: '2026-06-30', udeleno: '2024-02-01', rozsah: 'general', zamery: null, jePostoupena: true, puvodniZmocnitel: { name: 'Mesto Beroun', ico: '00233129' } },
+                { id: 'reza8', zmocnitel: { name: 'Ing. Tomas Dvorak', birthDate: '1975-08-12', address: 'Sokolovska 78, Praha 8' }, typZmocneni: 'plna_moc', platnostDo: '2025-12-31', udeleno: '2024-03-01', rozsah: 'limited', zamery: [{ id: 'Z-2024-015', nazev: 'Administrativni budova Karlin' }], jePostoupena: true, puvodniZmocnitel: { name: 'ABC Development s.r.o.', ico: '12345678' } }
             ]
         };
 
@@ -581,9 +593,14 @@
                 var detail = z.zmocnitel.ico ? 'ICO: ' + z.zmocnitel.ico : 'nar. ' + formatDate(z.zmocnitel.birthDate);
                 var validity = z.platnostDo ? 'Platnost do: ' + formatDate(z.platnostDo) : 'Neomezena platnost';
                 var isSelected = appState.selectedReza && appState.selectedReza.id === z.id;
+                var zameryText = z.zamery && z.zamery.length > 0 ? z.zamery.length + ' zamer' + (z.zamery.length > 1 ? 'y' : '') : '';
                 html += '<div class="gov-reza-card ' + (isSelected ? 'selected' : '') + '" data-reza-id="' + z.id + '" onclick="selectReza(\'' + z.id + '\')">';
-                html += '<div class="gov-reza-card-header"><span class="gov-reza-card-name">' + z.zmocnitel.name + '</span><div class="gov-reza-card-badges"><span class="gov-tag gov-tag-' + typClass + '">' + typLabel + '</span><div class="gov-reza-card-check"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg></div></div></div>';
-                html += '<div class="gov-reza-card-details">' + detail + '</div>';
+                html += '<div class="gov-reza-card-header"><span class="gov-reza-card-name">' + z.zmocnitel.name + '</span><div class="gov-reza-card-badges">';
+                if (z.jePostoupena) {
+                    html += '<span class="gov-reza-card-postoupena visible"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>Postoupena</span>';
+                }
+                html += '<span class="gov-tag gov-tag-' + typClass + '">' + typLabel + '</span><div class="gov-reza-card-check"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg></div></div></div>';
+                html += '<div class="gov-reza-card-details">' + detail + (zameryText ? ' · ' + zameryText : '') + '</div>';
                 html += '<div class="gov-reza-card-validity"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg><span>' + validity + '</span></div>';
                 html += '<div class="gov-reza-card-actions"><button type="button" class="gov-reza-detail-btn" onclick="event.stopPropagation(); showDetail(\'' + z.id + '\')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>Zobrazit detail</button></div>';
                 html += '</div>';
@@ -607,7 +624,20 @@
             var typClass = z.typZmocneni === 'povereni' ? 'povereni' : 'plna-moc';
             var isCompany = !!z.zmocnitel.ico;
             var validity = z.platnostDo ? formatDate(z.platnostDo) : 'Casove neomezena';
-            var html = '<div class="gov-detail-section"><div class="gov-detail-section-title">Udaje o zmocniteli</div><div class="gov-detail-grid">';
+            var html = '';
+            
+            // Sekce: Retezec zastoupeni (pokud je postoupena)
+            if (z.jePostoupena && z.puvodniZmocnitel) {
+                html += '<div class="gov-detail-section"><div class="gov-detail-section-title">Retezec zastoupeni</div>';
+                html += '<div class="gov-detail-chain"><div class="gov-detail-chain-title">Postoupena plna moc</div>';
+                html += '<div class="gov-detail-chain-item"><strong>Stavebnik:</strong> ' + z.puvodniZmocnitel.name + (z.puvodniZmocnitel.ico ? ' (ICO: ' + z.puvodniZmocnitel.ico + ')' : '') + '</div>';
+                html += '<div class="gov-detail-chain-item" style="margin-top:4px"><strong>Zmocnil:</strong> ' + z.zmocnitel.name + '</div>';
+                html += '<div class="gov-detail-chain-item" style="margin-top:4px"><strong>Ktery postoupil na:</strong> Vas</div>';
+                html += '</div></div>';
+            }
+            
+            // Sekce: Udaje o zmocniteli
+            html += '<div class="gov-detail-section"><div class="gov-detail-section-title">Udaje o zmocniteli</div><div class="gov-detail-grid">';
             html += '<div class="gov-detail-row"><span class="gov-detail-label">Nazev:</span><span class="gov-detail-value">' + z.zmocnitel.name + '</span></div>';
             if (isCompany) {
                 html += '<div class="gov-detail-row"><span class="gov-detail-label">ICO:</span><span class="gov-detail-value">' + z.zmocnitel.ico + '</span></div>';
@@ -615,14 +645,29 @@
                 html += '<div class="gov-detail-row"><span class="gov-detail-label">Datum narozeni:</span><span class="gov-detail-value">' + formatDate(z.zmocnitel.birthDate) + '</span></div>';
             }
             html += '<div class="gov-detail-row"><span class="gov-detail-label">Adresa:</span><span class="gov-detail-value">' + (z.zmocnitel.address || '-') + '</span></div>';
+            if (z.jePostoupena) {
+                html += '<div class="gov-detail-row"><span class="gov-detail-label">Role zmocnitele:</span><span class="gov-detail-value"><span class="gov-detail-tag gov-detail-tag-postoupena">Zastupce stavebnika</span></span></div>';
+            }
             html += '</div></div>';
+            
+            // Sekce: Parametry zmocneni
             html += '<div class="gov-detail-section"><div class="gov-detail-section-title">Parametry zmocneni</div><div class="gov-detail-grid">';
             html += '<div class="gov-detail-row"><span class="gov-detail-label">Typ zmocneni:</span><span class="gov-detail-value"><span class="gov-detail-tag gov-detail-tag-' + typClass + '">' + typLabel + '</span></span></div>';
-            html += '<div class="gov-detail-row"><span class="gov-detail-label">Rozsah:</span><span class="gov-detail-value">Obecne zmocneni</span></div>';
+            html += '<div class="gov-detail-row"><span class="gov-detail-label">Rozsah:</span><span class="gov-detail-value">' + (z.zamery && z.zamery.length > 0 ? 'Omezeno na vybrane zamery' : 'Obecne zmocneni') + '</span></div>';
             html += '<div class="gov-detail-row"><span class="gov-detail-label">Platnost:</span><span class="gov-detail-value">' + validity + '</span></div>';
-            html += '<div class="gov-detail-row"><span class="gov-detail-label">Zamery:</span><span class="gov-detail-value">Bez omezeni</span></div>';
             html += '<div class="gov-detail-row"><span class="gov-detail-label">Datum udeleni:</span><span class="gov-detail-value">' + formatDate(z.udeleno) + '</span></div>';
             html += '</div></div>';
+            
+            // Sekce: Zamery (pokud je omezene)
+            if (z.zamery && z.zamery.length > 0) {
+                html += '<div class="gov-detail-section"><div class="gov-detail-section-title">Vybrane zamery (' + z.zamery.length + ')</div>';
+                html += '<div class="gov-detail-zamery-list">';
+                for (var j = 0; j < z.zamery.length; j++) {
+                    html += '<div class="gov-detail-zamer"><span class="gov-detail-zamer-id">' + z.zamery[j].id + '</span><span class="gov-detail-zamer-nazev">' + z.zamery[j].nazev + '</span></div>';
+                }
+                html += '</div></div>';
+            }
+            
             document.getElementById('rezaDetailBody').innerHTML = html;
             document.getElementById('rezaDetailModal').classList.add('visible');
         }
@@ -707,7 +752,19 @@
                 if (appState.selectedReza) {
                     var reza = appState.selectedReza;
                     var typLabel = reza.typZmocneni === 'povereni' ? 'Poverena osoba' : 'Zastupce';
-                    summary = 'Vystupujete jako: <strong>' + typLabel + '</strong><span class="gov-summary-badge gov-summary-badge-reza">REZA</span><div class="gov-summary-reza-detail"><strong>' + reza.zmocnitel.name + '</strong><br>' + (reza.zmocnitel.ico ? 'ICO: ' + reza.zmocnitel.ico : 'nar. ' + formatDate(reza.zmocnitel.birthDate)) + '</div>';
+                    summary = 'Vystupujete jako: <strong>' + typLabel + '</strong><span class="gov-summary-badge gov-summary-badge-reza">REZA</span>';
+                    if (reza.jePostoupena) {
+                        summary += '<span class="gov-summary-badge" style="background:#fff3e0;color:#e65100;">Postoupena PM</span>';
+                    }
+                    summary += '<div class="gov-summary-reza-detail"><strong>' + reza.zmocnitel.name + '</strong>';
+                    if (reza.jePostoupena && reza.puvodniZmocnitel) {
+                        summary += '<br><span style="font-size:12px;color:#666;">zastupuje: ' + reza.puvodniZmocnitel.name + '</span>';
+                    }
+                    summary += '<br>' + (reza.zmocnitel.ico ? 'ICO: ' + reza.zmocnitel.ico : 'nar. ' + formatDate(reza.zmocnitel.birthDate));
+                    if (reza.zamery && reza.zamery.length > 0) {
+                        summary += '<br><span style="font-size:12px;color:#e65100;">Omezeno na ' + reza.zamery.length + ' zamer' + (reza.zamery.length > 1 ? 'y' : '') + '</span>';
+                    }
+                    summary += '</div>';
                     btnText.textContent = 'Pokracovat na udaje o zameru'; validationWarning.classList.remove('visible');
                 } else {
                     summary = 'Vystupujete jako: <strong>-</strong><div class="gov-summary-waiting"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"></path></svg>Vyberte zmocneni ze seznamu vyse</div>';
