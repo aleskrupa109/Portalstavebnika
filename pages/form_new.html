@@ -218,16 +218,22 @@
 
         .gov-modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 2000; align-items: center; justify-content: center; padding: 20px; }
         .gov-modal-overlay.visible { display: flex; }
-        .gov-modal { background: var(--gov-neutral-0); border-radius: var(--gov-radius-lg); max-width: 500px; width: 100%; max-height: 90vh; overflow-y: auto; }
-        .gov-modal-header { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; border-bottom: 1px solid var(--gov-neutral-100); }
-        .gov-modal-title { font-size: 16px; font-weight: 600; color: var(--gov-neutral-900); }
+        .gov-modal { background: var(--gov-neutral-0); border-radius: var(--gov-radius-lg); max-width: 560px; width: 100%; max-height: 90vh; overflow-y: auto; }
+        .gov-modal-header { display: flex; align-items: center; justify-content: space-between; padding: 20px 24px; border-bottom: 1px solid var(--gov-neutral-100); }
+        .gov-modal-title { font-size: 18px; font-weight: 600; color: var(--gov-neutral-900); }
         .gov-modal-close { background: none; border: none; font-size: 24px; color: var(--gov-neutral-400); cursor: pointer; }
-        .gov-modal-body { padding: 20px; }
-        .gov-detail-row { display: flex; padding: 10px 0; border-bottom: 1px solid var(--gov-neutral-100); }
-        .gov-detail-row:last-child { border-bottom: none; }
-        .gov-detail-label { width: 140px; flex-shrink: 0; font-size: 13px; color: var(--gov-neutral-500); }
-        .gov-detail-value { font-size: 13px; color: var(--gov-neutral-900); font-weight: 500; }
-        .gov-modal-footer { padding: 16px 20px; border-top: 1px solid var(--gov-neutral-100); display: flex; justify-content: flex-end; }
+        .gov-modal-body { padding: 24px; }
+        .gov-detail-section { margin-bottom: 24px; }
+        .gov-detail-section:last-of-type { margin-bottom: 0; }
+        .gov-detail-section-title { font-size: 14px; font-weight: 600; color: var(--gov-primary-600); margin-bottom: 12px; padding-bottom: 8px; border-bottom: 2px solid var(--gov-primary-100); }
+        .gov-detail-grid { display: flex; flex-direction: column; gap: 10px; }
+        .gov-detail-row { display: flex; gap: 16px; }
+        .gov-detail-label { min-width: 140px; flex-shrink: 0; font-size: 14px; color: var(--gov-neutral-500); }
+        .gov-detail-value { font-size: 14px; color: var(--gov-neutral-900); font-weight: 500; }
+        .gov-detail-tag { display: inline-block; padding: 3px 10px; border-radius: 4px; font-size: 12px; font-weight: 500; }
+        .gov-detail-tag-povereni { background: var(--gov-primary-100); color: var(--gov-primary-700); }
+        .gov-detail-tag-plna-moc { background: #f3e5f5; color: #7b1fa2; }
+        .gov-modal-footer { padding: 16px 24px; border-top: 1px solid var(--gov-neutral-100); display: flex; justify-content: flex-end; gap: 12px; }
 
         .sim-panel { position: fixed; bottom: 20px; right: 20px; width: 280px; background: #1a1a2e; border-radius: 12px; box-shadow: 0 8px 32px rgba(0,0,0,0.3); z-index: 9999; overflow: hidden; }
         .sim-panel.minimized .sim-panel-body { display: none; }
@@ -597,16 +603,26 @@
             for (var i = 0; i < appState.allRezaData.length; i++) { if (appState.allRezaData[i].id === id) { z = appState.allRezaData[i]; break; } }
             if (!z) return;
             appState.modalRezaId = id;
-            var typLabel = z.typZmocneni === 'povereni' ? 'Povereni' : 'Plna moc';
-            var detail = z.zmocnitel.ico ? 'ICO: ' + z.zmocnitel.ico : 'Datum narozeni: ' + formatDate(z.zmocnitel.birthDate);
-            var validity = z.platnostDo ? formatDate(z.platnostDo) : 'Neomezena';
-            var html = '<div class="gov-detail-row"><span class="gov-detail-label">Zmocnitel</span><span class="gov-detail-value">' + z.zmocnitel.name + '</span></div>';
-            html += '<div class="gov-detail-row"><span class="gov-detail-label">Identifikace</span><span class="gov-detail-value">' + detail + '</span></div>';
-            html += '<div class="gov-detail-row"><span class="gov-detail-label">Adresa</span><span class="gov-detail-value">' + (z.zmocnitel.address || '-') + '</span></div>';
-            html += '<div class="gov-detail-row"><span class="gov-detail-label">Typ zmocneni</span><span class="gov-detail-value">' + typLabel + '</span></div>';
-            html += '<div class="gov-detail-row"><span class="gov-detail-label">Rozsah</span><span class="gov-detail-value">Obecne zmocneni</span></div>';
-            html += '<div class="gov-detail-row"><span class="gov-detail-label">Platnost do</span><span class="gov-detail-value">' + validity + '</span></div>';
-            html += '<div class="gov-detail-row"><span class="gov-detail-label">Udeleno</span><span class="gov-detail-value">' + formatDate(z.udeleno) + '</span></div>';
+            var typLabel = z.typZmocneni === 'povereni' ? 'Poverena osoba' : 'Zastupce ve spravnim rizeni';
+            var typClass = z.typZmocneni === 'povereni' ? 'povereni' : 'plna-moc';
+            var isCompany = !!z.zmocnitel.ico;
+            var validity = z.platnostDo ? formatDate(z.platnostDo) : 'Casove neomezena';
+            var html = '<div class="gov-detail-section"><div class="gov-detail-section-title">Udaje o zmocniteli</div><div class="gov-detail-grid">';
+            html += '<div class="gov-detail-row"><span class="gov-detail-label">Nazev:</span><span class="gov-detail-value">' + z.zmocnitel.name + '</span></div>';
+            if (isCompany) {
+                html += '<div class="gov-detail-row"><span class="gov-detail-label">ICO:</span><span class="gov-detail-value">' + z.zmocnitel.ico + '</span></div>';
+            } else {
+                html += '<div class="gov-detail-row"><span class="gov-detail-label">Datum narozeni:</span><span class="gov-detail-value">' + formatDate(z.zmocnitel.birthDate) + '</span></div>';
+            }
+            html += '<div class="gov-detail-row"><span class="gov-detail-label">Adresa:</span><span class="gov-detail-value">' + (z.zmocnitel.address || '-') + '</span></div>';
+            html += '</div></div>';
+            html += '<div class="gov-detail-section"><div class="gov-detail-section-title">Parametry zmocneni</div><div class="gov-detail-grid">';
+            html += '<div class="gov-detail-row"><span class="gov-detail-label">Typ zmocneni:</span><span class="gov-detail-value"><span class="gov-detail-tag gov-detail-tag-' + typClass + '">' + typLabel + '</span></span></div>';
+            html += '<div class="gov-detail-row"><span class="gov-detail-label">Rozsah:</span><span class="gov-detail-value">Obecne zmocneni</span></div>';
+            html += '<div class="gov-detail-row"><span class="gov-detail-label">Platnost:</span><span class="gov-detail-value">' + validity + '</span></div>';
+            html += '<div class="gov-detail-row"><span class="gov-detail-label">Zamery:</span><span class="gov-detail-value">Bez omezeni</span></div>';
+            html += '<div class="gov-detail-row"><span class="gov-detail-label">Datum udeleni:</span><span class="gov-detail-value">' + formatDate(z.udeleno) + '</span></div>';
+            html += '</div></div>';
             document.getElementById('rezaDetailBody').innerHTML = html;
             document.getElementById('rezaDetailModal').classList.add('visible');
         }
