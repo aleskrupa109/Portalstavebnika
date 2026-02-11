@@ -803,6 +803,110 @@
                 width: 100%;
             }
         }
+
+        /* Sekce odeslaných návrhů */
+        .sent-proposals-section {
+            margin-bottom: 32px;
+            padding: 20px;
+            background: #e8f4fd;
+            border: 1px solid #b8daff;
+            border-radius: 12px;
+        }
+
+        .sent-proposals-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .sent-proposals-header svg {
+            width: 24px;
+            height: 24px;
+            color: #004085;
+        }
+
+        .sent-proposals-header h2 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #004085;
+            margin: 0;
+        }
+
+        .sent-proposals-count {
+            background: #2362A2;
+            color: #fff;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .sent-proposal-tile {
+            background: #fff;
+            border-radius: 8px;
+            padding: 16px 20px;
+            margin-bottom: 12px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .sent-proposal-tile:last-child {
+            margin-bottom: 0;
+        }
+
+        .sent-proposal-tile-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .sent-proposal-tile-left {
+            flex: 1;
+        }
+
+        .sent-proposal-tile-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #2362A2;
+            margin-bottom: 4px;
+        }
+
+        .sent-proposal-tile-subtitle {
+            font-size: 13px;
+            color: #666;
+        }
+
+        .sent-proposal-tile-badge {
+            background: #e8f4fd;
+            color: #004085;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .sent-proposal-tile-info {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px 24px;
+            margin-bottom: 12px;
+            font-size: 13px;
+            color: #666;
+        }
+
+        .sent-proposal-tile-info span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .sent-proposal-tile-actions {
+            display: flex;
+            gap: 12px;
+            padding-top: 12px;
+            border-top: 1px solid #eee;
+        }
     </style>
 </head>
 <body>
@@ -910,6 +1014,61 @@
             <button class="filter-btn" onclick="filterTiles('inactive')">
                 Neaktivní <span class="filter-count">1</span>
             </button>
+        </div>
+
+        <!-- Sekce: Vaše odeslané návrhy -->
+        <div class="sent-proposals-section" id="sent-proposals-section">
+            <div class="sent-proposals-header">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+                </svg>
+                <h2>Vaše odeslané návrhy</h2>
+                <span class="sent-proposals-count" id="sent-proposals-count">2</span>
+            </div>
+
+            <!-- Návrh 1 -->
+            <div class="sent-proposal-tile" id="sent-proposal-1">
+                <div class="sent-proposal-tile-header">
+                    <div class="sent-proposal-tile-left">
+                        <div class="sent-proposal-tile-title">Jan Novák s.r.o.</div>
+                        <div class="sent-proposal-tile-subtitle">IČO: 12345678 · Váš klient</div>
+                    </div>
+                    <span class="sent-proposal-tile-badge">⏳ Čeká na schválení</span>
+                </div>
+                <div class="sent-proposal-tile-info">
+                    <span>📋 Zástupce ve správním řízení</span>
+                    <span>📅 Odesláno: 10. 2. 2026</span>
+                    <span>⏱️ Platnost: Časově neomezená</span>
+                    <span>📁 Záměry: 2 vybrané</span>
+                </div>
+                <div class="sent-proposal-tile-actions">
+                    <button class="btn btn-secondary btn-sm" onclick="viewSentProposal('sent-proposal-1')">Zobrazit detail</button>
+                    <button class="btn btn-secondary btn-sm" onclick="resendProposal('sent-proposal-1', 'Jan Novák s.r.o.')">Poslat připomínku</button>
+                    <button class="btn btn-danger btn-sm" onclick="cancelSentProposal('sent-proposal-1', 'Jan Novák s.r.o.')">Zrušit návrh</button>
+                </div>
+            </div>
+
+            <!-- Návrh 2 -->
+            <div class="sent-proposal-tile" id="sent-proposal-2">
+                <div class="sent-proposal-tile-header">
+                    <div class="sent-proposal-tile-left">
+                        <div class="sent-proposal-tile-title">Marie Svobodová</div>
+                        <div class="sent-proposal-tile-subtitle">Fyzická osoba · Váš klient</div>
+                    </div>
+                    <span class="sent-proposal-tile-badge">⏳ Čeká na schválení</span>
+                </div>
+                <div class="sent-proposal-tile-info">
+                    <span>📋 Pověřená osoba</span>
+                    <span>📅 Odesláno: 8. 2. 2026</span>
+                    <span>⏱️ Platnost: do 31. 12. 2026</span>
+                    <span>📁 Záměry: Bez omezení</span>
+                </div>
+                <div class="sent-proposal-tile-actions">
+                    <button class="btn btn-secondary btn-sm" onclick="viewSentProposal('sent-proposal-2')">Zobrazit detail</button>
+                    <button class="btn btn-secondary btn-sm" onclick="resendProposal('sent-proposal-2', 'Marie Svobodová')">Poslat připomínku</button>
+                    <button class="btn btn-danger btn-sm" onclick="cancelSentProposal('sent-proposal-2', 'Marie Svobodová')">Zrušit návrh</button>
+                </div>
+            </div>
         </div>
 
         <!-- Dlaždice -->
@@ -1591,6 +1750,44 @@
 
         function downloadPDF() {
             alert('Stahování PDF plné moci...');
+        }
+
+        // ===== FUNKCE PRO ODESLANÉ NÁVRHY =====
+        function viewSentProposal(proposalId) {
+            alert('Zobrazení detailu odeslaného návrhu');
+        }
+
+        function resendProposal(proposalId, name) {
+            if (!confirm(`Chcete odeslat připomínku pro "${name}" o schválení návrhu plné moci?`)) return;
+            alert(`Připomínka byla odeslána na e-mail klienta "${name}".`);
+        }
+
+        function cancelSentProposal(proposalId, name) {
+            if (!confirm(`Opravdu chcete zrušit návrh plné moci pro "${name}"?`)) return;
+
+            const proposal = document.getElementById(proposalId);
+            if (proposal) {
+                proposal.style.transition = 'opacity 0.3s, transform 0.3s';
+                proposal.style.opacity = '0';
+                proposal.style.transform = 'translateX(20px)';
+                setTimeout(() => {
+                    proposal.remove();
+                    updateSentProposalsCount();
+                }, 300);
+            }
+        }
+
+        function updateSentProposalsCount() {
+            const section = document.getElementById('sent-proposals-section');
+            const proposals = section.querySelectorAll('.sent-proposal-tile');
+            const count = proposals.length;
+            
+            document.getElementById('sent-proposals-count').textContent = count;
+            
+            // Skrýt celou sekci, pokud nejsou žádné návrhy
+            if (count === 0) {
+                section.style.display = 'none';
+            }
         }
 
         function updateFilterCounts() {

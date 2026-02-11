@@ -836,6 +836,119 @@
             display: none !important;
         }
 
+        /* Sekce návrhů ke schválení */
+        .proposals-section {
+            margin-bottom: 32px;
+            padding: 20px;
+            background: #fff8e6;
+            border: 1px solid #ffc107;
+            border-radius: 12px;
+        }
+
+        .proposals-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .proposals-header svg {
+            width: 24px;
+            height: 24px;
+            color: #856404;
+        }
+
+        .proposals-header h2 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #856404;
+            margin: 0;
+        }
+
+        .proposals-count {
+            background: #ffc107;
+            color: #856404;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .proposal-tile {
+            background: #fff;
+            border-radius: 8px;
+            padding: 16px 20px;
+            margin-bottom: 12px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .proposal-tile:last-child {
+            margin-bottom: 0;
+        }
+
+        .proposal-tile-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .proposal-tile-left {
+            flex: 1;
+        }
+
+        .proposal-tile-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #2362A2;
+            margin-bottom: 4px;
+        }
+
+        .proposal-tile-subtitle {
+            font-size: 13px;
+            color: #666;
+        }
+
+        .proposal-tile-badge {
+            background: #fff3cd;
+            color: #856404;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .proposal-tile-info {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px 24px;
+            margin-bottom: 12px;
+            font-size: 13px;
+            color: #666;
+        }
+
+        .proposal-tile-info span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .proposal-tile-actions {
+            display: flex;
+            gap: 12px;
+            padding-top: 12px;
+            border-top: 1px solid #eee;
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: #fff;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+        }
+
         /* Responzivita */
         @media (max-width: 600px) {
             .tile {
@@ -1010,6 +1123,71 @@
             <button class="filter-btn" onclick="filterTiles('inactive')">
                 Neaktivní <span class="filter-count" id="count-inactive">1</span>
             </button>
+        </div>
+
+        <!-- Sekce: Návrhy ke schválení -->
+        <div class="proposals-section" id="proposals-section">
+            <div class="proposals-header">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
+                </svg>
+                <h2>Návrhy ke schválení</h2>
+                <span class="proposals-count" id="proposals-count">2</span>
+            </div>
+
+            <!-- Návrh 1 -->
+            <div class="proposal-tile" id="proposal-1">
+                <div class="proposal-tile-header">
+                    <div class="proposal-tile-left">
+                        <div class="proposal-tile-title">METROPROJEKT Praha a.s.</div>
+                        <div class="proposal-tile-subtitle">IČO: 45271895 · Žádá o plnou moc</div>
+                    </div>
+                    <span class="proposal-tile-badge">Čeká na vaše schválení</span>
+                </div>
+                <div class="proposal-tile-info">
+                    <span>📋 Zástupce ve správním řízení</span>
+                    <span>📅 Odesláno: 9. 2. 2026</span>
+                    <span>⏱️ Platnost: Časově neomezená</span>
+                    <span>📁 Záměry: 3 vybrané</span>
+                </div>
+                <div class="proposal-tile-actions">
+                    <button class="btn btn-success" onclick="approveProposal('proposal-1', 'METROPROJEKT Praha a.s.')">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                        </svg>
+                        Schválit a odeslat do REZA
+                    </button>
+                    <button class="btn btn-secondary" onclick="editProposal('proposal-1')">Upravit návrh</button>
+                    <button class="btn btn-danger" onclick="rejectProposal('proposal-1', 'METROPROJEKT Praha a.s.')">Odmítnout</button>
+                </div>
+            </div>
+
+            <!-- Návrh 2 -->
+            <div class="proposal-tile" id="proposal-2">
+                <div class="proposal-tile-header">
+                    <div class="proposal-tile-left">
+                        <div class="proposal-tile-title">Ing. Tomáš Dvořák</div>
+                        <div class="proposal-tile-subtitle">Fyzická osoba · Žádá o plnou moc</div>
+                    </div>
+                    <span class="proposal-tile-badge">Čeká na vaše schválení</span>
+                </div>
+                <div class="proposal-tile-info">
+                    <span>📋 Pověřená osoba</span>
+                    <span>📅 Odesláno: 8. 2. 2026</span>
+                    <span>⏱️ Platnost: do 31. 12. 2026</span>
+                    <span>📁 Záměry: Bez omezení</span>
+                </div>
+                <div class="proposal-tile-actions">
+                    <button class="btn btn-success" onclick="approveProposal('proposal-2', 'Ing. Tomáš Dvořák')">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                        </svg>
+                        Schválit a odeslat do REZA
+                    </button>
+                    <button class="btn btn-secondary" onclick="editProposal('proposal-2')">Upravit návrh</button>
+                    <button class="btn btn-danger" onclick="rejectProposal('proposal-2', 'Ing. Tomáš Dvořák')">Odmítnout</button>
+                </div>
+            </div>
         </div>
 
         <!-- Dlaždice - Moje PM (default) -->
@@ -1527,6 +1705,24 @@
         </div>
     </div>
 
+    <!-- Modal pro schválení návrhu -->
+    <div class="modal-overlay" id="approve-modal">
+        <div class="modal">
+            <div class="modal-icon" style="background: #d4edda; color: #155724;">✓</div>
+            <h3>Plná moc schválena</h3>
+            <p>Plná moc pro <strong id="approve-name">—</strong> byla schválena a odeslána do registru REZA.</p>
+        </div>
+    </div>
+
+    <!-- Modal pro odmítnutí návrhu -->
+    <div class="modal-overlay" id="reject-proposal-modal">
+        <div class="modal">
+            <div class="modal-icon" style="background: #f8d7da; color: #721c24;">✕</div>
+            <h3>Návrh odmítnut</h3>
+            <p>Návrh plné moci od <strong id="reject-name">—</strong> byl odmítnut. Žadatel bude informován.</p>
+        </div>
+    </div>
+
     <script>
         // ===== NAČTENÍ IDENTITY =====
         function loadIdentity() {
@@ -1660,6 +1856,68 @@
 
         function downloadPDF() {
             alert('Stahování PDF plné moci...');
+        }
+
+        // ===== FUNKCE PRO NÁVRHY KE SCHVÁLENÍ =====
+        function approveProposal(proposalId, name) {
+            if (!confirm(`Opravdu chcete schválit návrh plné moci od "${name}" a odeslat ji do registru REZA?`)) return;
+
+            document.getElementById('approve-name').textContent = name;
+            document.getElementById('approve-modal').classList.add('show');
+
+            setTimeout(() => {
+                document.getElementById('approve-modal').classList.remove('show');
+                // Odstranit návrh ze seznamu
+                const proposal = document.getElementById(proposalId);
+                if (proposal) {
+                    proposal.style.transition = 'opacity 0.3s, transform 0.3s';
+                    proposal.style.opacity = '0';
+                    proposal.style.transform = 'translateX(20px)';
+                    setTimeout(() => {
+                        proposal.remove();
+                        updateProposalsCount();
+                    }, 300);
+                }
+            }, 2000);
+        }
+
+        function rejectProposal(proposalId, name) {
+            if (!confirm(`Opravdu chcete odmítnout návrh plné moci od "${name}"?`)) return;
+
+            document.getElementById('reject-name').textContent = name;
+            document.getElementById('reject-proposal-modal').classList.add('show');
+
+            setTimeout(() => {
+                document.getElementById('reject-proposal-modal').classList.remove('show');
+                // Odstranit návrh ze seznamu
+                const proposal = document.getElementById(proposalId);
+                if (proposal) {
+                    proposal.style.transition = 'opacity 0.3s, transform 0.3s';
+                    proposal.style.opacity = '0';
+                    proposal.style.transform = 'translateX(20px)';
+                    setTimeout(() => {
+                        proposal.remove();
+                        updateProposalsCount();
+                    }, 300);
+                }
+            }, 2000);
+        }
+
+        function editProposal(proposalId) {
+            alert('Přechod na: Úprava návrhu plné moci');
+        }
+
+        function updateProposalsCount() {
+            const section = document.getElementById('proposals-section');
+            const proposals = section.querySelectorAll('.proposal-tile');
+            const count = proposals.length;
+            
+            document.getElementById('proposals-count').textContent = count;
+            
+            // Skrýt celou sekci, pokud nejsou žádné návrhy
+            if (count === 0) {
+                section.style.display = 'none';
+            }
         }
 
         function updateFilterCounts() {
