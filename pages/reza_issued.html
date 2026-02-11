@@ -1,0 +1,1692 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vámi udělené plné moci | Portál stavebníka</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gov-primary: #2c5a8c;
+            --gov-primary-light: #3a7ab8;
+            --gov-primary-600: #2362a2;
+            --gov-text-light: #ffffff;
+            --gov-neutral-50: #f9fafb;
+            --gov-neutral-200: #e0e0e0;
+            --gov-neutral-700: #333333;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background-color: #f5f7fa;
+            color: #1a1a1a;
+            line-height: 1.5;
+        }
+
+        /* ===== HLAVIČKA ===== */
+        .gov-header {
+            background: var(--gov-primary);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .gov-header-top {
+            padding: 14px 40px;
+        }
+
+        .gov-header-top-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .gov-header-brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            text-decoration: none;
+            color: var(--gov-text-light);
+        }
+
+        .gov-header-logo {
+            height: 38px;
+            width: auto;
+        }
+
+        .gov-header-title {
+            font-size: 18px;
+            font-weight: 400;
+            letter-spacing: 0.3px;
+            color: var(--gov-text-light);
+        }
+
+        .gov-header-user {
+            position: relative;
+        }
+
+        .gov-header-user-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 16px;
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 4px;
+            color: var(--gov-text-light);
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .gov-header-user-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.8);
+        }
+
+        .gov-header-user-btn svg.user-icon {
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+        }
+
+        .gov-header-user-btn .chevron {
+            width: 12px;
+            height: 12px;
+            transition: transform 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .gov-header-user-btn.active .chevron {
+            transform: rotate(180deg);
+        }
+
+        .gov-header-user-info {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            line-height: 1.25;
+            text-align: left;
+        }
+
+        .gov-header-user-name {
+            font-weight: 500;
+            font-size: 13px;
+        }
+
+        .gov-header-user-detail {
+            font-size: 11px;
+            opacity: 0.85;
+        }
+
+        .gov-header-user-dropdown {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            min-width: 280px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.2s ease;
+            z-index: 100;
+        }
+
+        .gov-header-user-dropdown.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .gov-header-user-dropdown-header {
+            padding: 16px;
+            border-bottom: 1px solid #eee;
+            background: #f9fafb;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .gov-header-user-dropdown-name {
+            font-weight: 600;
+            color: #1a1a1a;
+            font-size: 14px;
+        }
+
+        .gov-header-user-dropdown-detail {
+            font-size: 12px;
+            color: #666;
+            margin-top: 2px;
+        }
+
+        .gov-header-user-dropdown-badge {
+            display: inline-block;
+            background: #e8f4fc;
+            color: #2362a2;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 500;
+            margin-top: 6px;
+        }
+
+        .gov-header-user-dropdown a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            color: #333;
+            text-decoration: none;
+            font-size: 14px;
+            transition: background 0.15s ease;
+        }
+
+        .gov-header-user-dropdown a:last-child {
+            border-radius: 0 0 8px 8px;
+            border-top: 1px solid #eee;
+            color: #c53030;
+        }
+
+        .gov-header-user-dropdown a:hover {
+            background: #f5f7fa;
+        }
+
+        .gov-header-user-dropdown svg {
+            width: 18px;
+            height: 18px;
+            color: #666;
+        }
+
+        .gov-header-user-dropdown a:last-child svg {
+            color: #c53030;
+        }
+
+        /* ===== NAVIGACE ===== */
+        .gov-header-nav {
+            padding: 0 40px;
+        }
+
+        .gov-header-nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .gov-nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            list-style: none;
+        }
+
+        .gov-nav-link {
+            display: block;
+            padding: 14px 20px;
+            color: var(--gov-text-light);
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            transition: all 0.2s ease;
+            border-top: 3px solid transparent;
+        }
+
+        .gov-nav-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .gov-nav-link.active {
+            border-top-color: var(--gov-text-light);
+        }
+
+        .gov-nav-cta {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: transparent;
+            border: none;
+            color: var(--gov-text-light);
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            transition: all 0.2s ease;
+        }
+
+        .gov-nav-cta:hover {
+            opacity: 0.8;
+        }
+
+        .gov-nav-cta svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* ===== PAGE CONTENT ===== */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .breadcrumb a {
+            color: #2362A2;
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        .breadcrumb span {
+            color: #666;
+        }
+
+        /* Header sekce */
+        .section-header {
+            margin-bottom: 24px;
+        }
+
+        .section-header h1 {
+            font-size: 28px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 8px;
+        }
+
+        .section-header .meta {
+            font-size: 16px;
+            color: #555;
+        }
+
+        .section-header .meta strong {
+            color: #333;
+            font-weight: 600;
+        }
+
+        /* Context switcher */
+        .context-switcher {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .context-switcher label {
+            font-size: 14px;
+            color: #555;
+            font-weight: 500;
+        }
+
+        .context-select {
+            padding: 10px 36px 10px 14px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 8L1 3h10z'/%3E%3C/svg%3E") no-repeat right 12px center;
+            appearance: none;
+            cursor: pointer;
+            min-width: 280px;
+            font-family: inherit;
+        }
+
+        .context-select:focus {
+            outline: none;
+            border-color: #2362A2;
+            box-shadow: 0 0 0 2px rgba(35, 98, 162, 0.2);
+        }
+
+        /* Admin info box */
+        .admin-info-box {
+            background: #e8f4fd;
+            border: 1px solid #b8daff;
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            color: #004085;
+        }
+
+        .admin-info-box.hidden {
+            display: none;
+        }
+
+        .admin-info-box svg {
+            flex-shrink: 0;
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Filtry */
+        .filters {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 1px solid #ddd;
+            background: #fff;
+            font-size: 14px;
+            color: #555;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .filter-btn:hover {
+            border-color: #2362A2;
+            color: #2362A2;
+        }
+
+        .filter-btn.active {
+            background: #2362A2;
+            color: #fff;
+            border-color: #2362A2;
+        }
+
+        .filter-count {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 20px;
+            height: 20px;
+            padding: 0 6px;
+            border-radius: 10px;
+            background: rgba(0,0,0,0.1);
+            font-size: 12px;
+            margin-left: 6px;
+        }
+
+        .filter-btn.active .filter-count {
+            background: rgba(255,255,255,0.3);
+        }
+
+        /* Dlaždice */
+        .tiles {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .tile {
+            background: #fff;
+            border-radius: 12px;
+            padding: 20px 24px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            border: 1px solid transparent;
+        }
+
+        .tile:hover {
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+            border-color: #e0e0e0;
+        }
+
+        .tile-summary {
+            cursor: pointer;
+        }
+
+        .tile-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .tile-header-left {
+            flex: 1;
+        }
+
+        .tile-header-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .tile-chevron {
+            font-size: 12px;
+            color: #999;
+            transition: transform 0.3s ease;
+        }
+
+        .tile.expanded .tile-chevron {
+            transform: rotate(180deg);
+        }
+
+        .tile-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2362A2;
+            margin-bottom: 4px;
+        }
+
+        .tile-subtitle {
+            font-size: 14px;
+            color: #666;
+        }
+
+        /* Stavové badge */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 16px;
+            font-size: 13px;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .status-badge.pending {
+            background: #fef3cd;
+            color: #856404;
+        }
+
+        .status-badge.active {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-badge.rejected {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .status-badge.revoked {
+            background: #e9ecef;
+            color: #495057;
+        }
+
+        .status-badge.terminated {
+            background: #e9ecef;
+            color: #495057;
+        }
+
+        .status-badge.expired {
+            background: #e9ecef;
+            color: #6c757d;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .status-badge.pending .status-dot {
+            background: #ffc107;
+        }
+
+        .status-badge.active .status-dot {
+            background: #28a745;
+        }
+
+        .status-badge.rejected .status-dot {
+            background: #dc3545;
+        }
+
+        .status-badge.revoked .status-dot,
+        .status-badge.terminated .status-dot,
+        .status-badge.expired .status-dot {
+            background: #6c757d;
+        }
+
+        /* Tile content - parametry */
+        .tile-params {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px 32px;
+            margin-bottom: 12px;
+        }
+
+        .tile-param {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .tile-param-label {
+            font-size: 12px;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 2px;
+        }
+
+        .tile-param-value {
+            font-size: 14px;
+            color: #1a1a1a;
+            font-weight: 500;
+        }
+
+        /* Tags */
+        .tile-tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+
+        .tag.scope-zastupce {
+            background: #e3f2fd;
+            color: #1565c0;
+        }
+
+        .tag.scope-poverena {
+            background: #fff3e0;
+            color: #e65100;
+        }
+
+        .tag.scope-admin {
+            background: #f3e5f5;
+            color: #7b1fa2;
+        }
+
+        .tag.postoupeni {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .tag.bez-omezeni {
+            background: #eceff1;
+            color: #546e7a;
+        }
+
+        .tag.zamery {
+            background: #fce4ec;
+            color: #c2185b;
+        }
+
+        /* Tile detail */
+        .tile-detail {
+            display: none;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        .tile.expanded .tile-detail {
+            display: block;
+        }
+
+        .detail-section {
+            margin-bottom: 20px;
+        }
+
+        .detail-section:last-of-type {
+            margin-bottom: 0;
+        }
+
+        .detail-section h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: #2362A2;
+            margin-bottom: 12px;
+        }
+
+        .detail-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .detail-row {
+            display: flex;
+            gap: 16px;
+        }
+
+        .detail-label {
+            font-size: 14px;
+            color: #666;
+            min-width: 160px;
+            flex-shrink: 0;
+        }
+
+        .detail-value {
+            font-size: 14px;
+            color: #1a1a1a;
+            font-weight: 500;
+        }
+
+        .detail-value-list {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .detail-link {
+            color: #2362A2;
+            text-decoration: none;
+            font-weight: 400;
+            font-size: 14px;
+        }
+
+        .detail-link:hover {
+            text-decoration: underline;
+        }
+
+        .detail-actions {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        /* Inactive tile styling */
+        .tile[data-status="inactive"] .tile-summary,
+        .tile[data-status="revoked"] .tile-summary,
+        .tile[data-status="terminated"] .tile-summary,
+        .tile[data-status="rejected"] .tile-summary,
+        .tile[data-status="expired"] .tile-summary {
+            opacity: 0.7;
+        }
+
+        .tile[data-status="inactive"]:hover .tile-summary,
+        .tile[data-status="revoked"]:hover .tile-summary,
+        .tile[data-status="terminated"]:hover .tile-summary,
+        .tile[data-status="rejected"]:hover .tile-summary,
+        .tile[data-status="expired"]:hover .tile-summary {
+            opacity: 1;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: 500;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            font-family: inherit;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: #2362A2;
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background: #1a4f85;
+        }
+
+        .btn-secondary {
+            background: #fff;
+            color: #2362A2;
+            border: 1px solid #2362A2;
+        }
+
+        .btn-secondary:hover {
+            background: #f0f4f8;
+        }
+
+        .btn-danger {
+            background: #fff;
+            color: #dc3545;
+            border: 1px solid #dc3545;
+        }
+
+        .btn-danger:hover {
+            background: #fff5f5;
+        }
+
+        /* Add new PM button */
+        .add-pm-btn {
+            margin-bottom: 20px;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .modal-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal {
+            background: #fff;
+            border-radius: 12px;
+            padding: 32px;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            font-size: 32px;
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .modal h3 {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 12px;
+        }
+
+        .modal p {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Responzivita */
+        @media (max-width: 600px) {
+            .tile {
+                padding: 16px;
+            }
+            .tile-header {
+                flex-direction: column;
+                gap: 12px;
+            }
+            .tile-header-right {
+                flex-direction: column;
+                align-items: flex-end;
+                gap: 8px;
+            }
+            .tile-params {
+                gap: 12px 24px;
+            }
+            .filters {
+                gap: 8px;
+            }
+            .filter-btn {
+                padding: 6px 12px;
+                font-size: 13px;
+            }
+            .detail-row {
+                flex-direction: column;
+                gap: 4px;
+            }
+            .detail-label {
+                min-width: auto;
+            }
+            .detail-actions {
+                flex-direction: column;
+            }
+            .detail-actions .btn {
+                width: 100%;
+            }
+            .context-switcher {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .context-select {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ===== HLAVIČKA ===== -->
+    <header class="gov-header">
+        <div class="gov-header-top">
+            <div class="gov-header-top-content">
+                <a href="../index.html" class="gov-header-brand">
+                    <img src="../images/logo-lev-white.png" alt="Státní znak" class="gov-header-logo">
+                    <span class="gov-header-title">Portál stavebníka</span>
+                </a>
+
+                <div class="gov-header-user">
+                    <button class="gov-header-user-btn" onclick="toggleUserMenu()">
+                        <svg class="user-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                        </svg>
+                        <div class="gov-header-user-info">
+                            <span class="gov-header-user-name" id="userDisplayName">ALEŠ KRUPA</span>
+                            <span class="gov-header-user-detail" id="userDisplayDetail">FO · Nar.: 19.04.1968</span>
+                        </div>
+                        <svg class="chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                        </svg>
+                    </button>
+                    <div class="gov-header-user-dropdown" id="userDropdown">
+                        <div class="gov-header-user-dropdown-header">
+                            <div class="gov-header-user-dropdown-name" id="dropdownName">Aleš Krupa</div>
+                            <div class="gov-header-user-dropdown-detail" id="dropdownDetail">Nar.: 19.04.1968</div>
+                            <div class="gov-header-user-dropdown-badge" id="dropdownBadge">Fyzická osoba</div>
+                        </div>
+                        <a href="reza_implicitni.html">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/>
+                            </svg>
+                            Změnit postavení
+                        </a>
+                        <a href="#">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                            </svg>
+                            Nastavení
+                        </a>
+                        <a href="../index.html">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                            </svg>
+                            Odhlásit se
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <nav class="gov-header-nav">
+            <div class="gov-header-nav-content">
+                <ul class="gov-nav-menu">
+                    <li class="gov-nav-item"><a href="reza_implicitni.html" class="gov-nav-link">Úvod</a></li>
+                    <li class="gov-nav-item"><a href="prehled_zameru.html" class="gov-nav-link">Záměry</a></li>
+                    <li class="gov-nav-item"><a href="#" class="gov-nav-link">Řízení</a></li>
+                    <li class="gov-nav-item"><a href="#" class="gov-nav-link">Žádosti</a></li>
+                    <li class="gov-nav-item"><a href="#" class="gov-nav-link">Stavby</a></li>
+                    <li class="gov-nav-item"><a href="#" class="gov-nav-link">Dokumentace</a></li>
+                    <li class="gov-nav-item"><a href="reza_setup.html" class="gov-nav-link active">Plné moci</a></li>
+                </ul>
+                <a href="form_new.html" class="gov-nav-cta">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                    </svg>
+                    NOVÁ ŽÁDOST
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- ===== OBSAH ===== -->
+    <div class="container">
+        <!-- Breadcrumb -->
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+            <a href="reza_setup.html">Plné moci a zastoupení</a>
+            <span> › </span>
+            <span>Vámi udělené plné moci</span>
+        </nav>
+
+        <!-- Header sekce -->
+        <div class="section-header">
+            <h1>Vámi udělené plné moci</h1>
+            <div class="meta">
+                Přihlášený uživatel: <strong id="currentUserDisplay">Ing. Aleš Krupa</strong>
+            </div>
+        </div>
+
+        <!-- Context switcher -->
+        <div class="context-switcher">
+            <label for="context-select">Jednat za:</label>
+            <select class="context-select" id="context-select" onchange="switchContext(this.value)">
+                <option value="self" id="context-option-self">Ing. Aleš Krupa (moje PM)</option>
+                <option value="sudop">SUDOP PRAHA a.s. (administrátor)</option>
+            </select>
+        </div>
+
+        <!-- Admin info box - shown when acting as admin -->
+        <div class="admin-info-box hidden" id="admin-info-box">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span>Jednáte jako administrátor plných mocí za: <strong>SUDOP PRAHA a.s.</strong> (IČO: 25793349)</span>
+        </div>
+
+        <!-- Tlačítko pro novou PM -->
+        <div class="add-pm-btn">
+            <a href="reza_new.html" class="btn btn-primary">+ Vytvořit novou plnou moc</a>
+        </div>
+
+        <!-- Filtry -->
+        <div class="filters" role="group" aria-label="Filtrovat podle stavu">
+            <button class="filter-btn active" onclick="filterTiles('all')">
+                Všechny <span class="filter-count" id="count-all">4</span>
+            </button>
+            <button class="filter-btn" onclick="filterTiles('pending')">
+                Čeká na přijetí <span class="filter-count" id="count-pending">1</span>
+            </button>
+            <button class="filter-btn" onclick="filterTiles('active')">
+                Aktivní <span class="filter-count" id="count-active">2</span>
+            </button>
+            <button class="filter-btn" onclick="filterTiles('inactive')">
+                Neaktivní <span class="filter-count" id="count-inactive">1</span>
+            </button>
+        </div>
+
+        <!-- Dlaždice - Moje PM (default) -->
+        <div class="tiles" id="tiles-self">
+
+            <!-- PM 1: Čeká na přijetí -->
+            <div class="tile" data-status="pending" onclick="toggleTile(this)">
+                <div class="tile-summary">
+                    <div class="tile-header">
+                        <div class="tile-header-left">
+                            <div class="tile-title">Projektová kancelář ABC s.r.o.</div>
+                            <div class="tile-subtitle">IČO: 12345678</div>
+                        </div>
+                        <div class="tile-header-right">
+                            <div class="status-badge pending">
+                                <span class="status-dot"></span>
+                                Čeká na přijetí
+                            </div>
+                            <span class="tile-chevron">▼</span>
+                        </div>
+                    </div>
+                    <div class="tile-params">
+                        <div class="tile-param">
+                            <span class="tile-param-label">Vytvořeno</span>
+                            <span class="tile-param-value">10. 1. 2026</span>
+                        </div>
+                        <div class="tile-param">
+                            <span class="tile-param-label">Platnost</span>
+                            <span class="tile-param-value">Časově neomezená</span>
+                        </div>
+                    </div>
+                    <div class="tile-tags">
+                        <span class="tag scope-zastupce">Zástupce ve správním řízení</span>
+                        <span class="tag zamery">3 záměry</span>
+                    </div>
+                </div>
+                <div class="tile-detail">
+                    <div class="detail-section">
+                        <h4>Údaje o zmocněnci</h4>
+                        <div class="detail-grid">
+                            <div class="detail-row">
+                                <span class="detail-label">Název:</span>
+                                <span class="detail-value">Projektová kancelář ABC s.r.o.</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">IČO:</span>
+                                <span class="detail-value">12345678</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Adresa:</span>
+                                <span class="detail-value">Stavební 123, 110 00 Praha 1</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="detail-section">
+                        <h4>Parametry plné moci</h4>
+                        <div class="detail-grid">
+                            <div class="detail-row">
+                                <span class="detail-label">Rozsah zmocnění:</span>
+                                <span class="detail-value">Zástupce stavebníka ve správním řízení</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Omezení na záměry:</span>
+                                <span class="detail-value detail-value-list">
+                                    <a href="#" class="detail-link">Z/2025/173247 – Rekonstrukce RD Vinohrady</a>
+                                    <a href="#" class="detail-link">Z/2025/169822 – Přístavba garáže</a>
+                                    <a href="#" class="detail-link">Z/2025/158901 – Zahradní domek</a>
+                                </span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Možnost postoupení:</span>
+                                <span class="detail-value">Ne</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Platnost:</span>
+                                <span class="detail-value">Časově neomezená</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Datum vytvoření:</span>
+                                <span class="detail-value">10. 1. 2026</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="detail-actions" onclick="event.stopPropagation()">
+                        <button class="btn btn-danger" onclick="revokePM(this)">Odvolat plnou moc</button>
+                        <button class="btn btn-secondary" onclick="editPM()">Upravit</button>
+                        <button class="btn btn-secondary" onclick="duplicatePM()">Duplikovat</button>
+                        <button class="btn btn-secondary" onclick="downloadPDF()">Stáhnout PDF</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PM 2: Aktivní -->
+            <div class="tile" data-status="active" onclick="toggleTile(this)">
+                <div class="tile-summary">
+                    <div class="tile-header">
+                        <div class="tile-header-left">
+                            <div class="tile-title">Ing. Jana Nováková</div>
+                            <div class="tile-subtitle">Fyzická osoba</div>
+                        </div>
+                        <div class="tile-header-right">
+                            <div class="status-badge active">
+                                <span class="status-dot"></span>
+                                Aktivní
+                            </div>
+                            <span class="tile-chevron">▼</span>
+                        </div>
+                    </div>
+                    <div class="tile-params">
+                        <div class="tile-param">
+                            <span class="tile-param-label">Přijato</span>
+                            <span class="tile-param-value">5. 1. 2026</span>
+                        </div>
+                        <div class="tile-param">
+                            <span class="tile-param-label">Platnost</span>
+                            <span class="tile-param-value">do 31. 12. 2026</span>
+                        </div>
+                    </div>
+                    <div class="tile-tags">
+                        <span class="tag scope-poverena">Pověřená osoba</span>
+                        <span class="tag bez-omezeni">Bez omezení záměrů</span>
+                    </div>
+                </div>
+                <div class="tile-detail">
+                    <div class="detail-section">
+                        <h4>Údaje o zmocněnci</h4>
+                        <div class="detail-grid">
+                            <div class="detail-row">
+                                <span class="detail-label">Jméno a příjmení:</span>
+                                <span class="detail-value">Ing. Jana Nováková</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Adresa:</span>
+                                <span class="detail-value">Technická 456, 160 00 Praha 6</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="detail-section">
+                        <h4>Parametry plné moci</h4>
+                        <div class="detail-grid">
+                            <div class="detail-row">
+                                <span class="detail-label">Rozsah zmocnění:</span>
+                                <span class="detail-value">Pověřená osoba pro úkony na Portálu stavebníka</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Omezení na záměry:</span>
+                                <span class="detail-value">Bez omezení</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Možnost postoupení:</span>
+                                <span class="detail-value">Ne</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Platnost:</span>
+                                <span class="detail-value">1. 1. 2026 – 31. 12. 2026</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Datum přijetí:</span>
+                                <span class="detail-value">5. 1. 2026</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="detail-actions" onclick="event.stopPropagation()">
+                        <button class="btn btn-danger" onclick="revokePM(this)">Odvolat plnou moc</button>
+                        <button class="btn btn-secondary" onclick="editPM()">Upravit</button>
+                        <button class="btn btn-secondary" onclick="duplicatePM()">Duplikovat</button>
+                        <button class="btn btn-secondary" onclick="downloadPDF()">Stáhnout PDF</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PM 3: Aktivní - Administrátor -->
+            <div class="tile" data-status="active" onclick="toggleTile(this)">
+                <div class="tile-summary">
+                    <div class="tile-header">
+                        <div class="tile-header-left">
+                            <div class="tile-title">Mgr. Petr Svoboda</div>
+                            <div class="tile-subtitle">Fyzická osoba</div>
+                        </div>
+                        <div class="tile-header-right">
+                            <div class="status-badge active">
+                                <span class="status-dot"></span>
+                                Aktivní
+                            </div>
+                            <span class="tile-chevron">▼</span>
+                        </div>
+                    </div>
+                    <div class="tile-params">
+                        <div class="tile-param">
+                            <span class="tile-param-label">Přijato</span>
+                            <span class="tile-param-value">1. 12. 2025</span>
+                        </div>
+                        <div class="tile-param">
+                            <span class="tile-param-label">Platnost</span>
+                            <span class="tile-param-value">Časově neomezená</span>
+                        </div>
+                    </div>
+                    <div class="tile-tags">
+                        <span class="tag scope-admin">Administrátor plných mocí</span>
+                        <span class="tag bez-omezeni">Bez omezení záměrů</span>
+                    </div>
+                </div>
+                <div class="tile-detail">
+                    <div class="detail-section">
+                        <h4>Údaje o zmocněnci</h4>
+                        <div class="detail-grid">
+                            <div class="detail-row">
+                                <span class="detail-label">Jméno a příjmení:</span>
+                                <span class="detail-value">Mgr. Petr Svoboda</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Adresa:</span>
+                                <span class="detail-value">Právní 789, 150 00 Praha 5</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="detail-section">
+                        <h4>Parametry plné moci</h4>
+                        <div class="detail-grid">
+                            <div class="detail-row">
+                                <span class="detail-label">Rozsah zmocnění:</span>
+                                <span class="detail-value">Administrátor plných mocí</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Omezení na záměry:</span>
+                                <span class="detail-value">Bez omezení</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Možnost postoupení:</span>
+                                <span class="detail-value">Ne</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Platnost:</span>
+                                <span class="detail-value">Časově neomezená</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Datum přijetí:</span>
+                                <span class="detail-value">1. 12. 2025</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="detail-actions" onclick="event.stopPropagation()">
+                        <button class="btn btn-danger" onclick="revokePM(this)">Odvolat plnou moc</button>
+                        <button class="btn btn-secondary" onclick="editPM()">Upravit</button>
+                        <button class="btn btn-secondary" onclick="duplicatePM()">Duplikovat</button>
+                        <button class="btn btn-secondary" onclick="downloadPDF()">Stáhnout PDF</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PM 4: Odvolaná -->
+            <div class="tile" data-status="revoked" onclick="toggleTile(this)">
+                <div class="tile-summary">
+                    <div class="tile-header">
+                        <div class="tile-header-left">
+                            <div class="tile-title">STAVOPLAN s.r.o.</div>
+                            <div class="tile-subtitle">IČO: 87654321</div>
+                        </div>
+                        <div class="tile-header-right">
+                            <div class="status-badge revoked">
+                                <span class="status-dot"></span>
+                                Odvolána
+                            </div>
+                            <span class="tile-chevron">▼</span>
+                        </div>
+                    </div>
+                    <div class="tile-params">
+                        <div class="tile-param">
+                            <span class="tile-param-label">Odvoláno</span>
+                            <span class="tile-param-value">8. 1. 2026</span>
+                        </div>
+                        <div class="tile-param">
+                            <span class="tile-param-label">Původní platnost</span>
+                            <span class="tile-param-value">do 31. 12. 2026</span>
+                        </div>
+                    </div>
+                    <div class="tile-tags">
+                        <span class="tag scope-zastupce">Zástupce ve správním řízení</span>
+                        <span class="tag bez-omezeni">Bez omezení záměrů</span>
+                    </div>
+                </div>
+                <div class="tile-detail">
+                    <div class="detail-section">
+                        <h4>Údaje o zmocněnci</h4>
+                        <div class="detail-grid">
+                            <div class="detail-row">
+                                <span class="detail-label">Název:</span>
+                                <span class="detail-value">STAVOPLAN s.r.o.</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">IČO:</span>
+                                <span class="detail-value">87654321</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Adresa:</span>
+                                <span class="detail-value">Plánská 321, 130 00 Praha 3</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="detail-section">
+                        <h4>Parametry plné moci</h4>
+                        <div class="detail-grid">
+                            <div class="detail-row">
+                                <span class="detail-label">Rozsah zmocnění:</span>
+                                <span class="detail-value">Zástupce stavebníka ve správním řízení</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Omezení na záměry:</span>
+                                <span class="detail-value">Bez omezení</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Možnost postoupení:</span>
+                                <span class="detail-value">Ano</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Původní platnost:</span>
+                                <span class="detail-value">1. 6. 2025 – 31. 12. 2026</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Datum přijetí:</span>
+                                <span class="detail-value">5. 6. 2025</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Datum odvolání:</span>
+                                <span class="detail-value">8. 1. 2026</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Důvod ukončení:</span>
+                                <span class="detail-value">Odvolání zmocnitelem</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="detail-actions" onclick="event.stopPropagation()">
+                        <button class="btn btn-secondary" onclick="duplicatePM()">Duplikovat</button>
+                        <button class="btn btn-secondary" onclick="downloadPDF()">Stáhnout PDF</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dlaždice - SUDOP (admin mode) - hidden by default -->
+        <div class="tiles hidden" id="tiles-sudop">
+
+            <!-- PM od SUDOP 1: Aktivní -->
+            <div class="tile" data-status="active" onclick="toggleTile(this)">
+                <div class="tile-summary">
+                    <div class="tile-header">
+                        <div class="tile-header-left">
+                            <div class="tile-title">METROPROJEKT Praha a.s.</div>
+                            <div class="tile-subtitle">IČO: 45271895</div>
+                        </div>
+                        <div class="tile-header-right">
+                            <div class="status-badge active">
+                                <span class="status-dot"></span>
+                                Aktivní
+                            </div>
+                            <span class="tile-chevron">▼</span>
+                        </div>
+                    </div>
+                    <div class="tile-params">
+                        <div class="tile-param">
+                            <span class="tile-param-label">Přijato</span>
+                            <span class="tile-param-value">1. 10. 2025</span>
+                        </div>
+                        <div class="tile-param">
+                            <span class="tile-param-label">Platnost</span>
+                            <span class="tile-param-value">do 31. 12. 2027</span>
+                        </div>
+                    </div>
+                    <div class="tile-tags">
+                        <span class="tag scope-zastupce">Zástupce ve správním řízení</span>
+                        <span class="tag zamery">12 záměrů</span>
+                        <span class="tag postoupeni">S možností postoupení</span>
+                    </div>
+                </div>
+                <div class="tile-detail">
+                    <div class="detail-section">
+                        <h4>Údaje o zmocněnci</h4>
+                        <div class="detail-grid">
+                            <div class="detail-row">
+                                <span class="detail-label">Název:</span>
+                                <span class="detail-value">METROPROJEKT Praha a.s.</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">IČO:</span>
+                                <span class="detail-value">45271895</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Adresa:</span>
+                                <span class="detail-value">Argentinská 1621/36, 170 00 Praha 7</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="detail-section">
+                        <h4>Parametry plné moci</h4>
+                        <div class="detail-grid">
+                            <div class="detail-row">
+                                <span class="detail-label">Rozsah zmocnění:</span>
+                                <span class="detail-value">Zástupce stavebníka ve správním řízení</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Omezení na záměry:</span>
+                                <span class="detail-value">12 záměrů (klikněte pro zobrazení)</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Možnost postoupení:</span>
+                                <span class="detail-value">Ano</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Platnost:</span>
+                                <span class="detail-value">1. 10. 2025 – 31. 12. 2027</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Datum přijetí:</span>
+                                <span class="detail-value">1. 10. 2025</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="detail-actions" onclick="event.stopPropagation()">
+                        <button class="btn btn-danger" onclick="revokePM(this)">Odvolat plnou moc</button>
+                        <button class="btn btn-secondary" onclick="editPM()">Upravit</button>
+                        <button class="btn btn-secondary" onclick="duplicatePM()">Duplikovat</button>
+                        <button class="btn btn-secondary" onclick="downloadPDF()">Stáhnout PDF</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PM od SUDOP 2: Aktivní -->
+            <div class="tile" data-status="active" onclick="toggleTile(this)">
+                <div class="tile-summary">
+                    <div class="tile-header">
+                        <div class="tile-header-left">
+                            <div class="tile-title">Ing. Tomáš Dvořák</div>
+                            <div class="tile-subtitle">Fyzická osoba</div>
+                        </div>
+                        <div class="tile-header-right">
+                            <div class="status-badge active">
+                                <span class="status-dot"></span>
+                                Aktivní
+                            </div>
+                            <span class="tile-chevron">▼</span>
+                        </div>
+                    </div>
+                    <div class="tile-params">
+                        <div class="tile-param">
+                            <span class="tile-param-label">Přijato</span>
+                            <span class="tile-param-value">15. 11. 2025</span>
+                        </div>
+                        <div class="tile-param">
+                            <span class="tile-param-label">Platnost</span>
+                            <span class="tile-param-value">Časově neomezená</span>
+                        </div>
+                    </div>
+                    <div class="tile-tags">
+                        <span class="tag scope-poverena">Pověřená osoba</span>
+                        <span class="tag bez-omezeni">Bez omezení záměrů</span>
+                    </div>
+                </div>
+                <div class="tile-detail">
+                    <div class="detail-section">
+                        <h4>Údaje o zmocněnci</h4>
+                        <div class="detail-grid">
+                            <div class="detail-row">
+                                <span class="detail-label">Jméno a příjmení:</span>
+                                <span class="detail-value">Ing. Tomáš Dvořák</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Adresa:</span>
+                                <span class="detail-value">Technická 12, 160 00 Praha 6</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="detail-section">
+                        <h4>Parametry plné moci</h4>
+                        <div class="detail-grid">
+                            <div class="detail-row">
+                                <span class="detail-label">Rozsah zmocnění:</span>
+                                <span class="detail-value">Pověřená osoba pro úkony na Portálu stavebníka</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Omezení na záměry:</span>
+                                <span class="detail-value">Bez omezení</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Možnost postoupení:</span>
+                                <span class="detail-value">Ne</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Platnost:</span>
+                                <span class="detail-value">Časově neomezená</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Datum přijetí:</span>
+                                <span class="detail-value">15. 11. 2025</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="detail-actions" onclick="event.stopPropagation()">
+                        <button class="btn btn-danger" onclick="revokePM(this)">Odvolat plnou moc</button>
+                        <button class="btn btn-secondary" onclick="editPM()">Upravit</button>
+                        <button class="btn btn-secondary" onclick="duplicatePM()">Duplikovat</button>
+                        <button class="btn btn-secondary" onclick="downloadPDF()">Stáhnout PDF</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal pro odvolání PM -->
+    <div class="modal-overlay" id="revoke-modal">
+        <div class="modal">
+            <div class="modal-icon">✓</div>
+            <h3>Plná moc odvolána</h3>
+            <p>Plná moc byla úspěšně odvolána. Zmocněnec bude o odvolání informován.</p>
+        </div>
+    </div>
+
+    <script>
+        // ===== NAČTENÍ IDENTITY =====
+        function loadIdentity() {
+            const stored = localStorage.getItem('selectedIdentity');
+
+            if (stored) {
+                const identity = JSON.parse(stored);
+
+                // Aktualizace hlavičky
+                document.getElementById('userDisplayName').textContent = identity.name.toUpperCase();
+                let detailText = identity.type;
+                if (identity.detail) {
+                    detailText += ' · ' + identity.detail;
+                }
+                document.getElementById('userDisplayDetail').textContent = detailText;
+
+                document.getElementById('dropdownName').textContent = identity.name;
+                document.getElementById('dropdownDetail').textContent = identity.detail;
+                document.getElementById('dropdownBadge').textContent = identity.badge;
+
+                // Aktualizace jména přihlášeného uživatele v obsahu
+                document.getElementById('currentUserDisplay').textContent = identity.name;
+
+                // Aktualizace context switcher
+                document.getElementById('context-option-self').textContent = identity.name + ' (moje PM)';
+            }
+        }
+
+        // ===== USER MENU =====
+        function toggleUserMenu() {
+            const btn = document.querySelector('.gov-header-user-btn');
+            const dropdown = document.getElementById('userDropdown');
+            if (btn) btn.classList.toggle('active');
+            if (dropdown) dropdown.classList.toggle('show');
+        }
+
+        document.addEventListener('click', function(e) {
+            const userSection = document.querySelector('.gov-header-user');
+            if (userSection && !userSection.contains(e.target)) {
+                const btn = document.querySelector('.gov-header-user-btn');
+                const dropdown = document.getElementById('userDropdown');
+                if (btn) btn.classList.remove('active');
+                if (dropdown) dropdown.classList.remove('show');
+            }
+        });
+
+        // ===== TILE FUNKCE =====
+        function toggleTile(tile) {
+            document.querySelectorAll('.tile.expanded').forEach(t => {
+                if (t !== tile) t.classList.remove('expanded');
+            });
+            tile.classList.toggle('expanded');
+        }
+
+        function filterTiles(status) {
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.closest('.filter-btn').classList.add('active');
+
+            const currentContext = document.getElementById('context-select').value;
+            const tilesContainer = currentContext === 'self' ? document.getElementById('tiles-self') : document.getElementById('tiles-sudop');
+
+            tilesContainer.querySelectorAll('.tile').forEach(tile => {
+                const tileStatus = tile.dataset.status;
+                tile.classList.remove('expanded');
+                if (status === 'all') {
+                    tile.style.display = 'block';
+                } else if (status === 'inactive') {
+                    tile.style.display = (tileStatus === 'rejected' || tileStatus === 'revoked' || tileStatus === 'terminated' || tileStatus === 'expired' || tileStatus === 'inactive') ? 'block' : 'none';
+                } else {
+                    tile.style.display = tileStatus === status ? 'block' : 'none';
+                }
+            });
+        }
+
+        function switchContext(context) {
+            const selfTiles = document.getElementById('tiles-self');
+            const sudopTiles = document.getElementById('tiles-sudop');
+            const adminInfoBox = document.getElementById('admin-info-box');
+
+            if (context === 'self') {
+                selfTiles.classList.remove('hidden');
+                sudopTiles.classList.add('hidden');
+                adminInfoBox.classList.add('hidden');
+            } else {
+                selfTiles.classList.add('hidden');
+                sudopTiles.classList.remove('hidden');
+                adminInfoBox.classList.remove('hidden');
+            }
+
+            // Reset filter to "all"
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelector('.filter-btn').classList.add('active');
+
+            updateFilterCounts();
+        }
+
+        function revokePM(btn) {
+            if (!confirm('Opravdu chcete odvolat tuto plnou moc? Tato akce je nevratná.')) return;
+
+            const tile = btn.closest('.tile');
+            const modal = document.getElementById('revoke-modal');
+            modal.classList.add('show');
+
+            setTimeout(() => {
+                modal.classList.remove('show');
+                tile.dataset.status = 'revoked';
+                tile.querySelector('.status-badge').className = 'status-badge revoked';
+                tile.querySelector('.status-badge').innerHTML = '<span class="status-dot"></span> Odvolána';
+                const paramLabels = tile.querySelectorAll('.tile-summary .tile-param-label');
+                const paramValues = tile.querySelectorAll('.tile-summary .tile-param-value');
+                if (paramLabels[0]) paramLabels[0].textContent = 'Odvoláno';
+                if (paramValues[0]) paramValues[0].textContent = new Date().toLocaleDateString('cs-CZ');
+                const detailActions = tile.querySelector('.detail-actions');
+                detailActions.innerHTML = `
+                    <button class="btn btn-secondary" onclick="duplicatePM()">Duplikovat</button>
+                    <button class="btn btn-secondary" onclick="downloadPDF()">Stáhnout PDF</button>
+                `;
+                updateFilterCounts();
+            }, 2000);
+        }
+
+        function editPM() {
+            alert('Přechod na: Úprava plné moci');
+        }
+
+        function duplicatePM() {
+            alert('Přechod na: Nová plná moc (předvyplněná dle vybrané PM)');
+        }
+
+        function downloadPDF() {
+            alert('Stahování PDF plné moci...');
+        }
+
+        function updateFilterCounts() {
+            const currentContext = document.getElementById('context-select').value;
+            const tilesContainer = currentContext === 'self' ? document.getElementById('tiles-self') : document.getElementById('tiles-sudop');
+            const tiles = tilesContainer.querySelectorAll('.tile');
+
+            let pending = 0, active = 0, inactive = 0;
+
+            tiles.forEach(tile => {
+                const status = tile.dataset.status;
+                if (status === 'pending') pending++;
+                else if (status === 'active') active++;
+                else inactive++;
+            });
+
+            document.getElementById('count-all').textContent = tiles.length;
+            document.getElementById('count-pending').textContent = pending;
+            document.getElementById('count-active').textContent = active;
+            document.getElementById('count-inactive').textContent = inactive;
+        }
+
+        // ===== INICIALIZACE =====
+        document.addEventListener('DOMContentLoaded', function() {
+            loadIdentity();
+            updateFilterCounts();
+        });
+    </script>
+</body>
+</html>
