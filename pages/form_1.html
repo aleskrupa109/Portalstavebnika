@@ -458,20 +458,10 @@
                     </div>
 
                     <div id="novyZamerSection" style="display: none;">
-                        <h3 style="font-size: 16px; font-weight: 500; margin-bottom: 20px;">Místo záměru</h3>
-                        <div class="gov-form-row">
-                            <div class="gov-form-group"><label class="gov-form-label">Obec (nepovinné)</label><input type="text" class="gov-form-input"></div>
-                            <div class="gov-form-group"><label class="gov-form-label">Část obce (nepovinné)</label><input type="text" class="gov-form-input"></div>
-                        </div>
-                        <div class="gov-form-group"><label class="gov-form-label">Ulice (nepovinné)</label><input type="text" class="gov-form-input"></div>
-                        <div class="gov-form-row">
-                            <div class="gov-form-group"><label class="gov-form-label">Číslo popisné (nepovinné)</label><input type="text" class="gov-form-input"></div>
-                            <div class="gov-form-group"><label class="gov-form-label">Číslo orientační (nepovinné)</label><input type="text" class="gov-form-input"></div>
-                        </div>
-                        <p class="gov-form-hint" style="margin-top: -12px;">Pokud je místo čísla popisného přiděleno číslo evidenční, uveďte před číslem písmeno E.</p>
-                        <div class="gov-form-row" style="margin-top: 20px;">
-                            <div class="gov-form-group"><label class="gov-form-label">PSČ (nepovinné)</label><input type="text" class="gov-form-input" maxlength="5"></div>
-                            <div class="gov-form-group"></div>
+                        <div class="gov-form-group">
+                            <label class="gov-form-label">Název záměru</label>
+                            <input type="text" class="gov-form-input" id="novyZamerNazev" placeholder="Např. Rodinný dům Beroun, Přístavba garáže...">
+                            <p class="gov-form-hint">Zadejte pracovní název záměru pro snadnější orientaci</p>
                         </div>
                     </div>
 
@@ -502,11 +492,10 @@
                     <div class="gov-osnova-title">Osnova</div>
                     <div class="gov-osnova-item active"><div class="gov-osnova-number">1</div><span class="gov-osnova-label">Žadatel</span></div>
                     <div class="gov-osnova-item active"><div class="gov-osnova-number">2</div><span class="gov-osnova-label">Záměr</span></div>
-                    <div class="gov-osnova-item"><div class="gov-osnova-number">3</div><span class="gov-osnova-label">Rozsah</span></div>
-                    <div class="gov-osnova-item"><div class="gov-osnova-number">4</div><span class="gov-osnova-label">Dokumentace</span></div>
-                    <div class="gov-osnova-item"><div class="gov-osnova-number">5</div><span class="gov-osnova-label">Přílohy</span></div>
-                    <div class="gov-osnova-item"><div class="gov-osnova-number">6</div><span class="gov-osnova-label">Příjemce</span></div>
-                    <div class="gov-osnova-item"><div class="gov-osnova-number">7</div><span class="gov-osnova-label">Kontrola a podání</span></div>
+                    <div class="gov-osnova-item"><div class="gov-osnova-number">3</div><span class="gov-osnova-label">Dokumentace</span></div>
+                    <div class="gov-osnova-item"><div class="gov-osnova-number">4</div><span class="gov-osnova-label">Dokladová část</span></div>
+                    <div class="gov-osnova-item"><div class="gov-osnova-number">5</div><span class="gov-osnova-label">Příjemce</span></div>
+                    <div class="gov-osnova-item"><div class="gov-osnova-number">6</div><span class="gov-osnova-label">Kontrola a podání</span></div>
                     <div class="gov-osnova-toggle"><a href="#">Rozbalit</a></div>
                 </div>
             </aside>
@@ -824,11 +813,25 @@
         }
 
         function updateContinueButton() {
-            document.getElementById('continueBtn').disabled = state.zamerType === 'existujici' ? !state.selectedZamer : false;
+            var isValid = false;
+            if (state.zamerType === 'existujici') {
+                isValid = !!state.selectedZamer;
+            } else {
+                // Nový záměr - povolit pokračovat (název je nepovinný pro mockup)
+                isValid = true;
+            }
+            document.getElementById('continueBtn').disabled = !isValid;
         }
 
         function goToNext() {
-            alert('Pokračování na další krok...\n\nZáměr: ' + (state.selectedZamer ? state.selectedZamer.nazev : 'Nový záměr'));
+            // Uložit vybraný záměr do localStorage
+            var zamerData = {
+                type: state.zamerType,
+                zamer: state.selectedZamer,
+                novyNazev: state.zamerType === 'novy' ? document.getElementById('novyZamerNazev').value : null
+            };
+            localStorage.setItem('formZamer', JSON.stringify(zamerData));
+            window.location.href = 'form_2.html';
         }
 
         function startAutosaveTimer() {
