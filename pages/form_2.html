@@ -162,6 +162,8 @@
         .gov-upload-btn { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; background: #fff; border: 1px solid var(--gov-primary); border-radius: var(--gov-radius); color: var(--gov-primary); font-size: 13px; font-weight: 500; cursor: pointer; }
         .gov-upload-btn:hover { background: var(--gov-primary-50); }
         .gov-upload-btn svg { width: 16px; height: 16px; }
+        .gov-upload-btns { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+        .gov-upload-btn-folder { background: var(--gov-primary-50); }
 
         /* ===== UPLOADED FILES ===== */
         .gov-uploaded-files { margin-top: 12px; }
@@ -321,10 +323,14 @@
                             <div class="gov-doc-part-title">B - Souhrnná technická zpráva</div>
                             <div class="gov-doc-part-desc">Komplexní dokument, který stručně popisuje všechny podstatné technické, konstrukční a provozní aspekty navrhované stavby pro potřeby stavebního úřadu a dotčených orgánů.</div>
                             
-                            <div class="gov-upload-zone" ondrop="handleDrop(event, 'B')" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" onclick="triggerUpload('B')">
+                            <div class="gov-upload-zone" ondrop="handleDrop(event, 'B')" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)">
                                 <div class="gov-upload-text">Přetáhněte soubory nebo složky nebo</div>
-                                <button class="gov-upload-btn"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>Nahrát ze zařízení</button>
+                                <div class="gov-upload-btns">
+                                    <button class="gov-upload-btn" onclick="event.stopPropagation(); triggerUpload('B')"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>Nahrát soubory</button>
+                                    <button class="gov-upload-btn gov-upload-btn-folder" onclick="event.stopPropagation(); triggerFolderUpload('B')"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>Nahrát složku</button>
+                                </div>
                                 <input type="file" id="upload-B" multiple style="display: none;" onchange="handleFiles(event, 'B')">
+                                <input type="file" id="upload-B-folder" webkitdirectory style="display: none;" onchange="handleFolderFiles(event, 'B')">
                             </div>
                             <div class="gov-uploaded-files" id="files-B"></div>
                             <p class="gov-form-hint">Můžete nahrát jak jednotlivé soubory, tak celé složky včetně všech podsložek a jejich obsahu.</p>
@@ -394,20 +400,44 @@
 
                                         <div class="gov-upload-section">
                                             <div class="gov-upload-label">D1 - Stavební a technologická část</div>
-                                            <div class="gov-upload-zone" ondrop="handleDrop(event, 'D1-1')" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" onclick="triggerUpload('D1-1')"><div class="gov-upload-text">Přetáhněte soubory nebo složky nebo</div><button class="gov-upload-btn"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>Nahrát ze zařízení</button><input type="file" id="upload-D1-1" multiple style="display: none;" onchange="handleFiles(event, 'D1-1')"></div>
+                                            <div class="gov-upload-zone" ondrop="handleDrop(event, 'D1-1')" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)">
+                                                <div class="gov-upload-text">Přetáhněte soubory nebo složky nebo</div>
+                                                <div class="gov-upload-btns">
+                                                    <button class="gov-upload-btn" onclick="event.stopPropagation(); triggerUpload('D1-1')"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>Nahrát soubory</button>
+                                                    <button class="gov-upload-btn gov-upload-btn-folder" onclick="event.stopPropagation(); triggerFolderUpload('D1-1')"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>Nahrát složku</button>
+                                                </div>
+                                                <input type="file" id="upload-D1-1" multiple style="display: none;" onchange="handleFiles(event, 'D1-1')">
+                                                <input type="file" id="upload-D1-1-folder" webkitdirectory style="display: none;" onchange="handleFolderFiles(event, 'D1-1')">
+                                            </div>
                                             <div class="gov-uploaded-files" id="files-D1-1"></div>
                                             <p class="gov-form-hint">Můžete nahrát jak jednotlivé soubory, tak celé složky včetně všech podsložek a jejich obsahu.</p>
                                         </div>
 
                                         <div class="gov-upload-section">
                                             <div class="gov-upload-label">D2 - Základní stavebně konstrukční řešení</div>
-                                            <div class="gov-upload-zone" ondrop="handleDrop(event, 'D2-1')" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" onclick="triggerUpload('D2-1')"><div class="gov-upload-text">Přetáhněte soubory nebo složky nebo</div><button class="gov-upload-btn"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>Nahrát ze zařízení</button><input type="file" id="upload-D2-1" multiple style="display: none;" onchange="handleFiles(event, 'D2-1')"></div>
+                                            <div class="gov-upload-zone" ondrop="handleDrop(event, 'D2-1')" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)">
+                                                <div class="gov-upload-text">Přetáhněte soubory nebo složky nebo</div>
+                                                <div class="gov-upload-btns">
+                                                    <button class="gov-upload-btn" onclick="event.stopPropagation(); triggerUpload('D2-1')"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>Nahrát soubory</button>
+                                                    <button class="gov-upload-btn gov-upload-btn-folder" onclick="event.stopPropagation(); triggerFolderUpload('D2-1')"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>Nahrát složku</button>
+                                                </div>
+                                                <input type="file" id="upload-D2-1" multiple style="display: none;" onchange="handleFiles(event, 'D2-1')">
+                                                <input type="file" id="upload-D2-1-folder" webkitdirectory style="display: none;" onchange="handleFolderFiles(event, 'D2-1')">
+                                            </div>
                                             <div class="gov-uploaded-files" id="files-D2-1"></div>
                                         </div>
 
                                         <div class="gov-upload-section">
                                             <div class="gov-upload-label">D3 - Požárně bezpečnostní řešení</div>
-                                            <div class="gov-upload-zone" ondrop="handleDrop(event, 'D3-1')" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" onclick="triggerUpload('D3-1')"><div class="gov-upload-text">Přetáhněte soubory nebo složky nebo</div><button class="gov-upload-btn"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>Nahrát ze zařízení</button><input type="file" id="upload-D3-1" multiple style="display: none;" onchange="handleFiles(event, 'D3-1')"></div>
+                                            <div class="gov-upload-zone" ondrop="handleDrop(event, 'D3-1')" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)">
+                                                <div class="gov-upload-text">Přetáhněte soubory nebo složky nebo</div>
+                                                <div class="gov-upload-btns">
+                                                    <button class="gov-upload-btn" onclick="event.stopPropagation(); triggerUpload('D3-1')"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>Nahrát soubory</button>
+                                                    <button class="gov-upload-btn gov-upload-btn-folder" onclick="event.stopPropagation(); triggerFolderUpload('D3-1')"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>Nahrát složku</button>
+                                                </div>
+                                                <input type="file" id="upload-D3-1" multiple style="display: none;" onchange="handleFiles(event, 'D3-1')">
+                                                <input type="file" id="upload-D3-1-folder" webkitdirectory style="display: none;" onchange="handleFolderFiles(event, 'D3-1')">
+                                            </div>
                                             <div class="gov-uploaded-files" id="files-D3-1"></div>
                                         </div>
                                     </div>
@@ -501,7 +531,7 @@
 
         function createUploadSectionHTML(objektId, part, label) {
             var key = part + '-' + objektId;
-            return '<div class="gov-upload-section"><div class="gov-upload-label">' + label + '</div><div class="gov-upload-zone" ondrop="handleDrop(event, \'' + key + '\')" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" onclick="triggerUpload(\'' + key + '\')"><div class="gov-upload-text">Přetáhněte soubory nebo složky nebo</div><button class="gov-upload-btn"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>Nahrát ze zařízení</button><input type="file" id="upload-' + key + '" multiple style="display: none;" onchange="handleFiles(event, \'' + key + '\')"></div><div class="gov-uploaded-files" id="files-' + key + '"></div></div>';
+            return '<div class="gov-upload-section"><div class="gov-upload-label">' + label + '</div><div class="gov-upload-zone" ondrop="handleDrop(event, \'' + key + '\')" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)"><div class="gov-upload-text">Přetáhněte soubory nebo složky nebo</div><div class="gov-upload-btns"><button class="gov-upload-btn" onclick="event.stopPropagation(); triggerUpload(\'' + key + '\')"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>Nahrát soubory</button><button class="gov-upload-btn gov-upload-btn-folder" onclick="event.stopPropagation(); triggerFolderUpload(\'' + key + '\')"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>Nahrát složku</button></div><input type="file" id="upload-' + key + '" multiple style="display: none;" onchange="handleFiles(event, \'' + key + '\')"><input type="file" id="upload-' + key + '-folder" webkitdirectory style="display: none;" onchange="handleFolderFiles(event, \'' + key + '\')"></div><div class="gov-uploaded-files" id="files-' + key + '"></div></div>';
         }
 
         function deleteObjekt(id) { if (state.objekty.length <= 1) { alert('Musí existovat alespoň jeden objekt.'); return; } if (!confirm('Opravdu chcete odstranit tento objekt včetně všech nahraných souborů?')) return; state.objekty = state.objekty.filter(function(o) { return o.id !== id; }); var el = document.getElementById('objekt-' + id); if (el) el.remove(); }
@@ -509,14 +539,62 @@
         function finishPartD() { alert('Část D byla ukončena. Můžete pokračovat na Dokladovou část.'); }
 
         function triggerUpload(key) { document.getElementById('upload-' + key).click(); }
-        function handleFiles(event, key) { addFiles(key, event.target.files); }
-        function handleDrop(event, key) { event.preventDefault(); event.currentTarget.classList.remove('dragover'); addFiles(key, event.dataTransfer.files); }
+        function triggerFolderUpload(key) { document.getElementById('upload-' + key + '-folder').click(); }
+        function handleFiles(event, key) { addFiles(key, event.target.files, false); }
+        function handleFolderFiles(event, key) { addFiles(key, event.target.files, true); }
+        
+        function handleDrop(event, key) { 
+            event.preventDefault(); 
+            event.currentTarget.classList.remove('dragover'); 
+            var items = event.dataTransfer.items;
+            if (items) {
+                // Použijeme webkitGetAsEntry pro detekci složek
+                var entries = [];
+                for (var i = 0; i < items.length; i++) {
+                    var entry = items[i].webkitGetAsEntry ? items[i].webkitGetAsEntry() : null;
+                    if (entry) entries.push(entry);
+                }
+                if (entries.length > 0) {
+                    processEntries(entries, key, '');
+                    return;
+                }
+            }
+            // Fallback na standardní soubory
+            addFiles(key, event.dataTransfer.files, false); 
+        }
+        
+        function processEntries(entries, key, basePath) {
+            entries.forEach(function(entry) {
+                if (entry.isFile) {
+                    entry.file(function(file) {
+                        var path = basePath ? basePath + '/' + file.name : file.name;
+                        addSingleFile(key, file, path);
+                    });
+                } else if (entry.isDirectory) {
+                    var dirReader = entry.createReader();
+                    var folderPath = basePath ? basePath + '/' + entry.name : entry.name;
+                    dirReader.readEntries(function(subEntries) {
+                        processEntries(subEntries, key, folderPath);
+                    });
+                }
+            });
+        }
+        
+        function addSingleFile(key, file, path) {
+            if (!state.files[key]) state.files[key] = [];
+            state.files[key].push({ name: file.name, size: file.size, path: path });
+            renderFiles(key);
+        }
         function handleDragOver(event) { event.preventDefault(); event.currentTarget.classList.add('dragover'); }
         function handleDragLeave(event) { event.currentTarget.classList.remove('dragover'); }
 
-        function addFiles(key, fileList) {
+        function addFiles(key, fileList, isFolder) {
             if (!state.files[key]) state.files[key] = [];
-            for (var i = 0; i < fileList.length; i++) { state.files[key].push({ name: fileList[i].name, size: fileList[i].size }); }
+            for (var i = 0; i < fileList.length; i++) { 
+                var file = fileList[i];
+                var path = isFolder && file.webkitRelativePath ? file.webkitRelativePath : file.name;
+                state.files[key].push({ name: file.name, size: file.size, path: path }); 
+            }
             renderFiles(key);
         }
 
@@ -526,7 +604,10 @@
             var files = state.files[key] || [];
             var html = '';
             files.forEach(function(file, index) {
-                html += '<div class="gov-uploaded-file"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><span class="gov-uploaded-file-name">' + file.name + '</span><span class="gov-uploaded-file-size">' + formatFileSize(file.size) + '</span><button class="gov-uploaded-file-remove" onclick="removeFile(\'' + key + '\', ' + index + ')"><svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button></div>';
+                var displayName = file.path || file.name;
+                var isInFolder = displayName.indexOf('/') > -1;
+                var folderIcon = isInFolder ? '<svg style="width:14px;height:14px;margin-right:4px;color:#666;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>' : '';
+                html += '<div class="gov-uploaded-file"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><span class="gov-uploaded-file-name">' + folderIcon + displayName + '</span><span class="gov-uploaded-file-size">' + formatFileSize(file.size) + '</span><button class="gov-uploaded-file-remove" onclick="removeFile(\'' + key + '\', ' + index + ')"><svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button></div>';
             });
             container.innerHTML = html;
         }
