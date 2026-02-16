@@ -104,6 +104,20 @@
         .gov-radio input:checked + .gov-radio-circle { border-color: var(--gov-primary); }
         .gov-radio input:checked + .gov-radio-circle::after { content: ''; width: 10px; height: 10px; background: var(--gov-primary); border-radius: 50%; }
         .gov-radio-label { font-size: 14px; color: var(--gov-neutral-900); }
+        
+        /* Disabled/readonly radio styling */
+        .gov-radio.disabled { cursor: default; opacity: 0.5; }
+        .gov-radio.disabled .gov-radio-circle { border-color: var(--gov-neutral-200); }
+        .gov-radio.disabled .gov-radio-label { color: var(--gov-neutral-400); }
+        .gov-radio.selected-readonly { cursor: default; }
+        .gov-radio.selected-readonly .gov-radio-circle { border-color: var(--gov-primary); background: var(--gov-primary-50); }
+        .gov-radio.selected-readonly input:checked + .gov-radio-circle::after { background: var(--gov-primary); }
+        .gov-radio.selected-readonly .gov-radio-label { color: var(--gov-neutral-900); font-weight: 500; }
+        
+        .gov-readonly-note { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--gov-neutral-500); margin-top: -8px; margin-bottom: 20px; }
+        .gov-readonly-note svg { width: 14px; height: 14px; }
+        .gov-readonly-note a { color: var(--gov-primary); text-decoration: none; }
+        .gov-readonly-note a:hover { text-decoration: underline; }
 
         /* ===== FORM INPUTS ===== */
         .gov-form-group { margin-bottom: 20px; }
@@ -250,23 +264,27 @@
                 <div class="gov-form-section">
                     <h2 class="gov-form-section-title">1. Žadatel (stavebník)</h2>
 
-                    <!-- Volba role -->
+                    <!-- Volba role - READONLY (předvyplněno z form_new) -->
                     <div class="gov-radio-group" id="roleGroup">
-                        <label class="gov-radio">
-                            <input type="radio" name="role" value="ja" id="roleJa" checked onchange="updateRole('ja')">
+                        <label class="gov-radio disabled" id="radioJa">
+                            <input type="radio" name="role" value="ja" disabled>
                             <span class="gov-radio-circle"></span>
                             <span class="gov-radio-label">já</span>
                         </label>
-                        <label class="gov-radio">
-                            <input type="radio" name="role" value="zastoupeny" id="roleZastoupeny" onchange="updateRole('zastoupeny')">
+                        <label class="gov-radio disabled" id="radioZastoupeny">
+                            <input type="radio" name="role" value="zastoupeny" disabled>
                             <span class="gov-radio-circle"></span>
                             <span class="gov-radio-label">někdo jiný, zastoupený mnou</span>
                         </label>
-                        <label class="gov-radio">
-                            <input type="radio" name="role" value="vice" id="roleVice" onchange="updateRole('vice')">
+                        <label class="gov-radio disabled" id="radioVice">
+                            <input type="radio" name="role" value="vice" disabled>
                             <span class="gov-radio-circle"></span>
                             <span class="gov-radio-label">více fyzických osob/podnikatelů/firem</span>
                         </label>
+                    </div>
+                    <div class="gov-readonly-note">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        <span>Postavení bylo zvoleno v předchozím kroku. <a href="form_new.html">Změnit</a></span>
                     </div>
 
                     <!-- Řetězec zastoupení (pro postoupenou PM) -->
@@ -545,11 +563,28 @@
             var id = state.identifikace;
             var isRep = id.isRepresentative;
 
-            // Nastavit radio podle stavu
+            // Nastavit radio podle stavu - všechny disabled, vybraný jako selected-readonly
+            var radioJa = document.getElementById('radioJa');
+            var radioZastoupeny = document.getElementById('radioZastoupeny');
+            var radioVice = document.getElementById('radioVice');
+            
+            // Reset všech na disabled
+            radioJa.classList.remove('selected-readonly');
+            radioZastoupeny.classList.remove('selected-readonly');
+            radioVice.classList.remove('selected-readonly');
+            radioJa.classList.add('disabled');
+            radioZastoupeny.classList.add('disabled');
+            radioVice.classList.add('disabled');
+            
+            // Označit vybraný jako selected-readonly
             if (isRep) {
-                document.getElementById('roleZastoupeny').checked = true;
+                radioZastoupeny.classList.remove('disabled');
+                radioZastoupeny.classList.add('selected-readonly');
+                radioZastoupeny.querySelector('input').checked = true;
             } else {
-                document.getElementById('roleJa').checked = true;
+                radioJa.classList.remove('disabled');
+                radioJa.classList.add('selected-readonly');
+                radioJa.querySelector('input').checked = true;
             }
 
             // Render stavebník
@@ -678,12 +713,7 @@
             document.getElementById('chainFlow').innerHTML = html;
         }
 
-        function updateRole(role) {
-            // Při změně role by se mělo přejít zpět na identifikaci
-            if (role !== (state.identifikace.isRepresentative ? 'zastoupeny' : 'ja')) {
-                window.location.href = 'form_new.html';
-            }
-        }
+        // Funkce updateRole odstraněna - radiobutony jsou readonly
 
         // === ZÁMĚRY ===
         function loadZamery() {
