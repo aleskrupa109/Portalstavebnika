@@ -463,10 +463,33 @@
         var appState = { identity: 'FO', isRepresentative: false, authMethod: 'reza', selectedReza: null, repType: 'authorized', chain: [], rezaLoaded: false, allRezaData: [], filteredRezaData: [], currentFilter: 'all', currentSort: 'name', currentSearch: '', currentPage: 1, perPage: 4, modalRezaId: null };
 
         document.addEventListener('DOMContentLoaded', function() {
-            var urlParams = new URLSearchParams(window.location.search);
-            var scenario = urlParams.get('scenario');
-            var scenarioMap = { 'fo-zakladni': 'FO', 'osvc-zakladni': 'OSVC', 'almani': 'PO_ALMANI', 'prvni-projektova': 'PO_PRVNI' };
-            var identityId = scenario ? (scenarioMap[scenario] || 'FO') : 'FO';
+            // Načíst identitu z localStorage (uloženo v reza_implicitni.html)
+            var storedIdentity = localStorage.getItem('selectedIdentity');
+            var identityId = 'FO'; // default
+            
+            if (storedIdentity) {
+                var parsed = JSON.parse(storedIdentity);
+                // Mapování z selectedIdentity na interní ID
+                if (parsed.name === 'Aleš Krupa' && parsed.type === 'FO') {
+                    identityId = 'FO';
+                } else if (parsed.name === 'Ing. Aleš Krupa' || parsed.type === 'OSVČ') {
+                    identityId = 'OSVC';
+                } else if (parsed.name === 'ALMANI s.r.o.') {
+                    identityId = 'PO_ALMANI';
+                } else if (parsed.name === 'První projektová a.s.') {
+                    identityId = 'PO_PRVNI';
+                } else if (parsed.type === 'PO') {
+                    // Fallback pro jiné PO
+                    identityId = 'PO_ALMANI';
+                }
+            } else {
+                // Fallback na URL parametry pro zpětnou kompatibilitu
+                var urlParams = new URLSearchParams(window.location.search);
+                var scenario = urlParams.get('scenario');
+                var scenarioMap = { 'fo-zakladni': 'FO', 'osvc-zakladni': 'OSVC', 'almani': 'PO_ALMANI', 'prvni-projektova': 'PO_PRVNI' };
+                identityId = scenario ? (scenarioMap[scenario] || 'FO') : 'FO';
+            }
+            
             setIdentity(identityId);
             var radio = document.querySelector('input[name="identity"][value="' + identityId + '"]');
             if (radio) radio.checked = true;
