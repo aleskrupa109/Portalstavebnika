@@ -79,9 +79,13 @@
         .gov-page-header { margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid var(--gov-neutral-200); }
         .gov-page-title { font-size: 26px; font-weight: 500; margin-bottom: 12px; }
         .gov-page-subtitle { font-size: 14px; color: var(--gov-neutral-500); line-height: 1.6; max-width: 700px; }
-        .gov-layout { display: flex; gap: 40px; }
+        .gov-layout { display: flex; gap: 40px; align-items: flex-start; }
         .gov-main { flex: 1; min-width: 0; }
-        .gov-sidebar { width: 280px; flex-shrink: 0; }
+        .gov-sidebar { width: 280px; flex-shrink: 0; position: sticky; top: 100px; max-height: calc(100vh - 120px); overflow-y: auto; }
+        .gov-sidebar::-webkit-scrollbar { width: 6px; }
+        .gov-sidebar::-webkit-scrollbar-track { background: var(--gov-neutral-100); border-radius: 3px; }
+        .gov-sidebar::-webkit-scrollbar-thumb { background: var(--gov-neutral-300); border-radius: 3px; }
+        .gov-sidebar::-webkit-scrollbar-thumb:hover { background: var(--gov-neutral-400); }
 
         /* ===== SIDEBAR ===== */
         .gov-autosave { background: #fff; border: 1px solid var(--gov-neutral-200); border-radius: var(--gov-radius-lg); padding: 16px 20px; margin-bottom: 24px; }
@@ -113,7 +117,10 @@
         .gov-struktura-controls { display: flex; gap: 4px; }
         .gov-struktura-btn { width: 24px; height: 24px; border: 1px solid var(--gov-neutral-300); border-radius: 4px; background: #fff; color: var(--gov-neutral-600); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600; line-height: 1; }
         .gov-struktura-btn:hover { border-color: var(--gov-primary); color: var(--gov-primary); background: var(--gov-primary-50); }
-        .gov-struktura-tree { font-size: 12px; line-height: 1.6; max-height: 400px; overflow-y: auto; }
+        .gov-struktura-tree { font-size: 12px; line-height: 1.6; max-height: 300px; overflow-y: auto; }
+        .gov-struktura-tree::-webkit-scrollbar { width: 5px; }
+        .gov-struktura-tree::-webkit-scrollbar-track { background: var(--gov-neutral-100); border-radius: 3px; }
+        .gov-struktura-tree::-webkit-scrollbar-thumb { background: var(--gov-neutral-300); border-radius: 3px; }
         .gov-tree-item { display: flex; align-items: flex-start; gap: 4px; padding: 2px 0; }
         .gov-tree-item.folder { font-weight: 500; color: var(--gov-neutral-700); cursor: pointer; user-select: none; }
         .gov-tree-item.folder:hover { color: var(--gov-primary); }
@@ -295,7 +302,7 @@
 
         @media (max-width: 1024px) {
             .gov-layout { flex-direction: column-reverse; }
-            .gov-sidebar { width: 100%; }
+            .gov-sidebar { width: 100%; position: static; max-height: none; overflow-y: visible; }
         }
     </style>
 </head>
