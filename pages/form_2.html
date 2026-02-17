@@ -107,18 +107,26 @@
 
         /* ===== STRUKTURA DOKUMENTACE ===== */
         .gov-struktura { background: #fff; border: 1px solid var(--gov-neutral-200); border-radius: var(--gov-radius-lg); padding: 16px; margin-top: 24px; }
-        .gov-struktura-title { font-size: 14px; font-weight: 600; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+        .gov-struktura-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+        .gov-struktura-title { font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
         .gov-struktura-title svg { width: 18px; height: 18px; color: var(--gov-primary); }
+        .gov-struktura-controls { display: flex; gap: 4px; }
+        .gov-struktura-btn { width: 24px; height: 24px; border: 1px solid var(--gov-neutral-300); border-radius: 4px; background: #fff; color: var(--gov-neutral-600); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600; line-height: 1; }
+        .gov-struktura-btn:hover { border-color: var(--gov-primary); color: var(--gov-primary); background: var(--gov-primary-50); }
         .gov-struktura-tree { font-size: 12px; line-height: 1.6; max-height: 400px; overflow-y: auto; }
         .gov-tree-item { display: flex; align-items: flex-start; gap: 4px; padding: 2px 0; }
-        .gov-tree-item.folder { font-weight: 500; color: var(--gov-neutral-700); }
+        .gov-tree-item.folder { font-weight: 500; color: var(--gov-neutral-700); cursor: pointer; user-select: none; }
+        .gov-tree-item.folder:hover { color: var(--gov-primary); }
         .gov-tree-item.file { color: var(--gov-neutral-500); font-weight: 400; }
         .gov-tree-item.empty { color: var(--gov-neutral-400); font-style: italic; }
         .gov-tree-icon { width: 14px; height: 14px; flex-shrink: 0; margin-top: 2px; }
         .gov-tree-icon.folder-icon { color: var(--gov-warning-600); }
         .gov-tree-icon.file-icon { color: var(--gov-neutral-400); }
-        .gov-tree-children { margin-left: 18px; border-left: 1px dashed var(--gov-neutral-200); padding-left: 8px; }
+        .gov-tree-toggle { width: 14px; height: 14px; flex-shrink: 0; margin-top: 2px; color: var(--gov-neutral-400); transition: transform 0.15s ease; }
+        .gov-tree-toggle.collapsed { transform: rotate(-90deg); }
+        .gov-tree-children { margin-left: 18px; border-left: 1px dashed var(--gov-neutral-200); padding-left: 8px; overflow: hidden; transition: max-height 0.2s ease; }
         .gov-tree-children.has-content { border-left-color: var(--gov-primary-100); }
+        .gov-tree-children.collapsed { max-height: 0 !important; padding-top: 0; padding-bottom: 0; }
         .gov-tree-count { font-size: 10px; color: var(--gov-neutral-400); margin-left: 4px; font-weight: 400; }
 
         /* ===== STRUKTURA DOKUMENTACE ===== */
@@ -508,9 +516,15 @@
                 </div>
 
                 <div class="gov-struktura">
-                    <div class="gov-struktura-title">
-                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>
-                        Struktura dokumentace
+                    <div class="gov-struktura-header">
+                        <div class="gov-struktura-title">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>
+                            Struktura dokumentace
+                        </div>
+                        <div class="gov-struktura-controls">
+                            <button class="gov-struktura-btn" onclick="expandAllFolders()" title="Rozbalit vše">+</button>
+                            <button class="gov-struktura-btn" onclick="collapseAllFolders()" title="Sbalit vše">−</button>
+                        </div>
                     </div>
                     <div class="gov-struktura-tree" id="dokumentaceTree">
                         <!-- Dynamicky generováno JavaScriptem -->
@@ -895,88 +909,154 @@
         function startAutosaveTimer() { var s = 3; setInterval(function() { document.getElementById('autosaveTime').textContent = ++s; }, 1000); }
 
         // ===== STRUKTURA DOKUMENTACE =====
+        var treeIdCounter = 0;
+        
         function updateDokumentaceTree() {
             var tree = document.getElementById('dokumentaceTree');
             if (!tree) return;
             
+            treeIdCounter = 0;
             var html = '';
             
             // A - Průvodní list
-            html += renderTreeSection('A', 'A - Průvodní list', state.files['A']);
+            html += renderTreeFolder('A - Průvodní list', function() {
+                return renderTreeFiles(state.files['A']);
+            }, state.files['A']);
             
             // B - Souhrnná technická zpráva
-            html += renderTreeSection('B', 'B - Souhrnná technická zpráva', state.files['B']);
+            html += renderTreeFolder('B - Souhrnná technická zpráva', function() {
+                return renderTreeFiles(state.files['B']);
+            }, state.files['B']);
             
             // C - Situační výkresy
-            html += '<div class="gov-tree-item folder">' + folderIcon() + 'C - Situační výkresy</div>';
-            html += '<div class="gov-tree-children' + (hasAnyFiles(['C1','C2','C3','C4','C5']) ? ' has-content' : '') + '">';
-            html += renderTreeSection('C1', 'C1 - Širší vztahy', state.files['C1']);
-            html += renderTreeSection('C2', 'C2 - Katastrální', state.files['C2']);
-            html += renderTreeSection('C3', 'C3 - Koordinační', state.files['C3']);
-            html += renderTreeSection('C4', 'C4 - Speciální', state.files['C4']);
-            html += renderTreeSection('C5', 'C5 - Dělení pozemků', state.files['C5']);
-            html += '</div>';
+            html += renderTreeFolder('C - Situační výkresy', function() {
+                var content = '';
+                content += renderTreeFolder('C1 - Širší vztahy', function() { return renderTreeFiles(state.files['C1']); }, state.files['C1']);
+                content += renderTreeFolder('C2 - Katastrální', function() { return renderTreeFiles(state.files['C2']); }, state.files['C2']);
+                content += renderTreeFolder('C3 - Koordinační', function() { return renderTreeFiles(state.files['C3']); }, state.files['C3']);
+                content += renderTreeFolder('C4 - Speciální', function() { return renderTreeFiles(state.files['C4']); }, state.files['C4']);
+                content += renderTreeFolder('C5 - Dělení pozemků', function() { return renderTreeFiles(state.files['C5']); }, state.files['C5']);
+                return content;
+            }, null, true); // always has children (subfolders)
             
             // D - Dokumentace objektů
-            html += '<div class="gov-tree-item folder">' + folderIcon() + 'D - Dokumentace</div>';
-            html += '<div class="gov-tree-children has-content">';
-            
-            state.stavby.forEach(function(stavba) {
-                var stavbaName = stavba.name || (stavba.type === 'hlavni' ? 'Hlavní stavba' : 'Vedlejší stavba');
-                var stavbaIcon = stavba.type === 'hlavni' ? '🏠 ' : '🏗️ ';
-                
-                // Zkontrolovat, zda má stavba nějaké soubory
-                var stavbaHasFiles = false;
-                stavba.objekty.forEach(function(objekt) {
-                    var key = stavba.id + '-' + objekt.id;
-                    if (hasAnyFiles(['D1-' + key, 'D2-' + key, 'D3-' + key])) {
-                        stavbaHasFiles = true;
-                    }
-                });
-                
-                html += '<div class="gov-tree-item folder">' + folderIcon() + stavbaIcon + stavbaName + '</div>';
-                html += '<div class="gov-tree-children' + (stavbaHasFiles ? ' has-content' : '') + '">';
-                
-                stavba.objekty.forEach(function(objekt) {
-                    var objektName = objekt.name || 'Objekt ' + objekt.id;
-                    var objektKey = stavba.id + '-' + objekt.id;
-                    var d1Key = 'D1-' + objektKey;
-                    var d2Key = 'D2-' + objektKey;
-                    var d3Key = 'D3-' + objektKey;
-                    var hasContent = hasAnyFiles([d1Key, d2Key, d3Key]);
+            html += renderTreeFolder('D - Dokumentace', function() {
+                var content = '';
+                state.stavby.forEach(function(stavba) {
+                    var stavbaName = stavba.name || (stavba.type === 'hlavni' ? 'Hlavní stavba' : 'Vedlejší stavba');
+                    var stavbaIcon = stavba.type === 'hlavni' ? '🏠 ' : '🏗️ ';
                     
-                    html += '<div class="gov-tree-item folder">' + folderIcon() + '📦 ' + objektName + '</div>';
-                    html += '<div class="gov-tree-children' + (hasContent ? ' has-content' : '') + '">';
-                    html += renderTreeSection(d1Key, 'D1 - Stavební', state.files[d1Key]);
-                    html += renderTreeSection(d2Key, 'D2 - Konstrukční', state.files[d2Key]);
-                    html += renderTreeSection(d3Key, 'D3 - Požární', state.files[d3Key]);
-                    html += '</div>';
+                    content += renderTreeFolder(stavbaIcon + stavbaName, function() {
+                        var objektyContent = '';
+                        stavba.objekty.forEach(function(objekt) {
+                            var objektName = objekt.name || 'Objekt ' + objekt.id;
+                            var objektKey = stavba.id + '-' + objekt.id;
+                            
+                            objektyContent += renderTreeFolder('📦 ' + objektName, function() {
+                                var dContent = '';
+                                dContent += renderTreeFolder('D1 - Stavební', function() { return renderTreeFiles(state.files['D1-' + objektKey]); }, state.files['D1-' + objektKey]);
+                                dContent += renderTreeFolder('D2 - Konstrukční', function() { return renderTreeFiles(state.files['D2-' + objektKey]); }, state.files['D2-' + objektKey]);
+                                dContent += renderTreeFolder('D3 - Požární', function() { return renderTreeFiles(state.files['D3-' + objektKey]); }, state.files['D3-' + objektKey]);
+                                return dContent;
+                            }, null, true);
+                        });
+                        return objektyContent;
+                    }, null, true);
                 });
-                
-                html += '</div>';
-            });
-            
-            html += '</div>';
+                return content;
+            }, null, true);
             
             tree.innerHTML = html;
         }
         
-        function renderTreeSection(key, label, files) {
-            var html = '';
+        function renderTreeFolder(label, contentFn, files, alwaysHasChildren) {
+            var id = 'tree-folder-' + (++treeIdCounter);
             var fileCount = files ? files.length : 0;
             var countBadge = fileCount > 0 ? '<span class="gov-tree-count">(' + fileCount + ')</span>' : '';
+            var hasContent = alwaysHasChildren || fileCount > 0;
             
-            html += '<div class="gov-tree-item folder">' + folderIcon() + label + countBadge + '</div>';
+            var html = '<div class="gov-tree-item folder" onclick="toggleTreeFolder(\'' + id + '\')">';
+            html += toggleIcon(true); // defaultně sbaleno
+            html += folderIcon();
+            html += label + countBadge;
+            html += '</div>';
             
-            if (files && files.length > 0) {
-                // Vytvořit stromovou strukturu ze souborů
-                var fileTree = buildFileTree(files);
-                html += '<div class="gov-tree-children has-content">';
-                html += renderFileTree(fileTree);
+            var content = contentFn ? contentFn() : '';
+            html += '<div class="gov-tree-children collapsed' + (hasContent ? ' has-content' : '') + '" id="' + id + '">';
+            html += content;
+            html += '</div>';
+            
+            return html;
+        }
+        
+        function renderTreeFiles(files) {
+            if (!files || files.length === 0) return '';
+            
+            var fileTree = buildFileTree(files);
+            return renderFileTreeContent(fileTree);
+        }
+        
+        function renderFileTreeContent(tree) {
+            var html = '';
+            
+            // Nejprve složky
+            Object.keys(tree).forEach(function(key) {
+                if (key === '_files') return;
+                var id = 'tree-folder-' + (++treeIdCounter);
+                
+                html += '<div class="gov-tree-item folder" onclick="toggleTreeFolder(\'' + id + '\')">';
+                html += toggleIcon(true);
+                html += folderIcon();
+                html += key;
                 html += '</div>';
+                html += '<div class="gov-tree-children collapsed has-content" id="' + id + '">';
+                html += renderFileTreeContent(tree[key]);
+                html += '</div>';
+            });
+            
+            // Pak soubory
+            if (tree._files) {
+                tree._files.forEach(function(file) {
+                    html += '<div class="gov-tree-item file">' + fileIcon() + file.name + '</div>';
+                });
             }
             
             return html;
+        }
+        
+        function toggleTreeFolder(id) {
+            var el = document.getElementById(id);
+            if (!el) return;
+            
+            var isCollapsed = el.classList.contains('collapsed');
+            var toggleEl = el.previousElementSibling.querySelector('.gov-tree-toggle');
+            
+            if (isCollapsed) {
+                el.classList.remove('collapsed');
+                if (toggleEl) toggleEl.classList.remove('collapsed');
+            } else {
+                el.classList.add('collapsed');
+                if (toggleEl) toggleEl.classList.add('collapsed');
+            }
+        }
+        
+        function expandAllFolders() {
+            var folders = document.querySelectorAll('.gov-tree-children');
+            var toggles = document.querySelectorAll('.gov-tree-toggle');
+            folders.forEach(function(el) { el.classList.remove('collapsed'); });
+            toggles.forEach(function(el) { el.classList.remove('collapsed'); });
+        }
+        
+        function collapseAllFolders() {
+            var folders = document.querySelectorAll('.gov-tree-children');
+            var toggles = document.querySelectorAll('.gov-tree-toggle');
+            folders.forEach(function(el) { el.classList.add('collapsed'); });
+            toggles.forEach(function(el) { el.classList.add('collapsed'); });
+        }
+        
+        function renderTreeSection(key, label, files) {
+            // Zachováno pro zpětnou kompatibilitu, ale už se nepoužívá
+            return renderTreeFolder(label, function() { return renderTreeFiles(files); }, files);
         }
         
         function buildFileTree(files) {
@@ -1004,34 +1084,15 @@
             return tree;
         }
         
-        function renderFileTree(tree, depth) {
-            depth = depth || 0;
-            var html = '';
-            
-            // Nejprve složky
-            Object.keys(tree).forEach(function(key) {
-                if (key === '_files') return;
-                html += '<div class="gov-tree-item folder">' + folderIcon() + key + '</div>';
-                html += '<div class="gov-tree-children has-content">';
-                html += renderFileTree(tree[key], depth + 1);
-                html += '</div>';
-            });
-            
-            // Pak soubory
-            if (tree._files) {
-                tree._files.forEach(function(file) {
-                    html += '<div class="gov-tree-item file">' + fileIcon() + file.name + '</div>';
-                });
-            }
-            
-            return html;
-        }
-        
         function hasAnyFiles(keys) {
             for (var i = 0; i < keys.length; i++) {
                 if (state.files[keys[i]] && state.files[keys[i]].length > 0) return true;
             }
             return false;
+        }
+        
+        function toggleIcon(collapsed) {
+            return '<svg class="gov-tree-toggle' + (collapsed ? ' collapsed' : '') + '" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>';
         }
         
         function folderIcon() {
