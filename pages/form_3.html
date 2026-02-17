@@ -109,6 +109,36 @@
         .gov-osnova-toggle { margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--gov-neutral-100); }
         .gov-osnova-toggle a { font-size: 13px; color: var(--gov-primary); text-decoration: none; }
 
+        /* ===== STRUKTURA DOKLADU ===== */
+        .gov-struktura { background: #fff; border: 1px solid var(--gov-neutral-200); border-radius: var(--gov-radius-lg); padding: 16px; margin-top: 24px; }
+        .gov-struktura-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+        .gov-struktura-title { font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+        .gov-struktura-title svg { width: 18px; height: 18px; color: var(--gov-primary); }
+        .gov-struktura-controls { display: flex; gap: 4px; }
+        .gov-struktura-btn { width: 24px; height: 24px; border: 1px solid var(--gov-neutral-300); border-radius: 4px; background: #fff; color: var(--gov-neutral-600); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600; line-height: 1; }
+        .gov-struktura-btn:hover { border-color: var(--gov-primary); color: var(--gov-primary); background: var(--gov-primary-50); }
+        .gov-struktura-tree { font-size: 12px; line-height: 1.6; max-height: 300px; overflow-y: auto; }
+        .gov-struktura-tree::-webkit-scrollbar { width: 5px; }
+        .gov-struktura-tree::-webkit-scrollbar-track { background: var(--gov-neutral-100); border-radius: 3px; }
+        .gov-struktura-tree::-webkit-scrollbar-thumb { background: var(--gov-neutral-300); border-radius: 3px; }
+        .gov-tree-item { display: flex; align-items: flex-start; gap: 4px; padding: 2px 0; }
+        .gov-tree-item.folder { font-weight: 500; color: var(--gov-neutral-700); cursor: pointer; user-select: none; }
+        .gov-tree-item.folder:hover { color: var(--gov-primary); }
+        .gov-tree-item.file { color: var(--gov-neutral-500); font-weight: 400; }
+        .gov-tree-item.file.removed { color: var(--gov-neutral-400); text-decoration: line-through; }
+        .gov-tree-item.file.new { color: var(--gov-success-600); }
+        .gov-tree-icon { width: 14px; height: 14px; flex-shrink: 0; margin-top: 2px; }
+        .gov-tree-icon.folder-icon { color: var(--gov-warning-600); }
+        .gov-tree-icon.file-icon { color: var(--gov-neutral-400); }
+        .gov-tree-icon.file-icon.removed { color: var(--gov-error-600); }
+        .gov-tree-icon.file-icon.new { color: var(--gov-success-600); }
+        .gov-tree-toggle { width: 14px; height: 14px; flex-shrink: 0; margin-top: 2px; color: var(--gov-neutral-400); transition: transform 0.15s ease; }
+        .gov-tree-toggle.collapsed { transform: rotate(-90deg); }
+        .gov-tree-children { margin-left: 18px; border-left: 1px dashed var(--gov-neutral-200); padding-left: 8px; overflow: hidden; transition: max-height 0.2s ease; }
+        .gov-tree-children.has-content { border-left-color: var(--gov-primary-100); }
+        .gov-tree-children.collapsed { max-height: 0 !important; padding-top: 0; padding-bottom: 0; }
+        .gov-tree-count { font-size: 10px; color: var(--gov-neutral-400); margin-left: 4px; font-weight: 400; }
+
         /* ===== FORM SECTION ===== */
         .gov-form-section { background: #fff; border-radius: var(--gov-radius-lg); padding: 32px; margin-bottom: 24px; }
         .gov-form-section-title { font-size: 20px; font-weight: 500; color: var(--gov-primary); margin-bottom: 8px; }
@@ -382,6 +412,22 @@
                     <div class="gov-osnova-item"><div class="gov-osnova-number">7</div><span class="gov-osnova-label">Kontrola a podání</span></div>
                     <div class="gov-osnova-toggle"><a href="#">Rozbalit</a></div>
                 </div>
+
+                <div class="gov-struktura">
+                    <div class="gov-struktura-header">
+                        <div class="gov-struktura-title">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                            Struktura dokladů
+                        </div>
+                        <div class="gov-struktura-controls">
+                            <button class="gov-struktura-btn" onclick="expandAllFolders()" title="Rozbalit vše">+</button>
+                            <button class="gov-struktura-btn" onclick="collapseAllFolders()" title="Sbalit vše">−</button>
+                        </div>
+                    </div>
+                    <div class="gov-struktura-tree" id="dokladyTree">
+                        <!-- Dynamicky generováno JavaScriptem -->
+                    </div>
+                </div>
             </aside>
         </div>
     </div>
@@ -436,6 +482,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             loadIdentity();
             renderAllDoklady();
+            updateDokladyTree();
             startAutosaveTimer();
         });
 
@@ -658,6 +705,152 @@
                 document.getElementById('autosaveTime').textContent = ++s; 
             }, 1000);
         }
+
+        // ===== STRUKTURA DOKLADŮ =====
+        var sectionLabels = {
+            prehled: 'Přehled stanovisek a vyjádření',
+            zavazna: 'Závazná stanoviska DO',
+            vlastnici: 'Vyjádření vlastníků infrastruktury',
+            souhlasy: 'Souhlasy vlastníků',
+            eia: 'EIA / zjišťovací řízení',
+            ostatni: 'Ostatní podklady'
+        };
+
+        var treeIdCounter = 0;
+
+        function updateDokladyTree() {
+            var tree = document.getElementById('dokladyTree');
+            if (!tree) return;
+
+            treeIdCounter = 0;
+            var html = '';
+
+            Object.keys(sectionLabels).forEach(function(section) {
+                var label = sectionLabels[section];
+                var doklady = state.doklady[section] || [];
+                var activeCount = doklady.filter(function(d) { return d.status === 'active'; }).length;
+                var removedCount = doklady.filter(function(d) { return d.status === 'removed'; }).length;
+                
+                html += renderTreeFolder(label, function() {
+                    return renderDokladyFiles(doklady);
+                }, activeCount, removedCount);
+            });
+
+            tree.innerHTML = html;
+        }
+
+        function renderTreeFolder(label, contentFn, activeCount, removedCount) {
+            var id = 'tree-folder-' + (++treeIdCounter);
+            var totalCount = activeCount + removedCount;
+            var countBadge = '';
+            if (totalCount > 0) {
+                countBadge = '<span class="gov-tree-count">(' + activeCount;
+                if (removedCount > 0) {
+                    countBadge += '/' + removedCount + ' odebraných';
+                }
+                countBadge += ')</span>';
+            }
+
+            var html = '<div class="gov-tree-item folder" onclick="toggleTreeFolder(\'' + id + '\')">';
+            html += toggleIcon(true);
+            html += folderIcon();
+            html += label + countBadge;
+            html += '</div>';
+
+            var content = contentFn ? contentFn() : '';
+            var hasContent = totalCount > 0;
+            html += '<div class="gov-tree-children collapsed' + (hasContent ? ' has-content' : '') + '" id="' + id + '">';
+            html += content;
+            html += '</div>';
+
+            return html;
+        }
+
+        function renderDokladyFiles(doklady) {
+            var html = '';
+
+            // Nejprve aktivní
+            doklady.filter(function(d) { return d.status === 'active'; }).forEach(function(doklad) {
+                var isNew = doklad.isNew;
+                var statusClass = isNew ? ' new' : '';
+                html += '<div class="gov-tree-item file' + statusClass + '">';
+                html += fileIcon(statusClass);
+                html += truncateName(doklad.name, 30);
+                html += '</div>';
+            });
+
+            // Pak odebrané
+            doklady.filter(function(d) { return d.status === 'removed'; }).forEach(function(doklad) {
+                html += '<div class="gov-tree-item file removed">';
+                html += fileIcon(' removed');
+                html += truncateName(doklad.name, 30);
+                html += '</div>';
+            });
+
+            return html;
+        }
+
+        function truncateName(name, maxLength) {
+            if (name.length <= maxLength) return name;
+            var ext = name.lastIndexOf('.');
+            if (ext > 0 && name.length - ext <= 5) {
+                var base = name.substring(0, ext);
+                var extension = name.substring(ext);
+                if (base.length > maxLength - 3 - extension.length) {
+                    return base.substring(0, maxLength - 3 - extension.length) + '...' + extension;
+                }
+            }
+            return name.substring(0, maxLength - 3) + '...';
+        }
+
+        function toggleTreeFolder(id) {
+            var el = document.getElementById(id);
+            if (!el) return;
+
+            var isCollapsed = el.classList.contains('collapsed');
+            var toggleEl = el.previousElementSibling.querySelector('.gov-tree-toggle');
+
+            if (isCollapsed) {
+                el.classList.remove('collapsed');
+                if (toggleEl) toggleEl.classList.remove('collapsed');
+            } else {
+                el.classList.add('collapsed');
+                if (toggleEl) toggleEl.classList.add('collapsed');
+            }
+        }
+
+        function expandAllFolders() {
+            var folders = document.querySelectorAll('.gov-tree-children');
+            var toggles = document.querySelectorAll('.gov-tree-toggle');
+            folders.forEach(function(el) { el.classList.remove('collapsed'); });
+            toggles.forEach(function(el) { el.classList.remove('collapsed'); });
+        }
+
+        function collapseAllFolders() {
+            var folders = document.querySelectorAll('.gov-tree-children');
+            var toggles = document.querySelectorAll('.gov-tree-toggle');
+            folders.forEach(function(el) { el.classList.add('collapsed'); });
+            toggles.forEach(function(el) { el.classList.add('collapsed'); });
+        }
+
+        function toggleIcon(collapsed) {
+            return '<svg class="gov-tree-toggle' + (collapsed ? ' collapsed' : '') + '" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>';
+        }
+
+        function folderIcon() {
+            return '<svg class="gov-tree-icon folder-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>';
+        }
+
+        function fileIcon(statusClass) {
+            return '<svg class="gov-tree-icon file-icon' + (statusClass || '') + '" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>';
+        }
+
+        // Override renderDoklady to also update tree
+        var originalRenderDoklady = renderDoklady;
+        renderDoklady = function(section) {
+            originalRenderDoklady(section);
+            updateDokladyTree();
+        };
 
         // Close modal on overlay click
         document.getElementById('removeModal').addEventListener('click', function(e) {
