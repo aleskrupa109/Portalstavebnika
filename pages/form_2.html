@@ -218,23 +218,56 @@
         .gov-struktura-img { width: 100%; max-width: 500px; border: 1px solid var(--gov-neutral-200); border-radius: var(--gov-radius-lg); margin: 16px 0; }
 
         /* ===== OBJEKT BLOCK ===== */
-        .gov-objekt { background: var(--gov-neutral-50); border: 1px solid var(--gov-neutral-200); border-radius: var(--gov-radius-lg); margin-bottom: 20px; }
-        .gov-objekt-header { display: flex; align-items: center; justify-content: space-between; padding: 14px 20px; background: var(--gov-neutral-100); border-radius: var(--gov-radius-lg) var(--gov-radius-lg) 0 0; }
-        .gov-objekt-title { font-size: 14px; font-weight: 600; color: var(--gov-neutral-900); }
+        .gov-objekt { background: var(--gov-neutral-50); border: 1px solid var(--gov-neutral-200); border-radius: var(--gov-radius-lg); margin-bottom: 16px; }
+        .gov-objekt-header { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: var(--gov-neutral-100); border-radius: var(--gov-radius-lg) var(--gov-radius-lg) 0 0; }
+        .gov-objekt-title { font-size: 13px; font-weight: 600; color: var(--gov-neutral-900); display: flex; align-items: center; gap: 8px; }
+        .gov-objekt-title svg { width: 16px; height: 16px; color: var(--gov-neutral-500); }
         .gov-objekt-actions { display: flex; gap: 8px; }
         .gov-objekt-btn { padding: 5px 10px; font-size: 12px; font-family: var(--gov-font); border: 1px solid var(--gov-neutral-300); border-radius: var(--gov-radius); background: #fff; color: var(--gov-neutral-600); cursor: pointer; display: flex; align-items: center; gap: 4px; }
         .gov-objekt-btn:hover { border-color: var(--gov-primary); color: var(--gov-primary); }
         .gov-objekt-btn.delete:hover { border-color: var(--gov-error-600); color: var(--gov-error-600); }
         .gov-objekt-btn svg { width: 14px; height: 14px; }
-        .gov-objekt-body { padding: 20px; }
+        .gov-objekt-body { padding: 16px; }
 
-        /* ===== ADD OBJEKT ===== */
-        .gov-add-objekt { border: 2px dashed var(--gov-neutral-300); border-radius: var(--gov-radius-lg); padding: 20px; margin-top: 16px; }
+        /* ===== STAVBA BLOCK ===== */
+        .gov-stavba { background: #fff; border: 2px solid var(--gov-neutral-200); border-radius: var(--gov-radius-lg); margin-bottom: 24px; }
+        .gov-stavba.hlavni { border-color: var(--gov-primary); }
+        .gov-stavba.vedlejsi { border-color: var(--gov-neutral-300); }
+        .gov-stavba-header { padding: 16px 20px; border-bottom: 1px solid var(--gov-neutral-200); }
+        .gov-stavba.hlavni .gov-stavba-header { background: var(--gov-primary-50); border-bottom-color: var(--gov-primary-100); }
+        .gov-stavba.vedlejsi .gov-stavba-header { background: var(--gov-neutral-50); }
+        .gov-stavba-header-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+        .gov-stavba-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+        .gov-stavba.hlavni .gov-stavba-badge { background: var(--gov-primary); color: #fff; }
+        .gov-stavba.vedlejsi .gov-stavba-badge { background: var(--gov-neutral-200); color: var(--gov-neutral-600); }
+        .gov-stavba-badge svg { width: 14px; height: 14px; }
+        .gov-stavba-name { display: flex; align-items: center; gap: 12px; }
+        .gov-stavba-name-label { font-size: 13px; color: var(--gov-neutral-600); }
+        .gov-stavba-name-input { flex: 1; max-width: 400px; padding: 8px 12px; font-size: 14px; font-family: var(--gov-font); border: 1px solid var(--gov-neutral-200); border-radius: var(--gov-radius); }
+        .gov-stavba-name-input:focus { outline: none; border-color: var(--gov-primary); }
+        .gov-stavba-body { padding: 20px; }
+        .gov-stavba-info { font-size: 12px; color: var(--gov-neutral-500); margin-bottom: 16px; font-style: italic; }
+
+        /* ===== ADD BUTTONS ===== */
+        .gov-add-objekt { border: 2px dashed var(--gov-neutral-300); border-radius: var(--gov-radius-lg); padding: 16px; margin-top: 16px; }
         .gov-add-objekt-form { display: flex; gap: 12px; align-items: flex-end; }
-        .gov-add-objekt-form .gov-form-group { margin-bottom: 0; flex: 1; max-width: 300px; }
-        .gov-add-objekt-btn { padding: 10px 16px; background: var(--gov-primary); color: #fff; border: none; border-radius: var(--gov-radius); font-size: 13px; font-weight: 500; cursor: pointer; font-family: var(--gov-font); display: flex; align-items: center; gap: 6px; white-space: nowrap; }
+        .gov-add-objekt-form .gov-form-group { margin-bottom: 0; flex: 1; max-width: 250px; }
+        .gov-add-objekt-btn { padding: 8px 14px; background: var(--gov-primary); color: #fff; border: none; border-radius: var(--gov-radius); font-size: 13px; font-weight: 500; cursor: pointer; font-family: var(--gov-font); display: flex; align-items: center; gap: 6px; white-space: nowrap; }
         .gov-add-objekt-btn:hover { background: var(--gov-primary-700); }
         .gov-add-objekt-btn svg { width: 16px; height: 16px; }
+
+        .gov-add-stavba { border: 2px dashed var(--gov-neutral-300); border-radius: var(--gov-radius-lg); padding: 20px; text-align: center; margin-top: 16px; }
+        .gov-add-stavba-form { display: flex; gap: 12px; align-items: flex-end; justify-content: center; }
+        .gov-add-stavba-form .gov-form-group { margin-bottom: 0; flex: 1; max-width: 300px; text-align: left; }
+        .gov-add-stavba-btn { padding: 10px 20px; background: var(--gov-neutral-600); color: #fff; border: none; border-radius: var(--gov-radius); font-size: 14px; font-weight: 500; cursor: pointer; font-family: var(--gov-font); display: flex; align-items: center; gap: 8px; white-space: nowrap; }
+        .gov-add-stavba-btn:hover { background: var(--gov-neutral-700); }
+        .gov-add-stavba-btn svg { width: 18px; height: 18px; }
+
+        /* ===== COLLAPSIBLE ===== */
+        .gov-stavba-toggle { cursor: pointer; user-select: none; }
+        .gov-stavba-toggle svg { width: 20px; height: 20px; transition: transform 0.2s ease; }
+        .gov-stavba-toggle.collapsed svg { transform: rotate(-90deg); }
+        .gov-stavba-body.collapsed { display: none; }
 
         /* ===== BUTTONS ===== */
         .gov-btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; font-size: 14px; font-weight: 500; font-family: var(--gov-font); border-radius: var(--gov-radius); cursor: pointer; border: none; text-decoration: none; }
@@ -411,87 +444,39 @@
                             
                             <p style="font-size: 14px; font-weight: 500; margin-bottom: 12px;">Členění stavby</p>
                             <div class="gov-radio-group">
-                                <label class="gov-radio"><input type="radio" name="dType" value="jedna" checked onchange="setDType('jedna')"><span class="gov-radio-circle"></span><div class="gov-radio-content"><div class="gov-radio-label">Stavba (jedna stavba, která může být fyzicky rozdělena do více objektů, které bez sebe nemohou fungovat)</div></div></label>
-                                <label class="gov-radio"><input type="radio" name="dType" value="soubor" onchange="setDType('soubor')"><span class="gov-radio-circle"></span><div class="gov-radio-content"><div class="gov-radio-label">Soubor staveb (více samostatných staveb, které spolu souvisí, ale každá může fungovat samostatně, hlavní stavba určuje příslušnost SÚ pro celý soubor)</div></div></label>
+                                <label class="gov-radio"><input type="radio" name="dType" value="jedna" checked onchange="setDType('jedna')"><span class="gov-radio-circle"></span><div class="gov-radio-content"><div class="gov-radio-label">Jedna stavba</div><div class="gov-radio-desc">Jedna stavba, která může být fyzicky rozdělena do více objektů, které bez sebe nemohou fungovat</div></div></label>
+                                <label class="gov-radio"><input type="radio" name="dType" value="soubor" onchange="setDType('soubor')"><span class="gov-radio-circle"></span><div class="gov-radio-content"><div class="gov-radio-label">Soubor staveb</div><div class="gov-radio-desc">Více samostatných staveb (hlavní + vedlejší), které spolu souvisí, ale každá může fungovat samostatně. Hlavní stavba určuje příslušnost SÚ pro celý soubor.</div></div></label>
                             </div>
 
                             <div id="strukturaInfo" style="display: none;">
-                                <p style="font-size: 14px; font-weight: 500; margin: 16px 0 8px;">Struktura části D - soubor staveb s objekty</p>
-                                <img src="https://assets.nicepagecdn.com/88db6112/6536381/images/Snimekobrazovky2025-10-22v12.50.47.png" alt="Struktura dokumentace" class="gov-struktura-img">
-                            </div>
-
-                            <div id="objektyContainer">
-                                <div class="gov-objekt" id="objekt-1">
-                                    <div class="gov-objekt-header">
-                                        <div class="gov-objekt-title" id="objekt-1-label">Objekt</div>
-                                        <div class="gov-objekt-actions" id="objekt-1-actions" style="display: none;">
-                                            <button class="gov-objekt-btn" onclick="editObjektName(1)"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>Přejmenovat</button>
-                                        </div>
-                                    </div>
-                                    <div class="gov-objekt-body">
-                                        <div class="gov-form-group" id="objekt-1-name-group">
-                                            <label class="gov-form-label">Pojmenovat objekt</label>
-                                            <input type="text" class="gov-form-input" id="objekt-1-name" placeholder="Pojmenovat objekt">
-                                        </div>
-
-                                        <div class="gov-upload-section">
-                                            <div class="gov-upload-label">D1 - Stavební a technologická část</div>
-                                            <div class="gov-upload-zone" ondrop="handleDrop(event, 'D1-1')" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)">
-                                                <div class="gov-upload-text">Přetáhněte soubory nebo složky nebo</div>
-                                                <div class="gov-upload-btns">
-                                                    <button class="gov-upload-btn" onclick="event.stopPropagation(); triggerUpload('D1-1')"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>Nahrát soubory</button>
-                                                    <button class="gov-upload-btn gov-upload-btn-folder" onclick="event.stopPropagation(); triggerFolderUpload('D1-1')"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>Nahrát složku</button>
-                                                </div>
-                                                <input type="file" id="upload-D1-1" multiple style="display: none;" onchange="handleFiles(event, 'D1-1')">
-                                                <input type="file" id="upload-D1-1-folder" webkitdirectory style="display: none;" onchange="handleFolderFiles(event, 'D1-1')">
-                                            </div>
-                                            <div class="gov-uploaded-files" id="files-D1-1"></div>
-                                            <p class="gov-form-hint">Můžete nahrát jak jednotlivé soubory, tak celé složky včetně všech podsložek a jejich obsahu.</p>
-                                        </div>
-
-                                        <div class="gov-upload-section">
-                                            <div class="gov-upload-label">D2 - Základní stavebně konstrukční řešení</div>
-                                            <div class="gov-upload-zone" ondrop="handleDrop(event, 'D2-1')" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)">
-                                                <div class="gov-upload-text">Přetáhněte soubory nebo složky nebo</div>
-                                                <div class="gov-upload-btns">
-                                                    <button class="gov-upload-btn" onclick="event.stopPropagation(); triggerUpload('D2-1')"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>Nahrát soubory</button>
-                                                    <button class="gov-upload-btn gov-upload-btn-folder" onclick="event.stopPropagation(); triggerFolderUpload('D2-1')"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>Nahrát složku</button>
-                                                </div>
-                                                <input type="file" id="upload-D2-1" multiple style="display: none;" onchange="handleFiles(event, 'D2-1')">
-                                                <input type="file" id="upload-D2-1-folder" webkitdirectory style="display: none;" onchange="handleFolderFiles(event, 'D2-1')">
-                                            </div>
-                                            <div class="gov-uploaded-files" id="files-D2-1"></div>
-                                        </div>
-
-                                        <div class="gov-upload-section">
-                                            <div class="gov-upload-label">D3 - Požárně bezpečnostní řešení</div>
-                                            <div class="gov-upload-zone" ondrop="handleDrop(event, 'D3-1')" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)">
-                                                <div class="gov-upload-text">Přetáhněte soubory nebo složky nebo</div>
-                                                <div class="gov-upload-btns">
-                                                    <button class="gov-upload-btn" onclick="event.stopPropagation(); triggerUpload('D3-1')"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>Nahrát soubory</button>
-                                                    <button class="gov-upload-btn gov-upload-btn-folder" onclick="event.stopPropagation(); triggerFolderUpload('D3-1')"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>Nahrát složku</button>
-                                                </div>
-                                                <input type="file" id="upload-D3-1" multiple style="display: none;" onchange="handleFiles(event, 'D3-1')">
-                                                <input type="file" id="upload-D3-1-folder" webkitdirectory style="display: none;" onchange="handleFolderFiles(event, 'D3-1')">
-                                            </div>
-                                            <div class="gov-uploaded-files" id="files-D3-1"></div>
-                                        </div>
+                                <div class="gov-alert gov-alert-info" style="margin: 16px 0;">
+                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                    <div class="gov-alert-text">
+                                        <strong>Soubor staveb</strong> se skládá z jedné hlavní stavby a minimálně jedné vedlejší stavby. Každá stavba obsahuje jeden nebo více objektů, ke kterým se nahrává dokumentace D1-D3.
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="gov-add-objekt" id="addObjektSection" style="display: none;">
-                                <div class="gov-add-objekt-form">
+                            <!-- Container pro stavby -->
+                            <div id="stavbyContainer">
+                                <!-- Dynamicky generováno JavaScriptem -->
+                            </div>
+
+                            <!-- Přidat vedlejší stavbu (pouze pro soubor staveb) -->
+                            <div class="gov-add-stavba" id="addStavbaSection" style="display: none;">
+                                <div class="gov-add-stavba-form">
                                     <div class="gov-form-group">
-                                        <label class="gov-form-label">Přidat další objekt</label>
-                                        <input type="text" class="gov-form-input" id="newObjektName" placeholder="Pojmenovat objekt">
+                                        <label class="gov-form-label">Název vedlejší stavby</label>
+                                        <input type="text" class="gov-form-input" id="newStavbaName" placeholder="Např. Parkoviště, Přípojky, Garáž...">
                                     </div>
-                                    <button class="gov-add-objekt-btn" onclick="addObjekt()"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>Přidat další objekt</button>
+                                    <button class="gov-add-stavba-btn" onclick="addVedlejsiStavba()">
+                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                                        Přidat vedlejší stavbu
+                                    </button>
                                 </div>
-                                <p class="gov-form-hint" style="margin-top: 12px;">ℹ️ Přidáním objektu vytvoříte další strukturu D1-3 pro nový objekt. Nemá-li stavba další objekt, ukončete nahrávání části D.</p>
                             </div>
 
-                            <div style="text-align: center; margin-top: 20px;">
+                            <div style="text-align: center; margin-top: 24px;">
                                 <button class="gov-btn gov-btn-dark" onclick="finishPartD()">Ukončit nahrávání části D</button>
                             </div>
                         </div>
@@ -536,7 +521,22 @@
     </div>
 
     <script>
-        var state = { docSource: 'nahrat', aMethod: 'upload', dType: 'jedna', files: {}, objekty: [{ id: 1, name: '' }], nextObjektId: 2 };
+        var state = { 
+            docSource: 'nahrat', 
+            aMethod: 'upload', 
+            dType: 'jedna', 
+            files: {}, 
+            stavby: [
+                { 
+                    id: 1, 
+                    name: '', 
+                    type: 'hlavni', // 'hlavni' nebo 'vedlejsi'
+                    objekty: [{ id: 1, name: '' }],
+                    nextObjektId: 2
+                }
+            ],
+            nextStavbaId: 2
+        };
 
         function loadIdentity() {
             var stored = localStorage.getItem('formIdentifikace');
@@ -556,52 +556,256 @@
 
         function setDocSource(value) { state.docSource = value; document.getElementById('uploadSections').style.display = value === 'nahrat' ? 'block' : 'none'; }
         function setAMethod(value) { state.aMethod = value; document.getElementById('aUploadZone').style.display = value === 'upload' ? 'block' : 'none'; }
-        function setDType(type) { state.dType = type; document.getElementById('strukturaInfo').style.display = type === 'soubor' ? 'block' : 'none'; document.getElementById('addObjektSection').style.display = type === 'soubor' ? 'block' : 'none'; document.getElementById('objekt-1-actions').style.display = type === 'soubor' ? 'flex' : 'none'; }
+        
+        function setDType(type) { 
+            state.dType = type; 
+            document.getElementById('strukturaInfo').style.display = type === 'soubor' ? 'block' : 'none'; 
+            document.getElementById('addStavbaSection').style.display = type === 'soubor' ? 'block' : 'none';
+            
+            // Reset staveb při změně typu
+            if (type === 'jedna') {
+                // Jedna stavba - ponechat pouze první stavbu jako hlavní
+                state.stavby = [{
+                    id: 1,
+                    name: state.stavby[0] ? state.stavby[0].name : '',
+                    type: 'hlavni',
+                    objekty: state.stavby[0] ? state.stavby[0].objekty : [{ id: 1, name: '' }],
+                    nextObjektId: state.stavby[0] ? state.stavby[0].nextObjektId : 2
+                }];
+            }
+            
+            renderStavby();
+            updateDokumentaceTree();
+        }
 
-        function addObjekt() {
-            var nameInput = document.getElementById('newObjektName');
-            var name = nameInput.value.trim() || 'Objekt ' + state.nextObjektId;
-            var objekt = { id: state.nextObjektId, name: name };
-            state.objekty.push(objekt);
-            var container = document.getElementById('objektyContainer');
-            container.insertAdjacentHTML('beforeend', createObjektHTML(objekt));
+        // ===== RENDER STAVBY =====
+        function renderStavby() {
+            var container = document.getElementById('stavbyContainer');
+            var html = '';
+            
+            state.stavby.forEach(function(stavba) {
+                html += renderStavbaHTML(stavba);
+            });
+            
+            container.innerHTML = html;
+        }
+        
+        function renderStavbaHTML(stavba) {
+            var isHlavni = stavba.type === 'hlavni';
+            var isSoubor = state.dType === 'soubor';
+            var showDelete = isSoubor && !isHlavni;
+            
+            var html = '<div class="gov-stavba ' + stavba.type + '" id="stavba-' + stavba.id + '">';
+            
+            // Header
+            html += '<div class="gov-stavba-header">';
+            html += '<div class="gov-stavba-header-top">';
+            html += '<div class="gov-stavba-badge">';
+            if (isHlavni) {
+                html += '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>';
+                html += isSoubor ? 'Hlavní stavba' : 'Stavba';
+            } else {
+                html += '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>';
+                html += 'Vedlejší stavba';
+            }
+            html += '</div>';
+            
+            // Actions
+            if (showDelete) {
+                html += '<div class="gov-objekt-actions">';
+                html += '<button class="gov-objekt-btn delete" onclick="deleteStavba(' + stavba.id + ')"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>Odstranit stavbu</button>';
+                html += '</div>';
+            }
+            html += '</div>'; // header-top
+            
+            // Name input
+            html += '<div class="gov-stavba-name">';
+            html += '<span class="gov-stavba-name-label">Název:</span>';
+            html += '<input type="text" class="gov-stavba-name-input" id="stavba-' + stavba.id + '-name" value="' + (stavba.name || '') + '" placeholder="' + (isHlavni ? 'Např. Rodinný dům, Bytový dům...' : 'Např. Garáž, Parkoviště, Přípojky...') + '" onchange="updateStavbaName(' + stavba.id + ', this.value)">';
+            html += '</div>';
+            
+            html += '</div>'; // header
+            
+            // Body s objekty
+            html += '<div class="gov-stavba-body" id="stavba-' + stavba.id + '-body">';
+            
+            if (isSoubor && isHlavni) {
+                html += '<p class="gov-stavba-info">Hlavní stavba určuje příslušnost stavebního úřadu pro celý soubor staveb.</p>';
+            }
+            
+            // Objekty
+            stavba.objekty.forEach(function(objekt) {
+                html += renderObjektHTML(stavba.id, objekt, stavba.objekty.length > 1);
+            });
+            
+            // Přidat objekt
+            html += '<div class="gov-add-objekt">';
+            html += '<div class="gov-add-objekt-form">';
+            html += '<div class="gov-form-group">';
+            html += '<label class="gov-form-label">Přidat objekt</label>';
+            html += '<input type="text" class="gov-form-input" id="newObjekt-' + stavba.id + '" placeholder="Např. Hlavní budova, Sekce A...">';
+            html += '</div>';
+            html += '<button class="gov-add-objekt-btn" onclick="addObjekt(' + stavba.id + ')"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>Přidat objekt</button>';
+            html += '</div>';
+            html += '</div>';
+            
+            html += '</div>'; // body
+            html += '</div>'; // stavba
+            
+            return html;
+        }
+        
+        function renderObjektHTML(stavbaId, objekt, canDelete) {
+            var objektKey = stavbaId + '-' + objekt.id;
+            var html = '<div class="gov-objekt" id="objekt-' + objektKey + '">';
+            
+            // Header
+            html += '<div class="gov-objekt-header">';
+            html += '<div class="gov-objekt-title">';
+            html += '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>';
+            html += '<span id="objekt-' + objektKey + '-label">' + (objekt.name || 'Objekt ' + objekt.id) + '</span>';
+            html += '</div>';
+            html += '<div class="gov-objekt-actions">';
+            html += '<button class="gov-objekt-btn" onclick="editObjektName(' + stavbaId + ', ' + objekt.id + ')"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>Přejmenovat</button>';
+            if (canDelete) {
+                html += '<button class="gov-objekt-btn delete" onclick="deleteObjekt(' + stavbaId + ', ' + objekt.id + ')"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>Odstranit</button>';
+            }
+            html += '</div>';
+            html += '</div>';
+            
+            // Body s upload zónami
+            html += '<div class="gov-objekt-body">';
+            html += createUploadSectionHTML(objektKey, 'D1', 'D1 - Stavební a technologická část', true);
+            html += createUploadSectionHTML(objektKey, 'D2', 'D2 - Základní stavebně konstrukční řešení', false);
+            html += createUploadSectionHTML(objektKey, 'D3', 'D3 - Požárně bezpečnostní řešení', false);
+            html += '</div>';
+            
+            html += '</div>';
+            return html;
+        }
+
+        function createUploadSectionHTML(objektKey, part, label, showHint) {
+            var key = part + '-' + objektKey;
+            var html = '<div class="gov-upload-section"><div class="gov-upload-label">' + label + '</div>';
+            html += '<div class="gov-upload-zone" ondrop="handleDrop(event, \'' + key + '\')" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)">';
+            html += '<div class="gov-upload-text">Přetáhněte soubory nebo složky nebo</div>';
+            html += '<div class="gov-upload-btns">';
+            html += '<button class="gov-upload-btn" onclick="event.stopPropagation(); triggerUpload(\'' + key + '\')"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>Nahrát soubory</button>';
+            html += '<button class="gov-upload-btn gov-upload-btn-folder" onclick="event.stopPropagation(); triggerFolderUpload(\'' + key + '\')"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>Nahrát složku</button>';
+            html += '</div>';
+            html += '<input type="file" id="upload-' + key + '" multiple style="display: none;" onchange="handleFiles(event, \'' + key + '\')">';
+            html += '<input type="file" id="upload-' + key + '-folder" webkitdirectory style="display: none;" onchange="handleFolderFiles(event, \'' + key + '\')">';
+            html += '</div>';
+            html += '<div class="gov-uploaded-files" id="files-' + key + '"></div>';
+            if (showHint) {
+                html += '<p class="gov-form-hint">Můžete nahrát jak jednotlivé soubory, tak celé složky včetně všech podsložek a jejich obsahu.</p>';
+            }
+            html += '</div>';
+            return html;
+        }
+
+        // ===== STAVBA OPERATIONS =====
+        function updateStavbaName(stavbaId, name) {
+            var stavba = state.stavby.find(function(s) { return s.id === stavbaId; });
+            if (stavba) {
+                stavba.name = name;
+                updateDokumentaceTree();
+            }
+        }
+        
+        function addVedlejsiStavba() {
+            var nameInput = document.getElementById('newStavbaName');
+            var name = nameInput.value.trim() || 'Vedlejší stavba ' + (state.stavby.length);
+            
+            var stavba = {
+                id: state.nextStavbaId,
+                name: name,
+                type: 'vedlejsi',
+                objekty: [{ id: 1, name: '' }],
+                nextObjektId: 2
+            };
+            
+            state.stavby.push(stavba);
+            state.nextStavbaId++;
             nameInput.value = '';
-            state.nextObjektId++;
+            
+            renderStavby();
+            updateDokumentaceTree();
+        }
+        
+        function deleteStavba(stavbaId) {
+            var stavba = state.stavby.find(function(s) { return s.id === stavbaId; });
+            if (!stavba || stavba.type === 'hlavni') {
+                alert('Hlavní stavbu nelze odstranit.');
+                return;
+            }
+            if (!confirm('Opravdu chcete odstranit tuto stavbu včetně všech objektů a nahraných souborů?')) return;
+            
+            // Smazat soubory všech objektů stavby
+            stavba.objekty.forEach(function(objekt) {
+                var key = stavbaId + '-' + objekt.id;
+                delete state.files['D1-' + key];
+                delete state.files['D2-' + key];
+                delete state.files['D3-' + key];
+            });
+            
+            state.stavby = state.stavby.filter(function(s) { return s.id !== stavbaId; });
+            renderStavby();
             updateDokumentaceTree();
         }
 
-        function createObjektHTML(objekt) {
-            return '<div class="gov-objekt" id="objekt-' + objekt.id + '"><div class="gov-objekt-header"><div class="gov-objekt-title" id="objekt-' + objekt.id + '-label">' + objekt.name + '</div><div class="gov-objekt-actions"><button class="gov-objekt-btn" onclick="editObjektName(' + objekt.id + ')"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>Přejmenovat</button><button class="gov-objekt-btn delete" onclick="deleteObjekt(' + objekt.id + ')"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>Odstranit</button></div></div><div class="gov-objekt-body">' + createUploadSectionHTML(objekt.id, 'D1', 'D1 - Stavební a technologická část') + createUploadSectionHTML(objekt.id, 'D2', 'D2 - Základní stavebně konstrukční řešení') + createUploadSectionHTML(objekt.id, 'D3', 'D3 - Požárně bezpečnostní řešení') + '</div></div>';
+        // ===== OBJEKT OPERATIONS =====
+        function addObjekt(stavbaId) {
+            var stavba = state.stavby.find(function(s) { return s.id === stavbaId; });
+            if (!stavba) return;
+            
+            var nameInput = document.getElementById('newObjekt-' + stavbaId);
+            var name = nameInput.value.trim() || 'Objekt ' + stavba.nextObjektId;
+            
+            stavba.objekty.push({ id: stavba.nextObjektId, name: name });
+            stavba.nextObjektId++;
+            nameInput.value = '';
+            
+            renderStavby();
+            updateDokumentaceTree();
         }
-
-        function createUploadSectionHTML(objektId, part, label) {
-            var key = part + '-' + objektId;
-            return '<div class="gov-upload-section"><div class="gov-upload-label">' + label + '</div><div class="gov-upload-zone" ondrop="handleDrop(event, \'' + key + '\')" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)"><div class="gov-upload-text">Přetáhněte soubory nebo složky nebo</div><div class="gov-upload-btns"><button class="gov-upload-btn" onclick="event.stopPropagation(); triggerUpload(\'' + key + '\')"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>Nahrát soubory</button><button class="gov-upload-btn gov-upload-btn-folder" onclick="event.stopPropagation(); triggerFolderUpload(\'' + key + '\')"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>Nahrát složku</button></div><input type="file" id="upload-' + key + '" multiple style="display: none;" onchange="handleFiles(event, \'' + key + '\')"><input type="file" id="upload-' + key + '-folder" webkitdirectory style="display: none;" onchange="handleFolderFiles(event, \'' + key + '\')"></div><div class="gov-uploaded-files" id="files-' + key + '"></div></div>';
-        }
-
-        function deleteObjekt(id) { 
-            if (state.objekty.length <= 1) { alert('Musí existovat alespoň jeden objekt.'); return; } 
+        
+        function deleteObjekt(stavbaId, objektId) { 
+            var stavba = state.stavby.find(function(s) { return s.id === stavbaId; });
+            if (!stavba) return;
+            
+            if (stavba.objekty.length <= 1) { 
+                alert('Stavba musí obsahovat alespoň jeden objekt.'); 
+                return; 
+            } 
             if (!confirm('Opravdu chcete odstranit tento objekt včetně všech nahraných souborů?')) return; 
-            state.objekty = state.objekty.filter(function(o) { return o.id !== id; }); 
-            // Smazat soubory objektu
-            delete state.files['D1-' + id];
-            delete state.files['D2-' + id];
-            delete state.files['D3-' + id];
-            var el = document.getElementById('objekt-' + id); 
-            if (el) el.remove(); 
+            
+            var key = stavbaId + '-' + objektId;
+            delete state.files['D1-' + key];
+            delete state.files['D2-' + key];
+            delete state.files['D3-' + key];
+            
+            stavba.objekty = stavba.objekty.filter(function(o) { return o.id !== objektId; });
+            renderStavby();
             updateDokumentaceTree();
         }
-        function editObjektName(id) { 
-            var newName = prompt('Zadejte nový název objektu:'); 
-            if (newName && newName.trim()) { 
-                var objekt = state.objekty.find(function(o) { return o.id === id; }); 
-                if (objekt) { 
-                    objekt.name = newName.trim(); 
-                    document.getElementById('objekt-' + id + '-label').textContent = newName.trim(); 
-                    updateDokumentaceTree();
-                } 
+        
+        function editObjektName(stavbaId, objektId) { 
+            var stavba = state.stavby.find(function(s) { return s.id === stavbaId; });
+            if (!stavba) return;
+            
+            var objekt = stavba.objekty.find(function(o) { return o.id === objektId; });
+            if (!objekt) return;
+            
+            var newName = prompt('Zadejte nový název objektu:', objekt.name || ''); 
+            if (newName !== null && newName.trim()) { 
+                objekt.name = newName.trim(); 
+                var labelEl = document.getElementById('objekt-' + stavbaId + '-' + objektId + '-label');
+                if (labelEl) labelEl.textContent = newName.trim();
+                updateDokumentaceTree();
             } 
         }
+        
         function finishPartD() { alert('Část D byla ukončena. Můžete pokračovat na Dokladovou část.'); }
 
         function triggerUpload(key) { document.getElementById('upload-' + key).click(); }
@@ -714,21 +918,41 @@
             html += '</div>';
             
             // D - Dokumentace objektů
-            html += '<div class="gov-tree-item folder">' + folderIcon() + 'D - Dokumentace objektů</div>';
-            html += '<div class="gov-tree-children' + (state.objekty.length > 0 ? ' has-content' : '') + '">';
+            html += '<div class="gov-tree-item folder">' + folderIcon() + 'D - Dokumentace</div>';
+            html += '<div class="gov-tree-children has-content">';
             
-            state.objekty.forEach(function(objekt) {
-                var objektName = objekt.name || 'Objekt ' + objekt.id;
-                var d1Key = 'D1-' + objekt.id;
-                var d2Key = 'D2-' + objekt.id;
-                var d3Key = 'D3-' + objekt.id;
-                var hasContent = hasAnyFiles([d1Key, d2Key, d3Key]);
+            state.stavby.forEach(function(stavba) {
+                var stavbaName = stavba.name || (stavba.type === 'hlavni' ? 'Hlavní stavba' : 'Vedlejší stavba');
+                var stavbaIcon = stavba.type === 'hlavni' ? '🏠 ' : '🏗️ ';
                 
-                html += '<div class="gov-tree-item folder">' + folderIcon() + objektName + '</div>';
-                html += '<div class="gov-tree-children' + (hasContent ? ' has-content' : '') + '">';
-                html += renderTreeSection(d1Key, 'D1 - Stavební část', state.files[d1Key]);
-                html += renderTreeSection(d2Key, 'D2 - Konstrukční', state.files[d2Key]);
-                html += renderTreeSection(d3Key, 'D3 - Požární', state.files[d3Key]);
+                // Zkontrolovat, zda má stavba nějaké soubory
+                var stavbaHasFiles = false;
+                stavba.objekty.forEach(function(objekt) {
+                    var key = stavba.id + '-' + objekt.id;
+                    if (hasAnyFiles(['D1-' + key, 'D2-' + key, 'D3-' + key])) {
+                        stavbaHasFiles = true;
+                    }
+                });
+                
+                html += '<div class="gov-tree-item folder">' + folderIcon() + stavbaIcon + stavbaName + '</div>';
+                html += '<div class="gov-tree-children' + (stavbaHasFiles ? ' has-content' : '') + '">';
+                
+                stavba.objekty.forEach(function(objekt) {
+                    var objektName = objekt.name || 'Objekt ' + objekt.id;
+                    var objektKey = stavba.id + '-' + objekt.id;
+                    var d1Key = 'D1-' + objektKey;
+                    var d2Key = 'D2-' + objektKey;
+                    var d3Key = 'D3-' + objektKey;
+                    var hasContent = hasAnyFiles([d1Key, d2Key, d3Key]);
+                    
+                    html += '<div class="gov-tree-item folder">' + folderIcon() + '📦 ' + objektName + '</div>';
+                    html += '<div class="gov-tree-children' + (hasContent ? ' has-content' : '') + '">';
+                    html += renderTreeSection(d1Key, 'D1 - Stavební', state.files[d1Key]);
+                    html += renderTreeSection(d2Key, 'D2 - Konstrukční', state.files[d2Key]);
+                    html += renderTreeSection(d3Key, 'D3 - Požární', state.files[d3Key]);
+                    html += '</div>';
+                });
+                
                 html += '</div>';
             });
             
@@ -829,6 +1053,7 @@
         document.addEventListener('DOMContentLoaded', function() { 
             loadIdentity(); 
             startAutosaveTimer(); 
+            renderStavby();
             updateDokumentaceTree();
         });
     </script>
