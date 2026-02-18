@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Žádost o vyjádření nebo závazné stanovisko DO | Portál stavebníka</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gov-primary: #2c5a8c;
+            --gov-primary-light: #3a7ab8;
+            --gov-primary-700: #1e5086;
+            --gov-primary-100: #e5eef9;
+            --gov-primary-50: #f3f7fc;
+            --gov-text-light: #ffffff;
+            --gov-neutral-0: #ffffff;
+            --gov-neutral-50: #f6f6f6;
+            --gov-neutral-100: #e7e7e7;
+            --gov-neutral-200: #d1d1d1;
+            --gov-neutral-300: #b0b0b0;
+            --gov-neutral-400: #888888;
+            --gov-neutral-500: #6d6d6d;
+            --gov-neutral-600: #5a5a5a;
+            --gov-neutral-700: #4f4f4f;
+            --gov-neutral-900: #3b3b3b;
+            --gov-success-600: #2e7d32;
+            --gov-success-100: #e2f6e3;
+            --gov-success-50: #f0faf0;
+            --gov-warning-600: #ca8504;
+            --gov-warning-100: #fef7c3;
+            --gov-warning-50: #fffbeb;
+            --gov-error-600: #c62828;
+            --gov-error-100: #fee2e2;
+            --gov-radius: 4px;
+            --gov-radius-lg: 8px;
+            --gov-font: 'Roboto', sans-serif;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: var(--gov-font); background: var(--gov-neutral-50); color: var(--gov-neutral-900); line-height: 1.5; }
+
+        /* ===== HEADER ===== */
+        .gov-header { background: var(--gov-primary); position: sticky; top: 0; z-index: 1000; }
+        .gov-header-top { padding: 14px 40px; }
+        .gov-header-top-content { max-width: 1400px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
+        .gov-header-brand { display: flex; align-items: center; gap: 14px; text-decoration: none; color: var(--gov-text-light); }
+        .gov-header-logo { height: 38px; width: auto; }
+        .gov-header-title { font-size: 18px; font-weight: 400; }
+        .gov-header-user { position: relative; }
+        .gov-header-user-btn { display: flex; align-items: center; gap: 10px; padding: 8px 16px; background: transparent; border: 1px solid rgba(255,255,255,0.5); border-radius: 4px; color: #fff; font-size: 13px; cursor: pointer; font-family: var(--gov-font); }
+        .gov-header-user-btn:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.8); }
+        .gov-header-user-btn svg { width: 18px; height: 18px; flex-shrink: 0; }
+        .gov-header-user-btn .chevron { width: 12px; height: 12px; transition: transform 0.2s ease; }
+        .gov-header-user-info { display: flex; flex-direction: column; line-height: 1.25; text-align: left; }
+        .gov-header-user-name { font-weight: 500; font-size: 13px; }
+        .gov-header-user-detail { font-size: 11px; opacity: 0.85; }
+
+        .gov-header-nav { padding: 0 40px; }
+        .gov-header-nav-content { max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; }
+        .gov-nav-menu { display: flex; list-style: none; }
+        .gov-nav-link { display: block; padding: 14px 20px; color: #fff; text-decoration: none; font-size: 13px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; border-top: 3px solid transparent; }
+        .gov-nav-link:hover { background: rgba(255,255,255,0.1); }
+        .gov-nav-link.active { border-top-color: #fff; }
+
+        /* ===== PAGE ===== */
+        .gov-page { max-width: 1400px; margin: 0 auto; padding: 32px 40px; }
+        .gov-page-header { margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid var(--gov-neutral-200); }
+        .gov-page-title { font-size: 26px; font-weight: 500; margin-bottom: 12px; }
+        .gov-page-subtitle { font-size: 14px; color: var(--gov-neutral-500); line-height: 1.6; max-width: 700px; }
+        .gov-layout { display: flex; gap: 40px; align-items: flex-start; }
+        .gov-main { flex: 1; min-width: 0; }
+        .gov-sidebar { width: 300px; flex-shrink: 0; position: sticky; top: 100px; max-height: calc(100vh - 120px); overflow-y: auto; }
+        .gov-sidebar::-webkit-scrollbar { width: 6px; }
+        .gov-sidebar::-webkit-scrollbar-track { background: var(--gov-neutral-100); border-radius: 3px; }
+        .gov-sidebar::-webkit-scrollbar-thumb { background: var(--gov-neutral-300); border-radius: 3px; }
+
+        /* ===== SIDEBAR ===== */
+        .gov-autosave { background: #fff; border: 1px solid var(--gov-neutral-200); border-radius: var(--gov-radius-lg); padding: 16px 20px; margin-bottom: 24px; }
+        .gov-autosave-status { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+        .gov-autosave-status svg { width: 20px; height: 20px; color: var(--gov-success-600); }
+        .gov-autosave-title { font-size: 14px; font-weight: 500; }
+        .gov-autosave-time { font-size: 13px; color: var(--gov-neutral-500); margin-bottom: 12px; }
+        .gov-autosave-btn { width: 100%; padding: 10px 16px; background: var(--gov-primary); color: #fff; border: none; border-radius: var(--gov-radius); font-size: 14px; font-weight: 500; cursor: pointer; font-family: var(--gov-font); }
+
+        .gov-osnova { background: #fff; border: 1px solid var(--gov-neutral-200); border-radius: var(--gov-radius-lg); padding: 20px; margin-bottom: 24px; }
+        .gov-osnova-title { font-size: 15px; font-weight: 600; margin-bottom: 16px; }
+        .gov-osnova-item { display: flex; align-items: flex-start; gap: 12px; position: relative; }
+        .gov-osnova-item:not(:last-child) { padding-bottom: 8px; }
+        .gov-osnova-item:not(:last-child)::after { content: ''; position: absolute; left: 14px; top: 32px; bottom: 0; width: 2px; background: var(--gov-primary-100); }
+        .gov-osnova-item.completed:not(:last-child)::after { background: var(--gov-success-600); }
+        .gov-osnova-number { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; background: var(--gov-neutral-100); color: var(--gov-neutral-500); flex-shrink: 0; }
+        .gov-osnova-item.active .gov-osnova-number { background: var(--gov-primary); color: #fff; }
+        .gov-osnova-item.completed .gov-osnova-number { background: var(--gov-success-600); color: #fff; }
+        .gov-osnova-label { font-size: 14px; color: var(--gov-neutral-500); padding-top: 4px; }
+        .gov-osnova-item.active .gov-osnova-label { color: var(--gov-neutral-900); font-weight: 500; }
+
+        /* ===== SELECTED ITEMS PREVIEW ===== */
+        .gov-selected-preview { background: #fff; border: 1px solid var(--gov-neutral-200); border-radius: var(--gov-radius-lg); padding: 16px 20px; }
+        .gov-selected-preview-title { font-size: 14px; font-weight: 600; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+        .gov-selected-preview-title svg { width: 18px; height: 18px; color: var(--gov-primary); }
+        .gov-selected-preview-count { background: var(--gov-primary); color: #fff; font-size: 11px; padding: 2px 8px; border-radius: 10px; margin-left: auto; }
+        .gov-selected-preview-empty { font-size: 13px; color: var(--gov-neutral-500); font-style: italic; }
+        .gov-selected-preview-list { max-height: 200px; overflow-y: auto; }
+        .gov-selected-preview-item { display: flex; align-items: flex-start; gap: 8px; padding: 8px 0; border-bottom: 1px solid var(--gov-neutral-100); font-size: 12px; }
+        .gov-selected-preview-item:last-child { border-bottom: none; }
+        .gov-selected-preview-item svg { width: 14px; height: 14px; color: var(--gov-success-600); flex-shrink: 0; margin-top: 2px; }
+        .gov-selected-preview-item-content { flex: 1; }
+        .gov-selected-preview-item-label { font-weight: 500; color: var(--gov-neutral-900); }
+        .gov-selected-preview-item-adresat { color: var(--gov-neutral-500); }
+
+        /* ===== FORM SECTION ===== */
+        .gov-form-section { background: #fff; border-radius: var(--gov-radius-lg); padding: 32px; margin-bottom: 24px; }
+        .gov-form-section-title { font-size: 20px; font-weight: 500; color: var(--gov-primary); margin-bottom: 8px; }
+        .gov-form-section-desc { font-size: 14px; color: var(--gov-neutral-600); margin-bottom: 24px; }
+
+        /* ===== PREFILLED INFO ===== */
+        .gov-prefilled { background: var(--gov-neutral-50); border: 1px solid var(--gov-neutral-200); border-radius: var(--gov-radius); padding: 16px 20px; margin-bottom: 24px; }
+        .gov-prefilled-label { font-size: 12px; color: var(--gov-neutral-500); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .gov-prefilled-value { font-size: 15px; font-weight: 500; color: var(--gov-neutral-900); }
+        .gov-prefilled-row { display: flex; gap: 40px; flex-wrap: wrap; }
+        .gov-prefilled-col { flex: 1; min-width: 200px; }
+
+        /* ===== JES SELECTION ===== */
+        .gov-jes-section { margin-bottom: 32px; padding-bottom: 24px; border-bottom: 1px solid var(--gov-neutral-200); }
+        .gov-jes-title { font-size: 16px; font-weight: 600; margin-bottom: 16px; }
+        .gov-jes-options { display: flex; flex-direction: column; gap: 12px; }
+        .gov-jes-option { display: flex; align-items: flex-start; gap: 12px; padding: 16px; border: 2px solid var(--gov-neutral-200); border-radius: var(--gov-radius-lg); cursor: pointer; transition: all 0.15s ease; }
+        .gov-jes-option:hover { border-color: var(--gov-primary-light); background: var(--gov-primary-50); }
+        .gov-jes-option.selected { border-color: var(--gov-primary); background: var(--gov-primary-50); }
+        .gov-jes-option input { margin-top: 2px; }
+        .gov-jes-option-content { flex: 1; }
+        .gov-jes-option-title { font-size: 14px; font-weight: 500; margin-bottom: 2px; }
+        .gov-jes-option-desc { font-size: 13px; color: var(--gov-neutral-500); }
+
+        /* ===== STANOVISKA GRID ===== */
+        .gov-stanoviska-section { margin-bottom: 24px; }
+        .gov-stanoviska-title { font-size: 16px; font-weight: 600; margin-bottom: 8px; }
+        .gov-stanoviska-desc { font-size: 13px; color: var(--gov-neutral-500); margin-bottom: 16px; }
+        .gov-stanoviska-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+
+        .gov-stanovisko-card { border: 1px solid var(--gov-neutral-200); border-radius: var(--gov-radius-lg); overflow: hidden; transition: all 0.15s ease; }
+        .gov-stanovisko-card.selected { border-color: var(--gov-primary); background: var(--gov-primary-50); }
+        .gov-stanovisko-header { display: flex; align-items: center; gap: 12px; padding: 12px 16px; cursor: pointer; }
+        .gov-stanovisko-header:hover { background: var(--gov-neutral-50); }
+        .gov-stanovisko-card.selected .gov-stanovisko-header:hover { background: var(--gov-primary-100); }
+        .gov-stanovisko-checkbox { width: 18px; height: 18px; border: 2px solid var(--gov-neutral-300); border-radius: 3px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.15s ease; }
+        .gov-stanovisko-card.selected .gov-stanovisko-checkbox { background: var(--gov-primary); border-color: var(--gov-primary); }
+        .gov-stanovisko-checkbox svg { width: 12px; height: 12px; color: #fff; opacity: 0; }
+        .gov-stanovisko-card.selected .gov-stanovisko-checkbox svg { opacity: 1; }
+        .gov-stanovisko-name { font-size: 14px; font-weight: 500; flex: 1; }
+        .gov-stanovisko-adresat { padding: 0 16px 16px; display: none; }
+        .gov-stanovisko-card.selected .gov-stanovisko-adresat { display: block; }
+        .gov-stanovisko-adresat label { font-size: 12px; color: var(--gov-neutral-600); display: block; margin-bottom: 6px; }
+        .gov-stanovisko-adresat select { width: 100%; padding: 8px 12px; font-size: 13px; font-family: var(--gov-font); border: 1px solid var(--gov-neutral-300); border-radius: var(--gov-radius); background: #fff; }
+        .gov-stanovisko-adresat select:focus { outline: none; border-color: var(--gov-primary); }
+
+        /* ===== CATEGORY GROUPS ===== */
+        .gov-category-group { margin-bottom: 24px; }
+        .gov-category-group-header { display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: var(--gov-neutral-100); border-radius: var(--gov-radius); cursor: pointer; margin-bottom: 12px; }
+        .gov-category-group-header:hover { background: var(--gov-neutral-200); }
+        .gov-category-group-icon { width: 20px; height: 20px; color: var(--gov-primary); }
+        .gov-category-group-title { font-size: 14px; font-weight: 600; flex: 1; }
+        .gov-category-group-count { font-size: 12px; color: var(--gov-neutral-500); }
+        .gov-category-group-toggle { width: 20px; height: 20px; color: var(--gov-neutral-400); transition: transform 0.2s ease; }
+        .gov-category-group.collapsed .gov-category-group-toggle { transform: rotate(-90deg); }
+        .gov-category-group-content { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+        .gov-category-group.collapsed .gov-category-group-content { display: none; }
+
+        /* ===== BUTTONS ===== */
+        .gov-btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; font-size: 14px; font-weight: 500; font-family: var(--gov-font); border-radius: var(--gov-radius); cursor: pointer; border: none; text-decoration: none; }
+        .gov-btn svg { width: 18px; height: 18px; }
+        .gov-btn-primary { background: var(--gov-primary); color: #fff; }
+        .gov-btn-primary:hover { background: var(--gov-primary-700); }
+        .gov-btn-secondary { background: #fff; color: var(--gov-primary); border: 1px solid var(--gov-primary); }
+        .gov-btn-secondary:hover { background: var(--gov-primary-50); }
+
+        .gov-form-actions { display: flex; justify-content: space-between; padding-top: 24px; border-top: 1px solid var(--gov-neutral-100); margin-top: 24px; }
+
+        /* ===== PREHLED PRIJEMCU ===== */
+        .gov-prehled-table { width: 100%; border-collapse: collapse; }
+        .gov-prehled-table th { background: var(--gov-primary); color: #fff; padding: 12px 16px; text-align: left; font-size: 13px; font-weight: 500; }
+        .gov-prehled-table td { padding: 12px 16px; border-bottom: 1px solid var(--gov-neutral-200); font-size: 14px; }
+        .gov-prehled-table tr:hover td { background: var(--gov-neutral-50); }
+
+        @media (max-width: 1024px) {
+            .gov-layout { flex-direction: column-reverse; }
+            .gov-sidebar { width: 100%; position: static; max-height: none; }
+            .gov-stanoviska-grid, .gov-category-group-content { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <header class="gov-header">
+        <div class="gov-header-top">
+            <div class="gov-header-top-content">
+                <a href="../index.html" class="gov-header-brand">
+                    <img src="../images/logo-lev-white.png" alt="Státní znak" class="gov-header-logo">
+                    <span class="gov-header-title">Portál stavebníka</span>
+                </a>
+                <div class="gov-header-user">
+                    <button class="gov-header-user-btn">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                        <div class="gov-header-user-info">
+                            <span class="gov-header-user-name" id="headerUserName">ALEŠ KRUPA</span>
+                            <span class="gov-header-user-detail" id="headerUserDetail">FO</span>
+                        </div>
+                        <svg class="chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <nav class="gov-header-nav">
+            <div class="gov-header-nav-content">
+                <ul class="gov-nav-menu">
+                    <li><a href="reza_implicitni.html" class="gov-nav-link">Úvod</a></li>
+                    <li><a href="prehled_zameru.html" class="gov-nav-link">Záměry</a></li>
+                    <li><a href="#" class="gov-nav-link">Řízení</a></li>
+                    <li><a href="#" class="gov-nav-link active">Žádosti</a></li>
+                    <li><a href="#" class="gov-nav-link">Stavby</a></li>
+                    <li><a href="#" class="gov-nav-link">Dokumentace</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <div class="gov-page">
+        <div class="gov-page-header">
+            <h1 class="gov-page-title">Žádost o vyjádření nebo závazné stanovisko dotčeného orgánu</h1>
+            <p class="gov-page-subtitle">podle ustanovení § 172 odst. 1 a 2 ve spojení s § 177 zákona č. 283/2021 Sb., stavební zákon, ve znění pozdějších předpisů a přílohy č. 2 vyhlášky č. 190/2024 Sb.</p>
+        </div>
+
+        <div class="gov-layout">
+            <main class="gov-main">
+                <!-- STEP: Rozsah -->
+                <div class="gov-form-section" id="sectionRozsah">
+                    <h2 class="gov-form-section-title">4. Rozsah</h2>
+                    <p class="gov-form-section-desc">Vyberte, jaká stanoviska nebo vyjádření požadujete a zvolte jejich adresáty.</p>
+
+                    <!-- Předvyplněné údaje -->
+                    <div class="gov-prefilled">
+                        <div class="gov-prefilled-row">
+                            <div class="gov-prefilled-col">
+                                <div class="gov-prefilled-label">Záměr</div>
+                                <div class="gov-prefilled-value">Výstavba OC Retail Park Nehvizdy</div>
+                            </div>
+                            <div class="gov-prefilled-col">
+                                <div class="gov-prefilled-label">Katastrální území</div>
+                                <div class="gov-prefilled-value">Nehvizdy [703541]</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- JES Selection -->
+                    <div class="gov-jes-section">
+                        <div class="gov-jes-title">Žádám o sloučené vyjádření nebo stanovisko:</div>
+                        <div class="gov-jes-options">
+                            <label class="gov-jes-option" onclick="selectJES(this, 'koordinovane')">
+                                <input type="radio" name="jes" value="koordinovane">
+                                <div class="gov-jes-option-content">
+                                    <div class="gov-jes-option-title">Koordinované vyjádření nebo koordinované závazné stanovisko</div>
+                                    <div class="gov-jes-option-desc">Včetně jednotného environmentálního stanoviska (JES) bez EIA</div>
+                                </div>
+                            </label>
+                            <label class="gov-jes-option selected" onclick="selectJES(this, 'jes-bez-eia')">
+                                <input type="radio" name="jes" value="jes-bez-eia" checked>
+                                <div class="gov-jes-option-content">
+                                    <div class="gov-jes-option-title">Jednotné environmentální stanovisko (JES) bez EIA</div>
+                                    <div class="gov-jes-option-desc">Sloučené stanovisko k ochraně životního prostředí</div>
+                                </div>
+                            </label>
+                            <label class="gov-jes-option" onclick="selectJES(this, 'jes-s-eia')">
+                                <input type="radio" name="jes" value="jes-s-eia">
+                                <div class="gov-jes-option-content">
+                                    <div class="gov-jes-option-title">Jednotné environmentální stanovisko (JES) s EIA</div>
+                                    <div class="gov-jes-option-desc">Včetně posouzení vlivů na životní prostředí</div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Jednotlivá stanoviska -->
+                    <div class="gov-stanoviska-section">
+                        <div class="gov-stanoviska-title">Žádám o jednotlivá vyjádření nebo závazná stanoviska z hlediska:</div>
+                        <div class="gov-stanoviska-desc">Vyberte požadovaná stanoviska a u každého zvolte příslušný dotčený orgán</div>
+
+                        <!-- Skupina: Ochrana a bezpečnost -->
+                        <div class="gov-category-group" id="group-ochrana">
+                            <div class="gov-category-group-header" onclick="toggleGroup('group-ochrana')">
+                                <svg class="gov-category-group-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                                <span class="gov-category-group-title">Ochrana a bezpečnost</span>
+                                <span class="gov-category-group-count" id="count-ochrana">0 vybráno</span>
+                                <svg class="gov-category-group-toggle" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                            </div>
+                            <div class="gov-category-group-content">
+                                <div class="gov-stanovisko-card" data-id="pozarni" data-group="ochrana">
+                                    <div class="gov-stanovisko-header" onclick="toggleStanovisko('pozarni')">
+                                        <div class="gov-stanovisko-checkbox"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></div>
+                                        <span class="gov-stanovisko-name">Požární ochrany</span>
+                                    </div>
+                                    <div class="gov-stanovisko-adresat">
+                                        <label>Adresát (HZS)</label>
+                                        <select onchange="updateAdresat('pozarni', this.value)">
+                                            <option value="">Vyberte...</option>
+                                            <option value="HZS Středočeského kraje" selected>HZS Středočeského kraje</option>
+                                            <option value="HZS hl. m. Prahy">HZS hl. m. Prahy</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="gov-stanovisko-card" data-id="zdravi" data-group="ochrana">
+                                    <div class="gov-stanovisko-header" onclick="toggleStanovisko('zdravi')">
+                                        <div class="gov-stanovisko-checkbox"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></div>
+                                        <span class="gov-stanovisko-name">Ochrany veřejného zdraví</span>
+                                    </div>
+                                    <div class="gov-stanovisko-adresat">
+                                        <label>Adresát (KHS)</label>
+                                        <select onchange="updateAdresat('zdravi', this.value)">
+                                            <option value="">Vyberte...</option>
+                                            <option value="KHS Středočeského kraje" selected>KHS Středočeského kraje</option>
+                                            <option value="Hygienická stanice hl. m. Prahy">Hygienická stanice hl. m. Prahy</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="gov-stanovisko-card" data-id="obrana" data-group="ochrana">
+                                    <div class="gov-stanovisko-header" onclick="toggleStanovisko('obrana')">
+                                        <div class="gov-stanovisko-checkbox"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></div>
+                                        <span class="gov-stanovisko-name">Obrany státu</span>
+                                    </div>
+                                    <div class="gov-stanovisko-adresat">
+                                        <label>Adresát</label>
+                                        <select onchange="updateAdresat('obrana', this.value)">
+                                            <option value="">Vyberte...</option>
+                                            <option value="Ministerstvo obrany">Ministerstvo obrany</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="gov-stanovisko-card" data-id="bezpecnost" data-group="ochrana">
+                                    <div class="gov-stanovisko-header" onclick="toggleStanovisko('bezpecnost')">
+                                        <div class="gov-stanovisko-checkbox"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></div>
+                                        <span class="gov-stanovisko-name">Bezpečnosti státu</span>
+                                    </div>
+                                    <div class="gov-stanovisko-adresat">
+                                        <label>Adresát</label>
+                                        <select onchange="updateAdresat('bezpecnost', this.value)">
+                                            <option value="">Vyberte...</option>
+                                            <option value="Policie ČR">Policie ČR</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Skupina: Životní prostředí -->
+                        <div class="gov-category-group" id="group-zp">
+                            <div class="gov-category-group-header" onclick="toggleGroup('group-zp')">
+                                <svg class="gov-category-group-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                <span class="gov-category-group-title">Životní prostředí</span>
+                                <span class="gov-category-group-count" id="count-zp">0 vybráno</span>
+                                <svg class="gov-category-group-toggle" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                            </div>
+                            <div class="gov-category-group-content">
+                                <div class="gov-stanovisko-card" data-id="zivotni" data-group="zp">
+                                    <div class="gov-stanovisko-header" onclick="toggleStanovisko('zivotni')">
+                                        <div class="gov-stanovisko-checkbox"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></div>
+                                        <span class="gov-stanovisko-name">Ochrany životního prostředí</span>
+                                    </div>
+                                    <div class="gov-stanovisko-adresat">
+                                        <label>Adresát</label>
+                                        <select onchange="updateAdresat('zivotni', this.value)">
+                                            <option value="">Vyberte...</option>
+                                            <option value="MÚ Lysá nad Labem">MÚ Lysá nad Labem</option>
+                                            <option value="MÚ Brandýs nad Labem">MÚ Brandýs nad Labem</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="gov-stanovisko-card" data-id="vody" data-group="zp">
+                                    <div class="gov-stanovisko-header" onclick="toggleStanovisko('vody')">
+                                        <div class="gov-stanovisko-checkbox"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></div>
+                                        <span class="gov-stanovisko-name">Ochrany vod</span>
+                                    </div>
+                                    <div class="gov-stanovisko-adresat">
+                                        <label>Adresát</label>
+                                        <select onchange="updateAdresat('vody', this.value)">
+                                            <option value="">Vyberte...</option>
+                                            <option value="Povodí Labe">Povodí Labe</option>
+                                            <option value="MÚ Lysá nad Labem">MÚ Lysá nad Labem</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Skupina: Památky a kultura -->
+                        <div class="gov-category-group" id="group-pamatky">
+                            <div class="gov-category-group-header" onclick="toggleGroup('group-pamatky')">
+                                <svg class="gov-category-group-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"/></svg>
+                                <span class="gov-category-group-title">Památky a kultura</span>
+                                <span class="gov-category-group-count" id="count-pamatky">0 vybráno</span>
+                                <svg class="gov-category-group-toggle" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                            </div>
+                            <div class="gov-category-group-content">
+                                <div class="gov-stanovisko-card" data-id="pamatky" data-group="pamatky">
+                                    <div class="gov-stanovisko-header" onclick="toggleStanovisko('pamatky')">
+                                        <div class="gov-stanovisko-checkbox"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></div>
+                                        <span class="gov-stanovisko-name">Památkové péče</span>
+                                    </div>
+                                    <div class="gov-stanovisko-adresat">
+                                        <label>Adresát</label>
+                                        <select onchange="updateAdresat('pamatky', this.value)">
+                                            <option value="">Vyberte...</option>
+                                            <option value="MÚ Lysá nad Labem">MÚ Lysá nad Labem</option>
+                                            <option value="NPÚ">Národní památkový ústav</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Skupina: Doprava -->
+                        <div class="gov-category-group" id="group-doprava">
+                            <div class="gov-category-group-header" onclick="toggleGroup('group-doprava')">
+                                <svg class="gov-category-group-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
+                                <span class="gov-category-group-title">Doprava</span>
+                                <span class="gov-category-group-count" id="count-doprava">0 vybráno</span>
+                                <svg class="gov-category-group-toggle" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                            </div>
+                            <div class="gov-category-group-content">
+                                <div class="gov-stanovisko-card" data-id="pozemni" data-group="doprava">
+                                    <div class="gov-stanovisko-header" onclick="toggleStanovisko('pozemni')">
+                                        <div class="gov-stanovisko-checkbox"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></div>
+                                        <span class="gov-stanovisko-name">Dopravy na pozemních komunikacích</span>
+                                    </div>
+                                    <div class="gov-stanovisko-adresat">
+                                        <label>Adresát</label>
+                                        <select onchange="updateAdresat('pozemni', this.value)">
+                                            <option value="">Vyberte...</option>
+                                            <option value="Krajský úřad Středočeského kraje">Krajský úřad Středočeského kraje</option>
+                                            <option value="ŘSD">ŘSD</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="gov-stanovisko-card" data-id="drazni" data-group="doprava">
+                                    <div class="gov-stanovisko-header" onclick="toggleStanovisko('drazni')">
+                                        <div class="gov-stanovisko-checkbox"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></div>
+                                        <span class="gov-stanovisko-name">Dopravy drážní</span>
+                                    </div>
+                                    <div class="gov-stanovisko-adresat">
+                                        <label>Adresát</label>
+                                        <select onchange="updateAdresat('drazni', this.value)">
+                                            <option value="">Vyberte...</option>
+                                            <option value="Drážní úřad">Drážní úřad</option>
+                                            <option value="SŽDC">SŽDC</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="gov-stanovisko-card" data-id="letecka" data-group="doprava">
+                                    <div class="gov-stanovisko-header" onclick="toggleStanovisko('letecka')">
+                                        <div class="gov-stanovisko-checkbox"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></div>
+                                        <span class="gov-stanovisko-name">Dopravy letecké</span>
+                                    </div>
+                                    <div class="gov-stanovisko-adresat">
+                                        <label>Adresát</label>
+                                        <select onchange="updateAdresat('letecka', this.value)">
+                                            <option value="">Vyberte...</option>
+                                            <option value="Úřad pro civilní letectví">Úřad pro civilní letectví</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Skupina: Energie a surovin -->
+                        <div class="gov-category-group collapsed" id="group-energie">
+                            <div class="gov-category-group-header" onclick="toggleGroup('group-energie')">
+                                <svg class="gov-category-group-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                                <span class="gov-category-group-title">Energie a suroviny</span>
+                                <span class="gov-category-group-count" id="count-energie">0 vybráno</span>
+                                <svg class="gov-category-group-toggle" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                            </div>
+                            <div class="gov-category-group-content">
+                                <div class="gov-stanovisko-card" data-id="energetika" data-group="energie">
+                                    <div class="gov-stanovisko-header" onclick="toggleStanovisko('energetika')">
+                                        <div class="gov-stanovisko-checkbox"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></div>
+                                        <span class="gov-stanovisko-name">Energetiky</span>
+                                    </div>
+                                    <div class="gov-stanovisko-adresat">
+                                        <label>Adresát</label>
+                                        <select onchange="updateAdresat('energetika', this.value)">
+                                            <option value="">Vyberte...</option>
+                                            <option value="MPO">Ministerstvo průmyslu a obchodu</option>
+                                            <option value="ERÚ">Energetický regulační úřad</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="gov-stanovisko-card" data-id="loziska" data-group="energie">
+                                    <div class="gov-stanovisko-header" onclick="toggleStanovisko('loziska')">
+                                        <div class="gov-stanovisko-checkbox"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></div>
+                                        <span class="gov-stanovisko-name">Ochrany ložisek nerostných surovin</span>
+                                    </div>
+                                    <div class="gov-stanovisko-adresat">
+                                        <label>Adresát</label>
+                                        <select onchange="updateAdresat('loziska', this.value)">
+                                            <option value="">Vyberte...</option>
+                                            <option value="OBÚ">Obvodní báňský úřad</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="gov-stanovisko-card" data-id="jaderna" data-group="energie">
+                                    <div class="gov-stanovisko-header" onclick="toggleStanovisko('jaderna')">
+                                        <div class="gov-stanovisko-checkbox"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></div>
+                                        <span class="gov-stanovisko-name">Jaderné bezpečnosti</span>
+                                    </div>
+                                    <div class="gov-stanovisko-adresat">
+                                        <label>Adresát</label>
+                                        <select onchange="updateAdresat('jaderna', this.value)">
+                                            <option value="">Vyberte...</option>
+                                            <option value="SÚJB">Státní úřad pro jadernou bezpečnost</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="gov-form-actions">
+                        <a href="form_select.html" class="gov-btn gov-btn-secondary">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                            Zpět
+                        </a>
+                        <button type="button" class="gov-btn gov-btn-primary" onclick="showPrehled()">
+                            Přehled příjemců
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- STEP: Přehled příjemců -->
+                <div class="gov-form-section" id="sectionPrehled" style="display: none;">
+                    <h2 class="gov-form-section-title">6. Přehled příjemců</h2>
+                    <p class="gov-form-section-desc">Přehled všech dotčených orgánů, kterým bude žádost odeslána.</p>
+
+                    <div style="margin-bottom: 24px;">
+                        <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 16px;">Žádám o následující vyjádření a závazná stanoviska:</h3>
+                        <table class="gov-prehled-table" id="prehledTable">
+                            <thead>
+                                <tr>
+                                    <th>Hledisko</th>
+                                    <th>Dotčený orgán</th>
+                                </tr>
+                            </thead>
+                            <tbody id="prehledTableBody">
+                                <!-- Dynamicky generováno -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="gov-form-actions">
+                        <button type="button" class="gov-btn gov-btn-secondary" onclick="backToRozsah()">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                            Zpět na výběr DO
+                        </button>
+                        <button type="button" class="gov-btn gov-btn-primary" onclick="alert('Simulace končí. V produkční verzi by následovala kontrola a podání.')">
+                            Kontrola a podání
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                        </button>
+                    </div>
+                </div>
+            </main>
+
+            <aside class="gov-sidebar">
+                <div class="gov-autosave">
+                    <div class="gov-autosave-status">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        <span class="gov-autosave-title">Automaticky uloženo</span>
+                    </div>
+                    <div class="gov-autosave-time">před <span id="autosaveTime">10</span> sekundami</div>
+                    <button class="gov-autosave-btn">Uložit a zavřít</button>
+                </div>
+
+                <div class="gov-osnova">
+                    <div class="gov-osnova-title">Osnova</div>
+                    <div class="gov-osnova-item completed"><div class="gov-osnova-number">✓</div><span class="gov-osnova-label">Záměr</span></div>
+                    <div class="gov-osnova-item completed"><div class="gov-osnova-number">✓</div><span class="gov-osnova-label">Žadatel</span></div>
+                    <div class="gov-osnova-item completed"><div class="gov-osnova-number">✓</div><span class="gov-osnova-label">Dokumentace</span></div>
+                    <div class="gov-osnova-item active" id="osnova-rozsah"><div class="gov-osnova-number">4</div><span class="gov-osnova-label">Rozsah</span></div>
+                    <div class="gov-osnova-item" id="osnova-prilohy"><div class="gov-osnova-number">5</div><span class="gov-osnova-label">Přílohy</span></div>
+                    <div class="gov-osnova-item" id="osnova-prehled"><div class="gov-osnova-number">6</div><span class="gov-osnova-label">Přehled příjemců</span></div>
+                    <div class="gov-osnova-item"><div class="gov-osnova-number">7</div><span class="gov-osnova-label">Kontrola a podání</span></div>
+                </div>
+
+                <div class="gov-selected-preview">
+                    <div class="gov-selected-preview-title">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+                        Vybraná stanoviska
+                        <span class="gov-selected-preview-count" id="selectedCount">0</span>
+                    </div>
+                    <div class="gov-selected-preview-list" id="selectedList">
+                        <div class="gov-selected-preview-empty">Zatím není vybráno žádné stanovisko</div>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <script>
+        // State
+        var state = {
+            jes: 'jes-bez-eia',
+            stanoviska: {}
+        };
+
+        var stanoviskaLabels = {
+            'pozarni': 'Požární ochrany',
+            'zdravi': 'Ochrany veřejného zdraví',
+            'obrana': 'Obrany státu',
+            'bezpecnost': 'Bezpečnosti státu',
+            'zivotni': 'Ochrany životního prostředí',
+            'vody': 'Ochrany vod',
+            'pamatky': 'Památkové péče',
+            'pozemni': 'Dopravy na pozemních komunikacích',
+            'drazni': 'Dopravy drážní',
+            'letecka': 'Dopravy letecké',
+            'energetika': 'Energetiky',
+            'loziska': 'Ochrany ložisek nerostných surovin',
+            'jaderna': 'Jaderné bezpečnosti'
+        };
+
+        // Init
+        document.addEventListener('DOMContentLoaded', function() {
+            loadIdentity();
+            startAutosaveTimer();
+            // Pre-select some for demo
+            toggleStanovisko('pozarni');
+            toggleStanovisko('zdravi');
+            toggleStanovisko('pamatky');
+            toggleStanovisko('zivotni');
+            toggleStanovisko('obrana');
+            toggleStanovisko('energetika');
+        });
+
+        function loadIdentity() {
+            var stored = localStorage.getItem('formIdentifikace');
+            if (stored) {
+                var data = JSON.parse(stored);
+                var osobyDB = { 
+                    'FO': { name: 'Aleš Krupa', type: 'FO', birthDate: '19.04.1968' }, 
+                    'OSVC': { name: 'Ing. Aleš Krupa', type: 'OSVČ', ico: '15104418' }, 
+                    'PO_ALMANI': { name: 'ALMANI s.r.o.', type: 'PO', ico: '28765432' }, 
+                    'PO_PRVNI': { name: 'První projektová a.s.', type: 'PO', ico: '45678901' } 
+                };
+                var osoba = osobyDB[data.identity];
+                if (osoba) {
+                    document.getElementById('headerUserName').textContent = osoba.name.toUpperCase();
+                    document.getElementById('headerUserDetail').textContent = osoba.type + (osoba.ico ? ' · IČO: ' + osoba.ico : ' · Nar.: ' + osoba.birthDate);
+                }
+            }
+        }
+
+        function selectJES(el, value) {
+            document.querySelectorAll('.gov-jes-option').forEach(function(opt) {
+                opt.classList.remove('selected');
+            });
+            el.classList.add('selected');
+            state.jes = value;
+        }
+
+        function toggleGroup(groupId) {
+            document.getElementById(groupId).classList.toggle('collapsed');
+        }
+
+        function toggleStanovisko(id) {
+            var card = document.querySelector('[data-id="' + id + '"]');
+            if (!card) return;
+
+            var isSelected = card.classList.contains('selected');
+            
+            if (isSelected) {
+                card.classList.remove('selected');
+                delete state.stanoviska[id];
+            } else {
+                card.classList.add('selected');
+                var select = card.querySelector('select');
+                state.stanoviska[id] = {
+                    label: stanoviskaLabels[id],
+                    adresat: select ? select.value : ''
+                };
+            }
+
+            updateGroupCounts();
+            updateSelectedPreview();
+        }
+
+        function updateAdresat(id, value) {
+            if (state.stanoviska[id]) {
+                state.stanoviska[id].adresat = value;
+                updateSelectedPreview();
+            }
+        }
+
+        function updateGroupCounts() {
+            var groups = ['ochrana', 'zp', 'pamatky', 'doprava', 'energie'];
+            groups.forEach(function(group) {
+                var count = document.querySelectorAll('[data-group="' + group + '"].selected').length;
+                var countEl = document.getElementById('count-' + group);
+                if (countEl) {
+                    countEl.textContent = count + ' vybráno';
+                }
+            });
+        }
+
+        function updateSelectedPreview() {
+            var list = document.getElementById('selectedList');
+            var count = document.getElementById('selectedCount');
+            var keys = Object.keys(state.stanoviska);
+            
+            count.textContent = keys.length;
+
+            if (keys.length === 0) {
+                list.innerHTML = '<div class="gov-selected-preview-empty">Zatím není vybráno žádné stanovisko</div>';
+                return;
+            }
+
+            var html = '';
+            keys.forEach(function(key) {
+                var item = state.stanoviska[key];
+                html += '<div class="gov-selected-preview-item">';
+                html += '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>';
+                html += '<div class="gov-selected-preview-item-content">';
+                html += '<div class="gov-selected-preview-item-label">' + item.label + '</div>';
+                html += '<div class="gov-selected-preview-item-adresat">' + (item.adresat || 'Adresát nevybrán') + '</div>';
+                html += '</div></div>';
+            });
+
+            list.innerHTML = html;
+        }
+
+        function showPrehled() {
+            var keys = Object.keys(state.stanoviska);
+            if (keys.length === 0) {
+                alert('Vyberte alespoň jedno stanovisko nebo vyjádření.');
+                return;
+            }
+
+            // Update table
+            var tbody = document.getElementById('prehledTableBody');
+            var html = '';
+            keys.forEach(function(key) {
+                var item = state.stanoviska[key];
+                html += '<tr>';
+                html += '<td>' + item.label + '</td>';
+                html += '<td>' + (item.adresat || '<em style="color: var(--gov-error-600);">Nevybráno</em>') + '</td>';
+                html += '</tr>';
+            });
+            tbody.innerHTML = html;
+
+            // Switch sections
+            document.getElementById('sectionRozsah').style.display = 'none';
+            document.getElementById('sectionPrehled').style.display = 'block';
+
+            // Update osnova
+            document.getElementById('osnova-rozsah').classList.remove('active');
+            document.getElementById('osnova-rozsah').classList.add('completed');
+            document.getElementById('osnova-rozsah').querySelector('.gov-osnova-number').textContent = '✓';
+            document.getElementById('osnova-prilohy').classList.add('completed');
+            document.getElementById('osnova-prilohy').querySelector('.gov-osnova-number').textContent = '✓';
+            document.getElementById('osnova-prehled').classList.add('active');
+        }
+
+        function backToRozsah() {
+            document.getElementById('sectionRozsah').style.display = 'block';
+            document.getElementById('sectionPrehled').style.display = 'none';
+
+            // Update osnova
+            document.getElementById('osnova-rozsah').classList.add('active');
+            document.getElementById('osnova-rozsah').classList.remove('completed');
+            document.getElementById('osnova-rozsah').querySelector('.gov-osnova-number').textContent = '4';
+            document.getElementById('osnova-prilohy').classList.remove('completed');
+            document.getElementById('osnova-prilohy').querySelector('.gov-osnova-number').textContent = '5';
+            document.getElementById('osnova-prehled').classList.remove('active');
+        }
+
+        function startAutosaveTimer() {
+            var s = 10;
+            setInterval(function() { 
+                document.getElementById('autosaveTime').textContent = ++s; 
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
