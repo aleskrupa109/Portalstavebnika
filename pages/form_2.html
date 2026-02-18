@@ -218,12 +218,17 @@
 
         /* ===== UPLOADED FILES ===== */
         .gov-uploaded-files { margin-top: 12px; }
+        .gov-uploaded-files-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+        .gov-uploaded-files-count { font-size: 12px; color: var(--gov-neutral-500); }
+        .gov-uploaded-files-clear { padding: 4px 10px; font-size: 11px; font-family: var(--gov-font); border: 1px solid var(--gov-error-600); border-radius: var(--gov-radius); background: #fff; color: var(--gov-error-600); cursor: pointer; display: flex; align-items: center; gap: 4px; }
+        .gov-uploaded-files-clear:hover { background: var(--gov-error-50); }
+        .gov-uploaded-files-clear svg { width: 12px; height: 12px; }
         .gov-uploaded-file { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: var(--gov-success-50); border: 1px solid var(--gov-success-100); border-radius: var(--gov-radius); margin-bottom: 8px; }
         .gov-uploaded-file svg { width: 18px; height: 18px; color: var(--gov-success-600); flex-shrink: 0; }
-        .gov-uploaded-file-name { flex: 1; font-size: 13px; color: var(--gov-neutral-700); }
-        .gov-uploaded-file-size { font-size: 12px; color: var(--gov-neutral-500); }
-        .gov-uploaded-file-remove { padding: 4px; background: none; border: none; cursor: pointer; color: var(--gov-neutral-400); }
-        .gov-uploaded-file-remove:hover { color: var(--gov-error-600); }
+        .gov-uploaded-file-name { flex: 1; font-size: 13px; color: var(--gov-neutral-700); word-break: break-all; }
+        .gov-uploaded-file-size { font-size: 12px; color: var(--gov-neutral-500); white-space: nowrap; }
+        .gov-uploaded-file-remove { padding: 4px; background: none; border: none; cursor: pointer; color: var(--gov-neutral-400); border-radius: 4px; }
+        .gov-uploaded-file-remove:hover { color: var(--gov-error-600); background: var(--gov-error-50); }
 
         /* ===== C SECTION SUBPARTS ===== */
         .gov-subpart { margin-left: 20px; margin-bottom: 16px; }
@@ -493,10 +498,6 @@
                                         Přidat vedlejší stavbu
                                     </button>
                                 </div>
-                            </div>
-
-                            <div style="text-align: center; margin-top: 24px;">
-                                <button class="gov-btn gov-btn-dark" onclick="finishPartD()">Ukončit nahrávání části D</button>
                             </div>
                         </div>
                     </div>
@@ -879,7 +880,7 @@
             }
         }
         
-        function finishPartD() { alert('Část D byla ukončena. Můžete pokračovat na Dokladovou část.'); }
+        
 
         function triggerUpload(key) { document.getElementById('upload-' + key).click(); }
         function triggerFolderUpload(key) { document.getElementById('upload-' + key + '-folder').click(); }
@@ -946,13 +947,42 @@
             if (!container) return;
             var files = state.files[key] || [];
             var html = '';
-            files.forEach(function(file, index) {
-                var displayName = file.path || file.name;
-                var isInFolder = displayName.indexOf('/') > -1;
-                var folderIcon = isInFolder ? '<svg style="width:14px;height:14px;margin-right:4px;color:#666;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>' : '';
-                html += '<div class="gov-uploaded-file"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><span class="gov-uploaded-file-name">' + folderIcon + displayName + '</span><span class="gov-uploaded-file-size">' + formatFileSize(file.size) + '</span><button class="gov-uploaded-file-remove" onclick="removeFile(\'' + key + '\', ' + index + ')"><svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button></div>';
-            });
+            
+            if (files.length > 0) {
+                // Header s počtem a tlačítkem Smazat vše
+                html += '<div class="gov-uploaded-files-header">';
+                html += '<span class="gov-uploaded-files-count">Nahráno ' + files.length + ' ' + getFilesLabel(files.length) + '</span>';
+                html += '<button class="gov-uploaded-files-clear" onclick="clearAllFiles(\'' + key + '\')">';
+                html += '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>';
+                html += 'Smazat vše';
+                html += '</button>';
+                html += '</div>';
+                
+                files.forEach(function(file, index) {
+                    var displayName = file.path || file.name;
+                    var isInFolder = displayName.indexOf('/') > -1;
+                    var folderIcon = isInFolder ? '<svg style="width:14px;height:14px;margin-right:4px;color:#666;flex-shrink:0;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>' : '';
+                    html += '<div class="gov-uploaded-file"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><span class="gov-uploaded-file-name">' + folderIcon + displayName + '</span><span class="gov-uploaded-file-size">' + formatFileSize(file.size) + '</span><button class="gov-uploaded-file-remove" onclick="removeFile(\'' + key + '\', ' + index + ')" title="Smazat soubor"><svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button></div>';
+                });
+            }
+            
             container.innerHTML = html;
+        }
+        
+        function getFilesLabel(count) {
+            if (count === 1) return 'soubor';
+            if (count >= 2 && count <= 4) return 'soubory';
+            return 'souborů';
+        }
+        
+        function clearAllFiles(key) {
+            var files = state.files[key] || [];
+            if (files.length === 0) return;
+            
+            if (!confirm('Opravdu chcete smazat všech ' + files.length + ' ' + getFilesLabel(files.length) + '?')) return;
+            
+            state.files[key] = [];
+            renderFiles(key);
         }
 
         function removeFile(key, index) { 
