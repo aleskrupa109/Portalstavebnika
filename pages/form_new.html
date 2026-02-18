@@ -5,10 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nová žádost | Portál stavebníka</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
     <style>
         :root {
-            --gov-primary-600: #2c5a8c;
+            --gov-primary: #2c5a8c;
             --gov-primary-700: #1e5086;
             --gov-primary-100: #e5eef9;
             --gov-primary-50: #f3f7fc;
@@ -16,6 +15,7 @@
             --gov-neutral-50: #f6f6f6;
             --gov-neutral-100: #e7e7e7;
             --gov-neutral-200: #d1d1d1;
+            --gov-neutral-300: #b0b0b0;
             --gov-neutral-400: #888888;
             --gov-neutral-500: #6d6d6d;
             --gov-neutral-600: #5a5a5a;
@@ -34,34 +34,21 @@
             --gov-font: 'Roboto', sans-serif;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: var(--gov-font); background: var(--gov-neutral-0); color: var(--gov-neutral-900); line-height: 1.5; }
+        body { font-family: var(--gov-font); background: var(--gov-neutral-50); color: var(--gov-neutral-900); line-height: 1.5; }
 
-        .gov-header { background: #2c5a8c; position: sticky; top: 0; z-index: 1000; }
+        /* ===== HEADER ===== */
+        .gov-header { background: var(--gov-primary); position: sticky; top: 0; z-index: 1000; }
         .gov-header-top { padding: 14px 40px; }
         .gov-header-top-content { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
         .gov-header-brand { display: flex; align-items: center; gap: 14px; text-decoration: none; color: #fff; }
         .gov-header-logo { height: 38px; }
         .gov-header-title { font-size: 18px; font-weight: 400; }
-        .gov-header-user { position: relative; }
         .gov-header-user-btn { display: flex; align-items: center; gap: 10px; padding: 8px 16px; border: 1px solid rgba(255,255,255,0.5); border-radius: 4px; color: #fff; font-size: 13px; cursor: pointer; background: transparent; font-family: var(--gov-font); }
-        .gov-header-user-btn:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.8); }
-        .gov-header-user-btn svg { width: 18px; height: 18px; flex-shrink: 0; }
-        .gov-header-user-btn .chevron { width: 12px; height: 12px; transition: transform 0.2s ease; }
-        .gov-header-user-btn.active .chevron { transform: rotate(180deg); }
+        .gov-header-user-btn:hover { background: rgba(255,255,255,0.1); }
+        .gov-header-user-btn svg { width: 18px; height: 18px; }
         .gov-header-user-info { display: flex; flex-direction: column; line-height: 1.25; text-align: left; }
         .gov-header-user-name { font-weight: 500; font-size: 13px; }
         .gov-header-user-detail { font-size: 11px; opacity: 0.85; }
-        .gov-header-user-dropdown { position: absolute; top: calc(100% + 8px); right: 0; min-width: 280px; background: white; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); opacity: 0; visibility: hidden; transform: translateY(-10px); transition: all 0.2s ease; z-index: 100; }
-        .gov-header-user-dropdown.show { opacity: 1; visibility: visible; transform: translateY(0); }
-        .gov-header-user-dropdown-header { padding: 16px; border-bottom: 1px solid #eee; background: #f9fafb; border-radius: 8px 8px 0 0; }
-        .gov-header-user-dropdown-name { font-weight: 600; color: #1a1a1a; font-size: 14px; }
-        .gov-header-user-dropdown-detail { font-size: 12px; color: #666; margin-top: 2px; }
-        .gov-header-user-dropdown-badge { display: inline-block; background: #e8f4fc; color: #2362a2; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 500; margin-top: 6px; }
-        .gov-header-user-dropdown a { display: flex; align-items: center; gap: 12px; padding: 12px 16px; color: #333; text-decoration: none; font-size: 14px; transition: background 0.15s ease; }
-        .gov-header-user-dropdown a:last-child { border-radius: 0 0 8px 8px; border-top: 1px solid #eee; color: #c53030; }
-        .gov-header-user-dropdown a:hover { background: #f5f7fa; }
-        .gov-header-user-dropdown svg { width: 18px; height: 18px; color: #666; }
-        .gov-header-user-dropdown a:last-child svg { color: #c53030; }
         .gov-header-nav { padding: 0 40px; }
         .gov-header-nav-content { max-width: 1200px; margin: 0 auto; }
         .gov-nav-menu { display: flex; list-style: none; }
@@ -69,198 +56,143 @@
         .gov-nav-link:hover { background: rgba(255,255,255,0.1); }
         .gov-nav-link.active { border-top-color: #fff; }
 
-        .gov-container { padding: 32px 24px 100px; max-width: 560px; margin: 0 auto; }
-        .gov-page-header { text-align: center; margin-bottom: 32px; padding-bottom: 24px; border-bottom: 1px solid var(--gov-neutral-100); }
-        .gov-page-header h1 { font-size: 22px; font-weight: 500; color: var(--gov-neutral-900); margin: 0; }
+        /* ===== PAGE LAYOUT ===== */
+        .gov-page { max-width: 1000px; margin: 0 auto; padding: 32px 24px; }
+        .gov-page-header { margin-bottom: 24px; }
+        .gov-page-header h1 { font-size: 24px; font-weight: 500; }
+        
+        .gov-layout { display: flex; gap: 32px; align-items: flex-start; }
+        .gov-main { flex: 1; min-width: 0; }
+        .gov-sidebar { width: 300px; flex-shrink: 0; position: sticky; top: 120px; align-self: flex-start; }
 
-        .gov-step { margin-bottom: 24px; padding: 24px 0; opacity: 0; transform: translateY(16px); transition: all 0.3s ease; display: none; border-bottom: 1px solid var(--gov-neutral-100); }
-        .gov-step.visible { opacity: 1; transform: translateY(0); display: block; }
-        .gov-step-label { font-size: 12px; font-weight: 500; color: var(--gov-primary-600); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; }
+        /* ===== FORM CARD ===== */
+        .gov-card { background: #fff; border-radius: var(--gov-radius-lg); padding: 24px; margin-bottom: 16px; }
+        .gov-card-title { font-size: 13px; font-weight: 600; color: var(--gov-primary); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 16px; }
 
-        .gov-chain-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; background: var(--gov-primary-100); border-radius: 4px; font-size: 11px; font-weight: 500; color: var(--gov-primary-600); margin-bottom: 12px; }
+        /* ===== COMPACT SWITCH ===== */
+        .gov-switch { display: flex; background: var(--gov-neutral-100); border-radius: var(--gov-radius); padding: 3px; }
+        .gov-switch-btn { flex: 1; padding: 10px 16px; background: none; border: none; font-size: 13px; font-weight: 500; color: var(--gov-neutral-600); cursor: pointer; border-radius: var(--gov-radius); transition: all 0.2s; font-family: var(--gov-font); display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .gov-switch-btn svg { width: 18px; height: 18px; }
+        .gov-switch-btn.active { background: var(--gov-primary); color: #fff; }
+        .gov-switch-btn:not(.active):hover { background: var(--gov-neutral-200); }
+
+        /* ===== INLINE OPTIONS ===== */
+        .gov-options { display: flex; flex-direction: column; gap: 8px; }
+        .gov-option { display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: var(--gov-neutral-50); border: 2px solid transparent; border-radius: var(--gov-radius); cursor: pointer; transition: all 0.15s; }
+        .gov-option:hover { background: var(--gov-primary-50); border-color: var(--gov-primary-100); }
+        .gov-option.selected { background: var(--gov-primary-50); border-color: var(--gov-primary); }
+        .gov-option-radio { width: 18px; height: 18px; border: 2px solid var(--gov-neutral-300); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .gov-option.selected .gov-option-radio { border-color: var(--gov-primary); }
+        .gov-option.selected .gov-option-radio::after { content: ''; width: 10px; height: 10px; background: var(--gov-primary); border-radius: 50%; }
+        .gov-option-content { flex: 1; }
+        .gov-option-title { font-size: 14px; font-weight: 500; color: var(--gov-neutral-900); }
+        .gov-option-desc { font-size: 12px; color: var(--gov-neutral-500); margin-top: 2px; }
+
+        /* ===== CONDITIONAL SECTIONS ===== */
+        .gov-conditional { display: none; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--gov-neutral-100); }
+        .gov-conditional.visible { display: block; }
+
+        /* ===== FILE UPLOAD - COMPACT ===== */
+        .gov-upload { margin-top: 12px; }
+        .gov-upload-label { font-size: 13px; font-weight: 500; color: var(--gov-neutral-700); margin-bottom: 8px; display: block; }
+        .gov-upload-box { display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: var(--gov-warning-50); border: 1px dashed var(--gov-warning-600); border-radius: var(--gov-radius); cursor: pointer; }
+        .gov-upload-box:hover { background: var(--gov-warning-100); }
+        .gov-upload-box svg { width: 24px; height: 24px; color: var(--gov-warning-600); flex-shrink: 0; }
+        .gov-upload-text { font-size: 13px; color: var(--gov-neutral-700); }
+        .gov-upload-text span { color: var(--gov-primary); text-decoration: underline; }
+        .gov-upload-box input { display: none; }
+        .gov-upload-file { display: none; align-items: center; gap: 10px; padding: 10px 14px; background: var(--gov-success-50); border: 1px solid var(--gov-success-100); border-radius: var(--gov-radius); }
+        .gov-upload-file.visible { display: flex; }
+        .gov-upload-file svg { width: 18px; height: 18px; color: var(--gov-success-600); }
+        .gov-upload-file-name { flex: 1; font-size: 13px; color: var(--gov-neutral-700); }
+        .gov-upload-file-remove { background: none; border: none; color: var(--gov-neutral-400); cursor: pointer; font-size: 18px; }
+
+        /* ===== REZA LIST - COMPACT ===== */
+        .gov-reza-section { margin-top: 16px; }
+        .gov-reza-search { position: relative; margin-bottom: 12px; }
+        .gov-reza-search input { width: 100%; padding: 10px 12px 10px 36px; font-size: 13px; border: 1px solid var(--gov-neutral-200); border-radius: var(--gov-radius); font-family: var(--gov-font); }
+        .gov-reza-search input:focus { outline: none; border-color: var(--gov-primary); }
+        .gov-reza-search svg { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); width: 18px; height: 18px; color: var(--gov-neutral-400); }
+        .gov-reza-list { display: flex; flex-direction: column; gap: 8px; max-height: 280px; overflow-y: auto; }
+        .gov-reza-card { padding: 12px; border: 2px solid var(--gov-neutral-200); border-radius: var(--gov-radius); cursor: pointer; transition: all 0.15s; }
+        .gov-reza-card:hover { border-color: var(--gov-primary); background: var(--gov-primary-50); }
+        .gov-reza-card.selected { border-color: var(--gov-success-600); background: var(--gov-success-50); }
+        .gov-reza-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+        .gov-reza-card-name { font-size: 14px; font-weight: 500; }
+        .gov-reza-card-tag { font-size: 10px; padding: 2px 6px; border-radius: 3px; font-weight: 600; background: var(--gov-primary-100); color: var(--gov-primary); }
+        .gov-reza-card-details { font-size: 12px; color: var(--gov-neutral-500); }
+        .gov-reza-empty { padding: 24px; text-align: center; background: var(--gov-neutral-50); border-radius: var(--gov-radius); }
+        .gov-reza-empty svg { width: 32px; height: 32px; color: var(--gov-neutral-300); margin-bottom: 8px; }
+        .gov-reza-empty p { font-size: 13px; color: var(--gov-neutral-500); }
+
+        /* ===== CHAIN PERSON ===== */
+        .gov-chain-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; background: var(--gov-primary-100); color: var(--gov-primary); border-radius: var(--gov-radius); font-size: 11px; font-weight: 500; margin-bottom: 12px; }
         .gov-chain-badge svg { width: 14px; height: 14px; }
 
-        .gov-switch { position: relative; background: var(--gov-neutral-50); border: 1px solid var(--gov-neutral-200); border-radius: var(--gov-radius); padding: 4px; display: flex; width: 100%; }
-        .gov-switch-indicator { position: absolute; top: 4px; left: 4px; width: calc(50% - 4px); height: calc(100% - 8px); background: #2c5a8c; border-radius: var(--gov-radius); transition: transform 0.25s ease; }
-        .gov-switch.right .gov-switch-indicator { transform: translateX(100%); }
-        .gov-switch-btn { position: relative; z-index: 1; background: none; border: none; padding: 14px 16px; width: 50%; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 6px; transition: all 0.25s ease; border-radius: var(--gov-radius); font-family: var(--gov-font); }
-        .gov-switch-btn svg { width: 22px; height: 22px; stroke: var(--gov-neutral-500); transition: stroke 0.25s ease; }
-        .gov-switch-btn span { font-size: 13px; font-weight: 500; color: var(--gov-neutral-700); transition: color 0.25s ease; }
-        .gov-switch-btn.active svg { stroke: var(--gov-neutral-0); }
-        .gov-switch-btn.active span { color: var(--gov-neutral-0); }
+        /* ===== ENTITY FORM - COMPACT ===== */
+        .gov-entity-form { margin-top: 12px; }
+        .gov-entity-switch { display: flex; gap: 8px; margin-bottom: 12px; }
+        .gov-entity-switch-btn { flex: 1; padding: 10px; background: var(--gov-neutral-50); border: 2px solid var(--gov-neutral-200); border-radius: var(--gov-radius); cursor: pointer; text-align: center; font-size: 13px; font-weight: 500; color: var(--gov-neutral-600); transition: all 0.15s; font-family: var(--gov-font); }
+        .gov-entity-switch-btn:hover { border-color: var(--gov-neutral-300); }
+        .gov-entity-switch-btn.active { border-color: var(--gov-primary); background: var(--gov-primary-50); color: var(--gov-primary); }
+        .gov-entity-switch-btn svg { width: 20px; height: 20px; margin-bottom: 4px; }
 
-        .gov-status { margin-top: 12px; font-size: 14px; color: var(--gov-neutral-500); }
-        .gov-status strong { color: var(--gov-neutral-900); }
-        .gov-hint { margin-top: 6px; font-size: 13px; color: var(--gov-neutral-400); }
-
-        .gov-reza { width: 100%; margin-top: 16px; }
-        .gov-reza-loading { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 32px; background: var(--gov-neutral-50); border: 1px dashed var(--gov-neutral-200); border-radius: var(--gov-radius-lg); }
-        .gov-reza-loading svg { width: 20px; height: 20px; stroke: var(--gov-primary-600); animation: spin 1s linear infinite; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .gov-reza-loading span { font-size: 14px; color: var(--gov-neutral-500); }
-
-        .gov-reza-toolbar { display: none; flex-direction: column; gap: 12px; margin-bottom: 16px; }
-        .gov-reza-toolbar.visible { display: flex; }
-        .gov-reza-search { position: relative; display: flex; align-items: center; }
-        .gov-reza-search-icon { position: absolute; left: 12px; width: 18px; height: 18px; stroke: var(--gov-neutral-400); }
-        .gov-reza-search-input { width: 100%; padding: 10px 36px 10px 40px; font-size: 14px; font-family: var(--gov-font); border: 1px solid var(--gov-neutral-200); border-radius: var(--gov-radius); background: var(--gov-neutral-0); }
-        .gov-reza-search-input:focus { outline: none; border-color: var(--gov-primary-600); }
-        .gov-reza-search-clear { position: absolute; right: 8px; background: none; border: none; font-size: 18px; color: var(--gov-neutral-400); cursor: pointer; display: none; padding: 4px; }
-        .gov-reza-search-clear.visible { display: block; }
-
-        .gov-reza-filters-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
-        .gov-reza-filters { display: flex; flex-wrap: wrap; gap: 6px; }
-        .gov-reza-filter-btn { padding: 5px 10px; font-size: 11px; font-weight: 500; font-family: var(--gov-font); background: var(--gov-neutral-0); border: 1px solid var(--gov-neutral-200); border-radius: var(--gov-radius); color: var(--gov-neutral-600); cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 4px; }
-        .gov-reza-filter-btn:hover { border-color: var(--gov-primary-600); color: var(--gov-primary-600); }
-        .gov-reza-filter-btn.active { background: var(--gov-primary-600); border-color: var(--gov-primary-600); color: var(--gov-neutral-0); }
-        .gov-reza-filter-btn .count { font-size: 10px; padding: 1px 5px; border-radius: 10px; background: var(--gov-neutral-100); color: var(--gov-neutral-500); }
-        .gov-reza-filter-btn.active .count { background: rgba(255,255,255,0.2); color: var(--gov-neutral-0); }
-
-        .gov-reza-sort { display: flex; align-items: center; gap: 6px; }
-        .gov-reza-sort-label { font-size: 11px; color: var(--gov-neutral-500); }
-        .gov-reza-sort-select { padding: 5px 24px 5px 8px; font-size: 11px; font-family: var(--gov-font); background: var(--gov-neutral-0); border: 1px solid var(--gov-neutral-200); border-radius: var(--gov-radius); color: var(--gov-neutral-700); cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236d6d6d'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 4px center; background-size: 14px; }
-
-        .gov-reza-list { display: none; flex-direction: column; gap: 10px; }
-        .gov-reza-list.visible { display: flex; }
-        .gov-reza-card { padding: 14px; background: var(--gov-neutral-0); border: 2px solid var(--gov-neutral-200); border-radius: var(--gov-radius-lg); cursor: pointer; transition: all 0.2s; text-align: left; }
-        .gov-reza-card:hover { border-color: var(--gov-primary-600); background: var(--gov-primary-50); }
-        .gov-reza-card.selected { border-color: var(--gov-success-600); background: var(--gov-success-50); }
-        .gov-reza-card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px; }
-        .gov-reza-card-name { font-weight: 500; color: var(--gov-neutral-900); font-size: 14px; }
-        .gov-reza-card-badges { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
-        .gov-tag { font-size: 10px; padding: 2px 8px; border-radius: 4px; font-weight: 600; text-transform: uppercase; }
-        .gov-tag-povereni { background: var(--gov-primary-100); color: var(--gov-primary-700); }
-        .gov-tag-plna-moc { background: #f3e5f5; color: #7b1fa2; }
-        .gov-reza-card-check { display: none; width: 20px; height: 20px; background: var(--gov-success-600); border-radius: 50%; align-items: center; justify-content: center; }
-        .gov-reza-card-check svg { width: 12px; height: 12px; stroke: #fff; stroke-width: 3; }
-        .gov-reza-card.selected .gov-reza-card-check { display: flex; }
-        .gov-reza-card-details { font-size: 12px; color: var(--gov-neutral-500); }
-        .gov-reza-card-validity { font-size: 11px; color: var(--gov-neutral-400); margin-top: 4px; display: flex; align-items: center; gap: 4px; }
-        .gov-reza-card-validity svg { width: 14px; height: 14px; }
-        .gov-reza-card-actions { display: flex; justify-content: flex-end; margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--gov-neutral-100); }
-        .gov-reza-detail-btn { background: none; border: none; font-size: 12px; color: var(--gov-primary-600); cursor: pointer; font-family: var(--gov-font); display: flex; align-items: center; gap: 4px; }
-        .gov-reza-detail-btn:hover { text-decoration: underline; }
-        .gov-reza-detail-btn svg { width: 14px; height: 14px; }
-
-        .gov-reza-pagination { display: none; justify-content: space-between; align-items: center; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--gov-neutral-100); font-size: 12px; }
-        .gov-reza-pagination.visible { display: flex; }
-        .gov-reza-pagination-info { color: var(--gov-neutral-500); }
-        .gov-reza-pagination-info strong { color: var(--gov-neutral-700); }
-        .gov-reza-pagination-controls { display: flex; align-items: center; gap: 8px; }
-        .gov-reza-page-btn { display: flex; align-items: center; gap: 4px; padding: 5px 10px; font-size: 11px; font-family: var(--gov-font); background: var(--gov-neutral-0); border: 1px solid var(--gov-neutral-200); border-radius: var(--gov-radius); color: var(--gov-neutral-700); cursor: pointer; }
-        .gov-reza-page-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-        .gov-reza-page-btn svg { width: 14px; height: 14px; }
-
-        .gov-reza-empty { display: none; flex-direction: column; align-items: center; gap: 12px; padding: 32px; background: var(--gov-warning-50); border: 1px solid var(--gov-warning-100); border-radius: var(--gov-radius-lg); text-align: center; }
-        .gov-reza-empty.visible { display: flex; }
-        .gov-reza-empty svg { width: 32px; height: 32px; stroke: var(--gov-warning-600); }
-        .gov-reza-empty span { font-size: 14px; color: var(--gov-warning-600); }
-
-        .gov-file-upload { margin-top: 16px; }
-        .gov-file-upload label { display: block; font-size: 13px; font-weight: 500; color: var(--gov-neutral-700); margin-bottom: 8px; }
-        .gov-file-upload input[type="file"] { display: none; }
-        .gov-file-upload-box { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 24px; background: var(--gov-warning-100); border: 2px dashed #ffc107; border-radius: var(--gov-radius-lg); cursor: pointer; }
-        .gov-file-upload-box:hover { border-color: var(--gov-warning-600); }
-        .gov-file-upload-box svg { width: 32px; height: 32px; stroke: var(--gov-warning-600); }
-        .gov-file-upload-text { font-size: 14px; color: var(--gov-neutral-700); }
-        .gov-file-upload-hint { font-size: 12px; color: var(--gov-neutral-500); }
-        .gov-file-selected { display: none; align-items: center; gap: 8px; padding: 12px 16px; background: var(--gov-success-100); border-radius: var(--gov-radius-lg); }
-        .gov-file-selected.visible { display: flex; }
-        .gov-file-selected svg { width: 20px; height: 20px; stroke: var(--gov-success-600); }
-        .gov-file-selected span { flex: 1; font-size: 13px; }
-        .gov-file-remove { background: none; border: none; font-size: 18px; color: var(--gov-neutral-400); cursor: pointer; }
-
-        .gov-input-section { display: none; flex-direction: column; gap: 12px; margin-top: 16px; }
-        .gov-input-section.visible { display: flex; }
-        .gov-input-group { display: flex; flex-direction: column; gap: 4px; }
-        .gov-input-group label { font-size: 13px; font-weight: 500; color: var(--gov-neutral-700); }
+        .gov-input-row { display: flex; gap: 12px; margin-bottom: 12px; }
+        .gov-input-row:last-child { margin-bottom: 0; }
+        .gov-input-group { flex: 1; }
+        .gov-input-group label { display: block; font-size: 12px; font-weight: 500; color: var(--gov-neutral-600); margin-bottom: 4px; }
+        .gov-input-group input { width: 100%; padding: 10px 12px; font-size: 14px; border: 1px solid var(--gov-neutral-200); border-radius: var(--gov-radius); font-family: var(--gov-font); }
+        .gov-input-group input:focus { outline: none; border-color: var(--gov-primary); }
         .gov-required { color: var(--gov-error-600); }
-        .gov-input-group input { padding: 10px 14px; font-size: 14px; font-family: var(--gov-font); border: 1px solid var(--gov-neutral-200); border-radius: var(--gov-radius); }
-        .gov-input-group input:focus { outline: none; border-color: var(--gov-primary-600); }
-        .gov-input-row { display: flex; gap: 12px; }
-        .gov-input-row .gov-input-group { flex: 1; }
 
-        .gov-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 20px; font-size: 14px; font-weight: 500; font-family: var(--gov-font); border-radius: var(--gov-radius); cursor: pointer; border: none; }
-        .gov-btn svg { width: 18px; height: 18px; }
-        .gov-btn-primary { background: var(--gov-primary-600); color: #fff; }
+        .gov-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 10px 16px; font-size: 13px; font-weight: 500; border-radius: var(--gov-radius); cursor: pointer; border: none; font-family: var(--gov-font); }
+        .gov-btn svg { width: 16px; height: 16px; }
+        .gov-btn-primary { background: var(--gov-primary); color: #fff; }
         .gov-btn-primary:hover { background: var(--gov-primary-700); }
         .gov-btn-primary:disabled { background: var(--gov-neutral-200); color: var(--gov-neutral-400); cursor: not-allowed; }
-        .gov-btn-secondary { background: var(--gov-neutral-0); color: var(--gov-primary-600); border: 1px solid var(--gov-primary-600); }
-        .gov-btn-secondary:hover { background: var(--gov-primary-50); }
+        .gov-btn-outline { background: #fff; color: var(--gov-primary); border: 1px solid var(--gov-primary); }
+        .gov-btn-outline:hover { background: var(--gov-primary-50); }
         .gov-btn-full { width: 100%; }
 
-        .gov-continue { padding: 24px 20px; background: var(--gov-success-100); border-radius: var(--gov-radius-lg); margin-top: 16px; }
-        .gov-continue-title { font-weight: 600; color: var(--gov-success-600); margin-bottom: 12px; }
-        .gov-summary { font-size: 14px; color: var(--gov-neutral-700); line-height: 1.6; }
-        .gov-summary strong { color: var(--gov-neutral-900); }
-        .gov-summary-badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 500; margin-left: 8px; }
-        .gov-summary-badge-reza { background: #e3f2fd; color: #1565c0; }
-        .gov-summary-badge-paper { background: var(--gov-warning-100); color: var(--gov-warning-600); }
-        .gov-summary-reza-detail { padding: 12px; background: var(--gov-neutral-0); border-radius: var(--gov-radius); margin-top: 8px; font-size: 13px; }
-        .gov-chain-person { display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: var(--gov-neutral-0); border-radius: var(--gov-radius); margin-top: 8px; font-size: 13px; }
-        .gov-chain-position { font-weight: 600; color: var(--gov-primary-600); min-width: 20px; }
-        .gov-chain-name { font-weight: 500; flex: 1; }
-        .gov-chain-role { color: var(--gov-neutral-400); font-size: 12px; }
-        .gov-chain-status { margin-left: auto; font-size: 11px; font-weight: 500; }
-        .gov-chain-status.verified { color: var(--gov-success-600); }
-        .gov-chain-status.pending { color: var(--gov-warning-600); }
-        .gov-summary-waiting { padding: 12px; background: var(--gov-warning-50); border-radius: var(--gov-radius); margin-top: 8px; font-size: 13px; color: var(--gov-warning-600); display: flex; align-items: center; gap: 8px; }
-        .gov-summary-waiting svg { width: 18px; height: 18px; flex-shrink: 0; }
-        .gov-msg-warning { display: none; align-items: center; gap: 8px; padding: 12px; background: var(--gov-warning-100); border-radius: var(--gov-radius); margin-top: 12px; font-size: 13px; color: var(--gov-warning-600); }
-        .gov-msg-warning.visible { display: flex; }
-        .gov-msg-warning svg { width: 20px; height: 20px; flex-shrink: 0; }
-        .gov-btn-row { display: flex; gap: 12px; margin-top: 16px; }
+        /* ===== SIDEBAR - LIVE SUMMARY ===== */
+        .gov-summary-card { background: #fff; border-radius: var(--gov-radius-lg); border: 1px solid var(--gov-neutral-200); overflow: hidden; }
+        .gov-summary-header { padding: 16px 20px; border-bottom: 1px solid var(--gov-neutral-100); }
+        .gov-summary-header h3 { font-size: 15px; font-weight: 600; margin: 0; color: var(--gov-neutral-900); }
+        .gov-summary-body { padding: 16px 20px; }
+        .gov-summary-item { display: flex; justify-content: space-between; align-items: flex-start; padding: 12px 0; border-bottom: 1px solid var(--gov-neutral-100); }
+        .gov-summary-item:first-child { padding-top: 0; }
+        .gov-summary-item:last-child { border-bottom: none; padding-bottom: 0; }
+        .gov-summary-label { font-size: 13px; color: var(--gov-neutral-500); }
+        .gov-summary-value { font-size: 13px; font-weight: 500; color: var(--gov-neutral-900); text-align: right; max-width: 160px; }
+        .gov-summary-value.pending { color: var(--gov-neutral-400); font-style: italic; font-weight: 400; }
+        .gov-summary-value.success { color: var(--gov-neutral-900); }
+        .gov-summary-tag { display: inline-block; padding: 3px 10px; border-radius: 3px; font-size: 11px; font-weight: 500; }
+        .gov-summary-tag-reza { background: var(--gov-primary-100); color: var(--gov-primary); }
+        .gov-summary-tag-paper { background: var(--gov-neutral-100); color: var(--gov-neutral-700); }
 
-        .verification-result { position: relative; display: flex; gap: 12px; padding: 12px 16px; border-radius: var(--gov-radius-lg); margin-top: 12px; }
-        .verification-result.success { background: var(--gov-success-100); }
-        .verification-result.error { background: var(--gov-error-100); }
-        .result-icon svg { width: 20px; height: 20px; }
-        .verification-result.success .result-icon svg { stroke: var(--gov-success-600); }
-        .verification-result.error .result-icon svg { stroke: var(--gov-error-600); }
-        .result-content { flex: 1; }
-        .result-title { font-weight: 500; display: block; margin-bottom: 4px; }
-        .verification-result.success .result-title { color: var(--gov-success-600); }
-        .verification-result.error .result-title { color: var(--gov-error-600); }
-        .result-message { font-size: 13px; color: var(--gov-neutral-700); }
-        .result-detail { font-size: 12px; color: var(--gov-neutral-500); margin-top: 2px; }
-        .result-close { position: absolute; top: 8px; right: 8px; background: none; border: none; font-size: 18px; color: var(--gov-neutral-400); cursor: pointer; }
+        .gov-summary-footer { padding: 16px 20px; border-top: 1px solid var(--gov-neutral-100); }
+        .gov-summary-warning { display: none; padding: 10px 12px; background: var(--gov-neutral-50); border: 1px solid var(--gov-neutral-200); border-radius: var(--gov-radius); margin-bottom: 12px; font-size: 12px; color: var(--gov-neutral-600); }
+        .gov-summary-warning.visible { display: flex; align-items: center; gap: 8px; }
+        .gov-summary-warning svg { width: 16px; height: 16px; flex-shrink: 0; color: var(--gov-neutral-400); }
 
-        .gov-scroll { display: none; flex-direction: column; align-items: center; gap: 4px; margin-top: 20px; }
-        .gov-scroll.visible { display: flex; }
-        .gov-scroll span { font-size: 12px; color: var(--gov-neutral-400); }
-        .gov-scroll svg { width: 18px; height: 18px; stroke: var(--gov-neutral-400); animation: bounce 2s infinite; }
-        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(5px); } }
+        /* ===== VERIFICATION RESULT ===== */
+        .gov-verify-result { display: none; padding: 12px; border-radius: var(--gov-radius); margin-top: 12px; }
+        .gov-verify-result.visible { display: flex; align-items: flex-start; gap: 10px; }
+        .gov-verify-result.success { background: var(--gov-success-50); border: 1px solid var(--gov-success-100); }
+        .gov-verify-result.error { background: var(--gov-error-100); border: 1px solid var(--gov-error-600); }
+        .gov-verify-result svg { width: 20px; height: 20px; flex-shrink: 0; }
+        .gov-verify-result.success svg { color: var(--gov-success-600); }
+        .gov-verify-result.error svg { color: var(--gov-error-600); }
+        .gov-verify-result-content { flex: 1; }
+        .gov-verify-result-title { font-size: 13px; font-weight: 500; margin-bottom: 2px; }
+        .gov-verify-result.success .gov-verify-result-title { color: var(--gov-success-600); }
+        .gov-verify-result.error .gov-verify-result-title { color: var(--gov-error-600); }
+        .gov-verify-result-detail { font-size: 12px; color: var(--gov-neutral-600); }
 
-        .gov-modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 2000; align-items: center; justify-content: center; padding: 20px; }
-        .gov-modal-overlay.visible { display: flex; }
-        .gov-modal { background: var(--gov-neutral-0); border-radius: var(--gov-radius-lg); max-width: 560px; width: 100%; max-height: 90vh; overflow-y: auto; }
-        .gov-modal-header { display: flex; align-items: center; justify-content: space-between; padding: 20px 24px; border-bottom: 1px solid var(--gov-neutral-100); }
-        .gov-modal-title { font-size: 18px; font-weight: 600; color: var(--gov-neutral-900); }
-        .gov-modal-close { background: none; border: none; font-size: 24px; color: var(--gov-neutral-400); cursor: pointer; }
-        .gov-modal-body { padding: 24px; }
-        .gov-detail-section { margin-bottom: 24px; }
-        .gov-detail-section:last-of-type { margin-bottom: 0; }
-        .gov-detail-section-title { font-size: 14px; font-weight: 600; color: var(--gov-primary-600); margin-bottom: 12px; padding-bottom: 8px; border-bottom: 2px solid var(--gov-primary-100); }
-        .gov-detail-grid { display: flex; flex-direction: column; gap: 10px; }
-        .gov-detail-row { display: flex; gap: 16px; }
-        .gov-detail-label { min-width: 140px; flex-shrink: 0; font-size: 14px; color: var(--gov-neutral-500); }
-        .gov-detail-value { font-size: 14px; color: var(--gov-neutral-900); font-weight: 500; }
-        .gov-detail-tag { display: inline-block; padding: 3px 10px; border-radius: 4px; font-size: 12px; font-weight: 500; }
-        .gov-detail-tag-povereni { background: var(--gov-primary-100); color: var(--gov-primary-700); }
-        .gov-detail-tag-plna-moc { background: #f3e5f5; color: #7b1fa2; }
-        .gov-detail-tag-postoupena { background: #fff3e0; color: #e65100; }
-        .gov-detail-zamery-list { display: flex; flex-direction: column; gap: 6px; }
-        .gov-detail-zamer { display: flex; align-items: center; gap: 8px; padding: 6px 10px; background: var(--gov-neutral-50); border-radius: var(--gov-radius); font-size: 13px; }
-        .gov-detail-zamer-id { color: var(--gov-primary-600); font-weight: 500; }
-        .gov-detail-zamer-nazev { color: var(--gov-neutral-700); }
-        .gov-detail-chain { padding: 12px; background: #fff3e0; border-radius: var(--gov-radius); border-left: 3px solid #e65100; }
-        .gov-detail-chain-title { font-size: 12px; font-weight: 600; color: #e65100; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
-        .gov-detail-chain-item { font-size: 13px; color: var(--gov-neutral-700); }
-        .gov-detail-chain-item strong { color: var(--gov-neutral-900); }
-        .gov-reza-card-postoupena { display: none; align-items: center; gap: 4px; font-size: 10px; color: #e65100; background: #fff3e0; padding: 2px 6px; border-radius: 4px; }
-        .gov-reza-card-postoupena.visible { display: inline-flex; }
-        .gov-reza-card-postoupena svg { width: 12px; height: 12px; }
-        .gov-modal-footer { padding: 16px 24px; border-top: 1px solid var(--gov-neutral-100); display: flex; justify-content: flex-end; gap: 12px; }
+        @media (max-width: 900px) {
+            .gov-layout { flex-direction: column; }
+            .gov-sidebar { width: 100%; position: static; order: -1; margin-bottom: 24px; }
+        }
     </style>
 </head>
 <body>
@@ -271,35 +203,13 @@
                     <img src="../images/logo-lev-white.png" alt="Státní znak" class="gov-header-logo">
                     <span class="gov-header-title">Portál stavebníka</span>
                 </a>
-                <div class="gov-header-user">
-                    <button class="gov-header-user-btn" onclick="toggleUserMenu()">
-                        <svg class="user-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
-                        <div class="gov-header-user-info">
-                            <span class="gov-header-user-name" id="headerUserName">ALEŠ KRUPA</span>
-                            <span class="gov-header-user-detail" id="headerUserDetail">FO</span>
-                        </div>
-                        <svg class="chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-                    </button>
-                    <div class="gov-header-user-dropdown" id="userDropdown">
-                        <div class="gov-header-user-dropdown-header">
-                            <div class="gov-header-user-dropdown-name" id="dropdownName">Aleš Krupa</div>
-                            <div class="gov-header-user-dropdown-detail" id="dropdownDetail">Nar.: 19.04.1968</div>
-                            <div class="gov-header-user-dropdown-badge" id="dropdownBadge">Fyzická osoba</div>
-                        </div>
-                        <a href="reza_implicitni.html">
-                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
-                            Změnit postavení
-                        </a>
-                        <a href="#">
-                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                            Nastavení
-                        </a>
-                        <a href="../index.html">
-                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
-                            Odhlásit se
-                        </a>
+                <button class="gov-header-user-btn">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                    <div class="gov-header-user-info">
+                        <span class="gov-header-user-name" id="headerUserName">ALEŠ KRUPA</span>
+                        <span class="gov-header-user-detail" id="headerUserDetail">FO</span>
                     </div>
-                </div>
+                </button>
             </div>
         </div>
         <nav class="gov-header-nav">
@@ -311,619 +221,581 @@
                     <li><a href="#" class="gov-nav-link active">Žádosti</a></li>
                     <li><a href="#" class="gov-nav-link">Stavby</a></li>
                     <li><a href="#" class="gov-nav-link">Dokumentace</a></li>
-                    <li><a href="reza_setup.html" class="gov-nav-link">Plné moci</a></li>
                 </ul>
             </div>
         </nav>
     </header>
 
-    <div class="gov-container">
+    <div class="gov-page">
         <div class="gov-page-header">
             <h1>Identifikace osoby</h1>
         </div>
 
-        <div class="gov-step visible" id="step1Section">
-            <p class="gov-step-label">Vaše role</p>
-            <div class="gov-switch" id="roleSwitch">
-                <div class="gov-switch-indicator"></div>
-                <button class="gov-switch-btn active" id="roleBtnLeft" type="button" onclick="setRole('builder')">
-                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3H21m-3.75 3H21"></path></svg>
-                    <span>Jsem stavebník</span>
-                </button>
-                <button class="gov-switch-btn" id="roleBtnRight" type="button" onclick="setRole('representative')">
-                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"></path></svg>
-                    <span>Jednám za někoho</span>
-                </button>
-            </div>
-            <p class="gov-status">Zvoleno: <strong id="roleStatus">Stavebník</strong></p>
-            <div class="gov-scroll" id="scrollIndicator1"><span>Pokračujte níže</span><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg></div>
-        </div>
-
-        <div class="gov-step" id="step2Section">
-            <p class="gov-step-label">Způsob zmocnění</p>
-            <div class="gov-switch" id="authMethodSwitch">
-                <div class="gov-switch-indicator"></div>
-                <button class="gov-switch-btn active" id="authMethodBtnLeft" type="button" onclick="setAuthMethod('reza')">
-                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"></path></svg>
-                    <span>Elektronické (REZA)</span>
-                </button>
-                <button class="gov-switch-btn" id="authMethodBtnRight" type="button" onclick="setAuthMethod('paper')">
-                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"></path></svg>
-                    <span>Papírový dokument</span>
-                </button>
-            </div>
-            <p class="gov-status">Zvoleno: <strong id="authMethodStatus">Elektronické zmocnění (REZA)</strong></p>
-            <p class="gov-hint" id="authMethodHint">Zmocnění uděleno elektronicky prostřednictvím Registru zastupování</p>
-            <div class="gov-reza" id="rezaSection">
-                <div class="gov-reza-loading" id="rezaLoading" style="display:none;"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg><span>Načítám zmocnění z REZA...</span></div>
-                <div class="gov-reza-toolbar" id="rezaToolbar">
-                    <div class="gov-reza-search">
-                        <svg class="gov-reza-search-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                        <input type="text" class="gov-reza-search-input" id="rezaSearchInput" placeholder="Hledat podle názvu nebo IČO..." oninput="searchReza(this.value)">
-                        <button type="button" class="gov-reza-search-clear" id="rezaSearchClear" onclick="clearSearch()">×</button>
+        <div class="gov-layout">
+            <main class="gov-main">
+                <!-- KROK 1: Vaše role -->
+                <div class="gov-card">
+                    <div class="gov-card-title">Vaše role</div>
+                    <div class="gov-switch">
+                        <button type="button" class="gov-switch-btn active" onclick="setRole('builder')">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                            Jsem stavebník
+                        </button>
+                        <button type="button" class="gov-switch-btn" onclick="setRole('representative')">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                            Jednám za někoho
+                        </button>
                     </div>
-                    <div class="gov-reza-filters-row">
-                        <div class="gov-reza-filters">
-                            <button type="button" class="gov-reza-filter-btn active" data-filter="all" onclick="filterReza('all')">Vše <span class="count" id="countAll">0</span></button>
-                            <button type="button" class="gov-reza-filter-btn" data-filter="povereni" onclick="filterReza('povereni')">Pověření <span class="count" id="countPovereni">0</span></button>
-                            <button type="button" class="gov-reza-filter-btn" data-filter="plna_moc" onclick="filterReza('plna_moc')">Plné moci <span class="count" id="countPlnaMoc">0</span></button>
+                </div>
+
+                <!-- KROK 2: Způsob zmocnění (pouze pro zástupce) -->
+                <div class="gov-card gov-conditional" id="authMethodSection">
+                    <div class="gov-card-title">Způsob zmocnění</div>
+                    <div class="gov-options">
+                        <div class="gov-option selected" onclick="setAuthMethod('reza')">
+                            <div class="gov-option-radio"></div>
+                            <div class="gov-option-content">
+                                <div class="gov-option-title">Elektronické (REZA)</div>
+                                <div class="gov-option-desc">Mám elektronickou plnou moc v registru REZA</div>
+                            </div>
                         </div>
-                        <div class="gov-reza-sort">
-                            <span class="gov-reza-sort-label">Řadit:</span>
-                            <select class="gov-reza-sort-select" id="rezaSortSelect" onchange="sortReza(this.value)">
-                                <option value="name">Název (A-Z)</option>
-                                <option value="name-desc">Název (Z-A)</option>
-                                <option value="validity">Platnost</option>
-                                <option value="type">Typ</option>
-                            </select>
+                        <div class="gov-option" onclick="setAuthMethod('paper')">
+                            <div class="gov-option-radio"></div>
+                            <div class="gov-option-content">
+                                <div class="gov-option-title">Papírový dokument</div>
+                                <div class="gov-option-desc">Zmocnění doložím papírovou plnou mocí nebo pověřením</div>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="gov-reza-list" id="rezaList"></div>
-                <div class="gov-reza-pagination" id="rezaPagination">
-                    <div class="gov-reza-pagination-info"><strong id="rezaPageStart">1</strong>–<strong id="rezaPageEnd">4</strong> z <strong id="rezaPageTotal">0</strong></div>
-                    <div class="gov-reza-pagination-controls">
-                        <button type="button" class="gov-reza-page-btn" id="rezaPrevBtn" disabled onclick="prevPage()"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path></svg>Předchozí</button>
-                        <button type="button" class="gov-reza-page-btn" id="rezaNextBtn" onclick="nextPage()">Další<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path></svg></button>
+
+                    <!-- REZA výběr -->
+                    <div class="gov-conditional gov-reza-section" id="rezaSection">
+                        <div class="gov-reza-search">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                            <input type="text" placeholder="Hledat podle jména nebo IČO..." id="rezaSearchInput" oninput="filterReza()">
+                        </div>
+                        <div class="gov-reza-list" id="rezaList">
+                            <!-- Dynamicky generováno -->
+                        </div>
+                    </div>
+
+                    <!-- Papírový dokument -->
+                    <div class="gov-conditional" id="paperSection">
+                        <div class="gov-options" style="margin-bottom: 16px;">
+                            <div class="gov-option selected" onclick="setRepType('poverena')">
+                                <div class="gov-option-radio"></div>
+                                <div class="gov-option-content">
+                                    <div class="gov-option-title">Jsem pověřená osoba</div>
+                                    <div class="gov-option-desc">Zastupovaný mě pověřil provádět úkony</div>
+                                </div>
+                            </div>
+                            <div class="gov-option" onclick="setRepType('zastupce')">
+                                <div class="gov-option-radio"></div>
+                                <div class="gov-option-content">
+                                    <div class="gov-option-title">Jsem zástupce</div>
+                                    <div class="gov-option-desc">Mám plnou moc k zastupování</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="gov-upload">
+                            <label class="gov-upload-label">Nahrát pověření/plnou moc (PDF)</label>
+                            <label class="gov-upload-box" id="uploadBox">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+                                <div class="gov-upload-text"><span>Vyberte soubor</span> nebo přetáhněte sem</div>
+                                <input type="file" accept=".pdf" onchange="handleFileUpload(this)">
+                            </label>
+                            <div class="gov-upload-file" id="uploadedFile">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                <span class="gov-upload-file-name" id="uploadedFileName">dokument.pdf</span>
+                                <button class="gov-upload-file-remove" onclick="removeFile()">×</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="gov-reza-empty" id="rezaEmpty"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"></path></svg><span>Nemáte žádná aktivní elektronická zmocnění</span><button type="button" class="gov-btn gov-btn-secondary" onclick="setAuthMethod('paper')">Pokračovat s papírovým dokumentem</button></div>
-            </div>
-            <div class="gov-scroll" id="scrollIndicator2"><span>Pokračujte níže</span><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg></div>
-        </div>
 
-        <div class="gov-step" id="step3Section">
-            <p class="gov-step-label">Upřesněte typ zastoupení</p>
-            <div class="gov-switch" id="repTypeSwitch">
-                <div class="gov-switch-indicator"></div>
-                <button class="gov-switch-btn active" id="repTypeBtnLeft" type="button" onclick="setRepType('authorized')">
-                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    <span>Jsem pověřená osoba</span>
-                </button>
-                <button class="gov-switch-btn" id="repTypeBtnRight" type="button" onclick="setRepType('proxy')">
-                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"></path></svg>
-                    <span>Jsem zástupce</span>
-                </button>
-            </div>
-            <p class="gov-status">Zvoleno: <strong id="repTypeStatus">Pověřená osoba</strong></p>
-            <p class="gov-hint" id="repTypeHint">Zastupovaný mě pověřil provádět jeho jménem úkony prostřednictvím Portálu stavebníka</p>
-            <div class="gov-file-upload">
-                <label id="uploadLabel">Nahrát pověření (PDF)</label>
-                <input type="file" id="authDocument" accept=".pdf" onchange="handleFileSelect(this)">
-                <div class="gov-file-upload-box" id="uploadBox" onclick="document.getElementById('authDocument').click()">
-                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m6.75 12l-3-3m0 0l-3 3m3-3v6m-1.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"></path></svg>
-                    <span class="gov-file-upload-text">Klikněte pro výběr PDF souboru</span>
-                    <span class="gov-file-upload-hint">nebo přetáhněte soubor sem</span>
+                <!-- KROK 3: Identifikace zastupovaného (pouze pro papír) -->
+                <div class="gov-card gov-conditional" id="entitySection">
+                    <div class="gov-chain-badge" id="chainBadge">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
+                        Zastupovaný č. <span id="chainNumber">1</span>
+                    </div>
+                    
+                    <div class="gov-card-title">Role zastupovaného</div>
+                    <div class="gov-switch" style="margin-bottom: 16px;">
+                        <button type="button" class="gov-switch-btn active" onclick="setEntityRole('builder')">Je stavebník</button>
+                        <button type="button" class="gov-switch-btn" onclick="setEntityRole('delegate')">Postoupil zastoupení</button>
+                    </div>
+
+                    <div class="gov-card-title" style="margin-top: 16px;">Identifikace</div>
+                    <div class="gov-entity-switch">
+                        <button type="button" class="gov-entity-switch-btn active" onclick="setEntityType('company')">
+                            PO / OSVČ
+                        </button>
+                        <button type="button" class="gov-entity-switch-btn" onclick="setEntityType('person')">
+                            Fyzická osoba
+                        </button>
+                    </div>
+
+                    <!-- Formulář PO/OSVČ -->
+                    <div class="gov-entity-form" id="companyForm">
+                        <div class="gov-input-row">
+                            <div class="gov-input-group">
+                                <label>IČO <span class="gov-required">*</span></label>
+                                <input type="text" id="icoInput" placeholder="Zadejte IČO (8 číslic)" maxlength="8">
+                            </div>
+                        </div>
+                        <button type="button" class="gov-btn gov-btn-outline gov-btn-full" onclick="verifyICO()" style="margin-top: 8px;">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            Ověřit z registru
+                        </button>
+                        <div class="gov-verify-result" id="companyVerifyResult">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            <div class="gov-verify-result-content">
+                                <div class="gov-verify-result-title" id="companyName">-</div>
+                                <div class="gov-verify-result-detail" id="companyAddress">-</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Formulář FO -->
+                    <div class="gov-entity-form" id="personForm" style="display: none;">
+                        <div class="gov-input-row">
+                            <div class="gov-input-group">
+                                <label>Jméno <span class="gov-required">*</span></label>
+                                <input type="text" id="firstNameInput" placeholder="Jméno">
+                            </div>
+                            <div class="gov-input-group">
+                                <label>Příjmení <span class="gov-required">*</span></label>
+                                <input type="text" id="lastNameInput" placeholder="Příjmení">
+                            </div>
+                        </div>
+                        <div class="gov-input-row">
+                            <div class="gov-input-group">
+                                <label>Datum narození <span class="gov-required">*</span></label>
+                                <input type="date" id="birthDateInput">
+                            </div>
+                        </div>
+                        <button type="button" class="gov-btn gov-btn-outline gov-btn-full" onclick="verifyPerson()" style="margin-top: 8px;">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            Ověřit osobu
+                        </button>
+                        <div class="gov-verify-result" id="personVerifyResult">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            <div class="gov-verify-result-content">
+                                <div class="gov-verify-result-title" id="personName">-</div>
+                                <div class="gov-verify-result-detail" id="personAddress">-</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="gov-file-selected" id="fileSelected"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><span id="fileName"></span><button type="button" class="gov-file-remove" onclick="removeFile()">×</button></div>
-            </div>
-            <div class="gov-scroll visible" id="scrollIndicator3"><span>Pokračujte níže</span><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg></div>
-        </div>
+            </main>
 
-        <div id="dynamicSteps"></div>
-
-        <div class="gov-continue" id="continueSection">
-            <p class="gov-continue-title">Shrnutí</p>
-            <div class="gov-summary" id="summaryText">Vystupujete jako: <strong>Stavebník</strong></div>
-            <div class="gov-msg-warning" id="validationWarning"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"></path></svg><span>Pro pokračování je nutné ověřit všechny osoby</span></div>
-            <div class="gov-btn-row">
-                <button class="gov-btn gov-btn-secondary" type="button" style="flex: 0 0 auto;" onclick="window.location.href='prehled_zameru.html'"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"></path></svg>Zpět</button>
-                <button class="gov-btn gov-btn-primary" id="continueBtn" type="button" style="flex: 1;" onclick="goToNextPage()"><span id="continueBtnText">Pokračovat na žádost</span><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"></path></svg></button>
-            </div>
-        </div>
-    </div>
-
-    <div class="gov-modal-overlay" id="rezaDetailModal" onclick="if(event.target === this) closeModal()">
-        <div class="gov-modal">
-            <div class="gov-modal-header"><span class="gov-modal-title">Detail zmocnění</span><button class="gov-modal-close" onclick="closeModal()">×</button></div>
-            <div class="gov-modal-body" id="rezaDetailBody"></div>
-            <div class="gov-modal-footer"><button class="gov-btn gov-btn-primary" onclick="selectFromModal()">Vybrat toto zmocnění</button></div>
+            <!-- SIDEBAR - Živé shrnutí -->
+            <aside class="gov-sidebar">
+                <div class="gov-summary-card">
+                    <div class="gov-summary-header">
+                        <h3>Shrnutí identifikace</h3>
+                    </div>
+                    <div class="gov-summary-body">
+                        <div class="gov-summary-item">
+                            <span class="gov-summary-label">Vystupujete jako</span>
+                            <span class="gov-summary-value" id="summaryRole">Stavebník</span>
+                        </div>
+                        <div class="gov-summary-item" id="summaryAuthRow" style="display: none;">
+                            <span class="gov-summary-label">Zmocnění</span>
+                            <span class="gov-summary-value" id="summaryAuth">—</span>
+                        </div>
+                        <div class="gov-summary-item" id="summaryBuilderRow">
+                            <span class="gov-summary-label">Stavebník</span>
+                            <span class="gov-summary-value" id="summaryBuilder">—</span>
+                        </div>
+                    </div>
+                    <div class="gov-summary-footer">
+                        <div class="gov-summary-warning" id="summaryWarning">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            <span>Pro pokračování doplňte chybějící údaje</span>
+                        </div>
+                        <button type="button" class="gov-btn gov-btn-primary gov-btn-full" id="continueBtn" onclick="goToNextPage()" disabled>
+                            Pokračovat na žádost
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                        </button>
+                    </div>
+                </div>
+            </aside>
         </div>
     </div>
 
     <script>
+        // ===== STATE =====
+        var state = {
+            role: 'builder', // builder | representative
+            authMethod: 'reza', // reza | paper
+            repType: 'poverena', // poverena | zastupce
+            selectedReza: null,
+            uploadedFile: null,
+            entityType: 'company', // company | person
+            entityRole: 'builder', // builder | delegate
+            chain: [],
+            verifiedEntity: null
+        };
+
+        // ===== MOCK DATA =====
         var identities = {
-            'FO': { headerName: 'ALEŠ KRUPA', headerDetail: 'FO' },
+            'FO': { headerName: 'ALEŠ KRUPA', headerDetail: 'FO · Nar.: 19.04.1968' },
             'OSVC': { headerName: 'ING. ALEŠ KRUPA', headerDetail: 'OSVČ · IČO: 15104418' },
             'PO_ALMANI': { headerName: 'ALMANI S.R.O.', headerDetail: 'Statutár · IČO: 28765432' },
             'PO_PRVNI': { headerName: 'PRVNÍ PROJEKTOVÁ A.S.', headerDetail: 'Statutár · IČO: 45678901' }
         };
 
-        var rezaData = {
-            'FO': [],
-            'OSVC': [
-                { id: 'reza1', zmocnitel: { name: 'Jan Novák', birthDate: '1985-03-15', address: 'Květná 12, Praha 3' }, typZmocneni: 'plna_moc', platnostDo: '2026-12-31', udeleno: '2024-01-15', rozsah: 'general', zamery: null, jePostoupena: false },
-                { id: 'reza2', zmocnitel: { name: 'ABC Development s.r.o.', ico: '12345678', address: 'Pražská 123, Praha 1' }, typZmocneni: 'povereni', platnostDo: null, udeleno: '2023-06-01', rozsah: 'general', zamery: null, jePostoupena: false }
-            ],
-            'PO_ALMANI': [],
-            'PO_PRVNI': [
-                { id: 'reza1', zmocnitel: { name: 'Město Beroun', ico: '00233129', address: 'Husovo nám. 68, Beroun' }, typZmocneni: 'plna_moc', platnostDo: '2027-12-31', udeleno: '2024-01-01', rozsah: 'general', zamery: null, jePostoupena: false },
-                { id: 'reza2', zmocnitel: { name: 'ABC Development s.r.o.', ico: '12345678', address: 'Pražská 123, Praha 1' }, typZmocneni: 'plna_moc', platnostDo: null, udeleno: '2023-08-15', rozsah: 'general', zamery: null, jePostoupena: false },
-                { id: 'reza3', zmocnitel: { name: 'Jan Novák', birthDate: '1985-03-15', address: 'Květná 12, Praha 3' }, typZmocneni: 'povereni', platnostDo: '2026-12-31', udeleno: '2024-02-01', rozsah: 'general', zamery: null, jePostoupena: false },
-                { id: 'reza4', zmocnitel: { name: 'XYZ Stavby a.s.', ico: '87654321', address: 'Brněnská 456, Brno' }, typZmocneni: 'plna_moc', platnostDo: '2025-06-30', udeleno: '2023-07-01', rozsah: 'limited', zamery: [{ id: 'Z-2024-001', nazev: 'Novostavba RD Beroun' }, { id: 'Z-2024-002', nazev: 'Rekonstrukce bytového domu' }], jePostoupena: false },
-                { id: 'reza5', zmocnitel: { name: 'Obec Karlštejn', ico: '00234001', address: 'Karlštejn 185' }, typZmocneni: 'povereni', platnostDo: '2026-03-15', udeleno: '2024-03-15', rozsah: 'general', zamery: null, jePostoupena: false },
-                { id: 'reza6', zmocnitel: { name: 'Marie Svobodová', birthDate: '1990-07-22', address: 'Lipová 45, Plzeň' }, typZmocneni: 'plna_moc', platnostDo: '2025-12-31', udeleno: '2024-01-20', rozsah: 'limited', zamery: [{ id: 'Z-2023-089', nazev: 'Stavba garáže - Plzeň' }], jePostoupena: false },
-                { id: 'reza7', zmocnitel: { name: 'METROPROJEKT Praha a.s.', ico: '25793349', address: 'Argentinská 1621/4, Praha 7' }, typZmocneni: 'plna_moc', platnostDo: '2026-06-30', udeleno: '2024-02-01', rozsah: 'general', zamery: null, jePostoupena: true, puvodniZmocnitel: { name: 'Město Beroun', ico: '00233129' } },
-                { id: 'reza8', zmocnitel: { name: 'Ing. Tomáš Dvořák', birthDate: '1975-08-12', address: 'Sokolovská 78, Praha 8' }, typZmocneni: 'plna_moc', platnostDo: '2025-12-31', udeleno: '2024-03-01', rozsah: 'limited', zamery: [{ id: 'Z-2024-015', nazev: 'Administrativní budova Karlín' }], jePostoupena: true, puvodniZmocnitel: { name: 'ABC Development s.r.o.', ico: '12345678' } }
-            ]
-        };
+        var rezaData = [
+            { id: 1, type: 'povereni', zmocnitel: { name: 'Jan Novák', birthDate: '15.03.1975', address: 'Vinohradská 123, Praha 2' }, rozsah: 'Povolení stavby RD', platnost: '31.12.2026' },
+            { id: 2, type: 'plna_moc', zmocnitel: { name: 'ACME Development s.r.o.', ico: '12345678', address: 'Národní 15, Praha 1' }, rozsah: 'Všechna řízení', platnost: '31.12.2025' },
+            { id: 3, type: 'plna_moc', zmocnitel: { name: 'Marie Svobodová', birthDate: '22.08.1960', address: 'Mánesova 45, Praha 2' }, rozsah: 'Kolaudace bytového domu', platnost: '30.06.2025', postoupena: true, puvodniZmocnitel: { name: 'Bytové družstvo Harmonie', ico: '98765432' } }
+        ];
 
-        var testDatabase = {
-            companies: { '12345678': { name: 'ABC Development s.r.o.', address: 'Pražská 123, Praha 1' }, '00233129': { name: 'Město Beroun', address: 'Husovo nám. 68, Beroun' }, '87654321': { name: 'XYZ Stavby a.s.', address: 'Brněnská 456, Brno' } },
-            persons: [{ firstName: 'Jan', lastName: 'Novák', birthDate: '1985-03-15', address: 'Květná 12, Praha 3' }, { firstName: 'Marie', lastName: 'Svobodová', birthDate: '1990-07-22', address: 'Lipová 45, Plzeň' }]
-        };
+        var currentIdentity = 'FO';
 
-        var appState = { identity: 'FO', isRepresentative: false, authMethod: 'reza', selectedReza: null, repType: 'authorized', chain: [], rezaLoaded: false, allRezaData: [], filteredRezaData: [], currentFilter: 'all', currentSort: 'name', currentSearch: '', currentPage: 1, perPage: 4, modalRezaId: null };
-
+        // ===== INIT =====
         document.addEventListener('DOMContentLoaded', function() {
-            // Načíst identitu z localStorage (uloženo v reza_implicitni.html)
-            var storedIdentity = localStorage.getItem('selectedIdentity');
-            var identityId = 'FO'; // default
-            
-            if (storedIdentity) {
-                var parsed = JSON.parse(storedIdentity);
-                // Mapování z selectedIdentity na interní ID
-                if (parsed.name === 'Aleš Krupa' && parsed.type === 'FO') {
-                    identityId = 'FO';
-                } else if (parsed.name === 'Ing. Aleš Krupa' || parsed.type === 'OSVČ') {
-                    identityId = 'OSVC';
-                } else if (parsed.name === 'ALMANI s.r.o.') {
-                    identityId = 'PO_ALMANI';
-                } else if (parsed.name === 'První projektová a.s.') {
-                    identityId = 'PO_PRVNI';
-                } else if (parsed.type === 'PO') {
-                    // Fallback pro jiné PO
-                    identityId = 'PO_ALMANI';
-                }
-            } else {
-                // Fallback na URL parametry pro zpětnou kompatibilitu
-                var urlParams = new URLSearchParams(window.location.search);
-                var scenario = urlParams.get('scenario');
-                var scenarioMap = { 'fo-zakladni': 'FO', 'osvc-zakladni': 'OSVC', 'almani': 'PO_ALMANI', 'prvni-projektova': 'PO_PRVNI' };
-                identityId = scenario ? (scenarioMap[scenario] || 'FO') : 'FO';
-            }
-            
-            setIdentity(identityId);
-            var radio = document.querySelector('input[name="identity"][value="' + identityId + '"]');
-            if (radio) radio.checked = true;
-            updateContinueSection();
+            loadIdentityFromStorage();
+            renderRezaList();
+            updateSummary();
         });
 
-        function setIdentity(id) {
-            appState.identity = id;
-            var identity = identities[id];
-            document.getElementById('headerUserName').textContent = identity.headerName;
-            document.getElementById('headerUserDetail').textContent = identity.headerDetail;
-            appState.isRepresentative = false; appState.authMethod = 'reza'; appState.selectedReza = null; appState.chain = []; appState.rezaLoaded = false;
-            updateDropdownInfo();
-            setRole('builder');
+        function loadIdentityFromStorage() {
+            var stored = localStorage.getItem('formIdentifikace');
+            if (stored) {
+                var data = JSON.parse(stored);
+                currentIdentity = data.identity || 'FO';
+            }
+            var identity = identities[currentIdentity];
+            if (identity) {
+                document.getElementById('headerUserName').textContent = identity.headerName;
+                document.getElementById('headerUserDetail').textContent = identity.headerDetail;
+            }
         }
 
+        // ===== ROLE =====
         function setRole(role) {
-            var switchEl = document.getElementById('roleSwitch');
-            var statusEl = document.getElementById('roleStatus');
-            var step2 = document.getElementById('step2Section');
-            var step3 = document.getElementById('step3Section');
-            var scroll1 = document.getElementById('scrollIndicator1');
-            if (role === 'builder') {
-                switchEl.classList.remove('right'); statusEl.textContent = 'Stavebník'; document.getElementById('roleBtnLeft').classList.add('active'); document.getElementById('roleBtnRight').classList.remove('active');
-                appState.isRepresentative = false; scroll1.classList.remove('visible'); step2.classList.remove('visible'); step3.classList.remove('visible'); appState.chain = []; appState.selectedReza = null;
-            } else {
-                switchEl.classList.add('right'); statusEl.textContent = 'V zastoupení'; document.getElementById('roleBtnLeft').classList.remove('active'); document.getElementById('roleBtnRight').classList.add('active');
-                appState.isRepresentative = true; scroll1.classList.add('visible'); step2.classList.add('visible'); appState.selectedReza = null;
-                if (!appState.rezaLoaded) loadRezaData(); else showRezaUI();
-            }
-            renderDynamicSteps(); updateContinueSection();
-        }
-
-        function setAuthMethod(method) {
-            var switchEl = document.getElementById('authMethodSwitch');
-            var statusEl = document.getElementById('authMethodStatus');
-            var hintEl = document.getElementById('authMethodHint');
-            var rezaSection = document.getElementById('rezaSection');
-            var step3 = document.getElementById('step3Section');
-            var scroll2 = document.getElementById('scrollIndicator2');
-            appState.authMethod = method; appState.selectedReza = null;
-            if (method === 'reza') {
-                switchEl.classList.remove('right'); statusEl.textContent = 'Elektronické zmocnění (REZA)'; hintEl.textContent = 'Zmocnění uděleno elektronicky prostřednictvím Registru zastupování';
-                document.getElementById('authMethodBtnLeft').classList.add('active'); document.getElementById('authMethodBtnRight').classList.remove('active');
-                rezaSection.style.display = 'block'; scroll2.classList.remove('visible'); step3.classList.remove('visible'); appState.chain = []; showRezaUI();
-            } else {
-                switchEl.classList.add('right'); statusEl.textContent = 'Papírový dokument'; hintEl.textContent = 'Zmocnění je doloženo papírovou plnou mocí nebo pověřením';
-                document.getElementById('authMethodBtnLeft').classList.remove('active'); document.getElementById('authMethodBtnRight').classList.add('active');
-                rezaSection.style.display = 'none'; scroll2.classList.add('visible'); step3.classList.add('visible');
-                if (appState.chain.length === 0) appState.chain.push({ role: 'builder', entityType: 'company', data: {} });
-            }
-            renderDynamicSteps(); updateContinueSection();
-        }
-
-        function loadRezaData() {
-            var loading = document.getElementById('rezaLoading');
-            var toolbar = document.getElementById('rezaToolbar');
-            var list = document.getElementById('rezaList');
-            var pagination = document.getElementById('rezaPagination');
-            var empty = document.getElementById('rezaEmpty');
-            loading.style.display = 'flex'; toolbar.classList.remove('visible'); list.classList.remove('visible'); pagination.classList.remove('visible'); empty.classList.remove('visible');
-            setTimeout(function() {
-                loading.style.display = 'none'; appState.rezaLoaded = true;
-                appState.allRezaData = rezaData[appState.identity] || []; appState.filteredRezaData = appState.allRezaData.slice();
-                appState.currentFilter = 'all'; appState.currentSort = 'name'; appState.currentSearch = ''; appState.currentPage = 1;
-                showRezaUI();
-            }, 800);
-        }
-
-        function showRezaUI() {
-            var data = appState.allRezaData;
-            var toolbar = document.getElementById('rezaToolbar');
-            var list = document.getElementById('rezaList');
-            var pagination = document.getElementById('rezaPagination');
-            var empty = document.getElementById('rezaEmpty');
-            if (data.length === 0) { toolbar.classList.remove('visible'); list.classList.remove('visible'); pagination.classList.remove('visible'); empty.classList.add('visible'); }
-            else { toolbar.classList.add('visible'); list.classList.add('visible'); empty.classList.remove('visible'); document.getElementById('rezaSearchInput').value = ''; document.getElementById('rezaSearchClear').classList.remove('visible'); document.getElementById('rezaSortSelect').value = 'name'; 
-                var btns = document.querySelectorAll('.gov-reza-filter-btn');
-                for (var i = 0; i < btns.length; i++) { btns[i].classList.toggle('active', btns[i].getAttribute('data-filter') === 'all'); }
-                updateFilterCounts(); applyFilterAndSort(); }
-        }
-
-        function updateFilterCounts() { var data = appState.allRezaData; document.getElementById('countAll').textContent = data.length; document.getElementById('countPovereni').textContent = data.filter(function(z) { return z.typZmocneni === 'povereni'; }).length; document.getElementById('countPlnaMoc').textContent = data.filter(function(z) { return z.typZmocneni === 'plna_moc'; }).length; }
-
-        function filterReza(filter) { appState.currentFilter = filter; appState.currentPage = 1; var btns = document.querySelectorAll('.gov-reza-filter-btn'); for (var i = 0; i < btns.length; i++) { btns[i].classList.toggle('active', btns[i].getAttribute('data-filter') === filter); } applyFilterAndSort(); }
-        function sortReza(sortBy) { appState.currentSort = sortBy; applyFilterAndSort(); }
-        function searchReza(query) { appState.currentSearch = query.trim().toLowerCase(); appState.currentPage = 1; document.getElementById('rezaSearchClear').classList.toggle('visible', query.length > 0); applyFilterAndSort(); }
-        function clearSearch() { document.getElementById('rezaSearchInput').value = ''; appState.currentSearch = ''; appState.currentPage = 1; document.getElementById('rezaSearchClear').classList.remove('visible'); applyFilterAndSort(); }
-
-        function applyFilterAndSort() {
-            var data = appState.allRezaData.slice();
-            if (appState.currentFilter !== 'all') data = data.filter(function(z) { return z.typZmocneni === appState.currentFilter; });
-            if (appState.currentSearch) data = data.filter(function(z) { var name = z.zmocnitel.name.toLowerCase(); var ico = z.zmocnitel.ico || ''; return name.indexOf(appState.currentSearch) !== -1 || ico.indexOf(appState.currentSearch) !== -1; });
-            data.sort(function(a, b) {
-                if (appState.currentSort === 'name') return a.zmocnitel.name.localeCompare(b.zmocnitel.name, 'cs');
-                if (appState.currentSort === 'name-desc') return b.zmocnitel.name.localeCompare(a.zmocnitel.name, 'cs');
-                if (appState.currentSort === 'validity') { var aD = a.platnostDo ? new Date(a.platnostDo) : new Date('9999-12-31'); var bD = b.platnostDo ? new Date(b.platnostDo) : new Date('9999-12-31'); return aD - bD; }
-                if (appState.currentSort === 'type') return a.typZmocneni.localeCompare(b.typZmocneni);
-                return 0;
+            state.role = role;
+            var btns = document.querySelectorAll('.gov-card:first-of-type .gov-switch-btn');
+            btns.forEach(function(btn, i) {
+                btn.classList.toggle('active', (i === 0 && role === 'builder') || (i === 1 && role === 'representative'));
             });
-            appState.filteredRezaData = data; renderRezaPage();
+
+            var authSection = document.getElementById('authMethodSection');
+            authSection.classList.toggle('visible', role === 'representative');
+
+            if (role === 'builder') {
+                document.getElementById('entitySection').classList.remove('visible');
+            }
+
+            updateSummary();
         }
 
-        function renderRezaPage() {
-            var data = appState.filteredRezaData;
-            var start = (appState.currentPage - 1) * appState.perPage;
-            var end = Math.min(start + appState.perPage, data.length);
-            var pageData = data.slice(start, end);
-            renderRezaList(pageData);
-            var pagination = document.getElementById('rezaPagination');
-            if (data.length > appState.perPage) { pagination.classList.add('visible'); document.getElementById('rezaPageStart').textContent = start + 1; document.getElementById('rezaPageEnd').textContent = end; document.getElementById('rezaPageTotal').textContent = data.length; document.getElementById('rezaPrevBtn').disabled = appState.currentPage === 1; document.getElementById('rezaNextBtn').disabled = end >= data.length; }
-            else pagination.classList.remove('visible');
+        // ===== AUTH METHOD =====
+        function setAuthMethod(method) {
+            state.authMethod = method;
+            var options = document.querySelectorAll('#authMethodSection > .gov-options .gov-option');
+            options.forEach(function(opt, i) {
+                opt.classList.toggle('selected', (i === 0 && method === 'reza') || (i === 1 && method === 'paper'));
+            });
+
+            document.getElementById('rezaSection').classList.toggle('visible', method === 'reza');
+            document.getElementById('paperSection').classList.toggle('visible', method === 'paper');
+            document.getElementById('entitySection').classList.toggle('visible', method === 'paper');
+
+            if (method === 'reza') {
+                state.selectedReza = null;
+            }
+
+            updateSummary();
         }
 
-        function prevPage() { if (appState.currentPage > 1) { appState.currentPage--; renderRezaPage(); } }
-        function nextPage() { var maxPage = Math.ceil(appState.filteredRezaData.length / appState.perPage); if (appState.currentPage < maxPage) { appState.currentPage++; renderRezaPage(); } }
+        // ===== REP TYPE =====
+        function setRepType(type) {
+            state.repType = type;
+            var options = document.querySelectorAll('#paperSection > .gov-options .gov-option');
+            options.forEach(function(opt, i) {
+                opt.classList.toggle('selected', (i === 0 && type === 'poverena') || (i === 1 && type === 'zastupce'));
+            });
+            updateSummary();
+        }
 
-        function renderRezaList(data) {
+        // ===== REZA =====
+        function renderRezaList() {
             var list = document.getElementById('rezaList');
             var html = '';
-            for (var i = 0; i < data.length; i++) {
-                var z = data[i];
-                var typLabel = z.typZmocneni === 'povereni' ? 'Pověření' : 'Plná moc';
-                var typClass = z.typZmocneni === 'povereni' ? 'povereni' : 'plna-moc';
-                var detail = z.zmocnitel.ico ? 'IČO: ' + z.zmocnitel.ico : 'nar. ' + formatDate(z.zmocnitel.birthDate);
-                var validity = z.platnostDo ? 'Platnost do: ' + formatDate(z.platnostDo) : 'Neomezená platnost';
-                var isSelected = appState.selectedReza && appState.selectedReza.id === z.id;
-                var zameryText = z.zamery && z.zamery.length > 0 ? z.zamery.length + ' záměr' + (z.zamery.length > 1 ? 'y' : '') : '';
-                html += '<div class="gov-reza-card ' + (isSelected ? 'selected' : '') + '" data-reza-id="' + z.id + '" onclick="selectReza(\'' + z.id + '\')">';
-                html += '<div class="gov-reza-card-header"><span class="gov-reza-card-name">' + z.zmocnitel.name + '</span><div class="gov-reza-card-badges">';
-                if (z.jePostoupena) {
-                    html += '<span class="gov-reza-card-postoupena visible"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>Postoupená</span>';
-                }
-                html += '<span class="gov-tag gov-tag-' + typClass + '">' + typLabel + '</span><div class="gov-reza-card-check"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg></div></div></div>';
-                html += '<div class="gov-reza-card-details">' + detail + (zameryText ? ' · ' + zameryText : '') + '</div>';
-                html += '<div class="gov-reza-card-validity"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg><span>' + validity + '</span></div>';
-                html += '<div class="gov-reza-card-actions"><button type="button" class="gov-reza-detail-btn" onclick="event.stopPropagation(); showDetail(\'' + z.id + '\')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>Zobrazit detail</button></div>';
+
+            rezaData.forEach(function(item) {
+                var typeLabel = item.type === 'povereni' ? 'Pověření' : 'Plná moc';
+                var name = item.zmocnitel.name;
+                var detail = item.zmocnitel.ico ? 'IČO: ' + item.zmocnitel.ico : 'Nar.: ' + item.zmocnitel.birthDate;
+
+                html += '<div class="gov-reza-card" data-id="' + item.id + '" onclick="selectReza(' + item.id + ')">';
+                html += '<div class="gov-reza-card-header">';
+                html += '<span class="gov-reza-card-name">' + name + '</span>';
+                html += '<span class="gov-reza-card-tag">' + typeLabel + '</span>';
                 html += '</div>';
-            }
+                html += '<div class="gov-reza-card-details">' + detail + ' · Platnost do: ' + item.platnost + '</div>';
+                if (item.postoupena) {
+                    html += '<div class="gov-reza-card-details" style="color: #e65100; margin-top: 4px;">↳ Postoupeno od: ' + item.puvodniZmocnitel.name + '</div>';
+                }
+                html += '</div>';
+            });
+
             list.innerHTML = html;
         }
 
-        function selectReza(id) {
-            for (var i = 0; i < appState.allRezaData.length; i++) { if (appState.allRezaData[i].id === id) { appState.selectedReza = appState.allRezaData[i]; break; } }
+        function filterReza() {
+            var query = document.getElementById('rezaSearchInput').value.toLowerCase();
             var cards = document.querySelectorAll('.gov-reza-card');
-            for (var j = 0; j < cards.length; j++) { cards[j].classList.toggle('selected', cards[j].getAttribute('data-reza-id') === id); }
-            updateContinueSection();
+            cards.forEach(function(card) {
+                var text = card.textContent.toLowerCase();
+                card.style.display = text.includes(query) ? '' : 'none';
+            });
         }
 
-        function showDetail(id) {
-            var z = null;
-            for (var i = 0; i < appState.allRezaData.length; i++) { if (appState.allRezaData[i].id === id) { z = appState.allRezaData[i]; break; } }
-            if (!z) return;
-            appState.modalRezaId = id;
-            var typLabel = z.typZmocneni === 'povereni' ? 'Pověřená osoba' : 'Zástupce ve správním řízení';
-            var typClass = z.typZmocneni === 'povereni' ? 'povereni' : 'plna-moc';
-            var isCompany = !!z.zmocnitel.ico;
-            var validity = z.platnostDo ? formatDate(z.platnostDo) : 'Časově neomezená';
-            var html = '';
-            
-            if (z.jePostoupena && z.puvodniZmocnitel) {
-                html += '<div class="gov-detail-section"><div class="gov-detail-section-title">Řetězec zastoupení</div>';
-                html += '<div class="gov-detail-chain"><div class="gov-detail-chain-title">Postoupená plná moc</div>';
-                html += '<div class="gov-detail-chain-item"><strong>Stavebník:</strong> ' + z.puvodniZmocnitel.name + (z.puvodniZmocnitel.ico ? ' (IČO: ' + z.puvodniZmocnitel.ico + ')' : '') + '</div>';
-                html += '<div class="gov-detail-chain-item" style="margin-top:4px"><strong>Zmocnil:</strong> ' + z.zmocnitel.name + '</div>';
-                html += '<div class="gov-detail-chain-item" style="margin-top:4px"><strong>Který postoupil na:</strong> Vás</div>';
-                html += '</div></div>';
-            }
-            
-            html += '<div class="gov-detail-section"><div class="gov-detail-section-title">Údaje o zmocniteli</div><div class="gov-detail-grid">';
-            html += '<div class="gov-detail-row"><span class="gov-detail-label">Název:</span><span class="gov-detail-value">' + z.zmocnitel.name + '</span></div>';
-            if (isCompany) {
-                html += '<div class="gov-detail-row"><span class="gov-detail-label">IČO:</span><span class="gov-detail-value">' + z.zmocnitel.ico + '</span></div>';
-            } else {
-                html += '<div class="gov-detail-row"><span class="gov-detail-label">Datum narození:</span><span class="gov-detail-value">' + formatDate(z.zmocnitel.birthDate) + '</span></div>';
-            }
-            html += '<div class="gov-detail-row"><span class="gov-detail-label">Adresa:</span><span class="gov-detail-value">' + (z.zmocnitel.address || '–') + '</span></div>';
-            if (z.jePostoupena) {
-                html += '<div class="gov-detail-row"><span class="gov-detail-label">Role zmocnitele:</span><span class="gov-detail-value"><span class="gov-detail-tag gov-detail-tag-postoupena">Zástupce stavebníka</span></span></div>';
-            }
-            html += '</div></div>';
-            
-            html += '<div class="gov-detail-section"><div class="gov-detail-section-title">Parametry zmocnění</div><div class="gov-detail-grid">';
-            html += '<div class="gov-detail-row"><span class="gov-detail-label">Typ zmocnění:</span><span class="gov-detail-value"><span class="gov-detail-tag gov-detail-tag-' + typClass + '">' + typLabel + '</span></span></div>';
-            html += '<div class="gov-detail-row"><span class="gov-detail-label">Rozsah:</span><span class="gov-detail-value">' + (z.zamery && z.zamery.length > 0 ? 'Omezeno na vybrané záměry' : 'Obecné zmocnění') + '</span></div>';
-            html += '<div class="gov-detail-row"><span class="gov-detail-label">Platnost:</span><span class="gov-detail-value">' + validity + '</span></div>';
-            html += '<div class="gov-detail-row"><span class="gov-detail-label">Datum udělení:</span><span class="gov-detail-value">' + formatDate(z.udeleno) + '</span></div>';
-            html += '</div></div>';
-            
-            if (z.zamery && z.zamery.length > 0) {
-                html += '<div class="gov-detail-section"><div class="gov-detail-section-title">Vybrané záměry (' + z.zamery.length + ')</div>';
-                html += '<div class="gov-detail-zamery-list">';
-                for (var j = 0; j < z.zamery.length; j++) {
-                    html += '<div class="gov-detail-zamer"><span class="gov-detail-zamer-id">' + z.zamery[j].id + '</span><span class="gov-detail-zamer-nazev">' + z.zamery[j].nazev + '</span></div>';
-                }
-                html += '</div></div>';
-            }
-            
-            document.getElementById('rezaDetailBody').innerHTML = html;
-            document.getElementById('rezaDetailModal').classList.add('visible');
+        function selectReza(id) {
+            state.selectedReza = rezaData.find(function(r) { return r.id === id; });
+
+            var cards = document.querySelectorAll('.gov-reza-card');
+            cards.forEach(function(card) {
+                card.classList.toggle('selected', parseInt(card.dataset.id) === id);
+            });
+
+            updateSummary();
         }
 
-        function closeModal() { document.getElementById('rezaDetailModal').classList.remove('visible'); appState.modalRezaId = null; }
-        function selectFromModal() { if (appState.modalRezaId) { selectReza(appState.modalRezaId); closeModal(); } }
-
-        function setRepType(type) {
-            var switchEl = document.getElementById('repTypeSwitch');
-            var statusEl = document.getElementById('repTypeStatus');
-            var hintEl = document.getElementById('repTypeHint');
-            var uploadLabel = document.getElementById('uploadLabel');
-            appState.repType = type;
-            if (type === 'authorized') { switchEl.classList.remove('right'); statusEl.textContent = 'Pověřená osoba'; hintEl.textContent = 'Zastupovaný mě pověřil provádět jeho jménem úkony prostřednictvím Portálu stavebníka'; uploadLabel.textContent = 'Nahrát pověření (PDF)'; document.getElementById('repTypeBtnLeft').classList.add('active'); document.getElementById('repTypeBtnRight').classList.remove('active'); }
-            else { switchEl.classList.add('right'); statusEl.textContent = 'Zástupce'; hintEl.textContent = 'Zastupuji na základě plné moci stavebníka v průběhu řízení'; uploadLabel.textContent = 'Nahrát plnou moc (PDF)'; document.getElementById('repTypeBtnLeft').classList.remove('active'); document.getElementById('repTypeBtnRight').classList.add('active'); }
-            updateContinueSection();
-        }
-
-        function handleFileSelect(input) { if (input.files && input.files[0]) { document.getElementById('fileName').textContent = input.files[0].name; document.getElementById('uploadBox').style.display = 'none'; document.getElementById('fileSelected').classList.add('visible'); updateContinueSection(); } }
-        function removeFile() { document.getElementById('authDocument').value = ''; document.getElementById('uploadBox').style.display = 'flex'; document.getElementById('fileSelected').classList.remove('visible'); updateContinueSection(); }
-
-        function setChainRole(index, role) { appState.chain[index].role = role; appState.chain[index].data = {}; if (role === 'builder') appState.chain = appState.chain.slice(0, index + 1); else if (appState.chain.length <= index + 1) appState.chain.push({ role: 'builder', entityType: 'company', data: {} }); renderDynamicSteps(); updateContinueSection(); }
-        function setChainEntityType(index, type) { appState.chain[index].entityType = type; appState.chain[index].data = {}; renderDynamicSteps(); updateContinueSection(); }
-
-        function verifyFromRegistry(index) {
-            var item = appState.chain[index];
-            var btn = event.target.closest('.gov-btn');
-            var inputSection = btn.closest('.gov-input-section');
-            var existingResult = inputSection.querySelector('.verification-result');
-            if (existingResult) existingResult.parentNode.removeChild(existingResult);
-            if (item.entityType === 'company') {
-                var ico = document.getElementById('chainIco_' + index).value.trim();
-                if (ico.length !== 8 || !/^\d{8}$/.test(ico)) { showVerificationResult(inputSection, 'error', 'Neplatný formát IČO. Zadejte 8 číslic.'); return; }
-                btn.disabled = true; var originalHTML = btn.innerHTML; btn.innerHTML = '<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="animation: spin 1s linear infinite;"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg> Ověřuji...';
-                setTimeout(function() { btn.disabled = false; btn.innerHTML = originalHTML; var company = testDatabase.companies[ico]; if (company) { showVerificationResult(inputSection, 'success', null, { type: 'company', ico: ico, name: company.name, address: company.address }); appState.chain[index].data = { ico: ico, name: company.name, address: company.address, verified: true }; } else { showVerificationResult(inputSection, 'error', 'Subjekt s IČO ' + ico + ' nebyl nalezen v registru.'); } updateContinueSection(); }, 1200);
-            } else {
-                var firstName = document.getElementById('chainFirstName_' + index).value.trim();
-                var lastName = document.getElementById('chainLastName_' + index).value.trim();
-                var birthDate = document.getElementById('chainBirthDate_' + index).value;
-                if (!firstName || !lastName) { showVerificationResult(inputSection, 'error', 'Vyplňte jméno a příjmení.'); return; }
-                if (!birthDate) { showVerificationResult(inputSection, 'error', 'Vyplňte datum narození.'); return; }
-                btn.disabled = true; var originalHTML2 = btn.innerHTML; btn.innerHTML = '<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="animation: spin 1s linear infinite;"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg> Ověřuji...';
-                setTimeout(function() { btn.disabled = false; btn.innerHTML = originalHTML2; var person = null; for (var p = 0; p < testDatabase.persons.length; p++) { var per = testDatabase.persons[p]; if (per.firstName.toLowerCase() === firstName.toLowerCase() && per.lastName.toLowerCase() === lastName.toLowerCase() && per.birthDate === birthDate) { person = per; break; } } if (person) { showVerificationResult(inputSection, 'success', null, { type: 'person', firstName: person.firstName, lastName: person.lastName, birthDate: formatDate(person.birthDate), address: person.address }); appState.chain[index].data = { firstName: person.firstName, lastName: person.lastName, birthDate: person.birthDate, address: person.address, verified: true }; } else { showVerificationResult(inputSection, 'error', 'Osoba ' + firstName + ' ' + lastName + ' nebyla nalezena v registru.'); } updateContinueSection(); }, 1200);
+        // ===== FILE UPLOAD =====
+        function handleFileUpload(input) {
+            if (input.files && input.files[0]) {
+                state.uploadedFile = input.files[0];
+                document.getElementById('uploadedFileName').textContent = state.uploadedFile.name;
+                document.getElementById('uploadBox').style.display = 'none';
+                document.getElementById('uploadedFile').classList.add('visible');
+                updateSummary();
             }
         }
 
-        function showVerificationResult(inputSection, type, errorMessage, data) {
-            var resultDiv = document.createElement('div'); resultDiv.className = 'verification-result ' + type;
-            if (type === 'error') resultDiv.innerHTML = '<div class="result-icon"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg></div><div class="result-content"><span class="result-title">Ověření neúspěšné</span><span class="result-message">' + errorMessage + '</span></div><button type="button" class="result-close" onclick="this.parentElement.parentNode.removeChild(this.parentElement)">×</button>';
-            else { var details = data.type === 'company' ? '<div class="result-detail"><strong>IČO:</strong> ' + data.ico + '</div><div class="result-detail"><strong>Název:</strong> ' + data.name + '</div><div class="result-detail"><strong>Sídlo:</strong> ' + data.address + '</div>' : '<div class="result-detail"><strong>Jméno:</strong> ' + data.firstName + ' ' + data.lastName + '</div><div class="result-detail"><strong>Datum narození:</strong> ' + data.birthDate + '</div><div class="result-detail"><strong>Adresa:</strong> ' + data.address + '</div>'; resultDiv.innerHTML = '<div class="result-icon"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg></div><div class="result-content"><span class="result-title">Subjekt ověřen</span>' + details + '</div><button type="button" class="result-close" onclick="this.parentElement.parentNode.removeChild(this.parentElement)">×</button>'; }
-            inputSection.appendChild(resultDiv);
+        function removeFile() {
+            state.uploadedFile = null;
+            document.getElementById('uploadBox').style.display = 'flex';
+            document.getElementById('uploadedFile').classList.remove('visible');
+            updateSummary();
         }
 
-        function renderDynamicSteps() {
-            var container = document.getElementById('dynamicSteps'); container.innerHTML = '';
-            if (!appState.isRepresentative || appState.authMethod === 'reza') return;
-            for (var index = 0; index < appState.chain.length; index++) {
-                var item = appState.chain[index];
-                var isBuilder = item.role === 'builder';
-                var isLastInChain = index === appState.chain.length - 1;
-                var chainPosition = index + 1;
-                var chainLabel = chainPosition > 1 ? ' (v řetězci ' + chainPosition + '.)' : '';
-                var roleSection = document.createElement('div'); roleSection.className = 'gov-step visible';
-                roleSection.innerHTML = '<div class="gov-chain-badge"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg><span>Zastupovaný č. ' + chainPosition + '</span></div><p class="gov-step-label">Role zastupovaného' + chainLabel + '</p><div class="gov-switch' + (item.role === 'delegate' ? ' right' : '') + '"><div class="gov-switch-indicator"></div><button class="gov-switch-btn' + (item.role === 'builder' ? ' active' : '') + '" type="button" onclick="setChainRole(' + index + ', \'builder\')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3H21m-3.75 3H21"></path></svg><span>Je stavebník</span></button><button class="gov-switch-btn' + (item.role === 'delegate' ? ' active' : '') + '" type="button" onclick="setChainRole(' + index + ', \'delegate\')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5"></path></svg><span>Postoupil zastoupení</span></button></div><p class="gov-status">Zvoleno: <strong>' + (isBuilder ? 'Stavebník' : 'Postoupil zastoupení') + '</strong></p><p class="gov-hint">' + (isBuilder ? 'Zastupovaný subjekt je přímo stavebníkem' : 'Zastupovaný subjekt na mě postoupil zastoupení na základě plné moci') + '</p><div class="gov-scroll visible"><span>Pokračujte níže</span><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg></div>';
-                container.appendChild(roleSection);
-                var identSection = document.createElement('div'); identSection.className = 'gov-step visible';
-                var identTitle = isBuilder ? 'Identifikace stavebníka' : 'Identifikace zastupovaného';
-                identSection.innerHTML = '<p class="gov-step-label">' + identTitle + '</p><div class="gov-switch' + (item.entityType === 'person' ? ' right' : '') + '"><div class="gov-switch-indicator"></div><button class="gov-switch-btn' + (item.entityType === 'company' ? ' active' : '') + '" type="button" onclick="setChainEntityType(' + index + ', \'company\')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21"></path></svg><span>PO / OSVČ</span></button><button class="gov-switch-btn' + (item.entityType === 'person' ? ' active' : '') + '" type="button" onclick="setChainEntityType(' + index + ', \'person\')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"></path></svg><span>Fyzická osoba</span></button></div><p class="gov-status">Zvoleno: <strong>' + (item.entityType === 'company' ? 'Právnická osoba / OSVČ' : 'Fyzická osoba') + '</strong></p><div class="gov-input-section' + (item.entityType === 'company' ? ' visible' : '') + '" id="chainCompanyInputs_' + index + '"><div class="gov-input-group"><label for="chainIco_' + index + '">IČO <span class="gov-required">*</span></label><input type="text" id="chainIco_' + index + '" placeholder="Zadejte IČO (8 číslic)" maxlength="8" value="' + (item.data && item.data.ico ? item.data.ico : '') + '"></div><button class="gov-btn gov-btn-secondary gov-btn-full" type="button" onclick="verifyFromRegistry(' + index + ')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"></path></svg>Ověřit z registru</button></div><div class="gov-input-section' + (item.entityType === 'person' ? ' visible' : '') + '" id="chainPersonInputs_' + index + '"><div class="gov-input-row"><div class="gov-input-group"><label for="chainFirstName_' + index + '">Jméno <span class="gov-required">*</span></label><input type="text" id="chainFirstName_' + index + '" placeholder="Jméno" value="' + (item.data && item.data.firstName ? item.data.firstName : '') + '"></div><div class="gov-input-group"><label for="chainLastName_' + index + '">Příjmení <span class="gov-required">*</span></label><input type="text" id="chainLastName_' + index + '" placeholder="Příjmení" value="' + (item.data && item.data.lastName ? item.data.lastName : '') + '"></div></div><div class="gov-input-group"><label for="chainBirthDate_' + index + '">Datum narození <span class="gov-required">*</span></label><input type="date" id="chainBirthDate_' + index + '" value="' + (item.data && item.data.birthDate ? item.data.birthDate : '') + '"></div><button class="gov-btn gov-btn-secondary gov-btn-full" type="button" onclick="verifyFromRegistry(' + index + ')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"></path></svg>Ověřit z registru</button></div>' + (!isBuilder && isLastInChain ? '<div class="gov-scroll visible"><span>Pokračujte níže</span><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg></div>' : '');
-                container.appendChild(identSection);
+        // ===== ENTITY =====
+        function setEntityRole(role) {
+            state.entityRole = role;
+            var btns = document.querySelectorAll('#entitySection .gov-switch-btn');
+            btns.forEach(function(btn, i) {
+                btn.classList.toggle('active', (i === 0 && role === 'builder') || (i === 1 && role === 'delegate'));
+            });
+            updateSummary();
+        }
+
+        function setEntityType(type) {
+            state.entityType = type;
+            var btns = document.querySelectorAll('.gov-entity-switch-btn');
+            btns.forEach(function(btn, i) {
+                btn.classList.toggle('active', (i === 0 && type === 'company') || (i === 1 && type === 'person'));
+            });
+
+            document.getElementById('companyForm').style.display = type === 'company' ? 'block' : 'none';
+            document.getElementById('personForm').style.display = type === 'person' ? 'block' : 'none';
+
+            // Reset verification
+            state.verifiedEntity = null;
+            document.getElementById('companyVerifyResult').classList.remove('visible', 'success', 'error');
+            document.getElementById('personVerifyResult').classList.remove('visible', 'success', 'error');
+            updateSummary();
+        }
+
+        function verifyICO() {
+            var ico = document.getElementById('icoInput').value;
+            var result = document.getElementById('companyVerifyResult');
+
+            if (!ico || ico.length !== 8) {
+                result.classList.add('visible', 'error');
+                result.classList.remove('success');
+                document.getElementById('companyName').textContent = 'Chyba';
+                document.getElementById('companyAddress').textContent = 'Zadejte platné IČO (8 číslic)';
+                state.verifiedEntity = null;
+                updateSummary();
+                return;
             }
+
+            // Simulace ověření
+            setTimeout(function() {
+                result.classList.add('visible', 'success');
+                result.classList.remove('error');
+                var name = 'Testovací společnost s.r.o.';
+                var address = 'Příkladná 123, 110 00 Praha 1';
+                document.getElementById('companyName').textContent = name;
+                document.getElementById('companyAddress').textContent = address;
+                state.verifiedEntity = { name: name, ico: ico, address: address, type: 'company' };
+                updateSummary();
+            }, 500);
         }
 
-        function updateContinueSection() {
-            var summaryEl = document.getElementById('summaryText');
-            var btnText = document.getElementById('continueBtnText');
-            var validationWarning = document.getElementById('validationWarning');
+        function verifyPerson() {
+            var firstName = document.getElementById('firstNameInput').value;
+            var lastName = document.getElementById('lastNameInput').value;
+            var birthDate = document.getElementById('birthDateInput').value;
+            var result = document.getElementById('personVerifyResult');
+
+            if (!firstName || !lastName || !birthDate) {
+                result.classList.add('visible', 'error');
+                result.classList.remove('success');
+                document.getElementById('personName').textContent = 'Chyba';
+                document.getElementById('personAddress').textContent = 'Vyplňte všechna povinná pole';
+                state.verifiedEntity = null;
+                updateSummary();
+                return;
+            }
+
+            // Simulace ověření
+            setTimeout(function() {
+                result.classList.add('visible', 'success');
+                result.classList.remove('error');
+                var name = firstName + ' ' + lastName;
+                var address = 'Adresa ověřena z registru obyvatel';
+                document.getElementById('personName').textContent = name;
+                document.getElementById('personAddress').textContent = address;
+                state.verifiedEntity = { name: name, firstName: firstName, lastName: lastName, birthDate: birthDate, address: address, type: 'person' };
+                updateSummary();
+            }, 500);
+        }
+
+        // ===== SUMMARY =====
+        function updateSummary() {
+            var roleText = state.role === 'builder' ? 'Stavebník' : 'Zástupce';
+            document.getElementById('summaryRole').textContent = roleText;
+
+            var authRow = document.getElementById('summaryAuthRow');
+            var builderRow = document.getElementById('summaryBuilderRow');
+            var warning = document.getElementById('summaryWarning');
             var continueBtn = document.getElementById('continueBtn');
-            var summary = ''; var isValid = true;
-            if (!appState.isRepresentative) {
-                summary = 'Vystupujete jako: <strong>Stavebník</strong>'; btnText.textContent = 'Pokračovat na žádost'; validationWarning.classList.remove('visible');
-            } else if (appState.authMethod === 'reza') {
-                if (appState.selectedReza) {
-                    var reza = appState.selectedReza;
-                    var typLabel = reza.typZmocneni === 'povereni' ? 'Pověřená osoba' : 'Zástupce';
-                    summary = 'Vystupujete jako: <strong>' + typLabel + '</strong><span class="gov-summary-badge gov-summary-badge-reza">REZA</span>';
-                    if (reza.jePostoupena) {
-                        summary += '<span class="gov-summary-badge" style="background:#fff3e0;color:#e65100;">Postoupená PM</span>';
-                    }
-                    summary += '<div class="gov-summary-reza-detail"><strong>' + reza.zmocnitel.name + '</strong>';
-                    if (reza.jePostoupena && reza.puvodniZmocnitel) {
-                        summary += '<br><span style="font-size:12px;color:#666;">zastupuje: ' + reza.puvodniZmocnitel.name + '</span>';
-                    }
-                    summary += '<br>' + (reza.zmocnitel.ico ? 'IČO: ' + reza.zmocnitel.ico : 'nar. ' + formatDate(reza.zmocnitel.birthDate));
-                    if (reza.zamery && reza.zamery.length > 0) {
-                        summary += '<br><span style="font-size:12px;color:#e65100;">Omezeno na ' + reza.zamery.length + ' záměr' + (reza.zamery.length > 1 ? 'y' : '') + '</span>';
-                    }
-                    summary += '</div>';
-                    btnText.textContent = 'Pokračovat na žádost'; validationWarning.classList.remove('visible');
-                } else {
-                    summary = 'Vystupujete jako: <strong>–</strong><div class="gov-summary-waiting"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"></path></svg>Vyberte zmocnění ze seznamu výše</div>';
-                    btnText.textContent = 'Pokračovat na žádost'; validationWarning.classList.remove('visible'); isValid = false;
-                }
+
+            var isValid = false;
+
+            if (state.role === 'builder') {
+                // Stavebník sám za sebe
+                authRow.style.display = 'none';
+                builderRow.style.display = 'flex';
+                
+                var identity = identities[currentIdentity];
+                document.getElementById('summaryBuilder').textContent = identity ? identity.headerName : '—';
+                document.getElementById('summaryBuilder').className = 'gov-summary-value';
+
+                warning.classList.remove('visible');
+                isValid = true;
             } else {
-                var repTypeText = appState.repType === 'authorized' ? 'Pověřená osoba' : 'Zástupce';
-                summary = 'Vystupujete jako: <strong>' + repTypeText + '</strong><span class="gov-summary-badge gov-summary-badge-paper">Papírový dokument</span>';
-                btnText.textContent = 'Pokračovat na žádost';
-                var allVerified = true;
-                for (var i = 0; i < appState.chain.length; i++) {
-                    var item = appState.chain[i];
-                    var roleText = item.role === 'builder' ? 'stavebník' : 'postoupil zastoupení';
-                    var position = i + 1;
-                    var name = item.data && item.data.verified ? (item.data.name || item.data.firstName + ' ' + item.data.lastName) : '(neověřeno)';
-                    var statusClass = item.data && item.data.verified ? 'verified' : 'pending';
-                    var statusText = item.data && item.data.verified ? '✓ Ověřeno' : '⏳ Čeká';
-                    summary += '<div class="gov-chain-person"><span class="gov-chain-position">' + position + '.</span><span class="gov-chain-name">' + name + '</span><span class="gov-chain-role">(' + roleText + ')</span><span class="gov-chain-status ' + statusClass + '">' + statusText + '</span></div>';
-                    if (!item.data || !item.data.verified) allVerified = false;
+                // Zástupce
+                authRow.style.display = 'flex';
+                
+                if (state.authMethod === 'reza') {
+                    document.getElementById('summaryAuth').innerHTML = '<span class="gov-summary-tag gov-summary-tag-reza">REZA</span>';
+                    
+                    if (state.selectedReza) {
+                        builderRow.style.display = 'flex';
+                        
+                        var builderName = state.selectedReza.postoupena ? state.selectedReza.puvodniZmocnitel.name : state.selectedReza.zmocnitel.name;
+                        document.getElementById('summaryBuilder').textContent = builderName;
+                        document.getElementById('summaryBuilder').className = 'gov-summary-value';
+                        
+                        warning.classList.remove('visible');
+                        isValid = true;
+                    } else {
+                        builderRow.style.display = 'flex';
+                        document.getElementById('summaryBuilder').textContent = 'Vyberte zmocnění...';
+                        document.getElementById('summaryBuilder').className = 'gov-summary-value pending';
+                        warning.classList.add('visible');
+                        warning.querySelector('span').textContent = 'Vyberte zmocnění z registru REZA';
+                    }
+                } else {
+                    // Papírový dokument
+                    var repTypeText = state.repType === 'poverena' ? 'Pověření' : 'Plná moc';
+                    document.getElementById('summaryAuth').innerHTML = '<span class="gov-summary-tag gov-summary-tag-paper">' + repTypeText + '</span>';
+                    
+                    if (state.verifiedEntity) {
+                        builderRow.style.display = 'flex';
+                        document.getElementById('summaryBuilder').textContent = state.verifiedEntity.name;
+                        document.getElementById('summaryBuilder').className = 'gov-summary-value';
+                        
+                        if (state.uploadedFile) {
+                            warning.classList.remove('visible');
+                            isValid = true;
+                        } else {
+                            warning.classList.add('visible');
+                            warning.querySelector('span').textContent = 'Nahrajte dokument zmocnění';
+                        }
+                    } else {
+                        builderRow.style.display = 'flex';
+                        document.getElementById('summaryBuilder').textContent = 'Ověřte osobu...';
+                        document.getElementById('summaryBuilder').className = 'gov-summary-value pending';
+                        warning.classList.add('visible');
+                        warning.querySelector('span').textContent = 'Identifikujte a ověřte zastupovanou osobu';
+                    }
                 }
-                if (!allVerified) { validationWarning.classList.add('visible'); isValid = false; } else validationWarning.classList.remove('visible');
             }
-            summaryEl.innerHTML = summary; continueBtn.disabled = !isValid;
+
+            continueBtn.disabled = !isValid;
         }
 
-        function formatDate(dateStr) { if (!dateStr) return ''; var parts = dateStr.split('-'); return parts[2] + '.' + parts[1] + '.' + parts[0]; }
-        
+        // ===== NAVIGATION =====
         function saveToLocalStorage() {
             var stavebnik = null;
             
-            if (!appState.isRepresentative) {
+            if (state.role === 'builder') {
+                var identity = identities[currentIdentity];
                 stavebnik = {
-                    name: identities[appState.identity].headerName,
-                    detail: identities[appState.identity].headerDetail,
-                    type: appState.identity
+                    name: identity.headerName,
+                    type: currentIdentity
                 };
-            } else if (appState.authMethod === 'reza' && appState.selectedReza) {
-                if (appState.selectedReza.jePostoupena && appState.selectedReza.puvodniZmocnitel) {
+            } else if (state.authMethod === 'reza' && state.selectedReza) {
+                if (state.selectedReza.postoupena && state.selectedReza.puvodniZmocnitel) {
                     stavebnik = {
-                        name: appState.selectedReza.puvodniZmocnitel.name,
-                        ico: appState.selectedReza.puvodniZmocnitel.ico || null,
+                        name: state.selectedReza.puvodniZmocnitel.name,
+                        ico: state.selectedReza.puvodniZmocnitel.ico || null,
                         type: 'PO'
                     };
                 } else {
                     stavebnik = {
-                        name: appState.selectedReza.zmocnitel.name,
-                        ico: appState.selectedReza.zmocnitel.ico || null,
-                        birthDate: appState.selectedReza.zmocnitel.birthDate || null,
-                        address: appState.selectedReza.zmocnitel.address || null,
-                        type: appState.selectedReza.zmocnitel.ico ? 'PO' : 'FO'
+                        name: state.selectedReza.zmocnitel.name,
+                        ico: state.selectedReza.zmocnitel.ico || null,
+                        birthDate: state.selectedReza.zmocnitel.birthDate || null,
+                        type: state.selectedReza.zmocnitel.ico ? 'PO' : 'FO'
                     };
                 }
-            } else if (appState.authMethod === 'paper' && appState.chain.length > 0) {
-                var lastBuilder = null;
-                for (var i = appState.chain.length - 1; i >= 0; i--) {
-                    if (appState.chain[i].role === 'builder' && appState.chain[i].data && appState.chain[i].data.verified) {
-                        lastBuilder = appState.chain[i];
-                        break;
-                    }
-                }
-                if (lastBuilder) {
-                    stavebnik = {
-                        name: lastBuilder.data.name || (lastBuilder.data.firstName + ' ' + lastBuilder.data.lastName),
-                        ico: lastBuilder.data.ico || null,
-                        birthDate: lastBuilder.data.birthDate || null,
-                        address: lastBuilder.data.address || null,
-                        type: lastBuilder.entityType === 'company' ? 'PO' : 'FO'
-                    };
-                }
+            } else if (state.authMethod === 'paper' && state.verifiedEntity) {
+                stavebnik = {
+                    name: state.verifiedEntity.name,
+                    ico: state.verifiedEntity.ico || null,
+                    birthDate: state.verifiedEntity.birthDate || null,
+                    type: state.verifiedEntity.type === 'company' ? 'PO' : 'FO'
+                };
             }
             
             var data = {
-                identity: appState.identity,
-                identityName: identities[appState.identity].headerName,
-                identityDetail: identities[appState.identity].headerDetail,
-                isRepresentative: appState.isRepresentative,
-                authMethod: appState.authMethod,
-                repType: appState.repType,
-                selectedReza: appState.selectedReza,
-                chain: appState.chain,
+                identity: currentIdentity,
+                identityName: identities[currentIdentity].headerName,
+                identityDetail: identities[currentIdentity].headerDetail,
+                isRepresentative: state.role === 'representative',
+                authMethod: state.authMethod,
+                repType: state.repType,
+                selectedReza: state.selectedReza,
+                verifiedEntity: state.verifiedEntity,
                 stavebnik: stavebnik
             };
             localStorage.setItem('formIdentifikace', JSON.stringify(data));
         }
-        
-        function goToNextPage() { 
+
+        function goToNextPage() {
             saveToLocalStorage();
             window.location.href = 'form_select.html';
-        }
-        
-        // ===== USER MENU =====
-        function toggleUserMenu() {
-            var btn = document.querySelector('.gov-header-user-btn');
-            var dropdown = document.getElementById('userDropdown');
-            if (btn) btn.classList.toggle('active');
-            if (dropdown) dropdown.classList.toggle('show');
-        }
-
-        document.addEventListener('click', function(e) {
-            var userSection = document.querySelector('.gov-header-user');
-            if (userSection && !userSection.contains(e.target)) {
-                var btn = document.querySelector('.gov-header-user-btn');
-                var dropdown = document.getElementById('userDropdown');
-                if (btn) btn.classList.remove('active');
-                if (dropdown) dropdown.classList.remove('show');
-            }
-        });
-
-        function updateDropdownInfo() {
-            var identity = identities[appState.identity];
-            if (!identity) return;
-            
-            var dropdownName = document.getElementById('dropdownName');
-            var dropdownDetail = document.getElementById('dropdownDetail');
-            var dropdownBadge = document.getElementById('dropdownBadge');
-            
-            var badgeMap = {
-                'FO': 'Fyzická osoba',
-                'OSVC': 'Fyzická osoba podnikající',
-                'PO_ALMANI': 'Právnická osoba',
-                'PO_PRVNI': 'Právnická osoba'
-            };
-            
-            if (dropdownName) dropdownName.textContent = identity.headerName.split(' ').map(function(w) { return w.charAt(0) + w.slice(1).toLowerCase(); }).join(' ');
-            if (dropdownDetail) dropdownDetail.textContent = identity.headerDetail;
-            if (dropdownBadge) dropdownBadge.textContent = badgeMap[appState.identity] || 'Fyzická osoba';
         }
     </script>
 </body>
