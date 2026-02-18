@@ -229,6 +229,35 @@
         .gov-uploaded-file-size { font-size: 12px; color: var(--gov-neutral-500); white-space: nowrap; }
         .gov-uploaded-file-remove { padding: 4px; background: none; border: none; cursor: pointer; color: var(--gov-neutral-400); border-radius: 4px; }
         .gov-uploaded-file-remove:hover { color: var(--gov-error-600); background: var(--gov-error-50); }
+        .gov-uploaded-file-view { padding: 4px; background: none; border: none; cursor: pointer; color: var(--gov-neutral-400); border-radius: 4px; }
+        .gov-uploaded-file-view:hover { color: var(--gov-primary); background: var(--gov-primary-50); }
+        .gov-uploaded-file-actions { display: flex; gap: 4px; flex-shrink: 0; }
+
+        /* ===== FILE PREVIEW MODAL ===== */
+        .gov-modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 2000; opacity: 0; visibility: hidden; transition: all 0.2s ease; }
+        .gov-modal-overlay.show { opacity: 1; visibility: visible; }
+        .gov-modal { background: #fff; border-radius: var(--gov-radius-lg); width: 100%; max-width: 500px; transform: scale(0.95); transition: transform 0.2s ease; overflow: hidden; }
+        .gov-modal-overlay.show .gov-modal { transform: scale(1); }
+        .gov-modal-header { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; background: var(--gov-primary); color: #fff; }
+        .gov-modal-title { font-size: 16px; font-weight: 500; display: flex; align-items: center; gap: 10px; }
+        .gov-modal-title svg { width: 20px; height: 20px; }
+        .gov-modal-close { background: none; border: none; color: #fff; cursor: pointer; padding: 4px; border-radius: 4px; }
+        .gov-modal-close:hover { background: rgba(255,255,255,0.2); }
+        .gov-modal-close svg { width: 20px; height: 20px; }
+        .gov-modal-body { padding: 20px; }
+        .gov-modal-preview { background: var(--gov-neutral-100); border-radius: var(--gov-radius); padding: 40px; text-align: center; margin-bottom: 20px; }
+        .gov-modal-preview-icon { width: 64px; height: 64px; color: var(--gov-neutral-400); margin: 0 auto 12px; }
+        .gov-modal-preview-text { font-size: 13px; color: var(--gov-neutral-500); }
+        .gov-modal-info { display: grid; gap: 12px; }
+        .gov-modal-info-row { display: flex; gap: 12px; }
+        .gov-modal-info-label { font-size: 12px; color: var(--gov-neutral-500); min-width: 100px; }
+        .gov-modal-info-value { font-size: 13px; color: var(--gov-neutral-900); word-break: break-all; }
+        .gov-modal-footer { padding: 16px 20px; background: var(--gov-neutral-50); border-top: 1px solid var(--gov-neutral-200); display: flex; justify-content: flex-end; gap: 12px; }
+        .gov-modal-btn { padding: 8px 16px; font-size: 13px; font-weight: 500; font-family: var(--gov-font); border-radius: var(--gov-radius); cursor: pointer; border: none; }
+        .gov-modal-btn-secondary { background: #fff; color: var(--gov-neutral-700); border: 1px solid var(--gov-neutral-300); }
+        .gov-modal-btn-secondary:hover { background: var(--gov-neutral-50); }
+        .gov-modal-btn-primary { background: var(--gov-primary); color: #fff; }
+        .gov-modal-btn-primary:hover { background: var(--gov-primary-700); }
 
         /* ===== C SECTION SUBPARTS ===== */
         .gov-subpart { margin-left: 20px; margin-bottom: 16px; }
@@ -543,6 +572,56 @@
                     </div>
                 </div>
             </aside>
+        </div>
+    </div>
+
+    <!-- Modal pro náhled souboru -->
+    <div class="gov-modal-overlay" id="filePreviewModal">
+        <div class="gov-modal">
+            <div class="gov-modal-header">
+                <div class="gov-modal-title">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                    Náhled souboru
+                </div>
+                <button class="gov-modal-close" onclick="closeFilePreview()">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+            <div class="gov-modal-body">
+                <div class="gov-modal-preview">
+                    <svg class="gov-modal-preview-icon" id="previewIcon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                    <div class="gov-modal-preview-text">Náhled není k dispozici v prototypu</div>
+                </div>
+                <div class="gov-modal-info">
+                    <div class="gov-modal-info-row">
+                        <span class="gov-modal-info-label">Název souboru:</span>
+                        <span class="gov-modal-info-value" id="previewFileName">-</span>
+                    </div>
+                    <div class="gov-modal-info-row">
+                        <span class="gov-modal-info-label">Cesta:</span>
+                        <span class="gov-modal-info-value" id="previewFilePath">-</span>
+                    </div>
+                    <div class="gov-modal-info-row">
+                        <span class="gov-modal-info-label">Velikost:</span>
+                        <span class="gov-modal-info-value" id="previewFileSize">-</span>
+                    </div>
+                    <div class="gov-modal-info-row">
+                        <span class="gov-modal-info-label">Typ souboru:</span>
+                        <span class="gov-modal-info-value" id="previewFileType">-</span>
+                    </div>
+                    <div class="gov-modal-info-row">
+                        <span class="gov-modal-info-label">Nahráno:</span>
+                        <span class="gov-modal-info-value" id="previewFileDate">-</span>
+                    </div>
+                </div>
+            </div>
+            <div class="gov-modal-footer">
+                <button class="gov-modal-btn gov-modal-btn-secondary" onclick="closeFilePreview()">Zavřít</button>
+                <button class="gov-modal-btn gov-modal-btn-primary" onclick="simulateDownload()">
+                    <svg style="width:14px;height:14px;margin-right:6px;vertical-align:middle;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                    Stáhnout
+                </button>
+            </div>
         </div>
     </div>
 
@@ -926,7 +1005,13 @@
         
         function addSingleFile(key, file, path) {
             if (!state.files[key]) state.files[key] = [];
-            state.files[key].push({ name: file.name, size: file.size, path: path });
+            state.files[key].push({ 
+                name: file.name, 
+                size: file.size, 
+                path: path,
+                type: file.type || getFileTypeFromName(file.name),
+                addedAt: new Date().toISOString()
+            });
             renderFiles(key);
         }
         function handleDragOver(event) { event.preventDefault(); event.currentTarget.classList.add('dragover'); }
@@ -934,12 +1019,39 @@
 
         function addFiles(key, fileList, isFolder) {
             if (!state.files[key]) state.files[key] = [];
+            var now = new Date().toISOString();
             for (var i = 0; i < fileList.length; i++) { 
                 var file = fileList[i];
                 var path = isFolder && file.webkitRelativePath ? file.webkitRelativePath : file.name;
-                state.files[key].push({ name: file.name, size: file.size, path: path }); 
+                state.files[key].push({ 
+                    name: file.name, 
+                    size: file.size, 
+                    path: path,
+                    type: file.type || getFileTypeFromName(file.name),
+                    addedAt: now
+                }); 
             }
             renderFiles(key);
+        }
+        
+        function getFileTypeFromName(filename) {
+            var ext = filename.split('.').pop().toLowerCase();
+            var types = {
+                'pdf': 'application/pdf',
+                'doc': 'application/msword',
+                'docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                'xls': 'application/vnd.ms-excel',
+                'xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                'jpg': 'image/jpeg',
+                'jpeg': 'image/jpeg',
+                'png': 'image/png',
+                'gif': 'image/gif',
+                'dwg': 'application/acad',
+                'dxf': 'application/dxf',
+                'zip': 'application/zip',
+                'rar': 'application/x-rar-compressed'
+            };
+            return types[ext] || 'application/octet-stream';
         }
 
         function renderFiles(key) {
@@ -962,7 +1074,20 @@
                     var displayName = file.path || file.name;
                     var isInFolder = displayName.indexOf('/') > -1;
                     var folderIcon = isInFolder ? '<svg style="width:14px;height:14px;margin-right:4px;color:#666;flex-shrink:0;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>' : '';
-                    html += '<div class="gov-uploaded-file"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><span class="gov-uploaded-file-name">' + folderIcon + displayName + '</span><span class="gov-uploaded-file-size">' + formatFileSize(file.size) + '</span><button class="gov-uploaded-file-remove" onclick="removeFile(\'' + key + '\', ' + index + ')" title="Smazat soubor"><svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button></div>';
+                    
+                    html += '<div class="gov-uploaded-file">';
+                    html += '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>';
+                    html += '<span class="gov-uploaded-file-name">' + folderIcon + displayName + '</span>';
+                    html += '<span class="gov-uploaded-file-size">' + formatFileSize(file.size) + '</span>';
+                    html += '<div class="gov-uploaded-file-actions">';
+                    html += '<button class="gov-uploaded-file-view" onclick="openFilePreview(\'' + key + '\', ' + index + ')" title="Zobrazit detail">';
+                    html += '<svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>';
+                    html += '</button>';
+                    html += '<button class="gov-uploaded-file-remove" onclick="removeFile(\'' + key + '\', ' + index + ')" title="Smazat soubor">';
+                    html += '<svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>';
+                    html += '</button>';
+                    html += '</div>';
+                    html += '</div>';
                 });
             }
             
@@ -991,6 +1116,102 @@
                 renderFiles(key); 
             } 
         }
+        
+        // ===== FILE PREVIEW =====
+        var currentPreviewFile = null;
+        
+        function openFilePreview(key, index) {
+            var file = state.files[key] ? state.files[key][index] : null;
+            if (!file) return;
+            
+            currentPreviewFile = file;
+            
+            // Vyplnit údaje
+            document.getElementById('previewFileName').textContent = file.name;
+            document.getElementById('previewFilePath').textContent = file.path || file.name;
+            document.getElementById('previewFileSize').textContent = formatFileSize(file.size);
+            document.getElementById('previewFileType').textContent = getFileTypeLabel(file.type || getFileTypeFromName(file.name));
+            document.getElementById('previewFileDate').textContent = file.addedAt ? formatDateTime(file.addedAt) : 'Právě nahráno';
+            
+            // Nastavit ikonu podle typu souboru
+            var iconEl = document.getElementById('previewIcon');
+            iconEl.innerHTML = getFileIconPath(file.name);
+            
+            // Zobrazit modal
+            document.getElementById('filePreviewModal').classList.add('show');
+        }
+        
+        function closeFilePreview() {
+            document.getElementById('filePreviewModal').classList.remove('show');
+            currentPreviewFile = null;
+        }
+        
+        function simulateDownload() {
+            if (currentPreviewFile) {
+                alert('V prototypu není stahování k dispozici.\n\nSoubor: ' + currentPreviewFile.name);
+            }
+        }
+        
+        function getFileTypeLabel(mimeType) {
+            var labels = {
+                'application/pdf': 'PDF dokument',
+                'application/msword': 'Word dokument',
+                'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 'Word dokument (DOCX)',
+                'application/vnd.ms-excel': 'Excel tabulka',
+                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': 'Excel tabulka (XLSX)',
+                'image/jpeg': 'Obrázek JPEG',
+                'image/png': 'Obrázek PNG',
+                'image/gif': 'Obrázek GIF',
+                'application/acad': 'AutoCAD výkres (DWG)',
+                'application/dxf': 'AutoCAD výkres (DXF)',
+                'application/zip': 'ZIP archiv',
+                'application/x-rar-compressed': 'RAR archiv',
+                'application/octet-stream': 'Binární soubor'
+            };
+            return labels[mimeType] || mimeType;
+        }
+        
+        function getFileIconPath(filename) {
+            var ext = filename.split('.').pop().toLowerCase();
+            
+            // PDF
+            if (ext === 'pdf') {
+                return '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>';
+            }
+            // Obrázky
+            if (['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'].indexOf(ext) > -1) {
+                return '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>';
+            }
+            // CAD
+            if (['dwg', 'dxf'].indexOf(ext) > -1) {
+                return '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2"/>';
+            }
+            // Archivy
+            if (['zip', 'rar', '7z', 'tar', 'gz'].indexOf(ext) > -1) {
+                return '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/>';
+            }
+            // Default - dokument
+            return '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>';
+        }
+        
+        function formatDateTime(isoString) {
+            var date = new Date(isoString);
+            var day = String(date.getDate()).padStart(2, '0');
+            var month = String(date.getMonth() + 1).padStart(2, '0');
+            var year = date.getFullYear();
+            var hours = String(date.getHours()).padStart(2, '0');
+            var minutes = String(date.getMinutes()).padStart(2, '0');
+            return day + '.' + month + '.' + year + ' v ' + hours + ':' + minutes;
+        }
+        
+        // Event listenery pro modal
+        document.getElementById('filePreviewModal').addEventListener('click', function(e) {
+            if (e.target === this) closeFilePreview();
+        });
+        
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeFilePreview();
+        });
         function formatFileSize(bytes) { if (bytes < 1024) return bytes + ' B'; if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB'; return (bytes / (1024 * 1024)).toFixed(1) + ' MB'; }
         function goToNext() { localStorage.setItem('formDokumentace', JSON.stringify(state)); window.location.href = 'form_3.html'; }
         function toggleUserMenu() { var btn = document.querySelector('.gov-header-user-btn'); var dropdown = document.getElementById('userDropdown'); if (btn) btn.classList.toggle('active'); if (dropdown) dropdown.classList.toggle('show'); }
