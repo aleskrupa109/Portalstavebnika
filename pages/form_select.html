@@ -96,6 +96,7 @@
         .gov-wizard-result-desc { font-size: 14px; color: var(--gov-neutral-600); margin-bottom: 16px; }
         .gov-wizard-result-btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; background: var(--gov-primary); color: #fff; border: none; border-radius: var(--gov-radius); font-size: 14px; font-weight: 500; cursor: pointer; font-family: var(--gov-font); text-decoration: none; }
         .gov-wizard-result-btn:hover { background: var(--gov-primary-700); }
+        .gov-wizard-result-btn.disabled { background: var(--gov-neutral-300); color: var(--gov-neutral-500); cursor: not-allowed; pointer-events: none; }
         .gov-wizard-result-btn svg { width: 18px; height: 18px; }
 
         .gov-wizard-nav { display: flex; justify-content: space-between; margin-top: 24px; }
@@ -130,9 +131,9 @@
         .gov-form-item-content { flex: 1; min-width: 0; }
         .gov-form-item-name { font-size: 14px; font-weight: 500; color: var(--gov-neutral-900); margin-bottom: 2px; }
         .gov-form-item-desc { font-size: 13px; color: var(--gov-neutral-500); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .gov-form-item-badge { padding: 3px 10px; background: var(--gov-warning-100); color: var(--gov-warning-600); font-size: 11px; font-weight: 600; border-radius: 10px; white-space: nowrap; }
         .gov-form-item-btn { padding: 8px 16px; background: var(--gov-primary); color: #fff; border: none; border-radius: var(--gov-radius); font-size: 13px; font-weight: 500; cursor: pointer; font-family: var(--gov-font); white-space: nowrap; text-decoration: none; }
         .gov-form-item-btn:hover { background: var(--gov-primary-700); }
+        .gov-form-item-btn.disabled { background: var(--gov-neutral-300); color: var(--gov-neutral-500); cursor: not-allowed; pointer-events: none; }
 
         /* ===== POPULAR SECTION ===== */
         .gov-popular { background: var(--gov-primary-50); border: 1px solid var(--gov-primary-100); border-radius: var(--gov-radius-lg); padding: 20px; margin-bottom: 24px; }
@@ -449,9 +450,8 @@
                     </div>
                     <div class="gov-wizard-result-form">Žádost o povolení odstranění stavby, zařízení a terénních úprav</div>
                     <div class="gov-wizard-result-desc">Formulář č. 14 podle vyhlášky č. 149/2024 Sb.</div>
-                    <a href="form_1.html" class="gov-wizard-result-btn">
-                        Vyplnit žádost
-                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                    <a href="#" class="gov-wizard-result-btn disabled">
+                        Simulace připravujeme
                     </a>
                 </div>
                 <div class="gov-wizard-nav">
@@ -534,20 +534,16 @@
             <div class="gov-popular">
                 <div class="gov-popular-title">
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
-                    Nejčastěji používané
+                    Dostupné simulace
                 </div>
                 <div class="gov-popular-items">
                     <a href="form_1.html" class="gov-popular-item">
                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
-                        Povolení stavby
+                        Povolení stavby nebo zařízení
                     </a>
-                    <a href="form_1.html" class="gov-popular-item">
-                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                        Kolaudace
-                    </a>
-                    <a href="form_1.html" class="gov-popular-item">
-                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                        Předběžná informace
+                    <a href="form_11.html" class="gov-popular-item">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                        Závazné stanovisko dotčeného orgánu
                     </a>
                 </div>
             </div>
@@ -568,33 +564,33 @@
         // Form data
         var forms = {
             priprava: [
-                { num: '01', name: 'Žádost o předběžnou informaci stavebního úřadu', desc: 'Informace o podmínkách využívání území a povolování záměru', popular: true },
-                { num: 'VZOR', name: 'Žádost o předběžnou informaci dotčeného orgánu', desc: 'Informace o stanoviscích dotčených orgánů' },
-                { num: 'VZOR', name: 'Žádost o vyjádření nebo závazné stanovisko dotčeného orgánu', desc: 'Koordinované vyjádření, jednotné environmentální stanovisko' },
-                { num: '02', name: 'Žádost o vyjádření vlastníka veřejné dopravní nebo technické infrastruktury', desc: 'Možnost napojení, ochranná a bezpečnostní pásma' }
+                { num: '01', name: 'Žádost o předběžnou informaci stavebního úřadu', desc: 'Informace o podmínkách využívání území a povolování záměru', popular: true, active: false },
+                { num: '—', name: 'Žádost o předběžnou informaci dotčeného orgánu', desc: 'Informace o stanoviscích dotčených orgánů', active: false },
+                { num: '—', name: 'Žádost o vyjádření nebo závazné stanovisko dotčeného orgánu', desc: 'Koordinované vyjádření, jednotné environmentální stanovisko', active: true, link: 'form_11.html' },
+                { num: '02', name: 'Žádost o vyjádření vlastníka veřejné dopravní nebo technické infrastruktury', desc: 'Možnost napojení, ochranná a bezpečnostní pásma', active: false }
             ],
             povoleni: [
-                { num: '03', name: 'Žádost o povolení stavby nebo zařízení', desc: 'Novostavba, přístavba, nástavba, rekonstrukce', popular: true },
-                { num: '04', name: 'Žádost o změnu povolení', desc: 'Změna podmínek nebo parametrů vydaného povolení' },
-                { num: '05', name: 'Žádost o povolení změny využití území', desc: 'Terénní úpravy, změna druhu pozemku' },
-                { num: '06', name: 'Žádost o povolení dělení nebo scelení pozemků', desc: 'Rozdělení nebo sloučení pozemků' },
-                { num: '07', name: 'Žádost o vydání rámcového povolení', desc: 'Pro soubor staveb nebo etapovou výstavbu' },
-                { num: '08', name: 'Žádost o změnu záměru před dokončením', desc: 'Změna projektu rozpracované stavby' },
-                { num: '09', name: 'Návrh na stanovení ochranného pásma', desc: 'Pro blíže neurčený okruh osob nebo vodní dílo' }
+                { num: '03', name: 'Žádost o povolení stavby nebo zařízení', desc: 'Novostavba, přístavba, nástavba, rekonstrukce', popular: true, active: true, link: 'form_1.html' },
+                { num: '04', name: 'Žádost o změnu povolení', desc: 'Změna podmínek nebo parametrů vydaného povolení', active: false },
+                { num: '05', name: 'Žádost o povolení změny využití území', desc: 'Terénní úpravy, změna druhu pozemku', active: false },
+                { num: '06', name: 'Žádost o povolení dělení nebo scelení pozemků', desc: 'Rozdělení nebo sloučení pozemků', active: false },
+                { num: '07', name: 'Žádost o vydání rámcového povolení', desc: 'Pro soubor staveb nebo etapovou výstavbu', active: false },
+                { num: '08', name: 'Žádost o změnu záměru před dokončením', desc: 'Změna projektu rozpracované stavby', active: false },
+                { num: '09', name: 'Návrh na stanovení ochranného pásma', desc: 'Pro blíže neurčený okruh osob nebo vodní dílo', active: false }
             ],
             uzivani: [
-                { num: '10', name: 'Žádost o vydání kolaudačního rozhodnutí', desc: 'Povolení trvalého užívání dokončené stavby', popular: true },
-                { num: '11', name: 'Žádost o povolení předčasného užívání stavby', desc: 'Užívání stavby před jejím dokončením' },
-                { num: '12', name: 'Žádost o povolení zkušebního provozu', desc: 'Ověření funkčnosti a vlastností stavby' },
-                { num: '13', name: 'Žádost o povolení změny v užívání stavby', desc: 'Změna účelu užívání stávající stavby' }
+                { num: '10', name: 'Žádost o vydání kolaudačního rozhodnutí', desc: 'Povolení trvalého užívání dokončené stavby', popular: true, active: false },
+                { num: '11', name: 'Žádost o povolení předčasného užívání stavby', desc: 'Užívání stavby před jejím dokončením', active: false },
+                { num: '12', name: 'Žádost o povolení zkušebního provozu', desc: 'Ověření funkčnosti a vlastností stavby', active: false },
+                { num: '13', name: 'Žádost o povolení změny v užívání stavby', desc: 'Změna účelu užívání stávající stavby', active: false }
             ],
             odstraneni: [
-                { num: '14', name: 'Žádost o povolení odstranění stavby, zařízení a terénních úprav', desc: 'Demolice, bourání, odstranění' },
-                { num: '15', name: 'Žádost o dodatečné povolení stavby, zařízení a terénních úprav', desc: 'Legalizace stavby provedené bez povolení' }
+                { num: '14', name: 'Žádost o povolení odstranění stavby, zařízení a terénních úprav', desc: 'Demolice, bourání, odstranění', active: false },
+                { num: '15', name: 'Žádost o dodatečné povolení stavby, zařízení a terénních úprav', desc: 'Legalizace stavby provedené bez povolení', active: false }
             ],
             doplneni: [
-                { num: 'VZOR', name: 'Doplnění žádosti či odstranění vad žádosti', desc: 'Doplnění podané žádosti na základě výzvy úřadu' },
-                { num: 'VZOR', name: 'Oznámení o obnově stavby nebo terénní úpravy', desc: 'Oznámení obnovy po mimořádné události' }
+                { num: '—', name: 'Doplnění žádosti či odstranění vad žádosti', desc: 'Doplnění podané žádosti na základě výzvy úřadu', active: false },
+                { num: '—', name: 'Oznámení o obnově stavby nebo terénní úpravy', desc: 'Oznámení obnovy po mimořádné události', active: false }
             ]
         };
 
@@ -607,23 +603,24 @@
         };
 
         var formResults = {
-            'info-su': { name: 'Žádost o předběžnou informaci stavebního úřadu', desc: 'Formulář č. 1 podle vyhlášky č. 149/2024 Sb.' },
-            'info-do': { name: 'Žádost o předběžnou informaci dotčeného orgánu', desc: 'Vzorový formulář' },
-            'info-stanovisko': { name: 'Žádost o vyjádření nebo závazné stanovisko dotčeného orgánu', desc: 'Vzorový formulář' },
-            'info-infra': { name: 'Žádost o vyjádření vlastníka veřejné dopravní nebo technické infrastruktury', desc: 'Formulář č. 2 podle vyhlášky č. 149/2024 Sb.' },
-            'povoleni-stavba': { name: 'Žádost o povolení stavby nebo zařízení', desc: 'Formulář č. 3 podle vyhlášky č. 149/2024 Sb.' },
-            'povoleni-ramcove': { name: 'Žádost o vydání rámcového povolení', desc: 'Formulář č. 7 podle vyhlášky č. 149/2024 Sb.' },
-            'povoleni-dodatecne': { name: 'Žádost o dodatečné povolení stavby, zařízení a terénních úprav', desc: 'Formulář č. 15 podle vyhlášky č. 149/2024 Sb.' },
-            'kolaudace': { name: 'Žádost o vydání kolaudačního rozhodnutí', desc: 'Formulář č. 10 podle vyhlášky č. 149/2024 Sb.' },
-            'predcasne': { name: 'Žádost o povolení předčasného užívání stavby', desc: 'Formulář č. 11 podle vyhlášky č. 149/2024 Sb.' },
-            'zkusebni': { name: 'Žádost o povolení zkušebního provozu', desc: 'Formulář č. 12 podle vyhlášky č. 149/2024 Sb.' },
-            'zmena-uzivani': { name: 'Žádost o povolení změny v užívání stavby', desc: 'Formulář č. 13 podle vyhlášky č. 149/2024 Sb.' },
-            'zmena-povoleni': { name: 'Žádost o změnu povolení', desc: 'Formulář č. 4 podle vyhlášky č. 149/2024 Sb.' },
-            'zmena-pred-dokoncenim': { name: 'Žádost o změnu záměru před dokončením', desc: 'Formulář č. 8 podle vyhlášky č. 149/2024 Sb.' },
-            'doplneni': { name: 'Doplnění žádosti či odstranění vad žádosti', desc: 'Vzorový formulář' },
-            'deleni': { name: 'Žádost o povolení dělení nebo scelení pozemků', desc: 'Formulář č. 6 podle vyhlášky č. 149/2024 Sb.' },
-            'zmena-vyuziti': { name: 'Žádost o povolení změny využití území', desc: 'Formulář č. 5 podle vyhlášky č. 149/2024 Sb.' },
-            'ochranne-pasmo': { name: 'Návrh na stanovení ochranného pásma', desc: 'Formulář č. 9 podle vyhlášky č. 149/2024 Sb.' }
+            'info-su': { name: 'Žádost o předběžnou informaci stavebního úřadu', desc: 'Formulář č. 1 podle vyhlášky č. 149/2024 Sb.', active: false },
+            'info-do': { name: 'Žádost o předběžnou informaci dotčeného orgánu', desc: 'Vzorový formulář', active: false },
+            'info-stanovisko': { name: 'Žádost o vyjádření nebo závazné stanovisko dotčeného orgánu', desc: 'Vzorový formulář', active: true, link: 'form_11.html' },
+            'info-infra': { name: 'Žádost o vyjádření vlastníka veřejné dopravní nebo technické infrastruktury', desc: 'Formulář č. 2 podle vyhlášky č. 149/2024 Sb.', active: false },
+            'povoleni-stavba': { name: 'Žádost o povolení stavby nebo zařízení', desc: 'Formulář č. 3 podle vyhlášky č. 149/2024 Sb.', active: true, link: 'form_1.html' },
+            'povoleni-ramcove': { name: 'Žádost o vydání rámcového povolení', desc: 'Formulář č. 7 podle vyhlášky č. 149/2024 Sb.', active: false },
+            'povoleni-dodatecne': { name: 'Žádost o dodatečné povolení stavby, zařízení a terénních úprav', desc: 'Formulář č. 15 podle vyhlášky č. 149/2024 Sb.', active: false },
+            'kolaudace': { name: 'Žádost o vydání kolaudačního rozhodnutí', desc: 'Formulář č. 10 podle vyhlášky č. 149/2024 Sb.', active: false },
+            'predcasne': { name: 'Žádost o povolení předčasného užívání stavby', desc: 'Formulář č. 11 podle vyhlášky č. 149/2024 Sb.', active: false },
+            'zkusebni': { name: 'Žádost o povolení zkušebního provozu', desc: 'Formulář č. 12 podle vyhlášky č. 149/2024 Sb.', active: false },
+            'zmena-uzivani': { name: 'Žádost o povolení změny v užívání stavby', desc: 'Formulář č. 13 podle vyhlášky č. 149/2024 Sb.', active: false },
+            'zmena-povoleni': { name: 'Žádost o změnu povolení', desc: 'Formulář č. 4 podle vyhlášky č. 149/2024 Sb.', active: false },
+            'zmena-pred-dokoncenim': { name: 'Žádost o změnu záměru před dokončením', desc: 'Formulář č. 8 podle vyhlášky č. 149/2024 Sb.', active: false },
+            'doplneni': { name: 'Doplnění žádosti či odstranění vad žádosti', desc: 'Vzorový formulář', active: false },
+            'deleni': { name: 'Žádost o povolení dělení nebo scelení pozemků', desc: 'Formulář č. 6 podle vyhlášky č. 149/2024 Sb.', active: false },
+            'zmena-vyuziti': { name: 'Žádost o povolení změny využití území', desc: 'Formulář č. 5 podle vyhlášky č. 149/2024 Sb.', active: false },
+            'ochranne-pasmo': { name: 'Návrh na stanovení ochranného pásma', desc: 'Formulář č. 9 podle vyhlášky č. 149/2024 Sb.', active: false },
+            'odstraneni': { name: 'Žádost o povolení odstranění stavby, zařízení a terénních úprav', desc: 'Formulář č. 14 podle vyhlášky č. 149/2024 Sb.', active: false }
         };
 
         var wizardHistory = [];
@@ -670,6 +667,18 @@
             
             document.getElementById('result-name').textContent = result.name;
             document.getElementById('result-desc').textContent = result.desc;
+            
+            var btn = document.getElementById('result-btn');
+            if (result.active) {
+                btn.href = result.link || 'form_1.html';
+                btn.className = 'gov-wizard-result-btn';
+                btn.innerHTML = 'Vyplnit žádost <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>';
+            } else {
+                btn.href = '#';
+                btn.className = 'gov-wizard-result-btn disabled';
+                btn.innerHTML = 'Simulace připravujeme';
+            }
+            
             document.getElementById('result-step').style.display = 'block';
             currentStep = 'result-step';
         }
@@ -691,7 +700,7 @@
                 var cat = categoryLabels[catKey];
                 var items = forms[catKey];
                 
-                html += '<div class="gov-category" data-category="' + catKey + '">';
+                html += '<div class="gov-category collapsed" data-category="' + catKey + '">';
                 html += '<div class="gov-category-header" onclick="toggleCategory(this)">';
                 html += '<div class="gov-category-title">';
                 html += '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24">' + cat.icon + '</svg>';
@@ -703,16 +712,16 @@
                 html += '<div class="gov-category-items">';
                 
                 items.forEach(function(form) {
+                    var link = form.active ? (form.link || 'form_1.html') : '#';
+                    var btnClass = form.active ? '' : ' disabled';
+                    
                     html += '<div class="gov-form-item' + (form.popular ? ' popular' : '') + '" data-name="' + form.name.toLowerCase() + '" data-desc="' + form.desc.toLowerCase() + '">';
                     html += '<div class="gov-form-item-number">' + form.num + '</div>';
                     html += '<div class="gov-form-item-content">';
                     html += '<div class="gov-form-item-name">' + form.name + '</div>';
                     html += '<div class="gov-form-item-desc">' + form.desc + '</div>';
                     html += '</div>';
-                    if (form.num === 'VZOR') {
-                        html += '<span class="gov-form-item-badge">VZOR</span>';
-                    }
-                    html += '<a href="form_1.html" class="gov-form-item-btn">Vyplnit</a>';
+                    html += '<a href="' + link + '" class="gov-form-item-btn' + btnClass + '">' + (form.active ? 'Vyplnit' : 'Připravujeme') + '</a>';
                     html += '</div>';
                 });
                 
