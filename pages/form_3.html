@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dokladová část | Žádost o povolení stavby | Portál stavebníka</title>
+    <title>Doplnění žádosti | Dokladová část | Portál stavebníka</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -186,6 +186,9 @@
         .gov-doklad-btn.delete:hover { background: var(--gov-error-50); }
         .gov-doklad-btn.restore { color: var(--gov-success-600); }
         .gov-doklad-btn.restore:hover { background: var(--gov-success-50); }
+        .gov-doklad-btn-view { color: var(--gov-primary); }
+        .gov-doklad-btn-view:hover { background: var(--gov-primary-50); }
+        .gov-doklad-actions { display: flex; gap: 4px; flex-shrink: 0; }
 
         /* ===== UPLOAD ZONE ===== */
         .gov-upload-zone { border: 2px dashed var(--gov-neutral-300); border-radius: var(--gov-radius-lg); padding: 20px; text-align: center; background: #fff; transition: all 0.2s ease; cursor: pointer; }
@@ -199,8 +202,24 @@
         /* ===== MODAL ===== */
         .gov-modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 2000; opacity: 0; visibility: hidden; transition: all 0.2s ease; }
         .gov-modal-overlay.show { opacity: 1; visibility: visible; }
-        .gov-modal { background: #fff; border-radius: var(--gov-radius-lg); padding: 24px; width: 100%; max-width: 480px; transform: scale(0.95); transition: transform 0.2s ease; }
+        .gov-modal { background: #fff; border-radius: var(--gov-radius-lg); width: 100%; max-width: 480px; transform: scale(0.95); transition: transform 0.2s ease; overflow: hidden; }
         .gov-modal-overlay.show .gov-modal { transform: scale(1); }
+        .gov-modal-header { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; background: var(--gov-primary); color: #fff; }
+        .gov-modal-header-title { font-size: 16px; font-weight: 500; display: flex; align-items: center; gap: 10px; }
+        .gov-modal-header-title svg { width: 20px; height: 20px; }
+        .gov-modal-close { background: none; border: none; color: #fff; cursor: pointer; padding: 4px; border-radius: 4px; }
+        .gov-modal-close:hover { background: rgba(255,255,255,0.2); }
+        .gov-modal-close svg { width: 20px; height: 20px; }
+        .gov-modal-body { padding: 20px; }
+        .gov-modal-body-simple { padding: 24px; }
+        .gov-modal-preview { background: var(--gov-neutral-100); border-radius: var(--gov-radius); padding: 40px; text-align: center; margin-bottom: 20px; }
+        .gov-modal-preview-icon { width: 64px; height: 64px; color: var(--gov-neutral-400); margin: 0 auto 12px; }
+        .gov-modal-preview-text { font-size: 13px; color: var(--gov-neutral-500); }
+        .gov-modal-info { display: grid; gap: 12px; }
+        .gov-modal-info-row { display: flex; gap: 12px; }
+        .gov-modal-info-label { font-size: 12px; color: var(--gov-neutral-500); min-width: 100px; }
+        .gov-modal-info-value { font-size: 13px; color: var(--gov-neutral-900); word-break: break-all; }
+        .gov-modal-footer { padding: 16px 20px; background: var(--gov-neutral-50); border-top: 1px solid var(--gov-neutral-200); display: flex; justify-content: flex-end; gap: 12px; }
         .gov-modal-title { font-size: 18px; font-weight: 600; margin-bottom: 16px; }
         .gov-modal-text { font-size: 14px; color: var(--gov-neutral-600); margin-bottom: 16px; }
         .gov-modal-input { width: 100%; padding: 10px 14px; font-size: 14px; font-family: var(--gov-font); border: 1px solid var(--gov-neutral-200); border-radius: var(--gov-radius); margin-bottom: 16px; }
@@ -211,6 +230,8 @@
         .gov-modal-btn.secondary:hover { background: var(--gov-neutral-200); }
         .gov-modal-btn.danger { background: var(--gov-error-600); color: #fff; }
         .gov-modal-btn.danger:hover { background: #b91c1c; }
+        .gov-modal-btn.primary { background: var(--gov-primary); color: #fff; }
+        .gov-modal-btn.primary:hover { background: var(--gov-primary-700); }
 
         /* ===== BUTTONS ===== */
         .gov-btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; font-size: 14px; font-weight: 500; font-family: var(--gov-font); border-radius: var(--gov-radius); cursor: pointer; border: none; text-decoration: none; }
@@ -278,8 +299,8 @@
 
     <div class="gov-page">
         <div class="gov-page-header">
-            <h1 class="gov-page-title">Žádost o povolení stavby nebo zařízení</h1>
-            <p class="gov-page-subtitle">podle ustanovení § 172 odst. 2 ve spojení s § 184, § 200 odst. 2, § 212, § 213, § 216 odst. 2, § 218 odst. 3 a § 228 odst. 2 zákona č. 283/2021 Sb., stavební zákon, ve znění pozdějších předpisů, a § 4 vyhlášky č. 149/2024 Sb., o provedení některých ustanovení stavebního zákona</p>
+            <h1 class="gov-page-title">Doplnění žádosti či odstranění vad žádosti</h1>
+            <p class="gov-page-subtitle">podle ustanovení § 185 odst. 2, § 198 odst. 4, § 234 odst. 1, § 258 odst. 1 zákona č. 283/2021 Sb., stavební zákon, ve znění pozdějších předpisů</p>
         </div>
 
         <div class="gov-layout">
@@ -435,14 +456,66 @@
     <!-- Modal pro důvod odebrání -->
     <div class="gov-modal-overlay" id="removeModal">
         <div class="gov-modal">
-            <div class="gov-modal-title">Odebrat doklad</div>
-            <div class="gov-modal-text">
-                Zadejte důvod odebrání dokladu <strong id="removeFileName"></strong>:
+            <div class="gov-modal-body-simple">
+                <div class="gov-modal-title">Odebrat doklad</div>
+                <div class="gov-modal-text">
+                    Zadejte důvod odebrání dokladu <strong id="removeFileName"></strong>:
+                </div>
+                <input type="text" class="gov-modal-input" id="removeReason" placeholder="Např. Nahrazeno novější verzí, Chybně nahráno...">
+                <div class="gov-modal-actions">
+                    <button class="gov-modal-btn secondary" onclick="closeRemoveModal()">Zrušit</button>
+                    <button class="gov-modal-btn danger" onclick="confirmRemove()">Odebrat doklad</button>
+                </div>
             </div>
-            <input type="text" class="gov-modal-input" id="removeReason" placeholder="Např. Nahrazeno novější verzí, Chybně nahráno...">
-            <div class="gov-modal-actions">
-                <button class="gov-modal-btn secondary" onclick="closeRemoveModal()">Zrušit</button>
-                <button class="gov-modal-btn danger" onclick="confirmRemove()">Odebrat doklad</button>
+        </div>
+    </div>
+
+    <!-- Modal pro náhled souboru -->
+    <div class="gov-modal-overlay" id="filePreviewModal">
+        <div class="gov-modal">
+            <div class="gov-modal-header">
+                <div class="gov-modal-header-title">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                    Náhled dokladu
+                </div>
+                <button class="gov-modal-close" onclick="closeFilePreview()">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+            <div class="gov-modal-body">
+                <div class="gov-modal-preview">
+                    <svg class="gov-modal-preview-icon" id="previewIcon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                    <div class="gov-modal-preview-text">Náhled není k dispozici v prototypu</div>
+                </div>
+                <div class="gov-modal-info">
+                    <div class="gov-modal-info-row">
+                        <span class="gov-modal-info-label">Název dokladu:</span>
+                        <span class="gov-modal-info-value" id="previewFileName">-</span>
+                    </div>
+                    <div class="gov-modal-info-row">
+                        <span class="gov-modal-info-label">Velikost:</span>
+                        <span class="gov-modal-info-value" id="previewFileSize">-</span>
+                    </div>
+                    <div class="gov-modal-info-row">
+                        <span class="gov-modal-info-label">Typ souboru:</span>
+                        <span class="gov-modal-info-value" id="previewFileType">-</span>
+                    </div>
+                    <div class="gov-modal-info-row">
+                        <span class="gov-modal-info-label">Nahráno:</span>
+                        <span class="gov-modal-info-value" id="previewFileDate">-</span>
+                    </div>
+                    <div class="gov-modal-info-row" id="previewStatusRow">
+                        <span class="gov-modal-info-label">Stav:</span>
+                        <span class="gov-modal-info-value" id="previewFileStatus">-</span>
+                    </div>
+                </div>
+            </div>
+            <div class="gov-modal-footer">
+                <button class="gov-modal-btn secondary" onclick="closeFilePreview()">Zavřít</button>
+                <button class="gov-modal-btn primary" onclick="simulateDownload()">
+                    <svg style="width:14px;height:14px;margin-right:6px;vertical-align:middle;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                    Stáhnout
+                </button>
             </div>
         </div>
     </div>
@@ -551,6 +624,11 @@
                 
                 html += '</div>';
                 html += '<div class="gov-doklad-actions">';
+                
+                // Tlačítko náhledu
+                html += '<button class="gov-doklad-btn gov-doklad-btn-view" onclick="openFilePreview(\'' + section + '\', ' + doklad.id + ')" title="Zobrazit detail">';
+                html += '<svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>';
+                html += '</button>';
                 
                 if (isRemoved) {
                     html += '<button class="gov-doklad-btn restore" onclick="restoreDoklad(\'' + section + '\', ' + doklad.id + ')">Obnovit</button>';
@@ -852,10 +930,108 @@
             updateDokladyTree();
         };
 
+        // ===== FILE PREVIEW =====
+        var currentPreviewDoklad = null;
+
+        function openFilePreview(section, id) {
+            var doklad = state.doklady[section].find(function(d) { return d.id === id; });
+            if (!doklad) return;
+
+            currentPreviewDoklad = doklad;
+
+            // Vyplnit údaje
+            document.getElementById('previewFileName').textContent = doklad.name;
+            document.getElementById('previewFileSize').textContent = formatFileSize(doklad.size);
+            document.getElementById('previewFileType').textContent = getFileTypeLabel(doklad.name);
+            document.getElementById('previewFileDate').textContent = formatDate(doklad.addedAt);
+            
+            // Stav dokladu
+            var statusEl = document.getElementById('previewFileStatus');
+            var statusRowEl = document.getElementById('previewStatusRow');
+            if (doklad.status === 'removed') {
+                statusEl.innerHTML = '<span style="color: var(--gov-error-600);">Odebráno</span>' + 
+                    (doklad.removeReason ? ' – ' + doklad.removeReason : '');
+                statusRowEl.style.display = 'flex';
+            } else if (doklad.isNew) {
+                statusEl.innerHTML = '<span style="color: var(--gov-success-600);">Nově přidáno</span>';
+                statusRowEl.style.display = 'flex';
+            } else {
+                statusEl.textContent = 'Aktivní';
+                statusRowEl.style.display = 'flex';
+            }
+
+            // Nastavit ikonu podle typu souboru
+            var iconEl = document.getElementById('previewIcon');
+            iconEl.innerHTML = getFileIconPath(doklad.name);
+
+            // Zobrazit modal
+            document.getElementById('filePreviewModal').classList.add('show');
+        }
+
+        function closeFilePreview() {
+            document.getElementById('filePreviewModal').classList.remove('show');
+            currentPreviewDoklad = null;
+        }
+
+        function simulateDownload() {
+            if (currentPreviewDoklad) {
+                alert('V prototypu není stahování k dispozici.\n\nSoubor: ' + currentPreviewDoklad.name);
+            }
+        }
+
+        function getFileTypeLabel(filename) {
+            var ext = filename.split('.').pop().toLowerCase();
+            var labels = {
+                'pdf': 'PDF dokument',
+                'doc': 'Word dokument',
+                'docx': 'Word dokument (DOCX)',
+                'xls': 'Excel tabulka',
+                'xlsx': 'Excel tabulka (XLSX)',
+                'jpg': 'Obrázek JPEG',
+                'jpeg': 'Obrázek JPEG',
+                'png': 'Obrázek PNG',
+                'gif': 'Obrázek GIF',
+                'dwg': 'AutoCAD výkres (DWG)',
+                'dxf': 'AutoCAD výkres (DXF)',
+                'zip': 'ZIP archiv',
+                'rar': 'RAR archiv'
+            };
+            return labels[ext] || 'Soubor (' + ext.toUpperCase() + ')';
+        }
+
+        function getFileIconPath(filename) {
+            var ext = filename.split('.').pop().toLowerCase();
+
+            // PDF
+            if (ext === 'pdf') {
+                return '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>';
+            }
+            // Obrázky
+            if (['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'].indexOf(ext) > -1) {
+                return '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>';
+            }
+            // CAD
+            if (['dwg', 'dxf'].indexOf(ext) > -1) {
+                return '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2"/>';
+            }
+            // Archivy
+            if (['zip', 'rar', '7z', 'tar', 'gz'].indexOf(ext) > -1) {
+                return '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/>';
+            }
+            // Default - dokument
+            return '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>';
+        }
+
         // Close modal on overlay click
         document.getElementById('removeModal').addEventListener('click', function(e) {
             if (e.target === this) {
                 closeRemoveModal();
+            }
+        });
+        
+        document.getElementById('filePreviewModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeFilePreview();
             }
         });
 
@@ -863,6 +1039,7 @@
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
                 closeRemoveModal();
+                closeFilePreview();
             }
         });
     </script>
