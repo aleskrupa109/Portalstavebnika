@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Výběr typu žádosti | Portál stavebníka</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gov-primary: #2c5a8c;
+            --gov-primary-light: #3a7ab8;
+            --gov-primary-700: #1e5086;
+            --gov-primary-100: #e5eef9;
+            --gov-primary-50: #f3f7fc;
+            --gov-text-light: #ffffff;
+            --gov-neutral-0: #ffffff;
+            --gov-neutral-50: #f6f6f6;
+            --gov-neutral-100: #e7e7e7;
+            --gov-neutral-200: #d1d1d1;
+            --gov-neutral-300: #b0b0b0;
+            --gov-neutral-400: #888888;
+            --gov-neutral-500: #6d6d6d;
+            --gov-neutral-600: #5a5a5a;
+            --gov-neutral-700: #4f4f4f;
+            --gov-neutral-900: #3b3b3b;
+            --gov-success-600: #2e7d32;
+            --gov-success-100: #e2f6e3;
+            --gov-success-50: #f0faf0;
+            --gov-warning-600: #ca8504;
+            --gov-warning-100: #fef7c3;
+            --gov-warning-50: #fffbeb;
+            --gov-error-600: #c62828;
+            --gov-error-100: #fee2e2;
+            --gov-radius: 4px;
+            --gov-radius-lg: 8px;
+            --gov-font: 'Roboto', sans-serif;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: var(--gov-font); background: var(--gov-neutral-50); color: var(--gov-neutral-900); line-height: 1.5; }
+
+        /* ===== HEADER ===== */
+        .gov-header { background: var(--gov-primary); position: sticky; top: 0; z-index: 1000; }
+        .gov-header-top { padding: 14px 40px; }
+        .gov-header-top-content { max-width: 1400px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
+        .gov-header-brand { display: flex; align-items: center; gap: 14px; text-decoration: none; color: var(--gov-text-light); }
+        .gov-header-logo { height: 38px; width: auto; }
+        .gov-header-title { font-size: 18px; font-weight: 400; }
+        .gov-header-user { position: relative; }
+        .gov-header-user-btn { display: flex; align-items: center; gap: 10px; padding: 8px 16px; background: transparent; border: 1px solid rgba(255,255,255,0.5); border-radius: 4px; color: #fff; font-size: 13px; cursor: pointer; font-family: var(--gov-font); }
+        .gov-header-user-btn:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.8); }
+        .gov-header-user-btn svg { width: 18px; height: 18px; flex-shrink: 0; }
+        .gov-header-user-btn .chevron { width: 12px; height: 12px; transition: transform 0.2s ease; }
+        .gov-header-user-btn.active .chevron { transform: rotate(180deg); }
+        .gov-header-user-info { display: flex; flex-direction: column; line-height: 1.25; text-align: left; }
+        .gov-header-user-name { font-weight: 500; font-size: 13px; }
+        .gov-header-user-detail { font-size: 11px; opacity: 0.85; }
+
+        .gov-header-nav { padding: 0 40px; }
+        .gov-header-nav-content { max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; }
+        .gov-nav-menu { display: flex; list-style: none; }
+        .gov-nav-link { display: block; padding: 14px 20px; color: #fff; text-decoration: none; font-size: 13px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; border-top: 3px solid transparent; }
+        .gov-nav-link:hover { background: rgba(255,255,255,0.1); }
+        .gov-nav-link.active { border-top-color: #fff; }
+
+        /* ===== PAGE ===== */
+        .gov-page { max-width: 1200px; margin: 0 auto; padding: 32px 40px; }
+        .gov-page-header { margin-bottom: 32px; }
+        .gov-page-title { font-size: 28px; font-weight: 500; margin-bottom: 8px; }
+        .gov-page-subtitle { font-size: 15px; color: var(--gov-neutral-600); }
+
+        /* ===== TABS ===== */
+        .gov-tabs { display: flex; gap: 4px; margin-bottom: 24px; border-bottom: 2px solid var(--gov-neutral-200); }
+        .gov-tab { padding: 12px 24px; font-size: 14px; font-weight: 500; color: var(--gov-neutral-600); background: none; border: none; cursor: pointer; font-family: var(--gov-font); border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.2s ease; }
+        .gov-tab:hover { color: var(--gov-primary); }
+        .gov-tab.active { color: var(--gov-primary); border-bottom-color: var(--gov-primary); }
+
+        /* ===== WIZARD ===== */
+        .gov-wizard { display: none; }
+        .gov-wizard.active { display: block; }
+        .gov-wizard-step { background: #fff; border-radius: var(--gov-radius-lg); padding: 32px; margin-bottom: 24px; }
+        .gov-wizard-question { font-size: 20px; font-weight: 500; margin-bottom: 24px; color: var(--gov-neutral-900); }
+        .gov-wizard-options { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+        .gov-wizard-option { display: flex; align-items: flex-start; gap: 16px; padding: 20px; border: 2px solid var(--gov-neutral-200); border-radius: var(--gov-radius-lg); cursor: pointer; transition: all 0.2s ease; background: #fff; }
+        .gov-wizard-option:hover { border-color: var(--gov-primary); background: var(--gov-primary-50); }
+        .gov-wizard-option.selected { border-color: var(--gov-primary); background: var(--gov-primary-50); }
+        .gov-wizard-option-icon { width: 48px; height: 48px; background: var(--gov-primary-100); border-radius: var(--gov-radius); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .gov-wizard-option-icon svg { width: 24px; height: 24px; color: var(--gov-primary); }
+        .gov-wizard-option-content { flex: 1; }
+        .gov-wizard-option-title { font-size: 16px; font-weight: 600; margin-bottom: 4px; color: var(--gov-neutral-900); }
+        .gov-wizard-option-desc { font-size: 13px; color: var(--gov-neutral-600); line-height: 1.5; }
+
+        .gov-wizard-result { background: var(--gov-success-50); border: 1px solid var(--gov-success-100); border-radius: var(--gov-radius-lg); padding: 24px; margin-top: 24px; }
+        .gov-wizard-result-title { font-size: 14px; font-weight: 500; color: var(--gov-success-600); margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+        .gov-wizard-result-title svg { width: 20px; height: 20px; }
+        .gov-wizard-result-form { font-size: 18px; font-weight: 600; color: var(--gov-neutral-900); margin-bottom: 8px; }
+        .gov-wizard-result-desc { font-size: 14px; color: var(--gov-neutral-600); margin-bottom: 16px; }
+        .gov-wizard-result-btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; background: var(--gov-primary); color: #fff; border: none; border-radius: var(--gov-radius); font-size: 14px; font-weight: 500; cursor: pointer; font-family: var(--gov-font); text-decoration: none; }
+        .gov-wizard-result-btn:hover { background: var(--gov-primary-700); }
+        .gov-wizard-result-btn svg { width: 18px; height: 18px; }
+
+        .gov-wizard-nav { display: flex; justify-content: space-between; margin-top: 24px; }
+        .gov-wizard-back { display: flex; align-items: center; gap: 8px; padding: 10px 20px; background: none; border: 1px solid var(--gov-neutral-300); border-radius: var(--gov-radius); font-size: 14px; color: var(--gov-neutral-700); cursor: pointer; font-family: var(--gov-font); }
+        .gov-wizard-back:hover { background: var(--gov-neutral-50); }
+        .gov-wizard-back svg { width: 16px; height: 16px; }
+
+        /* ===== LIST VIEW ===== */
+        .gov-list-view { display: none; }
+        .gov-list-view.active { display: block; }
+
+        .gov-search-box { margin-bottom: 24px; }
+        .gov-search-input { width: 100%; padding: 14px 16px 14px 48px; font-size: 15px; font-family: var(--gov-font); border: 1px solid var(--gov-neutral-300); border-radius: var(--gov-radius-lg); background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='%23888' viewBox='0 0 24 24'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z'/%3E%3C/svg%3E") 16px center / 20px no-repeat; }
+        .gov-search-input:focus { outline: none; border-color: var(--gov-primary); box-shadow: 0 0 0 3px var(--gov-primary-100); }
+
+        .gov-category { background: #fff; border-radius: var(--gov-radius-lg); margin-bottom: 16px; overflow: hidden; }
+        .gov-category-header { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; cursor: pointer; user-select: none; }
+        .gov-category-header:hover { background: var(--gov-neutral-50); }
+        .gov-category-title { font-size: 16px; font-weight: 600; color: var(--gov-neutral-900); display: flex; align-items: center; gap: 12px; }
+        .gov-category-title svg { width: 24px; height: 24px; color: var(--gov-primary); }
+        .gov-category-count { font-size: 13px; color: var(--gov-neutral-500); font-weight: 400; margin-left: 8px; }
+        .gov-category-toggle { width: 24px; height: 24px; color: var(--gov-neutral-400); transition: transform 0.2s ease; }
+        .gov-category.collapsed .gov-category-toggle { transform: rotate(-90deg); }
+        .gov-category-items { border-top: 1px solid var(--gov-neutral-100); }
+        .gov-category.collapsed .gov-category-items { display: none; }
+
+        .gov-form-item { display: flex; align-items: center; gap: 16px; padding: 16px 20px; border-bottom: 1px solid var(--gov-neutral-100); transition: background 0.15s ease; }
+        .gov-form-item:last-child { border-bottom: none; }
+        .gov-form-item:hover { background: var(--gov-primary-50); }
+        .gov-form-item-number { width: 32px; height: 32px; background: var(--gov-neutral-100); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; color: var(--gov-neutral-600); flex-shrink: 0; }
+        .gov-form-item.popular .gov-form-item-number { background: var(--gov-primary); color: #fff; }
+        .gov-form-item-content { flex: 1; min-width: 0; }
+        .gov-form-item-name { font-size: 14px; font-weight: 500; color: var(--gov-neutral-900); margin-bottom: 2px; }
+        .gov-form-item-desc { font-size: 13px; color: var(--gov-neutral-500); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .gov-form-item-badge { padding: 3px 10px; background: var(--gov-warning-100); color: var(--gov-warning-600); font-size: 11px; font-weight: 600; border-radius: 10px; white-space: nowrap; }
+        .gov-form-item-btn { padding: 8px 16px; background: var(--gov-primary); color: #fff; border: none; border-radius: var(--gov-radius); font-size: 13px; font-weight: 500; cursor: pointer; font-family: var(--gov-font); white-space: nowrap; text-decoration: none; }
+        .gov-form-item-btn:hover { background: var(--gov-primary-700); }
+
+        /* ===== POPULAR SECTION ===== */
+        .gov-popular { background: var(--gov-primary-50); border: 1px solid var(--gov-primary-100); border-radius: var(--gov-radius-lg); padding: 20px; margin-bottom: 24px; }
+        .gov-popular-title { font-size: 14px; font-weight: 600; color: var(--gov-primary); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+        .gov-popular-title svg { width: 18px; height: 18px; }
+        .gov-popular-items { display: flex; flex-wrap: wrap; gap: 10px; }
+        .gov-popular-item { display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; background: #fff; border: 1px solid var(--gov-primary-100); border-radius: var(--gov-radius); font-size: 13px; font-weight: 500; color: var(--gov-neutral-900); cursor: pointer; transition: all 0.15s ease; text-decoration: none; }
+        .gov-popular-item:hover { border-color: var(--gov-primary); background: var(--gov-primary-50); color: var(--gov-primary); }
+        .gov-popular-item svg { width: 16px; height: 16px; color: var(--gov-primary); }
+
+        /* ===== NO RESULTS ===== */
+        .gov-no-results { text-align: center; padding: 48px 24px; color: var(--gov-neutral-500); }
+        .gov-no-results svg { width: 48px; height: 48px; color: var(--gov-neutral-300); margin-bottom: 16px; }
+        .gov-no-results-title { font-size: 16px; font-weight: 500; color: var(--gov-neutral-700); margin-bottom: 8px; }
+
+        @media (max-width: 768px) {
+            .gov-page { padding: 24px 16px; }
+            .gov-wizard-options { grid-template-columns: 1fr; }
+            .gov-tabs { overflow-x: auto; }
+        }
+    </style>
+</head>
+<body>
+    <header class="gov-header">
+        <div class="gov-header-top">
+            <div class="gov-header-top-content">
+                <a href="../index.html" class="gov-header-brand">
+                    <img src="../images/logo-lev-white.png" alt="Státní znak" class="gov-header-logo">
+                    <span class="gov-header-title">Portál stavebníka</span>
+                </a>
+                <div class="gov-header-user">
+                    <button class="gov-header-user-btn" onclick="toggleUserMenu()">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                        <div class="gov-header-user-info">
+                            <span class="gov-header-user-name" id="headerUserName">ALEŠ KRUPA</span>
+                            <span class="gov-header-user-detail" id="headerUserDetail">FO</span>
+                        </div>
+                        <svg class="chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <nav class="gov-header-nav">
+            <div class="gov-header-nav-content">
+                <ul class="gov-nav-menu">
+                    <li><a href="reza_implicitni.html" class="gov-nav-link">Úvod</a></li>
+                    <li><a href="prehled_zameru.html" class="gov-nav-link">Záměry</a></li>
+                    <li><a href="#" class="gov-nav-link">Řízení</a></li>
+                    <li><a href="#" class="gov-nav-link active">Žádosti</a></li>
+                    <li><a href="#" class="gov-nav-link">Stavby</a></li>
+                    <li><a href="#" class="gov-nav-link">Dokumentace</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <div class="gov-page">
+        <div class="gov-page-header">
+            <h1 class="gov-page-title">Nová žádost</h1>
+            <p class="gov-page-subtitle">Vyberte typ žádosti, kterou chcete podat</p>
+        </div>
+
+        <div class="gov-tabs">
+            <button class="gov-tab active" onclick="switchTab('wizard')">Průvodce výběrem</button>
+            <button class="gov-tab" onclick="switchTab('list')">Seznam formulářů</button>
+        </div>
+
+        <!-- ===== WIZARD VIEW ===== -->
+        <div class="gov-wizard active" id="wizardView">
+            <div class="gov-wizard-step" id="step1">
+                <div class="gov-wizard-question">Co chcete udělat?</div>
+                <div class="gov-wizard-options">
+                    <div class="gov-wizard-option" onclick="selectOption(1, 'priprava')">
+                        <div class="gov-wizard-option-icon">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+                        </div>
+                        <div class="gov-wizard-option-content">
+                            <div class="gov-wizard-option-title">Zjistit informace předem</div>
+                            <div class="gov-wizard-option-desc">Požádat o předběžnou informaci nebo vyjádření k záměru</div>
+                        </div>
+                    </div>
+                    <div class="gov-wizard-option" onclick="selectOption(1, 'povolit')">
+                        <div class="gov-wizard-option-icon">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                        </div>
+                        <div class="gov-wizard-option-content">
+                            <div class="gov-wizard-option-title">Postavit nebo změnit stavbu</div>
+                            <div class="gov-wizard-option-desc">Požádat o povolení nové stavby, přístavby, rekonstrukce</div>
+                        </div>
+                    </div>
+                    <div class="gov-wizard-option" onclick="selectOption(1, 'uzivat')">
+                        <div class="gov-wizard-option-icon">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+                        </div>
+                        <div class="gov-wizard-option-content">
+                            <div class="gov-wizard-option-title">Začít užívat stavbu</div>
+                            <div class="gov-wizard-option-desc">Kolaudace, zkušební provoz, změna užívání</div>
+                        </div>
+                    </div>
+                    <div class="gov-wizard-option" onclick="selectOption(1, 'zmenit')">
+                        <div class="gov-wizard-option-icon">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                        </div>
+                        <div class="gov-wizard-option-content">
+                            <div class="gov-wizard-option-title">Změnit nebo zrušit povolení</div>
+                            <div class="gov-wizard-option-desc">Změna povolení, změna záměru před dokončením</div>
+                        </div>
+                    </div>
+                    <div class="gov-wizard-option" onclick="selectOption(1, 'odstranit')">
+                        <div class="gov-wizard-option-icon">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                        </div>
+                        <div class="gov-wizard-option-content">
+                            <div class="gov-wizard-option-title">Odstranit stavbu</div>
+                            <div class="gov-wizard-option-desc">Demolice, bourání, odstranění zařízení</div>
+                        </div>
+                    </div>
+                    <div class="gov-wizard-option" onclick="selectOption(1, 'pozemky')">
+                        <div class="gov-wizard-option-icon">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
+                        </div>
+                        <div class="gov-wizard-option-content">
+                            <div class="gov-wizard-option-title">Změnit využití pozemků</div>
+                            <div class="gov-wizard-option-desc">Dělení, scelení pozemků, změna využití území</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 2 - Příprava -->
+            <div class="gov-wizard-step" id="step2-priprava" style="display: none;">
+                <div class="gov-wizard-question">Jakou informaci potřebujete?</div>
+                <div class="gov-wizard-options">
+                    <div class="gov-wizard-option" onclick="showResult('info-su')">
+                        <div class="gov-wizard-option-icon">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        </div>
+                        <div class="gov-wizard-option-content">
+                            <div class="gov-wizard-option-title">Informace od stavebního úřadu</div>
+                            <div class="gov-wizard-option-desc">Podmínky využívání území, nezbytnost povolení, dotčené orgány</div>
+                        </div>
+                    </div>
+                    <div class="gov-wizard-option" onclick="showResult('info-do')">
+                        <div class="gov-wizard-option-icon">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"/></svg>
+                        </div>
+                        <div class="gov-wizard-option-content">
+                            <div class="gov-wizard-option-title">Informace od dotčeného orgánu</div>
+                            <div class="gov-wizard-option-desc">Předběžná informace o stanoviscích dotčených orgánů</div>
+                        </div>
+                    </div>
+                    <div class="gov-wizard-option" onclick="showResult('info-stanovisko')">
+                        <div class="gov-wizard-option-icon">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                        </div>
+                        <div class="gov-wizard-option-content">
+                            <div class="gov-wizard-option-title">Závazné stanovisko dotčeného orgánu</div>
+                            <div class="gov-wizard-option-desc">Koordinované vyjádření, jednotné environmentální stanovisko</div>
+                        </div>
+                    </div>
+                    <div class="gov-wizard-option" onclick="showResult('info-infra')">
+                        <div class="gov-wizard-option-icon">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                        </div>
+                        <div class="gov-wizard-option-content">
+                            <div class="gov-wizard-option-title">Vyjádření vlastníka infrastruktury</div>
+                            <div class="gov-wizard-option-desc">Napojení na sítě, ochranná a bezpečnostní pásma</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="gov-wizard-nav">
+                    <button class="gov-wizard-back" onclick="goBack()">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                        Zpět
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 2 - Povolit -->
+            <div class="gov-wizard-step" id="step2-povolit" style="display: none;">
+                <div class="gov-wizard-question">Co chcete povolit?</div>
+                <div class="gov-wizard-options">
+                    <div class="gov-wizard-option" onclick="showResult('povoleni-stavba')">
+                        <div class="gov-wizard-option-icon">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                        </div>
+                        <div class="gov-wizard-option-content">
+                            <div class="gov-wizard-option-title">Stavbu nebo zařízení</div>
+                            <div class="gov-wizard-option-desc">Novostavba, přístavba, nástavba, rekonstrukce</div>
+                        </div>
+                    </div>
+                    <div class="gov-wizard-option" onclick="showResult('povoleni-ramcove')">
+                        <div class="gov-wizard-option-icon">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                        </div>
+                        <div class="gov-wizard-option-content">
+                            <div class="gov-wizard-option-title">Rámcové povolení</div>
+                            <div class="gov-wizard-option-desc">Pro soubor staveb nebo etapovou výstavbu</div>
+                        </div>
+                    </div>
+                    <div class="gov-wizard-option" onclick="showResult('povoleni-dodatecne')">
+                        <div class="gov-wizard-option-icon">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                        </div>
+                        <div class="gov-wizard-option-content">
+                            <div class="gov-wizard-option-title">Dodatečné povolení</div>
+                            <div class="gov-wizard-option-desc">Pro stavbu provedenou bez povolení (černá stavba)</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="gov-wizard-nav">
+                    <button class="gov-wizard-back" onclick="goBack()">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                        Zpět
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 2 - Užívat -->
+            <div class="gov-wizard-step" id="step2-uzivat" style="display: none;">
+                <div class="gov-wizard-question">V jaké fázi je stavba?</div>
+                <div class="gov-wizard-options">
+                    <div class="gov-wizard-option" onclick="showResult('kolaudace')">
+                        <div class="gov-wizard-option-icon">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        </div>
+                        <div class="gov-wizard-option-content">
+                            <div class="gov-wizard-option-title">Stavba je dokončena</div>
+                            <div class="gov-wizard-option-desc">Kolaudační rozhodnutí pro trvalé užívání</div>
+                        </div>
+                    </div>
+                    <div class="gov-wizard-option" onclick="showResult('predcasne')">
+                        <div class="gov-wizard-option-icon">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        </div>
+                        <div class="gov-wizard-option-content">
+                            <div class="gov-wizard-option-title">Chci užívat před dokončením</div>
+                            <div class="gov-wizard-option-desc">Předčasné užívání stavby</div>
+                        </div>
+                    </div>
+                    <div class="gov-wizard-option" onclick="showResult('zkusebni')">
+                        <div class="gov-wizard-option-icon">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
+                        </div>
+                        <div class="gov-wizard-option-content">
+                            <div class="gov-wizard-option-title">Potřebuji zkušební provoz</div>
+                            <div class="gov-wizard-option-desc">Ověření funkčnosti a vlastností stavby</div>
+                        </div>
+                    </div>
+                    <div class="gov-wizard-option" onclick="showResult('zmena-uzivani')">
+                        <div class="gov-wizard-option-icon">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
+                        </div>
+                        <div class="gov-wizard-option-content">
+                            <div class="gov-wizard-option-title">Změnit účel užívání</div>
+                            <div class="gov-wizard-option-desc">Změna v užívání stávající stavby</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="gov-wizard-nav">
+                    <button class="gov-wizard-back" onclick="goBack()">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                        Zpět
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 2 - Změnit -->
+            <div class="gov-wizard-step" id="step2-zmenit" style="display: none;">
+                <div class="gov-wizard-question">Co chcete změnit?</div>
+                <div class="gov-wizard-options">
+                    <div class="gov-wizard-option" onclick="showResult('zmena-povoleni')">
+                        <div class="gov-wizard-option-icon">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                        </div>
+                        <div class="gov-wizard-option-content">
+                            <div class="gov-wizard-option-title">Změnit vydané povolení</div>
+                            <div class="gov-wizard-option-desc">Změna podmínek nebo parametrů povolení</div>
+                        </div>
+                    </div>
+                    <div class="gov-wizard-option" onclick="showResult('zmena-pred-dokoncenim')">
+                        <div class="gov-wizard-option-icon">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                        </div>
+                        <div class="gov-wizard-option-content">
+                            <div class="gov-wizard-option-title">Změnit záměr před dokončením</div>
+                            <div class="gov-wizard-option-desc">Stavba je rozpracovaná a potřebuji změnit projekt</div>
+                        </div>
+                    </div>
+                    <div class="gov-wizard-option" onclick="showResult('doplneni')">
+                        <div class="gov-wizard-option-icon">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
+                        </div>
+                        <div class="gov-wizard-option-content">
+                            <div class="gov-wizard-option-title">Doplnit žádost</div>
+                            <div class="gov-wizard-option-desc">Doplnění podané žádosti nebo odstranění vad</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="gov-wizard-nav">
+                    <button class="gov-wizard-back" onclick="goBack()">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                        Zpět
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 2 - Odstranit -->
+            <div class="gov-wizard-step" id="step2-odstranit" style="display: none;">
+                <div class="gov-wizard-result">
+                    <div class="gov-wizard-result-title">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        Doporučený formulář
+                    </div>
+                    <div class="gov-wizard-result-form">Žádost o povolení odstranění stavby, zařízení a terénních úprav</div>
+                    <div class="gov-wizard-result-desc">Formulář č. 14 podle vyhlášky č. 149/2024 Sb.</div>
+                    <a href="form_1.html" class="gov-wizard-result-btn">
+                        Vyplnit žádost
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                    </a>
+                </div>
+                <div class="gov-wizard-nav">
+                    <button class="gov-wizard-back" onclick="goBack()">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                        Zpět
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 2 - Pozemky -->
+            <div class="gov-wizard-step" id="step2-pozemky" style="display: none;">
+                <div class="gov-wizard-question">Co chcete s pozemky udělat?</div>
+                <div class="gov-wizard-options">
+                    <div class="gov-wizard-option" onclick="showResult('deleni')">
+                        <div class="gov-wizard-option-icon">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"/></svg>
+                        </div>
+                        <div class="gov-wizard-option-content">
+                            <div class="gov-wizard-option-title">Dělit nebo scelovat pozemky</div>
+                            <div class="gov-wizard-option-desc">Rozdělení pozemku na více částí nebo sloučení</div>
+                        </div>
+                    </div>
+                    <div class="gov-wizard-option" onclick="showResult('zmena-vyuziti')">
+                        <div class="gov-wizard-option-icon">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
+                        </div>
+                        <div class="gov-wizard-option-content">
+                            <div class="gov-wizard-option-title">Změnit využití území</div>
+                            <div class="gov-wizard-option-desc">Terénní úpravy, změna druhu pozemku</div>
+                        </div>
+                    </div>
+                    <div class="gov-wizard-option" onclick="showResult('ochranne-pasmo')">
+                        <div class="gov-wizard-option-icon">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                        </div>
+                        <div class="gov-wizard-option-content">
+                            <div class="gov-wizard-option-title">Stanovit ochranné pásmo</div>
+                            <div class="gov-wizard-option-desc">Návrh na stanovení ochranného pásma</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="gov-wizard-nav">
+                    <button class="gov-wizard-back" onclick="goBack()">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                        Zpět
+                    </button>
+                </div>
+            </div>
+
+            <!-- Result template (will be shown dynamically) -->
+            <div class="gov-wizard-step" id="result-step" style="display: none;">
+                <div class="gov-wizard-result">
+                    <div class="gov-wizard-result-title">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        Doporučený formulář
+                    </div>
+                    <div class="gov-wizard-result-form" id="result-name">-</div>
+                    <div class="gov-wizard-result-desc" id="result-desc">-</div>
+                    <a href="form_1.html" class="gov-wizard-result-btn" id="result-btn">
+                        Vyplnit žádost
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                    </a>
+                </div>
+                <div class="gov-wizard-nav">
+                    <button class="gov-wizard-back" onclick="goBack()">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                        Zpět
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== LIST VIEW ===== -->
+        <div class="gov-list-view" id="listView">
+            <div class="gov-search-box">
+                <input type="text" class="gov-search-input" placeholder="Vyhledejte formulář..." id="searchInput" oninput="filterForms()">
+            </div>
+
+            <div class="gov-popular">
+                <div class="gov-popular-title">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
+                    Nejčastěji používané
+                </div>
+                <div class="gov-popular-items">
+                    <a href="form_1.html" class="gov-popular-item">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                        Povolení stavby
+                    </a>
+                    <a href="form_1.html" class="gov-popular-item">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        Kolaudace
+                    </a>
+                    <a href="form_1.html" class="gov-popular-item">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        Předběžná informace
+                    </a>
+                </div>
+            </div>
+
+            <div id="categoriesContainer">
+                <!-- Categories will be rendered by JS -->
+            </div>
+
+            <div class="gov-no-results" id="noResults" style="display: none;">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <div class="gov-no-results-title">Žádný formulář nenalezen</div>
+                <div>Zkuste jiná klíčová slova</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Form data
+        var forms = {
+            priprava: [
+                { num: '01', name: 'Žádost o předběžnou informaci stavebního úřadu', desc: 'Informace o podmínkách využívání území a povolování záměru', popular: true },
+                { num: 'VZOR', name: 'Žádost o předběžnou informaci dotčeného orgánu', desc: 'Informace o stanoviscích dotčených orgánů' },
+                { num: 'VZOR', name: 'Žádost o vyjádření nebo závazné stanovisko dotčeného orgánu', desc: 'Koordinované vyjádření, jednotné environmentální stanovisko' },
+                { num: '02', name: 'Žádost o vyjádření vlastníka veřejné dopravní nebo technické infrastruktury', desc: 'Možnost napojení, ochranná a bezpečnostní pásma' }
+            ],
+            povoleni: [
+                { num: '03', name: 'Žádost o povolení stavby nebo zařízení', desc: 'Novostavba, přístavba, nástavba, rekonstrukce', popular: true },
+                { num: '04', name: 'Žádost o změnu povolení', desc: 'Změna podmínek nebo parametrů vydaného povolení' },
+                { num: '05', name: 'Žádost o povolení změny využití území', desc: 'Terénní úpravy, změna druhu pozemku' },
+                { num: '06', name: 'Žádost o povolení dělení nebo scelení pozemků', desc: 'Rozdělení nebo sloučení pozemků' },
+                { num: '07', name: 'Žádost o vydání rámcového povolení', desc: 'Pro soubor staveb nebo etapovou výstavbu' },
+                { num: '08', name: 'Žádost o změnu záměru před dokončením', desc: 'Změna projektu rozpracované stavby' },
+                { num: '09', name: 'Návrh na stanovení ochranného pásma', desc: 'Pro blíže neurčený okruh osob nebo vodní dílo' }
+            ],
+            uzivani: [
+                { num: '10', name: 'Žádost o vydání kolaudačního rozhodnutí', desc: 'Povolení trvalého užívání dokončené stavby', popular: true },
+                { num: '11', name: 'Žádost o povolení předčasného užívání stavby', desc: 'Užívání stavby před jejím dokončením' },
+                { num: '12', name: 'Žádost o povolení zkušebního provozu', desc: 'Ověření funkčnosti a vlastností stavby' },
+                { num: '13', name: 'Žádost o povolení změny v užívání stavby', desc: 'Změna účelu užívání stávající stavby' }
+            ],
+            odstraneni: [
+                { num: '14', name: 'Žádost o povolení odstranění stavby, zařízení a terénních úprav', desc: 'Demolice, bourání, odstranění' },
+                { num: '15', name: 'Žádost o dodatečné povolení stavby, zařízení a terénních úprav', desc: 'Legalizace stavby provedené bez povolení' }
+            ],
+            doplneni: [
+                { num: 'VZOR', name: 'Doplnění žádosti či odstranění vad žádosti', desc: 'Doplnění podané žádosti na základě výzvy úřadu' },
+                { num: 'VZOR', name: 'Oznámení o obnově stavby nebo terénní úpravy', desc: 'Oznámení obnovy po mimořádné události' }
+            ]
+        };
+
+        var categoryLabels = {
+            priprava: { title: 'Příprava záměru', icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>' },
+            povoleni: { title: 'Povolení záměru', icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>' },
+            uzivani: { title: 'Užívání stavby', icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>' },
+            odstraneni: { title: 'Odstranění a dodatečné povolení', icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>' },
+            doplneni: { title: 'Doplnění a oznámení', icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>' }
+        };
+
+        var formResults = {
+            'info-su': { name: 'Žádost o předběžnou informaci stavebního úřadu', desc: 'Formulář č. 1 podle vyhlášky č. 149/2024 Sb.' },
+            'info-do': { name: 'Žádost o předběžnou informaci dotčeného orgánu', desc: 'Vzorový formulář' },
+            'info-stanovisko': { name: 'Žádost o vyjádření nebo závazné stanovisko dotčeného orgánu', desc: 'Vzorový formulář' },
+            'info-infra': { name: 'Žádost o vyjádření vlastníka veřejné dopravní nebo technické infrastruktury', desc: 'Formulář č. 2 podle vyhlášky č. 149/2024 Sb.' },
+            'povoleni-stavba': { name: 'Žádost o povolení stavby nebo zařízení', desc: 'Formulář č. 3 podle vyhlášky č. 149/2024 Sb.' },
+            'povoleni-ramcove': { name: 'Žádost o vydání rámcového povolení', desc: 'Formulář č. 7 podle vyhlášky č. 149/2024 Sb.' },
+            'povoleni-dodatecne': { name: 'Žádost o dodatečné povolení stavby, zařízení a terénních úprav', desc: 'Formulář č. 15 podle vyhlášky č. 149/2024 Sb.' },
+            'kolaudace': { name: 'Žádost o vydání kolaudačního rozhodnutí', desc: 'Formulář č. 10 podle vyhlášky č. 149/2024 Sb.' },
+            'predcasne': { name: 'Žádost o povolení předčasného užívání stavby', desc: 'Formulář č. 11 podle vyhlášky č. 149/2024 Sb.' },
+            'zkusebni': { name: 'Žádost o povolení zkušebního provozu', desc: 'Formulář č. 12 podle vyhlášky č. 149/2024 Sb.' },
+            'zmena-uzivani': { name: 'Žádost o povolení změny v užívání stavby', desc: 'Formulář č. 13 podle vyhlášky č. 149/2024 Sb.' },
+            'zmena-povoleni': { name: 'Žádost o změnu povolení', desc: 'Formulář č. 4 podle vyhlášky č. 149/2024 Sb.' },
+            'zmena-pred-dokoncenim': { name: 'Žádost o změnu záměru před dokončením', desc: 'Formulář č. 8 podle vyhlášky č. 149/2024 Sb.' },
+            'doplneni': { name: 'Doplnění žádosti či odstranění vad žádosti', desc: 'Vzorový formulář' },
+            'deleni': { name: 'Žádost o povolení dělení nebo scelení pozemků', desc: 'Formulář č. 6 podle vyhlášky č. 149/2024 Sb.' },
+            'zmena-vyuziti': { name: 'Žádost o povolení změny využití území', desc: 'Formulář č. 5 podle vyhlášky č. 149/2024 Sb.' },
+            'ochranne-pasmo': { name: 'Návrh na stanovení ochranného pásma', desc: 'Formulář č. 9 podle vyhlášky č. 149/2024 Sb.' }
+        };
+
+        var wizardHistory = [];
+        var currentStep = 'step1';
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            renderCategories();
+        });
+
+        // Tab switching
+        function switchTab(tab) {
+            document.querySelectorAll('.gov-tab').forEach(function(t) { t.classList.remove('active'); });
+            document.querySelectorAll('.gov-wizard, .gov-list-view').forEach(function(v) { v.classList.remove('active'); });
+            
+            if (tab === 'wizard') {
+                document.querySelector('.gov-tab:first-child').classList.add('active');
+                document.getElementById('wizardView').classList.add('active');
+            } else {
+                document.querySelector('.gov-tab:last-child').classList.add('active');
+                document.getElementById('listView').classList.add('active');
+            }
+        }
+
+        // Wizard navigation
+        function selectOption(step, choice) {
+            wizardHistory.push(currentStep);
+            
+            // Hide current step
+            document.getElementById(currentStep).style.display = 'none';
+            
+            // Show next step
+            var nextStep = 'step2-' + choice;
+            document.getElementById(nextStep).style.display = 'block';
+            currentStep = nextStep;
+        }
+
+        function showResult(resultKey) {
+            var result = formResults[resultKey];
+            if (!result) return;
+
+            wizardHistory.push(currentStep);
+            document.getElementById(currentStep).style.display = 'none';
+            
+            document.getElementById('result-name').textContent = result.name;
+            document.getElementById('result-desc').textContent = result.desc;
+            document.getElementById('result-step').style.display = 'block';
+            currentStep = 'result-step';
+        }
+
+        function goBack() {
+            if (wizardHistory.length === 0) return;
+            
+            document.getElementById(currentStep).style.display = 'none';
+            currentStep = wizardHistory.pop();
+            document.getElementById(currentStep).style.display = 'block';
+        }
+
+        // List view
+        function renderCategories() {
+            var container = document.getElementById('categoriesContainer');
+            var html = '';
+
+            Object.keys(forms).forEach(function(catKey) {
+                var cat = categoryLabels[catKey];
+                var items = forms[catKey];
+                
+                html += '<div class="gov-category" data-category="' + catKey + '">';
+                html += '<div class="gov-category-header" onclick="toggleCategory(this)">';
+                html += '<div class="gov-category-title">';
+                html += '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24">' + cat.icon + '</svg>';
+                html += cat.title;
+                html += '<span class="gov-category-count">(' + items.length + ')</span>';
+                html += '</div>';
+                html += '<svg class="gov-category-toggle" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>';
+                html += '</div>';
+                html += '<div class="gov-category-items">';
+                
+                items.forEach(function(form) {
+                    html += '<div class="gov-form-item' + (form.popular ? ' popular' : '') + '" data-name="' + form.name.toLowerCase() + '" data-desc="' + form.desc.toLowerCase() + '">';
+                    html += '<div class="gov-form-item-number">' + form.num + '</div>';
+                    html += '<div class="gov-form-item-content">';
+                    html += '<div class="gov-form-item-name">' + form.name + '</div>';
+                    html += '<div class="gov-form-item-desc">' + form.desc + '</div>';
+                    html += '</div>';
+                    if (form.num === 'VZOR') {
+                        html += '<span class="gov-form-item-badge">VZOR</span>';
+                    }
+                    html += '<a href="form_1.html" class="gov-form-item-btn">Vyplnit</a>';
+                    html += '</div>';
+                });
+                
+                html += '</div></div>';
+            });
+
+            container.innerHTML = html;
+        }
+
+        function toggleCategory(header) {
+            header.parentElement.classList.toggle('collapsed');
+        }
+
+        function filterForms() {
+            var query = document.getElementById('searchInput').value.toLowerCase().trim();
+            var categories = document.querySelectorAll('.gov-category');
+            var anyVisible = false;
+
+            categories.forEach(function(cat) {
+                var items = cat.querySelectorAll('.gov-form-item');
+                var catVisible = false;
+
+                items.forEach(function(item) {
+                    var name = item.getAttribute('data-name');
+                    var desc = item.getAttribute('data-desc');
+                    var matches = name.indexOf(query) > -1 || desc.indexOf(query) > -1;
+                    
+                    item.style.display = matches ? 'flex' : 'none';
+                    if (matches) catVisible = true;
+                });
+
+                cat.style.display = catVisible ? 'block' : 'none';
+                if (catVisible) {
+                    cat.classList.remove('collapsed');
+                    anyVisible = true;
+                }
+            });
+
+            document.getElementById('noResults').style.display = anyVisible ? 'none' : 'block';
+            document.querySelector('.gov-popular').style.display = query ? 'none' : 'block';
+        }
+
+        function toggleUserMenu() {
+            var btn = document.querySelector('.gov-header-user-btn');
+            if (btn) btn.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>
