@@ -119,6 +119,17 @@
         .gov-prefilled-row { display: flex; gap: 40px; flex-wrap: wrap; }
         .gov-prefilled-col { flex: 1; min-width: 200px; }
 
+        /* ===== PODKLAD PRO ===== */
+        .gov-podklad-section { margin-bottom: 32px; padding-bottom: 24px; border-bottom: 1px solid var(--gov-neutral-200); }
+        .gov-podklad-title { font-size: 16px; font-weight: 600; margin-bottom: 16px; }
+        .gov-podklad-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px 24px; margin-bottom: 20px; }
+        .gov-podklad-item { display: flex; align-items: flex-start; gap: 10px; padding: 8px 12px; border-radius: var(--gov-radius); cursor: pointer; transition: background 0.15s ease; }
+        .gov-podklad-item:hover { background: var(--gov-neutral-50); }
+        .gov-podklad-item input { margin-top: 3px; flex-shrink: 0; width: 16px; height: 16px; cursor: pointer; }
+        .gov-podklad-item span { font-size: 14px; color: var(--gov-neutral-700); }
+        .gov-podklad-vyjimka { padding-top: 16px; border-top: 1px solid var(--gov-neutral-200); }
+        .gov-podklad-vyjimka-title { font-size: 14px; font-weight: 600; margin-bottom: 12px; color: var(--gov-neutral-700); }
+
         /* ===== JES SELECTION ===== */
         .gov-jes-section { margin-bottom: 32px; padding-bottom: 24px; border-bottom: 1px solid var(--gov-neutral-200); }
         .gov-jes-title { font-size: 16px; font-weight: 600; margin-bottom: 16px; }
@@ -130,6 +141,11 @@
         .gov-jes-option-content { flex: 1; }
         .gov-jes-option-title { font-size: 14px; font-weight: 500; margin-bottom: 2px; }
         .gov-jes-option-desc { font-size: 13px; color: var(--gov-neutral-500); }
+        .gov-jes-adresat { margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--gov-neutral-300); display: none; }
+        .gov-jes-option.selected .gov-jes-adresat { display: block; }
+        .gov-jes-adresat label { font-size: 12px; color: var(--gov-neutral-600); display: block; margin-bottom: 6px; }
+        .gov-jes-adresat select { width: 100%; max-width: 400px; padding: 8px 12px; font-size: 13px; font-family: var(--gov-font); border: 1px solid var(--gov-neutral-300); border-radius: var(--gov-radius); background: #fff; }
+        .gov-jes-adresat select:focus { outline: none; border-color: var(--gov-primary); }
 
         /* ===== STANOVISKA GRID ===== */
         .gov-stanoviska-section { margin-bottom: 24px; }
@@ -249,6 +265,72 @@
                         </div>
                     </div>
 
+                    <!-- Podklad pro -->
+                    <div class="gov-podklad-section">
+                        <div class="gov-podklad-title">Vyjádření nebo závazné stanovisko dotčeného orgánu bude podkladem pro:</div>
+                        <div class="gov-podklad-grid">
+                            <label class="gov-podklad-item">
+                                <input type="checkbox" checked>
+                                <span>povolení stavby nebo zařízení (popř. změny dokončené stavby)</span>
+                            </label>
+                            <label class="gov-podklad-item">
+                                <input type="checkbox">
+                                <span>změnu povolení</span>
+                            </label>
+                            <label class="gov-podklad-item">
+                                <input type="checkbox">
+                                <span>povolení změny využití území</span>
+                            </label>
+                            <label class="gov-podklad-item">
+                                <input type="checkbox">
+                                <span>povolení dělení nebo scelení pozemků</span>
+                            </label>
+                            <label class="gov-podklad-item">
+                                <input type="checkbox">
+                                <span>rámcové povolení</span>
+                            </label>
+                            <label class="gov-podklad-item">
+                                <input type="checkbox">
+                                <span>povolení změny záměru před dokončením</span>
+                            </label>
+                            <label class="gov-podklad-item">
+                                <input type="checkbox">
+                                <span>stanovení ochranného pásma</span>
+                            </label>
+                            <label class="gov-podklad-item">
+                                <input type="checkbox">
+                                <span>kolaudační rozhodnutí</span>
+                            </label>
+                            <label class="gov-podklad-item">
+                                <input type="checkbox">
+                                <span>povolení předčasného užívání stavby</span>
+                            </label>
+                            <label class="gov-podklad-item">
+                                <input type="checkbox">
+                                <span>povolení zkušebního provozu</span>
+                            </label>
+                            <label class="gov-podklad-item">
+                                <input type="checkbox">
+                                <span>povolení změny v užívání stavby</span>
+                            </label>
+                            <label class="gov-podklad-item">
+                                <input type="checkbox">
+                                <span>povolení odstranění stavby, zařízení a terénních úprav</span>
+                            </label>
+                            <label class="gov-podklad-item">
+                                <input type="checkbox">
+                                <span>dodatečné povolení stavby, zařízení, terénních úprav</span>
+                            </label>
+                        </div>
+                        <div class="gov-podklad-vyjimka">
+                            <div class="gov-podklad-vyjimka-title">Výjimka</div>
+                            <label class="gov-podklad-item">
+                                <input type="checkbox">
+                                <span>Součástí žádosti o povolení stavby bude žádost o povolení výjimky</span>
+                            </label>
+                        </div>
+                    </div>
+
                     <!-- JES Selection -->
                     <div class="gov-jes-section">
                         <div class="gov-jes-title">Žádám o sloučené vyjádření nebo stanovisko:</div>
@@ -258,6 +340,15 @@
                                 <div class="gov-jes-option-content">
                                     <div class="gov-jes-option-title">Koordinované vyjádření nebo koordinované závazné stanovisko</div>
                                     <div class="gov-jes-option-desc">Včetně jednotného environmentálního stanoviska (JES) bez EIA</div>
+                                    <div class="gov-jes-adresat">
+                                        <label>Adresát koordinovaného stanoviska</label>
+                                        <select id="adresat-koordinovane">
+                                            <option value="">Vyberte adresáta...</option>
+                                            <option value="MÚ Lysá nad Labem">MÚ Lysá nad Labem (ORP)</option>
+                                            <option value="MÚ Brandýs nad Labem">MÚ Brandýs nad Labem (ORP)</option>
+                                            <option value="Krajský úřad Středočeského kraje">Krajský úřad Středočeského kraje</option>
+                                        </select>
+                                    </div>
                                 </div>
                             </label>
                             <label class="gov-jes-option selected" onclick="selectJES(this, 'jes-bez-eia')">
@@ -265,6 +356,14 @@
                                 <div class="gov-jes-option-content">
                                     <div class="gov-jes-option-title">Jednotné environmentální stanovisko (JES) bez EIA</div>
                                     <div class="gov-jes-option-desc">Sloučené stanovisko k ochraně životního prostředí</div>
+                                    <div class="gov-jes-adresat">
+                                        <label>Adresát JES</label>
+                                        <select id="adresat-jes-bez-eia">
+                                            <option value="">Vyberte adresáta...</option>
+                                            <option value="Krajský úřad Středočeského kraje" selected>Krajský úřad Středočeského kraje</option>
+                                            <option value="MŽP">Ministerstvo životního prostředí</option>
+                                        </select>
+                                    </div>
                                 </div>
                             </label>
                             <label class="gov-jes-option" onclick="selectJES(this, 'jes-s-eia')">
@@ -272,6 +371,21 @@
                                 <div class="gov-jes-option-content">
                                     <div class="gov-jes-option-title">Jednotné environmentální stanovisko (JES) s EIA</div>
                                     <div class="gov-jes-option-desc">Včetně posouzení vlivů na životní prostředí</div>
+                                    <div class="gov-jes-adresat">
+                                        <label>Adresát JES s EIA</label>
+                                        <select id="adresat-jes-s-eia">
+                                            <option value="">Vyberte adresáta...</option>
+                                            <option value="Krajský úřad Středočeského kraje">Krajský úřad Středočeského kraje</option>
+                                            <option value="MŽP">Ministerstvo životního prostředí</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </label>
+                            <label class="gov-jes-option" onclick="selectJES(this, 'nezadam')">
+                                <input type="radio" name="jes" value="nezadam">
+                                <div class="gov-jes-option-content">
+                                    <div class="gov-jes-option-title">Nežádám o sloučené stanovisko</div>
+                                    <div class="gov-jes-option-desc">Budu žádat pouze o jednotlivá vyjádření nebo stanoviska</div>
                                 </div>
                             </label>
                         </div>
