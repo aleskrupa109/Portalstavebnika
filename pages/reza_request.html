@@ -1770,7 +1770,7 @@
             if (formData.zamery === 'unlimited') {
                 document.getElementById('summary-zamery').textContent = 'Bez omezení';
             } else if (formData.selectedZamery.length > 0) {
-                document.getElementById('summary-zamery').textContent = formData.selectedZamery.map(z => z.num).join(', ');
+                document.getElementById('summary-zamery').textContent = formData.selectedZamery.map(function(z) { return z.num + ' – ' + z.name; }).join('; ');
             } else {
                 document.getElementById('summary-zamery').textContent = 'Žádné záměry nevybrány';
             }
