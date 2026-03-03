@@ -230,6 +230,7 @@
         }
 
         .gov-nav-link {
+            position: relative;
             display: block;
             padding: 14px 20px;
             color: var(--gov-text-light);
@@ -250,6 +251,46 @@
             border-top-color: var(--gov-text-light);
         }
 
+        .gov-nav-link.disabled {
+            color: rgba(255, 255, 255, 0.4);
+            cursor: default;
+            pointer-events: none;
+        }
+
+        .gov-nav-link[data-tooltip]:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1a1a2e;
+            color: #fff;
+            padding: 10px 14px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 400;
+            text-transform: none;
+            letter-spacing: 0;
+            white-space: normal;
+            width: 280px;
+            line-height: 1.5;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            margin-top: 8px;
+        }
+
+        .gov-nav-link[data-tooltip]:hover::before {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 6px solid transparent;
+            border-bottom-color: #1a1a2e;
+            margin-top: -4px;
+            z-index: 1001;
+        }
+
         .gov-nav-cta {
             display: flex;
             align-items: center;
@@ -263,6 +304,7 @@
             font-weight: 500;
             letter-spacing: 0.5px;
             transition: all 0.2s ease;
+            position: relative;
         }
 
         .gov-nav-cta:hover {
@@ -272,6 +314,38 @@
         .gov-nav-cta svg {
             width: 18px;
             height: 18px;
+        }
+
+        .gov-nav-cta[data-tooltip]:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: #1a1a2e;
+            color: #fff;
+            padding: 10px 14px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 400;
+            text-transform: none;
+            letter-spacing: 0;
+            white-space: normal;
+            width: 320px;
+            line-height: 1.5;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            margin-top: 8px;
+        }
+
+        .gov-nav-cta[data-tooltip]:hover::before {
+            content: '';
+            position: absolute;
+            top: 100%;
+            right: 20px;
+            border: 6px solid transparent;
+            border-bottom-color: #1a1a2e;
+            margin-top: -4px;
+            z-index: 1001;
         }
 
         /* ===== PAGE CONTENT ===== */
@@ -1003,15 +1077,15 @@
         <nav class="gov-header-nav">
             <div class="gov-header-nav-content">
                 <ul class="gov-nav-menu">
-                    <li class="gov-nav-item"><a href="reza_implicitni.html" class="gov-nav-link">Úvod</a></li>
-                    <li class="gov-nav-item"><a href="prehled_zameru.html" class="gov-nav-link">Záměry</a></li>
-                    <li class="gov-nav-item"><a href="#" class="gov-nav-link">Řízení</a></li>
-                    <li class="gov-nav-item"><a href="#" class="gov-nav-link">Žádosti</a></li>
-                    <li class="gov-nav-item"><a href="#" class="gov-nav-link">Stavby</a></li>
-                    <li class="gov-nav-item"><a href="#" class="gov-nav-link">Dokumentace</a></li>
-                    <li class="gov-nav-item"><a href="reza_setup.html" class="gov-nav-link active">Plné moci</a></li>
+                    <li class="gov-nav-item"><a href="#" class="gov-nav-link disabled">Úvod</a></li>
+                    <li class="gov-nav-item"><a href="#" class="gov-nav-link disabled">Záměry</a></li>
+                    <li class="gov-nav-item"><a href="#" class="gov-nav-link disabled">Řízení</a></li>
+                    <li class="gov-nav-item"><a href="#" class="gov-nav-link disabled">Žádosti</a></li>
+                    <li class="gov-nav-item"><a href="#" class="gov-nav-link disabled">Stavby</a></li>
+                    <li class="gov-nav-item"><a href="#" class="gov-nav-link disabled">Dokumentace</a></li>
+                    <li class="gov-nav-item"><a href="reza_setup.html" class="gov-nav-link" data-tooltip="Simulace administrace elektronických plných mocí v Registru elektronického zastupování (REZA)">Plné moci</a></li>
                 </ul>
-                <a href="form_new.html" class="gov-nav-cta">
+                <a href="form_new.html" class="gov-nav-cta" data-tooltip="Simulace vytvoření nové žádosti o povolení stavby se strukturovanou dokumentací a oddělenou dokladovou částí, nebo hromadné žádosti o stanovisko dotčených orgánů">
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                     </svg>
