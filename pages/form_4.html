@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Souhrn a odeslání žádosti | Portál stavebníka</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gov-primary: #2c5a8c;
+            --gov-primary-light: #3a7ab8;
+            --gov-primary-700: #1e5086;
+            --gov-primary-100: #e5eef9;
+            --gov-primary-50: #f3f7fc;
+            --gov-text-light: #ffffff;
+            --gov-neutral-0: #ffffff;
+            --gov-neutral-50: #f6f6f6;
+            --gov-neutral-100: #e7e7e7;
+            --gov-neutral-200: #d1d1d1;
+            --gov-neutral-300: #b0b0b0;
+            --gov-neutral-400: #888888;
+            --gov-neutral-500: #6d6d6d;
+            --gov-neutral-600: #5a5a5a;
+            --gov-neutral-700: #4f4f4f;
+            --gov-neutral-900: #3b3b3b;
+            --gov-success-600: #2e7d32;
+            --gov-success-100: #e2f6e3;
+            --gov-success-50: #f0faf0;
+            --gov-warning-600: #ca8504;
+            --gov-warning-100: #fef7c3;
+            --gov-warning-50: #fffbeb;
+            --gov-error-600: #c62828;
+            --gov-error-100: #fee2e2;
+            --gov-error-50: #fef2f2;
+            --gov-radius: 4px;
+            --gov-radius-lg: 8px;
+            --gov-font: 'Roboto', sans-serif;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: var(--gov-font); background: var(--gov-neutral-50); color: var(--gov-neutral-900); line-height: 1.5; }
+
+        /* ===== HEADER ===== */
+        .gov-header { background: var(--gov-primary); position: sticky; top: 0; z-index: 1000; }
+        .gov-header-top { padding: 14px 40px; }
+        .gov-header-top-content { max-width: 1400px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
+        .gov-header-brand { display: flex; align-items: center; gap: 14px; text-decoration: none; color: var(--gov-text-light); }
+        .gov-header-logo { height: 38px; width: auto; }
+        .gov-header-title { font-size: 18px; font-weight: 400; }
+        .gov-header-user { position: relative; }
+        .gov-header-user-btn { display: flex; align-items: center; gap: 10px; padding: 8px 16px; background: transparent; border: 1px solid rgba(255,255,255,0.5); border-radius: 4px; color: #fff; font-size: 13px; cursor: pointer; font-family: var(--gov-font); }
+        .gov-header-user-btn:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.8); }
+        .gov-header-user-btn svg { width: 18px; height: 18px; flex-shrink: 0; }
+        .gov-header-user-btn .chevron { width: 12px; height: 12px; transition: transform 0.2s ease; }
+        .gov-header-user-btn.active .chevron { transform: rotate(180deg); }
+        .gov-header-user-info { display: flex; flex-direction: column; line-height: 1.25; text-align: left; }
+        .gov-header-user-name { font-weight: 500; font-size: 13px; }
+        .gov-header-user-detail { font-size: 11px; opacity: 0.85; }
+        
+        .gov-header-user-dropdown { position: absolute; top: calc(100% + 8px); right: 0; min-width: 280px; background: white; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); opacity: 0; visibility: hidden; transform: translateY(-10px); transition: all 0.2s ease; z-index: 100; }
+        .gov-header-user-dropdown.show { opacity: 1; visibility: visible; transform: translateY(0); }
+        .gov-header-user-dropdown-header { padding: 16px; border-bottom: 1px solid #eee; background: #f9fafb; border-radius: 8px 8px 0 0; }
+        .gov-header-user-dropdown-name { font-weight: 600; color: #1a1a1a; font-size: 14px; }
+        .gov-header-user-dropdown-detail { font-size: 12px; color: #666; margin-top: 2px; }
+        .gov-header-user-dropdown-badge { display: inline-block; background: #e8f4fc; color: #2362a2; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 500; margin-top: 6px; }
+        .gov-header-user-dropdown a { display: flex; align-items: center; gap: 12px; padding: 12px 16px; color: #333; text-decoration: none; font-size: 14px; transition: background 0.15s ease; }
+        .gov-header-user-dropdown a:last-child { border-radius: 0 0 8px 8px; border-top: 1px solid #eee; color: #c53030; }
+        .gov-header-user-dropdown a:hover { background: #f5f7fa; }
+        .gov-header-user-dropdown svg { width: 18px; height: 18px; color: #666; }
+        .gov-header-user-dropdown a:last-child svg { color: #c53030; }
+
+        .gov-header-nav { padding: 0 40px; }
+        .gov-header-nav-content { max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; }
+        .gov-nav-menu { display: flex; list-style: none; }
+        .gov-nav-link { position: relative; display: block; padding: 14px 20px; color: #fff; text-decoration: none; font-size: 13px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; border-top: 3px solid transparent; }
+        .gov-nav-link:hover { background: rgba(255,255,255,0.1); }
+        .gov-nav-link.active { border-top-color: #fff; }
+        .gov-nav-link.disabled { color: rgba(255, 255, 255, 0.4); cursor: default; pointer-events: none; }
+        .gov-nav-link[data-tooltip]:hover::after { content: attr(data-tooltip); position: absolute; top: 100%; left: 50%; transform: translateX(-50%); background: #1a1a2e; color: #fff; padding: 10px 14px; border-radius: 6px; font-size: 12px; font-weight: 400; text-transform: none; letter-spacing: 0; white-space: normal; width: 280px; line-height: 1.5; z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.3); margin-top: 8px; }
+        .gov-nav-link[data-tooltip]:hover::before { content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border: 6px solid transparent; border-bottom-color: #1a1a2e; margin-top: -4px; z-index: 1001; }
+        .gov-nav-cta { display: flex; align-items: center; gap: 8px; padding: 8px 16px; color: #fff; text-decoration: none; font-size: 13px; font-weight: 500; position: relative; }
+        .gov-nav-cta svg { width: 18px; height: 18px; }
+        .gov-nav-cta[data-tooltip]:hover::after { content: attr(data-tooltip); position: absolute; top: 100%; right: 0; background: #1a1a2e; color: #fff; padding: 10px 14px; border-radius: 6px; font-size: 12px; font-weight: 400; text-transform: none; letter-spacing: 0; white-space: normal; width: 320px; line-height: 1.5; z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.3); margin-top: 8px; }
+        .gov-nav-cta[data-tooltip]:hover::before { content: ''; position: absolute; top: 100%; right: 20px; border: 6px solid transparent; border-bottom-color: #1a1a2e; margin-top: -4px; z-index: 1001; }
+
+        /* ===== PAGE ===== */
+        .gov-page { max-width: 1000px; margin: 0 auto; padding: 32px 40px; }
+        .gov-page-header { margin-bottom: 32px; }
+        .gov-page-title { font-size: 26px; font-weight: 500; margin-bottom: 8px; }
+        .gov-page-subtitle { font-size: 14px; color: var(--gov-neutral-500); }
+
+        /* ===== STEPPER ===== */
+        .gov-stepper { display: flex; align-items: center; gap: 0; margin-bottom: 32px; padding: 16px 24px; background: #fff; border-radius: var(--gov-radius-lg); border: 1px solid var(--gov-neutral-200); }
+        .gov-stepper-step { display: flex; align-items: center; gap: 10px; }
+        .gov-stepper-num { width: 28px; height: 28px; border-radius: 50%; background: var(--gov-neutral-200); color: var(--gov-neutral-500); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; }
+        .gov-stepper-step.completed .gov-stepper-num { background: var(--gov-success-600); color: #fff; }
+        .gov-stepper-step.active .gov-stepper-num { background: var(--gov-primary); color: #fff; }
+        .gov-stepper-label { font-size: 13px; color: var(--gov-neutral-500); }
+        .gov-stepper-step.completed .gov-stepper-label { color: var(--gov-success-600); }
+        .gov-stepper-step.active .gov-stepper-label { color: var(--gov-primary); font-weight: 500; }
+        .gov-stepper-line { flex: 1; height: 2px; background: var(--gov-neutral-200); margin: 0 12px; }
+        .gov-stepper-line.completed { background: var(--gov-success-600); }
+
+        /* ===== CARD ===== */
+        .gov-card { background: #fff; border-radius: var(--gov-radius-lg); border: 1px solid var(--gov-neutral-200); margin-bottom: 24px; overflow: hidden; }
+        .gov-card-header { padding: 20px 24px; border-bottom: 1px solid var(--gov-neutral-100); display: flex; align-items: center; justify-content: space-between; }
+        .gov-card-title { font-size: 16px; font-weight: 600; color: var(--gov-neutral-900); display: flex; align-items: center; gap: 10px; }
+        .gov-card-title svg { width: 20px; height: 20px; color: var(--gov-primary); }
+        .gov-card-body { padding: 24px; }
+        .gov-card-footer { padding: 16px 24px; border-top: 1px solid var(--gov-neutral-100); background: var(--gov-neutral-50); }
+
+        /* ===== SELECT ===== */
+        .gov-select-group { margin-bottom: 20px; }
+        .gov-select-label { display: block; font-size: 14px; font-weight: 500; color: var(--gov-neutral-700); margin-bottom: 8px; }
+        .gov-select { width: 100%; padding: 12px 16px; font-size: 14px; border: 1px solid var(--gov-neutral-200); border-radius: var(--gov-radius); font-family: var(--gov-font); background: #fff; cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23666'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; background-size: 16px; }
+        .gov-select:focus { outline: none; border-color: var(--gov-primary); box-shadow: 0 0 0 3px var(--gov-primary-100); }
+        .gov-select:disabled { background-color: var(--gov-neutral-50); color: var(--gov-neutral-400); cursor: not-allowed; }
+
+        /* ===== ÚŘAD INFO ===== */
+        .gov-urad-info { display: none; padding: 16px; background: var(--gov-primary-50); border-radius: var(--gov-radius); margin-top: 16px; }
+        .gov-urad-info.visible { display: block; }
+        .gov-urad-name { font-weight: 600; color: var(--gov-primary); margin-bottom: 4px; }
+        .gov-urad-address { font-size: 13px; color: var(--gov-neutral-600); }
+
+        /* ===== SUMMARY ===== */
+        .gov-summary-section { margin-bottom: 24px; }
+        .gov-summary-section:last-child { margin-bottom: 0; }
+        .gov-summary-title { font-size: 14px; font-weight: 600; color: var(--gov-neutral-700); margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--gov-neutral-100); }
+        .gov-summary-grid { display: grid; grid-template-columns: 180px 1fr; gap: 8px 16px; }
+        .gov-summary-label { font-size: 13px; color: var(--gov-neutral-500); }
+        .gov-summary-value { font-size: 13px; color: var(--gov-neutral-900); font-weight: 500; }
+        .gov-summary-value.highlight { color: var(--gov-primary); }
+
+        /* ===== DOCUMENT TREE ===== */
+        .gov-doc-tree { font-size: 13px; }
+        .gov-doc-folder { margin-bottom: 8px; }
+        .gov-doc-folder-header { display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: var(--gov-neutral-50); border-radius: var(--gov-radius); cursor: pointer; }
+        .gov-doc-folder-header:hover { background: var(--gov-neutral-100); }
+        .gov-doc-folder-icon { width: 18px; height: 18px; color: var(--gov-warning-600); }
+        .gov-doc-folder-name { font-weight: 500; color: var(--gov-neutral-700); }
+        .gov-doc-folder-count { font-size: 12px; color: var(--gov-neutral-400); margin-left: auto; }
+        .gov-doc-files { padding-left: 28px; margin-top: 4px; display: none; }
+        .gov-doc-folder.open .gov-doc-files { display: block; }
+        .gov-doc-file { display: flex; align-items: center; gap: 8px; padding: 6px 12px; color: var(--gov-neutral-600); }
+        .gov-doc-file-icon { width: 16px; height: 16px; color: var(--gov-neutral-400); }
+        .gov-doc-file-name { flex: 1; }
+        .gov-doc-file-size { font-size: 12px; color: var(--gov-neutral-400); }
+
+        /* ===== TAGS ===== */
+        .gov-tag { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 4px; font-size: 12px; font-weight: 500; }
+        .gov-tag-success { background: var(--gov-success-100); color: var(--gov-success-600); }
+        .gov-tag-warning { background: var(--gov-warning-100); color: var(--gov-warning-600); }
+        .gov-tag-info { background: var(--gov-primary-100); color: var(--gov-primary); }
+
+        /* ===== BUTTONS ===== */
+        .gov-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 24px; font-size: 14px; font-weight: 500; border-radius: var(--gov-radius); cursor: pointer; transition: all 0.2s ease; font-family: var(--gov-font); border: none; text-decoration: none; }
+        .gov-btn-primary { background: var(--gov-primary); color: #fff; }
+        .gov-btn-primary:hover { background: var(--gov-primary-700); }
+        .gov-btn-primary:disabled { background: var(--gov-neutral-200); color: var(--gov-neutral-400); cursor: not-allowed; }
+        .gov-btn-secondary { background: #fff; color: var(--gov-primary); border: 1px solid var(--gov-primary); }
+        .gov-btn-secondary:hover { background: var(--gov-primary-50); }
+        .gov-btn-success { background: var(--gov-success-600); color: #fff; }
+        .gov-btn-success:hover { background: #256929; }
+        .gov-btn svg { width: 18px; height: 18px; }
+        .gov-btn-lg { padding: 14px 32px; font-size: 15px; }
+
+        .gov-actions { display: flex; justify-content: space-between; align-items: center; padding-top: 24px; border-top: 1px solid var(--gov-neutral-200); margin-top: 24px; }
+
+        /* ===== MODAL ===== */
+        .gov-modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 2000; align-items: center; justify-content: center; padding: 20px; }
+        .gov-modal-overlay.show { display: flex; }
+        .gov-modal { background: #fff; border-radius: var(--gov-radius-lg); max-width: 500px; width: 100%; max-height: 90vh; overflow-y: auto; }
+        .gov-modal-header { padding: 24px; border-bottom: 1px solid var(--gov-neutral-100); display: flex; align-items: center; justify-content: space-between; }
+        .gov-modal-title { font-size: 18px; font-weight: 600; }
+        .gov-modal-close { background: none; border: none; cursor: pointer; padding: 4px; color: var(--gov-neutral-400); }
+        .gov-modal-close:hover { color: var(--gov-neutral-600); }
+        .gov-modal-close svg { width: 24px; height: 24px; }
+        .gov-modal-body { padding: 24px; }
+        .gov-modal-footer { padding: 16px 24px; border-top: 1px solid var(--gov-neutral-100); display: flex; justify-content: flex-end; gap: 12px; }
+
+        /* ===== SENDING STATE ===== */
+        .gov-sending { text-align: center; padding: 60px 40px; }
+        .gov-sending-icon { width: 80px; height: 80px; margin: 0 auto 24px; color: var(--gov-primary); animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        .gov-sending-title { font-size: 20px; font-weight: 600; margin-bottom: 8px; }
+        .gov-sending-text { font-size: 14px; color: var(--gov-neutral-500); }
+
+        .gov-success-state { text-align: center; padding: 60px 40px; }
+        .gov-success-icon { width: 80px; height: 80px; margin: 0 auto 24px; color: var(--gov-success-600); }
+        .gov-success-title { font-size: 20px; font-weight: 600; color: var(--gov-success-600); margin-bottom: 8px; }
+        .gov-success-text { font-size: 14px; color: var(--gov-neutral-600); margin-bottom: 24px; }
+        .gov-success-zamer { background: var(--gov-success-50); border: 1px solid var(--gov-success-100); border-radius: var(--gov-radius-lg); padding: 16px 20px; margin-bottom: 24px; }
+        .gov-success-zamer-label { font-size: 12px; color: var(--gov-neutral-500); margin-bottom: 4px; }
+        .gov-success-zamer-id { font-size: 18px; font-weight: 600; color: var(--gov-success-600); }
+
+        @media (max-width: 768px) {
+            .gov-page { padding: 24px 16px; }
+            .gov-stepper { flex-wrap: wrap; gap: 8px; }
+            .gov-stepper-line { display: none; }
+            .gov-summary-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <header class="gov-header">
+        <div class="gov-header-top">
+            <div class="gov-header-top-content">
+                <a href="../index.html" class="gov-header-brand">
+                    <img src="../images/logo-lev-white.png" alt="Státní znak" class="gov-header-logo">
+                    <span class="gov-header-title">Portál stavebníka</span>
+                </a>
+                <div class="gov-header-user">
+                    <button class="gov-header-user-btn" onclick="toggleUserMenu()">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                        <div class="gov-header-user-info">
+                            <span class="gov-header-user-name" id="headerUserName">Načítání...</span>
+                            <span class="gov-header-user-detail" id="headerUserDetail"></span>
+                        </div>
+                        <svg class="chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="gov-header-user-dropdown" id="userDropdown">
+                        <div class="gov-header-user-dropdown-header">
+                            <div class="gov-header-user-dropdown-name" id="dropdownName">Načítání...</div>
+                            <div class="gov-header-user-dropdown-detail" id="dropdownDetail"></div>
+                            <span class="gov-header-user-dropdown-badge" id="dropdownBadge">FO</span>
+                        </div>
+                        <a href="reza_implicitni.html">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
+                            Změnit postavení
+                        </a>
+                        <a href="#" onclick="logout(); return false;">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+                            Odhlásit se
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <nav class="gov-header-nav">
+            <div class="gov-header-nav-content">
+                <ul class="gov-nav-menu">
+                    <li><a href="#" class="gov-nav-link disabled">Úvod</a></li>
+                    <li><a href="#" class="gov-nav-link disabled">Záměry</a></li>
+                    <li><a href="#" class="gov-nav-link disabled">Řízení</a></li>
+                    <li><a href="#" class="gov-nav-link disabled">Žádosti</a></li>
+                    <li><a href="#" class="gov-nav-link disabled">Stavby</a></li>
+                    <li><a href="#" class="gov-nav-link disabled">Dokumentace</a></li>
+                    <li><a href="reza_setup.html" class="gov-nav-link" data-tooltip="Simulace administrace elektronických plných mocí v Registru elektronického zastupování (REZA)">Plné moci</a></li>
+                </ul>
+                <a href="form_new.html" class="gov-nav-cta" data-tooltip="Simulace vytvoření nové žádosti o povolení stavby se strukturovanou dokumentací a oddělenou dokladovou částí, nebo hromadné žádosti o stanovisko dotčených orgánů">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                    </svg>
+                    NOVÁ ŽÁDOST
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <div class="gov-page">
+        <div class="gov-page-header">
+            <h1 class="gov-page-title">Souhrn a odeslání žádosti</h1>
+            <p class="gov-page-subtitle">Zkontrolujte údaje a odešlete žádost na příslušný stavební úřad</p>
+        </div>
+
+        <!-- Stepper -->
+        <div class="gov-stepper">
+            <div class="gov-stepper-step completed">
+                <div class="gov-stepper-num">✓</div>
+                <span class="gov-stepper-label">Identifikace</span>
+            </div>
+            <div class="gov-stepper-line completed"></div>
+            <div class="gov-stepper-step completed">
+                <div class="gov-stepper-num">✓</div>
+                <span class="gov-stepper-label">Typ žádosti</span>
+            </div>
+            <div class="gov-stepper-line completed"></div>
+            <div class="gov-stepper-step completed">
+                <div class="gov-stepper-num">✓</div>
+                <span class="gov-stepper-label">Žadatel</span>
+            </div>
+            <div class="gov-stepper-line completed"></div>
+            <div class="gov-stepper-step completed">
+                <div class="gov-stepper-num">✓</div>
+                <span class="gov-stepper-label">Dokumentace</span>
+            </div>
+            <div class="gov-stepper-line completed"></div>
+            <div class="gov-stepper-step completed">
+                <div class="gov-stepper-num">✓</div>
+                <span class="gov-stepper-label">Doklady</span>
+            </div>
+            <div class="gov-stepper-line"></div>
+            <div class="gov-stepper-step active">
+                <div class="gov-stepper-num">6</div>
+                <span class="gov-stepper-label">Odeslání</span>
+            </div>
+        </div>
+
+        <!-- Hlavní obsah -->
+        <div id="mainContent">
+            <!-- Výběr úřadu -->
+            <div class="gov-card">
+                <div class="gov-card-header">
+                    <div class="gov-card-title">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                        Příslušný stavební úřad
+                    </div>
+                </div>
+                <div class="gov-card-body">
+                    <div class="gov-select-group">
+                        <label class="gov-select-label">Vyberte stavební úřad pro podání žádosti</label>
+                        <select class="gov-select" id="uradSelect" onchange="onUradSelect()">
+                            <option value="">-- Vyberte stavební úřad --</option>
+                            <option value="praha1">Úřad městské části Praha 1 - Odbor výstavby</option>
+                            <option value="praha2">Úřad městské části Praha 2 - Odbor výstavby</option>
+                            <option value="praha3">Úřad městské části Praha 3 - Odbor výstavby</option>
+                            <option value="praha4">Úřad městské části Praha 4 - Odbor výstavby</option>
+                            <option value="praha5">Úřad městské části Praha 5 - Odbor výstavby</option>
+                            <option value="praha6">Úřad městské části Praha 6 - Odbor výstavby</option>
+                            <option value="praha7">Úřad městské části Praha 7 - Odbor výstavby</option>
+                            <option value="praha8">Úřad městské části Praha 8 - Odbor výstavby</option>
+                            <option value="brno">Magistrát města Brna - Odbor územního plánování a rozvoje</option>
+                            <option value="ostrava">Magistrát města Ostravy - Útvar hlavního architekta</option>
+                        </select>
+                    </div>
+                    <div class="gov-urad-info" id="uradInfo">
+                        <div class="gov-urad-name" id="uradName"></div>
+                        <div class="gov-urad-address" id="uradAddress"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Souhrn žádosti -->
+            <div class="gov-card" id="summaryCard" style="display: none;">
+                <div class="gov-card-header">
+                    <div class="gov-card-title">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                        Souhrn žádosti
+                    </div>
+                    <span class="gov-tag gov-tag-info" id="typZadostiTag">Povolení stavby</span>
+                </div>
+                <div class="gov-card-body">
+                    <!-- Záměr -->
+                    <div class="gov-summary-section">
+                        <div class="gov-summary-title">Záměr</div>
+                        <div class="gov-summary-grid">
+                            <div class="gov-summary-label">Číslo záměru:</div>
+                            <div class="gov-summary-value highlight" id="sumZamerCislo">Z/2026/XXXXXX</div>
+                            <div class="gov-summary-label">Název záměru:</div>
+                            <div class="gov-summary-value" id="sumZamerNazev">—</div>
+                            <div class="gov-summary-label">Typ žádosti:</div>
+                            <div class="gov-summary-value" id="sumTypZadosti">Povolení stavby</div>
+                        </div>
+                    </div>
+
+                    <!-- Žadatel -->
+                    <div class="gov-summary-section">
+                        <div class="gov-summary-title">Žadatel (stavebník)</div>
+                        <div class="gov-summary-grid">
+                            <div class="gov-summary-label">Jméno / Název:</div>
+                            <div class="gov-summary-value" id="sumStavebnikName">—</div>
+                            <div class="gov-summary-label">IČO / Datum nar.:</div>
+                            <div class="gov-summary-value" id="sumStavebnikDetail">—</div>
+                            <div class="gov-summary-label">Adresa:</div>
+                            <div class="gov-summary-value" id="sumStavebnikAddress">—</div>
+                        </div>
+                    </div>
+
+                    <!-- Zástupce (pokud je) -->
+                    <div class="gov-summary-section" id="sumZastupceSection" style="display: none;">
+                        <div class="gov-summary-title">Zástupce</div>
+                        <div class="gov-summary-grid">
+                            <div class="gov-summary-label">Jméno / Název:</div>
+                            <div class="gov-summary-value" id="sumZastupceName">—</div>
+                            <div class="gov-summary-label">IČO / Datum nar.:</div>
+                            <div class="gov-summary-value" id="sumZastupceDetail">—</div>
+                            <div class="gov-summary-label">Oprávnění:</div>
+                            <div class="gov-summary-value" id="sumZastupceAuth">—</div>
+                        </div>
+                    </div>
+
+                    <!-- Dokumentace -->
+                    <div class="gov-summary-section">
+                        <div class="gov-summary-title">Projektová dokumentace</div>
+                        <div class="gov-doc-tree" id="sumDokumentace">
+                            <div class="gov-doc-folder" onclick="toggleFolder(this)">
+                                <div class="gov-doc-folder-header">
+                                    <svg class="gov-doc-folder-icon" fill="currentColor" viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>
+                                    <span class="gov-doc-folder-name">A. Průvodní zpráva</span>
+                                    <span class="gov-doc-folder-count">2 soubory</span>
+                                </div>
+                                <div class="gov-doc-files">
+                                    <div class="gov-doc-file">
+                                        <svg class="gov-doc-file-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                                        <span class="gov-doc-file-name">A.1_Identifikacni_udaje.pdf</span>
+                                        <span class="gov-doc-file-size">245 KB</span>
+                                    </div>
+                                    <div class="gov-doc-file">
+                                        <svg class="gov-doc-file-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                                        <span class="gov-doc-file-name">A.2_Cleneni_stavby.pdf</span>
+                                        <span class="gov-doc-file-size">180 KB</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="gov-doc-folder" onclick="toggleFolder(this)">
+                                <div class="gov-doc-folder-header">
+                                    <svg class="gov-doc-folder-icon" fill="currentColor" viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>
+                                    <span class="gov-doc-folder-name">B. Souhrnná technická zpráva</span>
+                                    <span class="gov-doc-folder-count">1 soubor</span>
+                                </div>
+                                <div class="gov-doc-files">
+                                    <div class="gov-doc-file">
+                                        <svg class="gov-doc-file-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                                        <span class="gov-doc-file-name">B_Souhrnna_technicka_zprava.pdf</span>
+                                        <span class="gov-doc-file-size">892 KB</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="gov-doc-folder" onclick="toggleFolder(this)">
+                                <div class="gov-doc-folder-header">
+                                    <svg class="gov-doc-folder-icon" fill="currentColor" viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>
+                                    <span class="gov-doc-folder-name">C. Situační výkresy</span>
+                                    <span class="gov-doc-folder-count">3 soubory</span>
+                                </div>
+                                <div class="gov-doc-files">
+                                    <div class="gov-doc-file">
+                                        <svg class="gov-doc-file-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                                        <span class="gov-doc-file-name">C.1_Situacni_vykresy.pdf</span>
+                                        <span class="gov-doc-file-size">1.2 MB</span>
+                                    </div>
+                                    <div class="gov-doc-file">
+                                        <svg class="gov-doc-file-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                                        <span class="gov-doc-file-name">C.2_Koordinacni_situace.dwg</span>
+                                        <span class="gov-doc-file-size">3.5 MB</span>
+                                    </div>
+                                    <div class="gov-doc-file">
+                                        <svg class="gov-doc-file-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                                        <span class="gov-doc-file-name">C.3_Katastralni_situace.pdf</span>
+                                        <span class="gov-doc-file-size">456 KB</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Doklady -->
+                    <div class="gov-summary-section">
+                        <div class="gov-summary-title">Dokladová část</div>
+                        <div class="gov-doc-tree" id="sumDoklady">
+                            <div class="gov-doc-folder" onclick="toggleFolder(this)">
+                                <div class="gov-doc-folder-header">
+                                    <svg class="gov-doc-folder-icon" fill="currentColor" viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>
+                                    <span class="gov-doc-folder-name">Stanoviska dotčených orgánů</span>
+                                    <span class="gov-doc-folder-count">4 soubory</span>
+                                </div>
+                                <div class="gov-doc-files">
+                                    <div class="gov-doc-file">
+                                        <svg class="gov-doc-file-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                        <span class="gov-doc-file-name">Stanovisko_HZS.pdf</span>
+                                        <span class="gov-doc-file-size">125 KB</span>
+                                    </div>
+                                    <div class="gov-doc-file">
+                                        <svg class="gov-doc-file-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                        <span class="gov-doc-file-name">Stanovisko_KHS.pdf</span>
+                                        <span class="gov-doc-file-size">98 KB</span>
+                                    </div>
+                                    <div class="gov-doc-file">
+                                        <svg class="gov-doc-file-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                        <span class="gov-doc-file-name">Stanovisko_OZP.pdf</span>
+                                        <span class="gov-doc-file-size">156 KB</span>
+                                    </div>
+                                    <div class="gov-doc-file">
+                                        <svg class="gov-doc-file-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                        <span class="gov-doc-file-name">Stanovisko_doprava.pdf</span>
+                                        <span class="gov-doc-file-size">210 KB</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="gov-doc-folder" onclick="toggleFolder(this)">
+                                <div class="gov-doc-folder-header">
+                                    <svg class="gov-doc-folder-icon" fill="currentColor" viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>
+                                    <span class="gov-doc-folder-name">Vyjádření správců sítí</span>
+                                    <span class="gov-doc-folder-count">3 soubory</span>
+                                </div>
+                                <div class="gov-doc-files">
+                                    <div class="gov-doc-file">
+                                        <svg class="gov-doc-file-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                        <span class="gov-doc-file-name">Vyjadreni_PRE.pdf</span>
+                                        <span class="gov-doc-file-size">89 KB</span>
+                                    </div>
+                                    <div class="gov-doc-file">
+                                        <svg class="gov-doc-file-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                        <span class="gov-doc-file-name">Vyjadreni_PVK.pdf</span>
+                                        <span class="gov-doc-file-size">112 KB</span>
+                                    </div>
+                                    <div class="gov-doc-file">
+                                        <svg class="gov-doc-file-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                        <span class="gov-doc-file-name">Vyjadreni_PP.pdf</span>
+                                        <span class="gov-doc-file-size">145 KB</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Akce -->
+            <div class="gov-actions" id="actionsSection" style="display: none;">
+                <a href="form_3.html" class="gov-btn gov-btn-secondary">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                    Zpět na doklady
+                </a>
+                <button type="button" class="gov-btn gov-btn-success gov-btn-lg" onclick="submitZadost()">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    Odeslat žádost
+                </button>
+            </div>
+        </div>
+
+        <!-- Stav odesílání -->
+        <div id="sendingState" style="display: none;">
+            <div class="gov-card">
+                <div class="gov-card-body">
+                    <div class="gov-sending">
+                        <svg class="gov-sending-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                        <div class="gov-sending-title">Odesílání žádosti...</div>
+                        <div class="gov-sending-text">Probíhá elektronické podání žádosti na stavební úřad</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stav úspěchu -->
+        <div id="successState" style="display: none;">
+            <div class="gov-card">
+                <div class="gov-card-body">
+                    <div class="gov-success-state">
+                        <svg class="gov-success-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        <div class="gov-success-title">Žádost byla úspěšně odeslána!</div>
+                        <div class="gov-success-text">Vaše žádost byla přijata a bude zpracována příslušným stavebním úřadem.</div>
+                        <div class="gov-success-zamer">
+                            <div class="gov-success-zamer-label">Číslo záměru</div>
+                            <div class="gov-success-zamer-id" id="successZamerId">Z/2026/XXXXXX</div>
+                        </div>
+                        <button type="button" class="gov-btn gov-btn-primary gov-btn-lg" onclick="goToZamery()">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
+                            Přejít na přehled záměrů
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/app-state.js"></script>
+    <script src="../js/header-helper.js"></script>
+    <script>
+        // Data stavebních úřadů
+        var uradyDB = {
+            'praha1': { name: 'Úřad městské části Praha 1 - Odbor výstavby', address: 'Vodičkova 18, 115 68 Praha 1', kod: 'SU-P1' },
+            'praha2': { name: 'Úřad městské části Praha 2 - Odbor výstavby', address: 'náměstí Míru 20, 120 39 Praha 2', kod: 'SU-P2' },
+            'praha3': { name: 'Úřad městské části Praha 3 - Odbor výstavby', address: 'Havlíčkovo náměstí 9, 130 00 Praha 3', kod: 'SU-P3' },
+            'praha4': { name: 'Úřad městské části Praha 4 - Odbor výstavby', address: 'Antala Staška 2059/80b, 140 46 Praha 4', kod: 'SU-P4' },
+            'praha5': { name: 'Úřad městské části Praha 5 - Odbor výstavby', address: 'nám. 14. října 4, 150 22 Praha 5', kod: 'SU-P5' },
+            'praha6': { name: 'Úřad městské části Praha 6 - Odbor výstavby', address: 'Čs. armády 23, 160 52 Praha 6', kod: 'SU-P6' },
+            'praha7': { name: 'Úřad městské části Praha 7 - Odbor výstavby', address: 'nábř. Kpt. Jaroše 1000/7, 170 00 Praha 7', kod: 'SU-P7' },
+            'praha8': { name: 'Úřad městské části Praha 8 - Odbor výstavby', address: 'Zenklova 35, 180 00 Praha 8', kod: 'SU-P8' },
+            'brno': { name: 'Magistrát města Brna - Odbor územního plánování a rozvoje', address: 'Kounicova 67, 601 67 Brno', kod: 'SU-BM' },
+            'ostrava': { name: 'Magistrát města Ostravy - Útvar hlavního architekta', address: 'Prokešovo náměstí 8, 729 30 Ostrava', kod: 'SU-OV' }
+        };
+
+        var state = {
+            selectedUrad: null,
+            zamerCislo: null,
+            identifikace: null
+        };
+
+        // Inicializace
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!PortalStavebnika.isLoggedIn()) {
+                window.location.href = '../index.html';
+                return;
+            }
+            
+            HeaderHelper.loadHeaderData();
+            loadFormData();
+            generateZamerCislo();
+        });
+
+        function loadFormData() {
+            // Načtení dat z localStorage
+            var stored = localStorage.getItem('formIdentifikace');
+            if (stored) {
+                state.identifikace = JSON.parse(stored);
+            }
+        }
+
+        function generateZamerCislo() {
+            var year = new Date().getFullYear();
+            var num = String(Math.floor(Math.random() * 900000) + 100000);
+            state.zamerCislo = 'Z/' + year + '/' + num;
+        }
+
+        function onUradSelect() {
+            var select = document.getElementById('uradSelect');
+            var uradKey = select.value;
+            
+            if (!uradKey) {
+                document.getElementById('uradInfo').classList.remove('visible');
+                document.getElementById('summaryCard').style.display = 'none';
+                document.getElementById('actionsSection').style.display = 'none';
+                state.selectedUrad = null;
+                return;
+            }
+
+            state.selectedUrad = uradyDB[uradKey];
+            
+            // Zobrazit info o úřadu
+            document.getElementById('uradName').textContent = state.selectedUrad.name;
+            document.getElementById('uradAddress').textContent = state.selectedUrad.address;
+            document.getElementById('uradInfo').classList.add('visible');
+            
+            // Zobrazit souhrn
+            renderSummary();
+            document.getElementById('summaryCard').style.display = 'block';
+            document.getElementById('actionsSection').style.display = 'flex';
+        }
+
+        function renderSummary() {
+            var id = state.identifikace;
+            var user = PortalStavebnika.getUser();
+            var identity = PortalStavebnika.getCurrentIdentity();
+            var identityKey = PortalStavebnika.getCurrentIdentityKey();
+            
+            // Záměr
+            document.getElementById('sumZamerCislo').textContent = state.zamerCislo;
+            document.getElementById('sumZamerNazev').textContent = 'Novostavba rodinného domu'; // Mock data
+            document.getElementById('sumTypZadosti').textContent = 'Povolení stavby';
+            
+            // Stavebník
+            var stavebnikName = '—';
+            var stavebnikDetail = '—';
+            var stavebnikAddress = '—';
+            
+            if (id && id.isRepresentative && id.selectedReza) {
+                // Stavebník z REZA
+                var reza = id.selectedReza;
+                if (reza.postoupena && reza.puvodniZmocnitel) {
+                    stavebnikName = reza.puvodniZmocnitel.name;
+                    stavebnikDetail = reza.puvodniZmocnitel.ico ? 'IČO: ' + reza.puvodniZmocnitel.ico : '—';
+                    stavebnikAddress = reza.puvodniZmocnitel.address || '—';
+                } else {
+                    stavebnikName = reza.zmocnitel.name;
+                    stavebnikDetail = reza.zmocnitel.ico ? 'IČO: ' + reza.zmocnitel.ico : (reza.zmocnitel.birthDate || '—');
+                    stavebnikAddress = reza.zmocnitel.address || '—';
+                }
+            } else if (id && id.stavebnik) {
+                // Stavebník z papírového zmocnění
+                stavebnikName = id.stavebnik.name;
+                stavebnikDetail = id.stavebnik.ico ? 'IČO: ' + id.stavebnik.ico : (id.stavebnik.birthDate || '—');
+                stavebnikAddress = id.stavebnik.address || '—';
+            } else {
+                // Stavebník = přihlášená osoba
+                if (identity && identity.type === 'PO') {
+                    stavebnikName = identity.name;
+                    stavebnikDetail = 'IČO: ' + identity.ico;
+                    stavebnikAddress = identity.address || '—';
+                } else if (identityKey === 'OSVC') {
+                    var identities = PortalStavebnika.getIdentities();
+                    if (identities.OSVC) {
+                        stavebnikName = identities.OSVC.name;
+                        stavebnikDetail = 'IČO: ' + identities.OSVC.ico;
+                        stavebnikAddress = identities.OSVC.address || '—';
+                    }
+                } else if (user) {
+                    stavebnikName = user.name;
+                    stavebnikDetail = 'Nar.: ' + user.birthDate;
+                    stavebnikAddress = 'Adresa z registru';
+                }
+            }
+            
+            document.getElementById('sumStavebnikName').textContent = stavebnikName;
+            document.getElementById('sumStavebnikDetail').textContent = stavebnikDetail;
+            document.getElementById('sumStavebnikAddress').textContent = stavebnikAddress;
+            
+            // Zástupce (pokud je)
+            if (id && id.isRepresentative) {
+                document.getElementById('sumZastupceSection').style.display = 'block';
+                
+                var zastupceName = user ? user.name : '—';
+                var zastupceDetail = user ? 'Nar.: ' + user.birthDate : '—';
+                
+                if (identityKey === 'OSVC') {
+                    var identities = PortalStavebnika.getIdentities();
+                    if (identities.OSVC) {
+                        zastupceName = identities.OSVC.name;
+                        zastupceDetail = 'IČO: ' + identities.OSVC.ico;
+                    }
+                } else if (identity && identity.type === 'PO') {
+                    zastupceName = identity.name;
+                    zastupceDetail = 'IČO: ' + identity.ico;
+                }
+                
+                document.getElementById('sumZastupceName').textContent = zastupceName;
+                document.getElementById('sumZastupceDetail').textContent = zastupceDetail;
+                
+                var authText = 'Plná moc';
+                if (id.authMethod === 'reza') {
+                    authText = 'Elektronická plná moc (REZA)';
+                } else if (id.repType === 'poverena') {
+                    authText = 'Pověření';
+                }
+                document.getElementById('sumZastupceAuth').textContent = authText;
+            } else {
+                document.getElementById('sumZastupceSection').style.display = 'none';
+            }
+        }
+
+        function toggleFolder(folder) {
+            folder.classList.toggle('open');
+        }
+
+        function submitZadost() {
+            // Schovat hlavní obsah, zobrazit stav odesílání
+            document.getElementById('mainContent').style.display = 'none';
+            document.getElementById('sendingState').style.display = 'block';
+            
+            // Simulace odesílání
+            setTimeout(function() {
+                // Vytvořit záměr v localStorage
+                createZamer();
+                
+                // Zobrazit úspěch
+                document.getElementById('sendingState').style.display = 'none';
+                document.getElementById('successState').style.display = 'block';
+                document.getElementById('successZamerId').textContent = state.zamerCislo;
+            }, 2500);
+        }
+
+        function createZamer() {
+            var id = state.identifikace;
+            var user = PortalStavebnika.getUser();
+            var identity = PortalStavebnika.getCurrentIdentity();
+            var identityKey = PortalStavebnika.getCurrentIdentityKey();
+            
+            // Určit stavebníka
+            var stavebnikName = user ? user.name : 'Neznámý';
+            var role = 'stavebnik';
+            
+            if (id && id.isRepresentative) {
+                role = 'zastupce';
+                if (id.selectedReza) {
+                    var reza = id.selectedReza;
+                    stavebnikName = (reza.postoupena && reza.puvodniZmocnitel) ? reza.puvodniZmocnitel.name : reza.zmocnitel.name;
+                } else if (id.stavebnik) {
+                    stavebnikName = id.stavebnik.name;
+                }
+            } else if (identity && identity.type === 'PO') {
+                stavebnikName = identity.name;
+            } else if (identityKey === 'OSVC') {
+                var identities = PortalStavebnika.getIdentities();
+                if (identities.OSVC) {
+                    stavebnikName = identities.OSVC.name;
+                }
+            }
+            
+            // Vytvořit nový záměr
+            var newZamer = {
+                id: state.zamerCislo,
+                nazev: 'Novostavba rodinného domu',
+                stavebnik: stavebnikName,
+                stav: 'Aktivní',
+                dokumentace: 'SR00X00' + String(Math.floor(Math.random() * 9000) + 1000),
+                datum: formatDate(new Date()),
+                role: role,
+                urad: state.selectedUrad ? state.selectedUrad.name : null,
+                identityKey: identityKey
+            };
+            
+            // Uložit do localStorage
+            var storedZamery = localStorage.getItem('userCreatedZamery');
+            var zamery = storedZamery ? JSON.parse(storedZamery) : [];
+            zamery.push(newZamer);
+            localStorage.setItem('userCreatedZamery', JSON.stringify(zamery));
+            
+            // Vyčistit formIdentifikace
+            localStorage.removeItem('formIdentifikace');
+        }
+
+        function formatDate(date) {
+            var day = date.getDate();
+            var month = date.getMonth() + 1;
+            var year = date.getFullYear();
+            return day + '. ' + month + '. ' + year;
+        }
+
+        function goToZamery() {
+            window.location.href = 'prehled_zameru.html';
+        }
+
+        function toggleUserMenu() {
+            HeaderHelper.toggleUserMenu();
+        }
+
+        function logout() {
+            HeaderHelper.logout();
+        }
+    </script>
+</body>
+</html>

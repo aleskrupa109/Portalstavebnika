@@ -254,7 +254,8 @@
         .gov-nav-link.disabled { color: rgba(255, 255, 255, 0.4); cursor: default; pointer-events: none; }
         .gov-nav-link[data-tooltip]:hover::after { content: attr(data-tooltip); position: absolute; top: 100%; left: 50%; transform: translateX(-50%); background: #1a1a2e; color: #fff; padding: 10px 14px; border-radius: 6px; font-size: 12px; font-weight: 400; text-transform: none; letter-spacing: 0; white-space: normal; width: 280px; line-height: 1.5; z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.3); margin-top: 8px; }
         .gov-nav-link[data-tooltip]:hover::before { content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border: 6px solid transparent; border-bottom-color: #1a1a2e; margin-top: -4px; z-index: 1001; }
-        .gov-nav-cta { position: relative; }
+        .gov-nav-cta { display: flex; align-items: center; gap: 8px; padding: 8px 16px; color: #fff; text-decoration: none; font-size: 13px; font-weight: 500; position: relative; }
+        .gov-nav-cta svg { width: 18px; height: 18px; }
         .gov-nav-cta[data-tooltip]:hover::after { content: attr(data-tooltip); position: absolute; top: 100%; right: 0; background: #1a1a2e; color: #fff; padding: 10px 14px; border-radius: 6px; font-size: 12px; font-weight: 400; text-transform: none; letter-spacing: 0; white-space: normal; width: 320px; line-height: 1.5; z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.3); margin-top: 8px; }
         .gov-nav-cta[data-tooltip]:hover::before { content: ''; position: absolute; top: 100%; right: 20px; border: 6px solid transparent; border-bottom-color: #1a1a2e; margin-top: -4px; z-index: 1001; }
 
@@ -572,6 +573,219 @@
                 margin-left: 0;
             }
         }
+
+        /* ===== MODÁLNÍ OKNO ===== */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .modal-overlay.show {
+            display: flex;
+        }
+        .modal {
+            background: #fff;
+            border-radius: 12px;
+            max-width: 700px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        .modal-header {
+            padding: 24px;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #f5f7fa;
+            border-radius: 12px 12px 0 0;
+        }
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a1a1a;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .modal-title svg {
+            width: 24px;
+            height: 24px;
+            color: var(--gov-primary);
+        }
+        .modal-close {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            color: #666;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+        .modal-close:hover {
+            background: #e0e0e0;
+            color: #333;
+        }
+        .modal-close svg {
+            width: 24px;
+            height: 24px;
+        }
+        .modal-body {
+            padding: 24px;
+        }
+        .modal-section {
+            margin-bottom: 24px;
+        }
+        .modal-section:last-child {
+            margin-bottom: 0;
+        }
+        .modal-section-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #666;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #e0e0e0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .modal-grid {
+            display: grid;
+            grid-template-columns: 160px 1fr;
+            gap: 8px 16px;
+        }
+        .modal-label {
+            font-size: 13px;
+            color: #666;
+        }
+        .modal-value {
+            font-size: 13px;
+            color: #1a1a1a;
+            font-weight: 500;
+        }
+        .modal-value.highlight {
+            color: var(--gov-primary);
+        }
+        .modal-tag {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        .modal-tag-success {
+            background: #e2f6e3;
+            color: #2e7d32;
+        }
+        .modal-tag-warning {
+            background: #fef7c3;
+            color: #ca8504;
+        }
+        .modal-tag-info {
+            background: #e5eef9;
+            color: #2c5a8c;
+        }
+        .modal-doc-tree {
+            font-size: 13px;
+        }
+        .modal-doc-folder {
+            margin-bottom: 8px;
+        }
+        .modal-doc-folder-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: #f5f7fa;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .modal-doc-folder-header:hover {
+            background: #e0e0e0;
+        }
+        .modal-doc-folder-icon {
+            width: 18px;
+            height: 18px;
+            color: #f5a623;
+        }
+        .modal-doc-folder-name {
+            font-weight: 500;
+            color: #333;
+        }
+        .modal-doc-folder-count {
+            font-size: 12px;
+            color: #888;
+            margin-left: auto;
+        }
+        .modal-doc-files {
+            padding-left: 28px;
+            margin-top: 4px;
+            display: none;
+        }
+        .modal-doc-folder.open .modal-doc-files {
+            display: block;
+        }
+        .modal-doc-file {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            color: #666;
+        }
+        .modal-doc-file-icon {
+            width: 16px;
+            height: 16px;
+            color: #888;
+        }
+        .modal-footer {
+            padding: 16px 24px;
+            border-top: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            background: #f5f7fa;
+            border-radius: 0 0 12px 12px;
+        }
+        .modal-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: 500;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+            border: none;
+        }
+        .modal-btn-primary {
+            background: var(--gov-primary);
+            color: #fff;
+        }
+        .modal-btn-primary:hover {
+            background: #1e5086;
+        }
+        .modal-btn-secondary {
+            background: #fff;
+            color: #333;
+            border: 1px solid #d0d0d0;
+        }
+        .modal-btn-secondary:hover {
+            background: #f5f5f5;
+        }
     </style>
 </head>
 <body>
@@ -604,20 +818,20 @@
                             <div class="gov-header-user-dropdown-badge" id="dropdownBadge">Fyzická osoba</div>
                         </div>
                         <a href="reza_implicitni.html">
-                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/>
                             </svg>
                             Změnit postavení
                         </a>
                         <a href="#">
-                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                             </svg>
                             Nastavení
                         </a>
                         <a href="../index.html">
-                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
                             </svg>
                             Odhlásit se
@@ -639,7 +853,7 @@
                     <li class="gov-nav-item"><a href="reza_setup.html" class="gov-nav-link" data-tooltip="Simulace administrace elektronických plných mocí v Registru elektronického zastupování (REZA)">Plné moci</a></li>
                 </ul>
                 <a href="form_new.html" class="gov-nav-cta" data-tooltip="Simulace vytvoření nové žádosti o povolení stavby se strukturovanou dokumentací a oddělenou dokladovou částí, nebo hromadné žádosti o stanovisko dotčených orgánů">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                     </svg>
                     NOVÁ ŽÁDOST
@@ -655,7 +869,7 @@
             <div class="filter-group search">
                 <label class="filter-label">Filtrovat</label>
                 <div class="filter-input">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                     </svg>
                     <input type="text" placeholder="Dle názvu/čísla záměru, dokumentace" id="searchInput" oninput="filterZamery()">
@@ -701,12 +915,12 @@
             <div class="view-toggle">
                 <span class="view-toggle-label">Zobrazení</span>
                 <button class="view-btn active" title="Mřížka">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/>
                     </svg>
                 </button>
                 <button class="view-btn" title="Seznam">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/>
                     </svg>
                 </button>
@@ -995,6 +1209,7 @@
 
         function loadZamery(identity) {
             var dataKey = identity.type;
+            var identityKey = PortalStavebnika.getCurrentIdentityKey();
             
             // Pro PO určit konkrétní společnost
             if (identity.type === "PO") {
@@ -1010,7 +1225,19 @@
             }
             
             // Získání záměrů z mock dat nebo centrálního stavu
-            var zamery = zameryData[dataKey] || [];
+            var zamery = zameryData[dataKey] ? [...zameryData[dataKey]] : [];
+            
+            // Přidat záměry vytvořené uživatelem (z form_4)
+            var userCreatedZamery = localStorage.getItem('userCreatedZamery');
+            if (userCreatedZamery) {
+                var created = JSON.parse(userCreatedZamery);
+                created.forEach(function(z) {
+                    // Přidat pouze záměry pro aktuální identitu
+                    if (z.identityKey === identityKey) {
+                        zamery.unshift(z); // Přidat na začátek
+                    }
+                });
+            }
             
             // Přidat záměry z centrálního stavu
             var storedZamery = PortalStavebnika.getZamery();
@@ -1028,6 +1255,9 @@
                     });
                 });
             }
+            
+            // Uložit záměry do globální proměnné pro detail
+            window.currentZamery = zamery;
             
             // Naplnění selectu stavebníků
             populateStavebnikFilter(zamery);
@@ -1056,7 +1286,7 @@
                 return;
             }
 
-            grid.innerHTML = zamery.map(zamer => `
+            grid.innerHTML = zamery.map((zamer, index) => `
                 <div class="zamer-card">
                     <a href="#" class="zamer-id">${zamer.id}</a>
                     <div class="zamer-row">
@@ -1083,7 +1313,7 @@
                         <span class="zamer-value">${zamer.datum}</span>
                     </div>
                     <span class="zamer-role ${zamer.role}">${getRoleLabel(zamer.role)}</span>
-                    <a href="#" class="zamer-btn">Zobrazit detail</a>
+                    <button type="button" class="zamer-btn" onclick="showZamerDetail(${index})">Zobrazit detail</button>
                 </div>
             `).join('');
         }
@@ -1128,6 +1358,17 @@
             }
             
             let zamery = [...(zameryData[dataKey] || [])];
+            
+            // Přidat záměry vytvořené uživatelem (z form_4)
+            var userCreatedZamery = localStorage.getItem('userCreatedZamery');
+            if (userCreatedZamery) {
+                var created = JSON.parse(userCreatedZamery);
+                created.forEach(function(z) {
+                    if (z.identityKey === identityKey) {
+                        zamery.unshift(z);
+                    }
+                });
+            }
             
             // Přidat záměry z centrálního stavu
             var storedZamery = PortalStavebnika.getZamery();
@@ -1182,6 +1423,9 @@
                 return 0;
             });
             
+            // Uložit filtrované záměry pro detail
+            window.currentZamery = zamery;
+            
             renderZamery(zamery);
         }
 
@@ -1209,6 +1453,223 @@
 
         // Inicializace
         document.addEventListener('DOMContentLoaded', loadIdentity);
+
+        // ===== MODÁLNÍ OKNO DETAIL ZÁMĚRU =====
+        function showZamerDetail(index) {
+            var zamer = window.currentZamery[index];
+            if (!zamer) return;
+
+            // Naplnit modal daty
+            document.getElementById('modalZamerId').textContent = zamer.id;
+            document.getElementById('modalZamerNazev').textContent = zamer.nazev;
+            document.getElementById('modalZamerStav').textContent = zamer.stav;
+            document.getElementById('modalZamerStav').className = 'modal-tag ' + (zamer.stav === 'Aktivní' ? 'modal-tag-success' : 'modal-tag-warning');
+            document.getElementById('modalZamerDatum').textContent = zamer.datum;
+            document.getElementById('modalZamerDokumentace').textContent = zamer.dokumentace || '-';
+            
+            document.getElementById('modalStavebnikName').textContent = zamer.stavebnik;
+            document.getElementById('modalStavebnikRole').textContent = getRoleLabel(zamer.role);
+            
+            // Úřad (pokud existuje)
+            if (zamer.urad) {
+                document.getElementById('modalUradSection').style.display = 'block';
+                document.getElementById('modalUrad').textContent = zamer.urad;
+            } else {
+                document.getElementById('modalUradSection').style.display = 'none';
+            }
+
+            // Zobrazit modal
+            document.getElementById('zamerDetailModal').classList.add('show');
+        }
+
+        function closeZamerDetail() {
+            document.getElementById('zamerDetailModal').classList.remove('show');
+        }
+
+        function toggleModalFolder(el) {
+            el.parentElement.classList.toggle('open');
+        }
+
+        // Close modal on overlay click
+        document.getElementById('zamerDetailModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeZamerDetail();
+            }
+        });
+
+        // Close modal on Escape
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeZamerDetail();
+            }
+        });
     </script>
+
+    <!-- ===== MODÁLNÍ OKNO DETAIL ZÁMĚRU ===== -->
+    <div class="modal-overlay" id="zamerDetailModal">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                    Detail záměru
+                </div>
+                <button class="modal-close" onclick="closeZamerDetail()">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Základní údaje -->
+                <div class="modal-section">
+                    <div class="modal-section-title">Základní údaje</div>
+                    <div class="modal-grid">
+                        <div class="modal-label">Číslo záměru:</div>
+                        <div class="modal-value highlight" id="modalZamerId">—</div>
+                        <div class="modal-label">Název záměru:</div>
+                        <div class="modal-value" id="modalZamerNazev">—</div>
+                        <div class="modal-label">Stav:</div>
+                        <div><span class="modal-tag modal-tag-success" id="modalZamerStav">Aktivní</span></div>
+                        <div class="modal-label">Datum vytvoření:</div>
+                        <div class="modal-value" id="modalZamerDatum">—</div>
+                        <div class="modal-label">ID dokumentace:</div>
+                        <div class="modal-value" id="modalZamerDokumentace">—</div>
+                    </div>
+                </div>
+
+                <!-- Žadatel -->
+                <div class="modal-section">
+                    <div class="modal-section-title">Žadatel (stavebník)</div>
+                    <div class="modal-grid">
+                        <div class="modal-label">Jméno / Název:</div>
+                        <div class="modal-value" id="modalStavebnikName">—</div>
+                        <div class="modal-label">Vaše role:</div>
+                        <div class="modal-value" id="modalStavebnikRole">—</div>
+                    </div>
+                </div>
+
+                <!-- Úřad -->
+                <div class="modal-section" id="modalUradSection" style="display: none;">
+                    <div class="modal-section-title">Stavební úřad</div>
+                    <div class="modal-grid">
+                        <div class="modal-label">Příslušný úřad:</div>
+                        <div class="modal-value" id="modalUrad">—</div>
+                    </div>
+                </div>
+
+                <!-- Dokumentace -->
+                <div class="modal-section">
+                    <div class="modal-section-title">Projektová dokumentace</div>
+                    <div class="modal-doc-tree">
+                        <div class="modal-doc-folder">
+                            <div class="modal-doc-folder-header" onclick="toggleModalFolder(this)">
+                                <svg class="modal-doc-folder-icon" fill="currentColor" viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>
+                                <span class="modal-doc-folder-name">A. Průvodní zpráva</span>
+                                <span class="modal-doc-folder-count">2 soubory</span>
+                            </div>
+                            <div class="modal-doc-files">
+                                <div class="modal-doc-file">
+                                    <svg class="modal-doc-file-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                                    A.1_Identifikacni_udaje.pdf
+                                </div>
+                                <div class="modal-doc-file">
+                                    <svg class="modal-doc-file-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                                    A.2_Cleneni_stavby.pdf
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-doc-folder">
+                            <div class="modal-doc-folder-header" onclick="toggleModalFolder(this)">
+                                <svg class="modal-doc-folder-icon" fill="currentColor" viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>
+                                <span class="modal-doc-folder-name">B. Souhrnná technická zpráva</span>
+                                <span class="modal-doc-folder-count">1 soubor</span>
+                            </div>
+                            <div class="modal-doc-files">
+                                <div class="modal-doc-file">
+                                    <svg class="modal-doc-file-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                                    B_Souhrnna_technicka_zprava.pdf
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-doc-folder">
+                            <div class="modal-doc-folder-header" onclick="toggleModalFolder(this)">
+                                <svg class="modal-doc-folder-icon" fill="currentColor" viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>
+                                <span class="modal-doc-folder-name">C. Situační výkresy</span>
+                                <span class="modal-doc-folder-count">3 soubory</span>
+                            </div>
+                            <div class="modal-doc-files">
+                                <div class="modal-doc-file">
+                                    <svg class="modal-doc-file-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                                    C.1_Situacni_vykresy.pdf
+                                </div>
+                                <div class="modal-doc-file">
+                                    <svg class="modal-doc-file-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                                    C.2_Koordinacni_situace.dwg
+                                </div>
+                                <div class="modal-doc-file">
+                                    <svg class="modal-doc-file-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                                    C.3_Katastralni_situace.pdf
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Doklady -->
+                <div class="modal-section">
+                    <div class="modal-section-title">Dokladová část</div>
+                    <div class="modal-doc-tree">
+                        <div class="modal-doc-folder">
+                            <div class="modal-doc-folder-header" onclick="toggleModalFolder(this)">
+                                <svg class="modal-doc-folder-icon" fill="currentColor" viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>
+                                <span class="modal-doc-folder-name">Stanoviska dotčených orgánů</span>
+                                <span class="modal-doc-folder-count">4 soubory</span>
+                            </div>
+                            <div class="modal-doc-files">
+                                <div class="modal-doc-file">
+                                    <svg class="modal-doc-file-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                    Stanovisko_HZS.pdf
+                                </div>
+                                <div class="modal-doc-file">
+                                    <svg class="modal-doc-file-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                    Stanovisko_KHS.pdf
+                                </div>
+                                <div class="modal-doc-file">
+                                    <svg class="modal-doc-file-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                    Stanovisko_OZP.pdf
+                                </div>
+                                <div class="modal-doc-file">
+                                    <svg class="modal-doc-file-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                    Stanovisko_doprava.pdf
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-doc-folder">
+                            <div class="modal-doc-folder-header" onclick="toggleModalFolder(this)">
+                                <svg class="modal-doc-folder-icon" fill="currentColor" viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>
+                                <span class="modal-doc-folder-name">Vyjádření správců sítí</span>
+                                <span class="modal-doc-folder-count">3 soubory</span>
+                            </div>
+                            <div class="modal-doc-files">
+                                <div class="modal-doc-file">
+                                    <svg class="modal-doc-file-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                    Vyjadreni_PRE.pdf
+                                </div>
+                                <div class="modal-doc-file">
+                                    <svg class="modal-doc-file-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                    Vyjadreni_PVK.pdf
+                                </div>
+                                <div class="modal-doc-file">
+                                    <svg class="modal-doc-file-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                    Vyjadreni_PP.pdf
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn modal-btn-secondary" onclick="closeZamerDetail()">Zavřít</button>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
