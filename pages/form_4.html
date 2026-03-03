@@ -957,7 +957,9 @@
                 datum: formatDate(new Date()),
                 role: role,
                 urad: state.selectedUrad ? state.selectedUrad.name : null,
-                identityKey: identityKey
+                identityKey: identityKey,
+                dokumentaceData: state.dokumentace || null,
+                dokladyData: state.doklady || null
             };
             
             var storedZamery = localStorage.getItem('userCreatedZamery');

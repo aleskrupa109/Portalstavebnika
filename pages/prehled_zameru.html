@@ -1487,9 +1487,12 @@
             'ostatni': 'Ostatní doklady'
         };
 
+        var currentModalZamer = null;
+
         function showZamerDetail(index) {
             var zamer = window.currentZamery[index];
             if (!zamer) return;
+            currentModalZamer = zamer;
             document.getElementById('modalZamerId').textContent = zamer.id;
             document.getElementById('modalZamerNazev').textContent = zamer.nazev;
             document.getElementById('modalZamerStav').textContent = zamer.stav;
@@ -1517,9 +1520,52 @@
 
         function renderModalContainerFolder(label, count, content) { return '<div class="modal-doc-folder"><div class="modal-doc-folder-header" onclick="toggleModalFolder(this)"><svg class="modal-doc-folder-toggle" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg><svg class="modal-doc-folder-icon" fill="currentColor" viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg><span class="modal-doc-folder-name">' + label + '</span><span class="modal-doc-folder-count">' + count + '</span></div><div class="modal-doc-files">' + content + '</div></div>'; }
 
-        function renderModalDokumentace() { var container = document.getElementById('modalDokumentace'); var storedDok = localStorage.getItem('formDokumentace'); if (!storedDok) { container.innerHTML = '<div class="modal-doc-empty">Žádná dokumentace</div>'; return; } var dok = JSON.parse(storedDok); if (!dok.files) { container.innerHTML = '<div class="modal-doc-empty">Žádná dokumentace</div>'; return; } var html = ''; var hasAnyFiles = false; var filesA = dok.files['A'] || []; if (filesA.length > 0) { hasAnyFiles = true; html += renderModalFolderWithTree('A - Průvodní list', filesA); } var filesB = dok.files['B'] || []; if (filesB.length > 0) { hasAnyFiles = true; html += renderModalFolderWithTree('B - Souhrnná technická zpráva', filesB); } var cSubfolders = [{ key: 'C1', label: 'C1 - Širší vztahy' }, { key: 'C2', label: 'C2 - Katastrální' }, { key: 'C3', label: 'C3 - Koordinační' }, { key: 'C4', label: 'C4 - Speciální' }, { key: 'C5', label: 'C5 - Dělení pozemků' }]; var cTotalFiles = 0; var cContent = ''; cSubfolders.forEach(function(sub) { var files = dok.files[sub.key] || []; if (files.length > 0) { cTotalFiles += files.length; cContent += renderModalFolderWithTree(sub.label, files); } }); if (cTotalFiles > 0) { hasAnyFiles = true; html += renderModalContainerFolder('C - Situační výkresy', cTotalFiles, cContent); } if (dok.stavby && dok.stavby.length > 0) { var dTotalFiles = 0; var dContent = ''; dok.stavby.forEach(function(stavba) { var stavbaName = stavba.name || (stavba.type === 'hlavni' ? 'Hlavní stavba' : 'Vedlejší stavba'); var stavbaFiles = 0; var stavbaContent = ''; if (stavba.objekty && stavba.objekty.length > 0) { stavba.objekty.forEach(function(objekt) { var objektName = objekt.name || 'Objekt ' + objekt.id; var objektKey = stavba.id + '-' + objekt.id; var objektFiles = 0; var objektContent = ''; var dParts = [{ key: 'D1-' + objektKey, label: 'D1 - Stavební' }, { key: 'D2-' + objektKey, label: 'D2 - Konstrukční' }, { key: 'D3-' + objektKey, label: 'D3 - Požární' }]; dParts.forEach(function(part) { var files = dok.files[part.key] || []; if (files.length > 0) { objektFiles += files.length; objektContent += renderModalFolderWithTree(part.label, files); } }); if (objektFiles > 0) { stavbaFiles += objektFiles; stavbaContent += renderModalContainerFolder('📦 ' + objektName, objektFiles, objektContent); } }); } if (stavbaFiles > 0) { dTotalFiles += stavbaFiles; var icon = stavba.type === 'hlavni' ? '🏠' : '🏗️'; dContent += renderModalContainerFolder(icon + ' ' + stavbaName, stavbaFiles, stavbaContent); } }); if (dTotalFiles > 0) { hasAnyFiles = true; html += renderModalContainerFolder('D - Dokumentace objektů', dTotalFiles, dContent); } } container.innerHTML = hasAnyFiles ? html : '<div class="modal-doc-empty">Žádná dokumentace</div>'; }
+        function renderModalDokumentace() {
+            var container = document.getElementById('modalDokumentace');
+            var dok = currentModalZamer ? currentModalZamer.dokumentaceData : null;
+            if (!dok || !dok.files) { container.innerHTML = '<div class="modal-doc-empty">Žádná dokumentace</div>'; return; }
+            var html = ''; var hasAnyFiles = false;
+            var filesA = dok.files['A'] || []; if (filesA.length > 0) { hasAnyFiles = true; html += renderModalFolderWithTree('A - Průvodní list', filesA); }
+            var filesB = dok.files['B'] || []; if (filesB.length > 0) { hasAnyFiles = true; html += renderModalFolderWithTree('B - Souhrnná technická zpráva', filesB); }
+            var cSubfolders = [{ key: 'C1', label: 'C1 - Širší vztahy' }, { key: 'C2', label: 'C2 - Katastrální' }, { key: 'C3', label: 'C3 - Koordinační' }, { key: 'C4', label: 'C4 - Speciální' }, { key: 'C5', label: 'C5 - Dělení pozemků' }];
+            var cTotalFiles = 0; var cContent = '';
+            cSubfolders.forEach(function(sub) { var files = dok.files[sub.key] || []; if (files.length > 0) { cTotalFiles += files.length; cContent += renderModalFolderWithTree(sub.label, files); } });
+            if (cTotalFiles > 0) { hasAnyFiles = true; html += renderModalContainerFolder('C - Situační výkresy', cTotalFiles, cContent); }
+            if (dok.stavby && dok.stavby.length > 0) {
+                var dTotalFiles = 0; var dContent = '';
+                dok.stavby.forEach(function(stavba) {
+                    var stavbaName = stavba.name || (stavba.type === 'hlavni' ? 'Hlavní stavba' : 'Vedlejší stavba');
+                    var stavbaFiles = 0; var stavbaContent = '';
+                    if (stavba.objekty && stavba.objekty.length > 0) {
+                        stavba.objekty.forEach(function(objekt) {
+                            var objektName = objekt.name || 'Objekt ' + objekt.id;
+                            var objektKey = stavba.id + '-' + objekt.id;
+                            var objektFiles = 0; var objektContent = '';
+                            var dParts = [{ key: 'D1-' + objektKey, label: 'D1 - Stavební' }, { key: 'D2-' + objektKey, label: 'D2 - Konstrukční' }, { key: 'D3-' + objektKey, label: 'D3 - Požární' }];
+                            dParts.forEach(function(part) { var files = dok.files[part.key] || []; if (files.length > 0) { objektFiles += files.length; objektContent += renderModalFolderWithTree(part.label, files); } });
+                            if (objektFiles > 0) { stavbaFiles += objektFiles; stavbaContent += renderModalContainerFolder('📦 ' + objektName, objektFiles, objektContent); }
+                        });
+                    }
+                    if (stavbaFiles > 0) { dTotalFiles += stavbaFiles; var icon = stavba.type === 'hlavni' ? '🏠' : '🏗️'; dContent += renderModalContainerFolder(icon + ' ' + stavbaName, stavbaFiles, stavbaContent); }
+                });
+                if (dTotalFiles > 0) { hasAnyFiles = true; html += renderModalContainerFolder('D - Dokumentace objektů', dTotalFiles, dContent); }
+            }
+            container.innerHTML = hasAnyFiles ? html : '<div class="modal-doc-empty">Žádná dokumentace</div>';
+        }
 
-        function renderModalDoklady() { var container = document.getElementById('modalDoklady'); var storedDoklady = localStorage.getItem('formDoklady'); if (!storedDoklady) { container.innerHTML = '<div class="modal-doc-empty">Žádné doklady</div>'; return; } var doklady = JSON.parse(storedDoklady); var html = ''; var hasAnyFiles = false; Object.keys(doklady).forEach(function(section) { var files = doklady[section]; if (!files || !Array.isArray(files)) return; var activeFiles = files.filter(function(f) { return f.status === 'active'; }); if (activeFiles.length > 0) { hasAnyFiles = true; var label = dokladySectionLabels[section] || section; html += renderModalFolderWithTree(label, activeFiles); } }); container.innerHTML = hasAnyFiles ? html : '<div class="modal-doc-empty">Žádné doklady</div>'; }
+        function renderModalDoklady() {
+            var container = document.getElementById('modalDoklady');
+            var doklady = currentModalZamer ? currentModalZamer.dokladyData : null;
+            if (!doklady) { container.innerHTML = '<div class="modal-doc-empty">Žádné doklady</div>'; return; }
+            var html = ''; var hasAnyFiles = false;
+            Object.keys(doklady).forEach(function(section) {
+                var files = doklady[section];
+                if (!files || !Array.isArray(files)) return;
+                var activeFiles = files.filter(function(f) { return f.status === 'active'; });
+                if (activeFiles.length > 0) { hasAnyFiles = true; var label = dokladySectionLabels[section] || section; html += renderModalFolderWithTree(label, activeFiles); }
+            });
+            container.innerHTML = hasAnyFiles ? html : '<div class="modal-doc-empty">Žádné doklady</div>';
+        }
 
         function closeZamerDetail() { document.getElementById('zamerDetailModal').classList.remove('show'); }
         function toggleModalFolder(el) { el.parentElement.classList.toggle('open'); }
