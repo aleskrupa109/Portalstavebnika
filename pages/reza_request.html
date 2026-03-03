@@ -1495,9 +1495,11 @@
         </div>
     </div>
 
+    <script src="../js/app-state.js"></script>
+    <script src="../js/header-helper.js"></script>
     <script>
         // ===== DATA =====
-        let formData = {
+        var formData = {
             scope: 'zastupce',
             zmocnitelType: 'po',
             zmocnitelData: {},
@@ -1509,99 +1511,85 @@
             platnostDo: ''
         };
 
-        let zamerCounter = 0;
-
-        // Data zmocněnce podle identity
-        const zmocnenecData = {
-            "FO": { 
-                jmeno: "Aleš Krupa", 
-                identifikatorType: "narozeni",
-                identifikator: "19.04.1968", 
-                adresa: "Vinohradská 1234/56, 120 00 Praha 2" 
-            },
-            "OSVČ": { 
-                jmeno: "Ing. Aleš Krupa", 
-                identifikatorType: "ico",
-                identifikator: "15104418", 
-                adresa: "Vinohradská 1234/56, 120 00 Praha 2" 
-            },
-            "PO_ALMANI": { 
-                jmeno: "ALMANI s.r.o.", 
-                identifikatorType: "ico",
-                identifikator: "28765432", 
-                adresa: "Projektová 789, 150 00 Praha 5" 
-            },
-            "PO_PRVNI": { 
-                jmeno: "První projektová a.s.", 
-                identifikatorType: "ico",
-                identifikator: "45678901", 
-                adresa: "Stavitelská 456, 140 00 Praha 4" 
-            }
-        };
+        var zamerCounter = 0;
 
         // ===== IDENTITY LOADING =====
         function loadIdentity() {
-            const stored = localStorage.getItem('selectedIdentity');
-            let identityKey = 'OSVČ'; // default
-
-            if (stored) {
-                const identity = JSON.parse(stored);
-
-                // Aktualizace hlavičky
-                document.getElementById('userDisplayName').textContent = identity.name.toUpperCase();
-                let detailText = identity.type;
-                if (identity.detail) {
-                    detailText += ' · ' + identity.detail;
-                }
-                document.getElementById('userDisplayDetail').textContent = detailText;
-
-                document.getElementById('dropdownName').textContent = identity.name;
-                document.getElementById('dropdownDetail').textContent = identity.detail;
-                document.getElementById('dropdownBadge').textContent = identity.badge;
-
-                // Určení klíče identity
-                if (identity.key) {
-                    identityKey = identity.key;
-                } else if (identity.badge === 'Fyzická osoba') {
-                    identityKey = 'FO';
-                } else if (identity.badge === 'OSVČ') {
-                    identityKey = 'OSVČ';
-                } else if (identity.name.includes('ALMANI')) {
-                    identityKey = 'PO_ALMANI';
-                } else if (identity.name.includes('První')) {
-                    identityKey = 'PO_PRVNI';
-                }
-
-                // Aktualizace "Budoucí zmocněnec"
-                document.getElementById('futureRepresentative').textContent = identity.name;
+            // Kontrola přihlášení
+            if (!PortalStavebnika.isLoggedIn()) {
+                window.location.href = '../index.html';
+                return;
             }
 
-            // Načtení dat zmocněnce
-            const data = zmocnenecData[identityKey] || zmocnenecData['OSVČ'];
+            // Načtení hlavičky
+            HeaderHelper.loadHeaderData();
             
-            document.getElementById('zmocnenecJmeno').textContent = data.jmeno;
-            document.getElementById('zmocnenecAdresa').textContent = data.adresa;
+            // Získání dat
+            var user = PortalStavebnika.getUser();
+            var identity = PortalStavebnika.getCurrentIdentity();
+            var identityKey = PortalStavebnika.getCurrentIdentityKey();
+            var identities = PortalStavebnika.getIdentities();
+            
+            // Sestavení dat zmocněnce
+            var zmocnenecInfo = {
+                jmeno: user.name,
+                identifikatorType: 'narozeni',
+                identifikator: user.birthDate,
+                adresa: 'Adresa z registru'
+            };
+            
+            if (identityKey === 'OSVC' && identities.OSVC) {
+                zmocnenecInfo = {
+                    jmeno: identities.OSVC.name,
+                    identifikatorType: 'ico',
+                    identifikator: identities.OSVC.ico,
+                    adresa: identities.OSVC.address
+                };
+            } else if (identityKey.startsWith('po_')) {
+                var company = identities.companies.find(function(c) { return c.id === identityKey; });
+                if (company) {
+                    zmocnenecInfo = {
+                        jmeno: company.name,
+                        identifikatorType: 'ico',
+                        identifikator: company.ico,
+                        adresa: company.address
+                    };
+                }
+            }
+            
+            // Aktualizace "Budoucí zmocněnec"
+            var futureRep = document.getElementById('futureRepresentative');
+            if (futureRep) futureRep.textContent = zmocnenecInfo.jmeno;
 
-            if (data.identifikatorType === 'ico') {
-                document.getElementById('zmocnenecIcoRow').style.display = '';
-                document.getElementById('zmocnenecNarozeniRow').style.display = 'none';
-                document.getElementById('zmocnenecIco').textContent = data.identifikator;
+            // Načtení dat zmocněnce do formuláře
+            var zmocnenecJmeno = document.getElementById('zmocnenecJmeno');
+            var zmocnenecAdresa = document.getElementById('zmocnenecAdresa');
+            if (zmocnenecJmeno) zmocnenecJmeno.textContent = zmocnenecInfo.jmeno;
+            if (zmocnenecAdresa) zmocnenecAdresa.textContent = zmocnenecInfo.adresa;
+
+            var icoRow = document.getElementById('zmocnenecIcoRow');
+            var narozeniRow = document.getElementById('zmocnenecNarozeniRow');
+            
+            if (zmocnenecInfo.identifikatorType === 'ico') {
+                if (icoRow) icoRow.style.display = '';
+                if (narozeniRow) narozeniRow.style.display = 'none';
+                var icoEl = document.getElementById('zmocnenecIco');
+                if (icoEl) icoEl.textContent = zmocnenecInfo.identifikator;
             } else {
-                document.getElementById('zmocnenecIcoRow').style.display = 'none';
-                document.getElementById('zmocnenecNarozeniRow').style.display = '';
-                document.getElementById('zmocnenecNarozeni').textContent = data.identifikator;
+                if (icoRow) icoRow.style.display = 'none';
+                if (narozeniRow) narozeniRow.style.display = '';
+                var narozeniEl = document.getElementById('zmocnenecNarozeni');
+                if (narozeniEl) narozeniEl.textContent = zmocnenecInfo.identifikator;
             }
 
             // Aktualizace souhrnu
-            document.getElementById('summary-zmocnenec').textContent = data.jmeno;
+            var summaryZmocnenec = document.getElementById('summary-zmocnenec');
+            if (summaryZmocnenec) summaryZmocnenec.textContent = zmocnenecInfo.jmeno;
         }
 
         // ===== USER MENU =====
         function toggleUserMenu() {
-            const btn = document.querySelector('.gov-header-user-btn');
-            const dropdown = document.getElementById('userDropdown');
-            if (btn) btn.classList.toggle('active');
-            if (dropdown) dropdown.classList.toggle('show');
+            HeaderHelper.toggleUserMenu();
         }
 
         document.addEventListener('click', function(e) {

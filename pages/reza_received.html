@@ -1602,44 +1602,62 @@
         </div>
     </div>
 
+    <script src="../js/app-state.js"></script>
+    <script src="../js/header-helper.js"></script>
     <script>
         // ===== NAČTENÍ IDENTITY =====
         function loadIdentity() {
-            const stored = localStorage.getItem('selectedIdentity');
-
-            if (stored) {
-                const identity = JSON.parse(stored);
-
-                // Aktualizace hlavičky
-                document.getElementById('userDisplayName').textContent = identity.name.toUpperCase();
-                let detailText = identity.type;
-                if (identity.detail) {
-                    detailText += ' · ' + identity.detail;
-                }
-                document.getElementById('userDisplayDetail').textContent = detailText;
-
-                document.getElementById('dropdownName').textContent = identity.name;
-                document.getElementById('dropdownDetail').textContent = identity.detail;
-                document.getElementById('dropdownBadge').textContent = identity.badge;
-
-                // Aktualizace jména přihlášeného uživatele v obsahu
-                document.getElementById('currentUserDisplay').textContent = identity.name;
+            // Kontrola přihlášení
+            if (!PortalStavebnika.isLoggedIn()) {
+                window.location.href = '../index.html';
+                return;
             }
+
+            // Načtení hlavičky
+            HeaderHelper.loadHeaderData();
+            
+            // Získání dat pro zobrazení
+            var user = PortalStavebnika.getUser();
+            var identity = PortalStavebnika.getCurrentIdentity();
+            var identityKey = PortalStavebnika.getCurrentIdentityKey();
+            var identities = PortalStavebnika.getIdentities();
+            
+            // Sestavení jména pro zobrazení
+            var displayName = user.name;
+            
+            if (identityKey === 'OSVC' && identities.OSVC) {
+                displayName = identities.OSVC.name;
+            } else if (identityKey.startsWith('po_')) {
+                var company = identities.companies.find(function(c) { return c.id === identityKey; });
+                if (company) {
+                    displayName = company.name;
+                }
+            }
+            
+            // Aktualizace jména přihlášeného uživatele v obsahu
+            var currentUserDisplay = document.getElementById('currentUserDisplay');
+            if (currentUserDisplay) currentUserDisplay.textContent = displayName;
+            
+            // Načtení přijatých PM
+            renderReceivedPM();
+        }
+
+        // ===== VYKRESLENÍ PŘIJATÝCH PM =====
+        function renderReceivedPM() {
+            // Pro budoucí použití - nyní používáme hardcoded tiles
+            // Zde by se načetly PM z PortalStavebnika.getReceivedPM()
         }
 
         // ===== USER MENU =====
         function toggleUserMenu() {
-            const btn = document.querySelector('.gov-header-user-btn');
-            const dropdown = document.getElementById('userDropdown');
-            if (btn) btn.classList.toggle('active');
-            if (dropdown) dropdown.classList.toggle('show');
+            HeaderHelper.toggleUserMenu();
         }
 
         document.addEventListener('click', function(e) {
-            const userSection = document.querySelector('.gov-header-user');
+            var userSection = document.querySelector('.gov-header-user');
             if (userSection && !userSection.contains(e.target)) {
-                const btn = document.querySelector('.gov-header-user-btn');
-                const dropdown = document.getElementById('userDropdown');
+                var btn = document.querySelector('.gov-header-user-btn');
+                var dropdown = document.getElementById('userDropdown');
                 if (btn) btn.classList.remove('active');
                 if (dropdown) dropdown.classList.remove('show');
             }
@@ -1647,20 +1665,20 @@
 
         // ===== TILE FUNKCE =====
         function toggleTile(tile) {
-            document.querySelectorAll('.tile.expanded').forEach(t => {
+            document.querySelectorAll('.tile.expanded').forEach(function(t) {
                 if (t !== tile) t.classList.remove('expanded');
             });
             tile.classList.toggle('expanded');
         }
 
         function filterTiles(status) {
-            document.querySelectorAll('.filter-btn').forEach(btn => {
+            document.querySelectorAll('.filter-btn').forEach(function(btn) {
                 btn.classList.remove('active');
             });
             event.target.closest('.filter-btn').classList.add('active');
 
-            document.querySelectorAll('.tile').forEach(tile => {
-                const tileStatus = tile.dataset.status;
+            document.querySelectorAll('.tile').forEach(function(tile) {
+                var tileStatus = tile.dataset.status;
                 tile.classList.remove('expanded');
                 if (status === 'all') {
                     tile.style.display = 'block';
@@ -1673,47 +1691,43 @@
         }
 
         function acceptPM(btn) {
-            const tile = btn.closest('.tile');
-            const modal = document.getElementById('accept-modal');
+            var tile = btn.closest('.tile');
+            var modal = document.getElementById('accept-modal');
             modal.classList.add('show');
 
-            setTimeout(() => {
+            setTimeout(function() {
                 modal.classList.remove('show');
                 tile.dataset.status = 'active';
                 tile.querySelector('.status-badge').className = 'status-badge active';
                 tile.querySelector('.status-badge').innerHTML = '<span class="status-dot"></span> Aktivní';
-                const paramLabels = tile.querySelectorAll('.tile-summary .tile-param-label');
-                const paramValues = tile.querySelectorAll('.tile-summary .tile-param-value');
+                var paramLabels = tile.querySelectorAll('.tile-summary .tile-param-label');
+                var paramValues = tile.querySelectorAll('.tile-summary .tile-param-value');
                 if (paramLabels[0]) paramLabels[0].textContent = 'Přijato';
                 if (paramValues[0]) paramValues[0].textContent = new Date().toLocaleDateString('cs-CZ');
-                const detailActions = tile.querySelector('.detail-actions');
-                detailActions.innerHTML = `
-                    <button class="btn btn-primary" onclick="goToZamery()">Přejít na záměry</button>
-                    <button class="btn btn-danger" onclick="terminatePM(this)">Vypovědět zmocnění</button>
-                    <button class="btn btn-secondary" onclick="downloadPDF()">Stáhnout PDF</button>
-                `;
+                var detailActions = tile.querySelector('.detail-actions');
+                detailActions.innerHTML = '<button class="btn btn-primary" onclick="goToZamery()">Přejít na záměry</button>' +
+                    '<button class="btn btn-danger" onclick="terminatePM(this)">Vypovědět zmocnění</button>' +
+                    '<button class="btn btn-secondary" onclick="downloadPDF()">Stáhnout PDF</button>';
                 updateFilterCounts();
             }, 2000);
         }
 
         function rejectPM(btn) {
-            const tile = btn.closest('.tile');
-            const modal = document.getElementById('reject-modal');
+            var tile = btn.closest('.tile');
+            var modal = document.getElementById('reject-modal');
             modal.classList.add('show');
 
-            setTimeout(() => {
+            setTimeout(function() {
                 modal.classList.remove('show');
                 tile.dataset.status = 'inactive';
                 tile.querySelector('.status-badge').className = 'status-badge rejected';
                 tile.querySelector('.status-badge').innerHTML = '<span class="status-dot"></span> Odmítnuta';
-                const paramLabels = tile.querySelectorAll('.tile-summary .tile-param-label');
-                const paramValues = tile.querySelectorAll('.tile-summary .tile-param-value');
+                var paramLabels = tile.querySelectorAll('.tile-summary .tile-param-label');
+                var paramValues = tile.querySelectorAll('.tile-summary .tile-param-value');
                 if (paramLabels[0]) paramLabels[0].textContent = 'Odmítnuto';
                 if (paramValues[0]) paramValues[0].textContent = new Date().toLocaleDateString('cs-CZ');
-                const detailActions = tile.querySelector('.detail-actions');
-                detailActions.innerHTML = `
-                    <button class="btn btn-secondary" onclick="downloadPDF()">Stáhnout PDF</button>
-                `;
+                var detailActions = tile.querySelector('.detail-actions');
+                detailActions.innerHTML = '<button class="btn btn-secondary" onclick="downloadPDF()">Stáhnout PDF</button>';
                 updateFilterCounts();
             }, 2000);
         }
@@ -1721,18 +1735,16 @@
         function terminatePM(btn) {
             if (!confirm('Opravdu chcete vypovědět tuto plnou moc? Tato akce je nevratná.')) return;
 
-            const tile = btn.closest('.tile');
+            var tile = btn.closest('.tile');
             tile.dataset.status = 'inactive';
             tile.querySelector('.status-badge').className = 'status-badge terminated';
             tile.querySelector('.status-badge').innerHTML = '<span class="status-dot"></span> Vypovězena';
-            const paramLabels = tile.querySelectorAll('.tile-summary .tile-param-label');
-            const paramValues = tile.querySelectorAll('.tile-summary .tile-param-value');
+            var paramLabels = tile.querySelectorAll('.tile-summary .tile-param-label');
+            var paramValues = tile.querySelectorAll('.tile-summary .tile-param-value');
             if (paramLabels[0]) paramLabels[0].textContent = 'Vypovězeno';
             if (paramValues[0]) paramValues[0].textContent = new Date().toLocaleDateString('cs-CZ');
-            const detailActions = tile.querySelector('.detail-actions');
-            detailActions.innerHTML = `
-                <button class="btn btn-secondary" onclick="downloadPDF()">Stáhnout PDF</button>
-            `;
+            var detailActions = tile.querySelector('.detail-actions');
+            detailActions.innerHTML = '<button class="btn btn-secondary" onclick="downloadPDF()">Stáhnout PDF</button>';
             updateFilterCounts();
         }
 
@@ -1758,19 +1770,19 @@
         }
 
         function resendProposal(proposalId, name) {
-            if (!confirm(`Chcete odeslat připomínku pro "${name}" o schválení návrhu plné moci?`)) return;
-            alert(`Připomínka byla odeslána na e-mail klienta "${name}".`);
+            if (!confirm('Chcete odeslat připomínku pro "' + name + '" o schválení návrhu plné moci?')) return;
+            alert('Připomínka byla odeslána na e-mail klienta "' + name + '".');
         }
 
         function cancelSentProposal(proposalId, name) {
-            if (!confirm(`Opravdu chcete zrušit návrh plné moci pro "${name}"?`)) return;
+            if (!confirm('Opravdu chcete zrušit návrh plné moci pro "' + name + '"?')) return;
 
-            const proposal = document.getElementById(proposalId);
+            var proposal = document.getElementById(proposalId);
             if (proposal) {
                 proposal.style.transition = 'opacity 0.3s, transform 0.3s';
                 proposal.style.opacity = '0';
                 proposal.style.transform = 'translateX(20px)';
-                setTimeout(() => {
+                setTimeout(function() {
                     proposal.remove();
                     updateSentProposalsCount();
                 }, 300);
@@ -1778,9 +1790,9 @@
         }
 
         function updateSentProposalsCount() {
-            const section = document.getElementById('sent-proposals-section');
-            const proposals = section.querySelectorAll('.sent-proposal-tile');
-            const count = proposals.length;
+            var section = document.getElementById('sent-proposals-section');
+            var proposals = section.querySelectorAll('.sent-proposal-tile');
+            var count = proposals.length;
             
             document.getElementById('sent-proposals-count').textContent = count;
             
@@ -1791,17 +1803,17 @@
         }
 
         function updateFilterCounts() {
-            const tiles = document.querySelectorAll('.tile');
-            let pending = 0, active = 0, inactive = 0;
+            var tiles = document.querySelectorAll('.tile');
+            var pending = 0, active = 0, inactive = 0;
 
-            tiles.forEach(tile => {
-                const status = tile.dataset.status;
+            tiles.forEach(function(tile) {
+                var status = tile.dataset.status;
                 if (status === 'pending') pending++;
                 else if (status === 'active') active++;
                 else inactive++;
             });
 
-            const buttons = document.querySelectorAll('.filter-btn');
+            var buttons = document.querySelectorAll('.filter-btn');
             buttons[0].querySelector('.filter-count').textContent = tiles.length;
             buttons[1].querySelector('.filter-count').textContent = pending;
             buttons[2].querySelector('.filter-count').textContent = active;

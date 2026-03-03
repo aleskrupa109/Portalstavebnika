@@ -562,54 +562,60 @@
         </div>
     </div>
 
+    <script src="../js/app-state.js"></script>
+    <script src="../js/header-helper.js"></script>
     <script>
         // ===== NAČTENÍ IDENTITY =====
         function loadIdentityToHeader() {
-            const stored = localStorage.getItem('selectedIdentity');
+            // Kontrola přihlášení
+            if (!PortalStavebnika.isLoggedIn()) {
+                window.location.href = '../index.html';
+                return;
+            }
+
+            // Načtení hlavičky
+            HeaderHelper.loadHeaderData();
             
-            if (stored) {
-                const identity = JSON.parse(stored);
-                
-                // Aktualizace hlavičky
-                const userDisplayName = document.getElementById('userDisplayName');
-                const userDisplayDetail = document.getElementById('userDisplayDetail');
-                const dropdownName = document.getElementById('dropdownName');
-                const dropdownDetail = document.getElementById('dropdownDetail');
-                const dropdownBadge = document.getElementById('dropdownBadge');
-                const representedPerson = document.getElementById('representedPerson');
-                
-                if (userDisplayName) userDisplayName.textContent = identity.name.toUpperCase();
-                
-                let detailText = identity.type;
-                if (identity.detail) {
-                    detailText += ' · ' + identity.detail;
+            // Získání dat pro stránku
+            var user = PortalStavebnika.getUser();
+            var identity = PortalStavebnika.getCurrentIdentity();
+            var identityKey = PortalStavebnika.getCurrentIdentityKey();
+            var identities = PortalStavebnika.getIdentities();
+            
+            // Sestavení jména a detailu
+            var displayName = user.name;
+            var displayDetail = '';
+            
+            if (identityKey === 'FO') {
+                displayDetail = 'Nar.: ' + user.birthDate;
+            } else if (identityKey === 'OSVC' && identities.OSVC) {
+                displayName = identities.OSVC.name;
+                displayDetail = 'IČO: ' + identities.OSVC.ico;
+            } else if (identityKey.startsWith('po_')) {
+                var company = identities.companies.find(function(c) { return c.id === identityKey; });
+                if (company) {
+                    displayName = company.name;
+                    displayDetail = 'IČO: ' + company.ico;
                 }
-                if (userDisplayDetail) userDisplayDetail.textContent = detailText;
-                
-                if (dropdownName) dropdownName.textContent = identity.name;
-                if (dropdownDetail) dropdownDetail.textContent = identity.detail;
-                if (dropdownBadge) dropdownBadge.textContent = identity.badge;
-                
-                // Aktualizace "Zastupovaný" v obsahu stránky
-                if (representedPerson) {
-                    representedPerson.textContent = identity.name + (identity.detail ? ', ' + identity.detail : '');
-                }
+            }
+            
+            // Aktualizace "Zastupovaný" v obsahu stránky
+            var representedPerson = document.getElementById('representedPerson');
+            if (representedPerson) {
+                representedPerson.textContent = displayName + (displayDetail ? ', ' + displayDetail : '');
             }
         }
 
         // ===== USER MENU =====
         function toggleUserMenu() {
-            const btn = document.querySelector('.gov-header-user-btn');
-            const dropdown = document.getElementById('userDropdown');
-            if (btn) btn.classList.toggle('active');
-            if (dropdown) dropdown.classList.toggle('show');
+            HeaderHelper.toggleUserMenu();
         }
 
         document.addEventListener('click', function(e) {
-            const userSection = document.querySelector('.gov-header-user');
+            var userSection = document.querySelector('.gov-header-user');
             if (userSection && !userSection.contains(e.target)) {
-                const btn = document.querySelector('.gov-header-user-btn');
-                const dropdown = document.getElementById('userDropdown');
+                var btn = document.querySelector('.gov-header-user-btn');
+                var dropdown = document.getElementById('userDropdown');
                 if (btn) btn.classList.remove('active');
                 if (dropdown) dropdown.classList.remove('show');
             }
