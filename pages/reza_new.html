@@ -1557,8 +1557,59 @@
         // ===== ZÁMĚRY =====
         function toggleZamerySection() {
             var value = document.querySelector('input[name="zamer-omezeni"]:checked').value;
-            var section = document.getElementById('zamery-selection');
-            if (section) section.classList.toggle('hidden', value === 'bez');
+            var section = document.getElementById('zamery-section');
+            var infoBox = document.getElementById('zamer-info-bez');
+            if (section) section.classList.toggle('show', value === 'vybrat');
+            if (infoBox) infoBox.style.display = value === 'bez' ? 'flex' : 'none';
+        }
+
+        function addExistingZamer() {
+            var select = document.getElementById('existujici-zamer');
+            if (!select || !select.value) {
+                alert('Vyberte záměr ze seznamu');
+                return;
+            }
+            var option = select.options[select.selectedIndex];
+            var text = option.text;
+            var parts = text.split(' - ');
+            var zamer = { cislo: parts[0], nazev: parts[1] || '', stav: 'Existující' };
+            
+            // Kontrola duplicity
+            var exists = selectedZamery.some(function(z) { return z.cislo === zamer.cislo; });
+            if (!exists) {
+                selectedZamery.push(zamer);
+                renderZameryTable();
+            } else {
+                alert('Tento záměr je již vybrán');
+            }
+            select.value = '';
+        }
+
+        function createNewZamer() {
+            var nazevInput = document.getElementById('novy-zamer-nazev');
+            var nazev = nazevInput ? nazevInput.value.trim() : '';
+            if (!nazev) {
+                alert('Zadejte název záměru');
+                return;
+            }
+
+            var loadingEl = document.getElementById('novy-zamer-loading');
+            var btn = document.getElementById('btn-zalozit-zamer');
+            
+            if (loadingEl) loadingEl.style.display = 'block';
+            if (btn) btn.disabled = true;
+
+            setTimeout(function() {
+                if (loadingEl) loadingEl.style.display = 'none';
+                if (btn) btn.disabled = false;
+
+                var cisloZameru = 'Z/' + new Date().getFullYear() + '/' + (Math.floor(Math.random() * 900000) + 100000);
+                var zamer = { cislo: cisloZameru, nazev: nazev, stav: 'Nový' };
+                selectedZamery.push(zamer);
+                renderZameryTable();
+
+                if (nazevInput) nazevInput.value = '';
+            }, 1500);
         }
 
         function selectZamer(radio) {
@@ -1576,31 +1627,6 @@
                 selectedZamery.splice(existingIndex, 1);
             }
             renderZameryTable();
-        }
-
-        function zalozitNovyZamer() {
-            var nazev = document.getElementById('novy-zamer-nazev').value;
-            if (!nazev) {
-                alert('Zadejte název záměru');
-                return;
-            }
-
-            var btn = document.getElementById('btn-zalozit-zamer');
-            btn.disabled = true;
-            btn.textContent = 'Zakládám...';
-
-            setTimeout(function() {
-                btn.textContent = 'Založit záměr';
-                btn.disabled = false;
-
-                var cisloZameru = 'Z/' + new Date().getFullYear() + '/' + (Math.floor(Math.random() * 90000) + 10000);
-
-                var zamer = { cislo: cisloZameru, nazev: nazev, stav: 'Nový' };
-                selectedZamery.push(zamer);
-                renderZameryTable();
-
-                document.getElementById('novy-zamer-nazev').value = '';
-            }, 1500);
         }
 
         function renderZameryTable() {
