@@ -606,6 +606,85 @@
             renderDokladyTree();
         }
 
+        // Pomocná funkce pro vytvoření stromové struktury ze souborů
+        function buildFileTree(files) {
+            var tree = { _files: [] };
+            
+            files.forEach(function(file) {
+                var path = file.path || file.name;
+                var parts = path.split('/');
+                var current = tree;
+                
+                for (var i = 0; i < parts.length; i++) {
+                    var part = parts[i];
+                    if (i === parts.length - 1) {
+                        // Je to soubor
+                        if (!current._files) current._files = [];
+                        current._files.push({ name: part, size: file.size });
+                    } else {
+                        // Je to složka
+                        if (!current[part]) current[part] = { _files: [] };
+                        current = current[part];
+                    }
+                }
+            });
+            
+            return tree;
+        }
+
+        // Počítání všech souborů ve stromu (včetně vnořených)
+        function countFilesInTree(tree) {
+            var count = 0;
+            if (tree._files) count += tree._files.length;
+            Object.keys(tree).forEach(function(key) {
+                if (key !== '_files') {
+                    count += countFilesInTree(tree[key]);
+                }
+            });
+            return count;
+        }
+
+        // Rekurzivní renderování stromové struktury
+        function renderFileTreeContent(tree, level) {
+            level = level || 0;
+            var html = '';
+            
+            // Nejprve složky
+            Object.keys(tree).sort().forEach(function(key) {
+                if (key === '_files') return;
+                var subTree = tree[key];
+                var fileCount = countFilesInTree(subTree);
+                var id = 'subtree-' + Math.random().toString(36).substr(2, 9);
+                
+                html += '<div class="gov-doc-folder collapsed" id="' + id + '" style="margin-left: ' + (level * 16) + 'px;">';
+                html += '<div class="gov-doc-folder-header" onclick="toggleFolder(\'' + id + '\')">';
+                html += '<svg class="gov-doc-folder-toggle" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>';
+                html += '<svg class="gov-doc-folder-icon" fill="currentColor" viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>';
+                html += '<span class="gov-doc-folder-name">' + key + '</span>';
+                html += '<span class="gov-doc-folder-count">' + fileCount + '</span>';
+                html += '</div>';
+                html += '<div class="gov-doc-files">';
+                html += renderFileTreeContent(subTree, 0);
+                html += '</div></div>';
+            });
+            
+            // Pak soubory
+            if (tree._files && tree._files.length > 0) {
+                tree._files.forEach(function(file) {
+                    var fileSize = file.size ? formatFileSize(file.size) : '';
+                    html += '<div class="gov-doc-file" style="margin-left: ' + (level * 16) + 'px;">';
+                    html += '<svg class="gov-doc-file-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>';
+                    html += '<span class="gov-doc-file-name">' + file.name + '</span>';
+                    if (fileSize) {
+                        html += '<span class="gov-doc-file-size">' + fileSize + '</span>';
+                    }
+                    html += '</div>';
+                });
+            }
+            
+            return html;
+        }
+
         function renderDokumentaceTree() {
             var container = document.getElementById('sumDokumentace');
             var dok = state.dokumentace;
@@ -622,36 +701,88 @@
             var filesA = dok.files['A'] || [];
             if (filesA.length > 0) {
                 hasAnyFiles = true;
-                html += renderDocFolder('A - Průvodní list', filesA);
+                html += renderDocFolderWithTree('A - Průvodní list', filesA);
             }
             
             // B - Souhrnná technická zpráva
             var filesB = dok.files['B'] || [];
             if (filesB.length > 0) {
                 hasAnyFiles = true;
-                html += renderDocFolder('B - Souhrnná technická zpráva', filesB);
+                html += renderDocFolderWithTree('B - Souhrnná technická zpráva', filesB);
             }
             
-            // C - Situační výkresy
-            var cFiles = [];
-            ['C1', 'C2', 'C3', 'C4', 'C5'].forEach(function(key) {
-                if (dok.files[key]) cFiles = cFiles.concat(dok.files[key]);
-            });
-            if (cFiles.length > 0) {
-                hasAnyFiles = true;
-                html += renderDocFolder('C - Situační výkresy', cFiles);
-            }
-            
-            // D - Dokumentace objektů
-            var dFiles = [];
-            Object.keys(dok.files).forEach(function(key) {
-                if (key.startsWith('D1-') || key.startsWith('D2-') || key.startsWith('D3-')) {
-                    dFiles = dFiles.concat(dok.files[key]);
+            // C - Situační výkresy (s podsložkami)
+            var cSubfolders = [
+                { key: 'C1', label: 'C1 - Širší vztahy' },
+                { key: 'C2', label: 'C2 - Katastrální' },
+                { key: 'C3', label: 'C3 - Koordinační' },
+                { key: 'C4', label: 'C4 - Speciální' },
+                { key: 'C5', label: 'C5 - Dělení pozemků' }
+            ];
+            var cTotalFiles = 0;
+            var cContent = '';
+            cSubfolders.forEach(function(sub) {
+                var files = dok.files[sub.key] || [];
+                if (files.length > 0) {
+                    cTotalFiles += files.length;
+                    cContent += renderDocFolderWithTree(sub.label, files);
                 }
             });
-            if (dFiles.length > 0) {
+            if (cTotalFiles > 0) {
                 hasAnyFiles = true;
-                html += renderDocFolder('D - Dokumentace objektů', dFiles);
+                html += renderContainerFolder('C - Situační výkresy', cTotalFiles, cContent);
+            }
+            
+            // D - Dokumentace objektů (se strukturou staveb a objektů)
+            if (dok.stavby && dok.stavby.length > 0) {
+                var dTotalFiles = 0;
+                var dContent = '';
+                
+                dok.stavby.forEach(function(stavba) {
+                    var stavbaName = stavba.name || (stavba.type === 'hlavni' ? 'Hlavní stavba' : 'Vedlejší stavba');
+                    var stavbaFiles = 0;
+                    var stavbaContent = '';
+                    
+                    if (stavba.objekty && stavba.objekty.length > 0) {
+                        stavba.objekty.forEach(function(objekt) {
+                            var objektName = objekt.name || 'Objekt ' + objekt.id;
+                            var objektKey = stavba.id + '-' + objekt.id;
+                            var objektFiles = 0;
+                            var objektContent = '';
+                            
+                            // D1, D2, D3 pro každý objekt
+                            var dParts = [
+                                { key: 'D1-' + objektKey, label: 'D1 - Stavební' },
+                                { key: 'D2-' + objektKey, label: 'D2 - Konstrukční' },
+                                { key: 'D3-' + objektKey, label: 'D3 - Požární' }
+                            ];
+                            
+                            dParts.forEach(function(part) {
+                                var files = dok.files[part.key] || [];
+                                if (files.length > 0) {
+                                    objektFiles += files.length;
+                                    objektContent += renderDocFolderWithTree(part.label, files);
+                                }
+                            });
+                            
+                            if (objektFiles > 0) {
+                                stavbaFiles += objektFiles;
+                                stavbaContent += renderContainerFolder('📦 ' + objektName, objektFiles, objektContent);
+                            }
+                        });
+                    }
+                    
+                    if (stavbaFiles > 0) {
+                        dTotalFiles += stavbaFiles;
+                        var icon = stavba.type === 'hlavni' ? '🏠' : '🏗️';
+                        dContent += renderContainerFolder(icon + ' ' + stavbaName, stavbaFiles, stavbaContent);
+                    }
+                });
+                
+                if (dTotalFiles > 0) {
+                    hasAnyFiles = true;
+                    html += renderContainerFolder('D - Dokumentace objektů', dTotalFiles, dContent);
+                }
             }
             
             if (!hasAnyFiles) {
@@ -659,6 +790,43 @@
             }
             
             container.innerHTML = html;
+        }
+
+        // Renderování složky s obsahem (pro kontejnery jako C, D, stavby, objekty)
+        function renderContainerFolder(label, count, content) {
+            var id = 'folder-' + Math.random().toString(36).substr(2, 9);
+            
+            var html = '<div class="gov-doc-folder collapsed" id="' + id + '">';
+            html += '<div class="gov-doc-folder-header" onclick="toggleFolder(\'' + id + '\')">';
+            html += '<svg class="gov-doc-folder-toggle" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>';
+            html += '<svg class="gov-doc-folder-icon" fill="currentColor" viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>';
+            html += '<span class="gov-doc-folder-name">' + label + '</span>';
+            html += '<span class="gov-doc-folder-count">' + count + '</span>';
+            html += '</div>';
+            html += '<div class="gov-doc-files">' + content + '</div>';
+            html += '</div>';
+            
+            return html;
+        }
+
+        // Renderování složky se soubory (zachovává stromovou strukturu z path)
+        function renderDocFolderWithTree(label, files) {
+            var id = 'folder-' + Math.random().toString(36).substr(2, 9);
+            var tree = buildFileTree(files);
+            var count = files.length;
+            
+            var html = '<div class="gov-doc-folder collapsed" id="' + id + '">';
+            html += '<div class="gov-doc-folder-header" onclick="toggleFolder(\'' + id + '\')">';
+            html += '<svg class="gov-doc-folder-toggle" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>';
+            html += '<svg class="gov-doc-folder-icon" fill="currentColor" viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>';
+            html += '<span class="gov-doc-folder-name">' + label + '</span>';
+            html += '<span class="gov-doc-folder-count">' + count + '</span>';
+            html += '</div>';
+            html += '<div class="gov-doc-files">';
+            html += renderFileTreeContent(tree, 0);
+            html += '</div></div>';
+            
+            return html;
         }
 
         function renderDokladyTree() {

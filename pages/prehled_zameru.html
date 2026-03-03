@@ -748,6 +748,28 @@
             height: 16px;
             color: #888;
         }
+        .modal-doc-file-size {
+            font-size: 11px;
+            color: #aaa;
+            margin-left: auto;
+        }
+        .modal-doc-empty {
+            padding: 16px;
+            text-align: center;
+            color: #888;
+            font-style: italic;
+            font-size: 13px;
+        }
+        .modal-doc-folder-toggle {
+            width: 14px;
+            height: 14px;
+            color: #888;
+            flex-shrink: 0;
+            transition: transform 0.15s;
+        }
+        .modal-doc-folder.open .modal-doc-folder-toggle {
+            transform: rotate(90deg);
+        }
         .modal-footer {
             padding: 16px 24px;
             border-top: 1px solid #e0e0e0;
@@ -1452,57 +1474,57 @@
         });
 
         // Inicializace
+
         document.addEventListener('DOMContentLoaded', loadIdentity);
 
         // ===== MODÁLNÍ OKNO DETAIL ZÁMĚRU =====
+        var dokladySectionLabels = {
+            'prehled': 'Přehled vyjádření správců TI',
+            'zavazna': 'Závazná stanoviska DO',
+            'vlastnici': 'Vyjádření vlastníků TI',
+            'souhlasy': 'Souhlasy a stanoviska',
+            'eia': 'EIA / SEA',
+            'ostatni': 'Ostatní doklady'
+        };
+
         function showZamerDetail(index) {
             var zamer = window.currentZamery[index];
             if (!zamer) return;
-
-            // Naplnit modal daty
             document.getElementById('modalZamerId').textContent = zamer.id;
             document.getElementById('modalZamerNazev').textContent = zamer.nazev;
             document.getElementById('modalZamerStav').textContent = zamer.stav;
             document.getElementById('modalZamerStav').className = 'modal-tag ' + (zamer.stav === 'Aktivní' ? 'modal-tag-success' : 'modal-tag-warning');
             document.getElementById('modalZamerDatum').textContent = zamer.datum;
             document.getElementById('modalZamerDokumentace').textContent = zamer.dokumentace || '-';
-            
             document.getElementById('modalStavebnikName').textContent = zamer.stavebnik;
             document.getElementById('modalStavebnikRole').textContent = getRoleLabel(zamer.role);
-            
-            // Úřad (pokud existuje)
-            if (zamer.urad) {
-                document.getElementById('modalUradSection').style.display = 'block';
-                document.getElementById('modalUrad').textContent = zamer.urad;
-            } else {
-                document.getElementById('modalUradSection').style.display = 'none';
-            }
-
-            // Zobrazit modal
+            if (zamer.urad) { document.getElementById('modalUradSection').style.display = 'block'; document.getElementById('modalUrad').textContent = zamer.urad; }
+            else { document.getElementById('modalUradSection').style.display = 'none'; }
+            renderModalDokumentace();
+            renderModalDoklady();
             document.getElementById('zamerDetailModal').classList.add('show');
         }
 
-        function closeZamerDetail() {
-            document.getElementById('zamerDetailModal').classList.remove('show');
-        }
+        function buildFileTree(files) { var tree = { _files: [] }; files.forEach(function(file) { var path = file.path || file.name; var parts = path.split('/'); var current = tree; for (var i = 0; i < parts.length; i++) { var part = parts[i]; if (i === parts.length - 1) { if (!current._files) current._files = []; current._files.push({ name: part, size: file.size }); } else { if (!current[part]) current[part] = { _files: [] }; current = current[part]; } } }); return tree; }
 
-        function toggleModalFolder(el) {
-            el.parentElement.classList.toggle('open');
-        }
+        function countFilesInTree(tree) { var count = 0; if (tree._files) count += tree._files.length; Object.keys(tree).forEach(function(key) { if (key !== '_files') count += countFilesInTree(tree[key]); }); return count; }
 
-        // Close modal on overlay click
-        document.getElementById('zamerDetailModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeZamerDetail();
-            }
-        });
+        function renderModalFileTreeContent(tree) { var html = ''; Object.keys(tree).sort().forEach(function(key) { if (key === '_files') return; var subTree = tree[key]; var fileCount = countFilesInTree(subTree); html += '<div class="modal-doc-folder"><div class="modal-doc-folder-header" onclick="toggleModalFolder(this)"><svg class="modal-doc-folder-toggle" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg><svg class="modal-doc-folder-icon" fill="currentColor" viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg><span class="modal-doc-folder-name">' + key + '</span><span class="modal-doc-folder-count">' + fileCount + '</span></div><div class="modal-doc-files">' + renderModalFileTreeContent(subTree) + '</div></div>'; }); if (tree._files && tree._files.length > 0) { tree._files.forEach(function(file) { html += '<div class="modal-doc-file"><svg class="modal-doc-file-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg><span>' + file.name + '</span>' + (file.size ? '<span class="modal-doc-file-size">' + formatFileSizeModal(file.size) + '</span>' : '') + '</div>'; }); } return html; }
 
-        // Close modal on Escape
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                closeZamerDetail();
-            }
-        });
+        function formatFileSizeModal(bytes) { if (!bytes) return ''; if (bytes < 1024) return bytes + ' B'; if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB'; return (bytes / (1024 * 1024)).toFixed(1) + ' MB'; }
+
+        function renderModalFolderWithTree(label, files) { var tree = buildFileTree(files); var count = files.length; return '<div class="modal-doc-folder"><div class="modal-doc-folder-header" onclick="toggleModalFolder(this)"><svg class="modal-doc-folder-toggle" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg><svg class="modal-doc-folder-icon" fill="currentColor" viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg><span class="modal-doc-folder-name">' + label + '</span><span class="modal-doc-folder-count">' + count + '</span></div><div class="modal-doc-files">' + renderModalFileTreeContent(tree) + '</div></div>'; }
+
+        function renderModalContainerFolder(label, count, content) { return '<div class="modal-doc-folder"><div class="modal-doc-folder-header" onclick="toggleModalFolder(this)"><svg class="modal-doc-folder-toggle" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg><svg class="modal-doc-folder-icon" fill="currentColor" viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg><span class="modal-doc-folder-name">' + label + '</span><span class="modal-doc-folder-count">' + count + '</span></div><div class="modal-doc-files">' + content + '</div></div>'; }
+
+        function renderModalDokumentace() { var container = document.getElementById('modalDokumentace'); var storedDok = localStorage.getItem('formDokumentace'); if (!storedDok) { container.innerHTML = '<div class="modal-doc-empty">Žádná dokumentace</div>'; return; } var dok = JSON.parse(storedDok); if (!dok.files) { container.innerHTML = '<div class="modal-doc-empty">Žádná dokumentace</div>'; return; } var html = ''; var hasAnyFiles = false; var filesA = dok.files['A'] || []; if (filesA.length > 0) { hasAnyFiles = true; html += renderModalFolderWithTree('A - Průvodní list', filesA); } var filesB = dok.files['B'] || []; if (filesB.length > 0) { hasAnyFiles = true; html += renderModalFolderWithTree('B - Souhrnná technická zpráva', filesB); } var cSubfolders = [{ key: 'C1', label: 'C1 - Širší vztahy' }, { key: 'C2', label: 'C2 - Katastrální' }, { key: 'C3', label: 'C3 - Koordinační' }, { key: 'C4', label: 'C4 - Speciální' }, { key: 'C5', label: 'C5 - Dělení pozemků' }]; var cTotalFiles = 0; var cContent = ''; cSubfolders.forEach(function(sub) { var files = dok.files[sub.key] || []; if (files.length > 0) { cTotalFiles += files.length; cContent += renderModalFolderWithTree(sub.label, files); } }); if (cTotalFiles > 0) { hasAnyFiles = true; html += renderModalContainerFolder('C - Situační výkresy', cTotalFiles, cContent); } if (dok.stavby && dok.stavby.length > 0) { var dTotalFiles = 0; var dContent = ''; dok.stavby.forEach(function(stavba) { var stavbaName = stavba.name || (stavba.type === 'hlavni' ? 'Hlavní stavba' : 'Vedlejší stavba'); var stavbaFiles = 0; var stavbaContent = ''; if (stavba.objekty && stavba.objekty.length > 0) { stavba.objekty.forEach(function(objekt) { var objektName = objekt.name || 'Objekt ' + objekt.id; var objektKey = stavba.id + '-' + objekt.id; var objektFiles = 0; var objektContent = ''; var dParts = [{ key: 'D1-' + objektKey, label: 'D1 - Stavební' }, { key: 'D2-' + objektKey, label: 'D2 - Konstrukční' }, { key: 'D3-' + objektKey, label: 'D3 - Požární' }]; dParts.forEach(function(part) { var files = dok.files[part.key] || []; if (files.length > 0) { objektFiles += files.length; objektContent += renderModalFolderWithTree(part.label, files); } }); if (objektFiles > 0) { stavbaFiles += objektFiles; stavbaContent += renderModalContainerFolder('📦 ' + objektName, objektFiles, objektContent); } }); } if (stavbaFiles > 0) { dTotalFiles += stavbaFiles; var icon = stavba.type === 'hlavni' ? '🏠' : '🏗️'; dContent += renderModalContainerFolder(icon + ' ' + stavbaName, stavbaFiles, stavbaContent); } }); if (dTotalFiles > 0) { hasAnyFiles = true; html += renderModalContainerFolder('D - Dokumentace objektů', dTotalFiles, dContent); } } container.innerHTML = hasAnyFiles ? html : '<div class="modal-doc-empty">Žádná dokumentace</div>'; }
+
+        function renderModalDoklady() { var container = document.getElementById('modalDoklady'); var storedDoklady = localStorage.getItem('formDoklady'); if (!storedDoklady) { container.innerHTML = '<div class="modal-doc-empty">Žádné doklady</div>'; return; } var doklady = JSON.parse(storedDoklady); var html = ''; var hasAnyFiles = false; Object.keys(doklady).forEach(function(section) { var files = doklady[section]; if (!files || !Array.isArray(files)) return; var activeFiles = files.filter(function(f) { return f.status === 'active'; }); if (activeFiles.length > 0) { hasAnyFiles = true; var label = dokladySectionLabels[section] || section; html += renderModalFolderWithTree(label, activeFiles); } }); container.innerHTML = hasAnyFiles ? html : '<div class="modal-doc-empty">Žádné doklady</div>'; }
+
+        function closeZamerDetail() { document.getElementById('zamerDetailModal').classList.remove('show'); }
+        function toggleModalFolder(el) { el.parentElement.classList.toggle('open'); }
+        document.getElementById('zamerDetailModal').addEventListener('click', function(e) { if (e.target === this) { closeZamerDetail(); } });
+        document.addEventListener('keydown', function(e) { if (e.key === 'Escape') { closeZamerDetail(); } });
     </script>
 
     <!-- ===== MODÁLNÍ OKNO DETAIL ZÁMĚRU ===== -->
@@ -1555,114 +1577,20 @@
                     </div>
                 </div>
 
+
                 <!-- Dokumentace -->
                 <div class="modal-section">
                     <div class="modal-section-title">Projektová dokumentace</div>
-                    <div class="modal-doc-tree">
-                        <div class="modal-doc-folder">
-                            <div class="modal-doc-folder-header" onclick="toggleModalFolder(this)">
-                                <svg class="modal-doc-folder-icon" fill="currentColor" viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>
-                                <span class="modal-doc-folder-name">A. Průvodní zpráva</span>
-                                <span class="modal-doc-folder-count">2 soubory</span>
-                            </div>
-                            <div class="modal-doc-files">
-                                <div class="modal-doc-file">
-                                    <svg class="modal-doc-file-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                                    A.1_Identifikacni_udaje.pdf
-                                </div>
-                                <div class="modal-doc-file">
-                                    <svg class="modal-doc-file-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                                    A.2_Cleneni_stavby.pdf
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-doc-folder">
-                            <div class="modal-doc-folder-header" onclick="toggleModalFolder(this)">
-                                <svg class="modal-doc-folder-icon" fill="currentColor" viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>
-                                <span class="modal-doc-folder-name">B. Souhrnná technická zpráva</span>
-                                <span class="modal-doc-folder-count">1 soubor</span>
-                            </div>
-                            <div class="modal-doc-files">
-                                <div class="modal-doc-file">
-                                    <svg class="modal-doc-file-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                                    B_Souhrnna_technicka_zprava.pdf
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-doc-folder">
-                            <div class="modal-doc-folder-header" onclick="toggleModalFolder(this)">
-                                <svg class="modal-doc-folder-icon" fill="currentColor" viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>
-                                <span class="modal-doc-folder-name">C. Situační výkresy</span>
-                                <span class="modal-doc-folder-count">3 soubory</span>
-                            </div>
-                            <div class="modal-doc-files">
-                                <div class="modal-doc-file">
-                                    <svg class="modal-doc-file-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                                    C.1_Situacni_vykresy.pdf
-                                </div>
-                                <div class="modal-doc-file">
-                                    <svg class="modal-doc-file-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                                    C.2_Koordinacni_situace.dwg
-                                </div>
-                                <div class="modal-doc-file">
-                                    <svg class="modal-doc-file-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                                    C.3_Katastralni_situace.pdf
-                                </div>
-                            </div>
-                        </div>
+                    <div class="modal-doc-tree" id="modalDokumentace">
+                        <div class="modal-doc-empty">Žádná dokumentace</div>
                     </div>
                 </div>
 
                 <!-- Doklady -->
                 <div class="modal-section">
                     <div class="modal-section-title">Dokladová část</div>
-                    <div class="modal-doc-tree">
-                        <div class="modal-doc-folder">
-                            <div class="modal-doc-folder-header" onclick="toggleModalFolder(this)">
-                                <svg class="modal-doc-folder-icon" fill="currentColor" viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>
-                                <span class="modal-doc-folder-name">Stanoviska dotčených orgánů</span>
-                                <span class="modal-doc-folder-count">4 soubory</span>
-                            </div>
-                            <div class="modal-doc-files">
-                                <div class="modal-doc-file">
-                                    <svg class="modal-doc-file-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                                    Stanovisko_HZS.pdf
-                                </div>
-                                <div class="modal-doc-file">
-                                    <svg class="modal-doc-file-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                                    Stanovisko_KHS.pdf
-                                </div>
-                                <div class="modal-doc-file">
-                                    <svg class="modal-doc-file-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                                    Stanovisko_OZP.pdf
-                                </div>
-                                <div class="modal-doc-file">
-                                    <svg class="modal-doc-file-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                                    Stanovisko_doprava.pdf
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-doc-folder">
-                            <div class="modal-doc-folder-header" onclick="toggleModalFolder(this)">
-                                <svg class="modal-doc-folder-icon" fill="currentColor" viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>
-                                <span class="modal-doc-folder-name">Vyjádření správců sítí</span>
-                                <span class="modal-doc-folder-count">3 soubory</span>
-                            </div>
-                            <div class="modal-doc-files">
-                                <div class="modal-doc-file">
-                                    <svg class="modal-doc-file-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                                    Vyjadreni_PRE.pdf
-                                </div>
-                                <div class="modal-doc-file">
-                                    <svg class="modal-doc-file-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                                    Vyjadreni_PVK.pdf
-                                </div>
-                                <div class="modal-doc-file">
-                                    <svg class="modal-doc-file-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                                    Vyjadreni_PP.pdf
-                                </div>
-                            </div>
-                        </div>
+                    <div class="modal-doc-tree" id="modalDoklady">
+                        <div class="modal-doc-empty">Žádné doklady</div>
                     </div>
                 </div>
             </div>
