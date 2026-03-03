@@ -1138,8 +1138,7 @@
                 builderRow.style.display = 'flex';
                 chainSection.style.display = 'none';
                 
-                var identity = identities[currentIdentity];
-                document.getElementById('summaryBuilder').textContent = identity ? identity.headerName : '—';
+                document.getElementById('summaryBuilder').textContent = currentIdentityData ? currentIdentityData.headerName : '—';
                 document.getElementById('summaryBuilder').className = 'gov-summary-value';
 
                 warning.classList.remove('visible');
