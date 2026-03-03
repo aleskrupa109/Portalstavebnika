@@ -291,7 +291,7 @@
                         <div class="gov-podklad-title">Vyjádření nebo závazné stanovisko dotčeného orgánu bude podkladem pro:</div>
                         <div class="gov-podklad-grid">
                             <label class="gov-podklad-item">
-                                <input type="checkbox" checked>
+                                <input type="checkbox">
                                 <span>povolení stavby nebo zařízení (popř. změny dokončené stavby)</span>
                             </label>
                             <label class="gov-podklad-item">
@@ -372,8 +372,8 @@
                                     </div>
                                 </div>
                             </label>
-                            <label class="gov-jes-option selected" onclick="selectJES(this, 'jes-bez-eia')">
-                                <input type="radio" name="jes" value="jes-bez-eia" checked>
+                            <label class="gov-jes-option" onclick="selectJES(this, 'jes-bez-eia')">
+                                <input type="radio" name="jes" value="jes-bez-eia">
                                 <div class="gov-jes-option-content">
                                     <div class="gov-jes-option-title">Jednotné environmentální stanovisko (JES) bez EIA</div>
                                     <div class="gov-jes-option-desc">Sloučené stanovisko k ochraně životního prostředí</div>
@@ -381,7 +381,7 @@
                                         <label>Adresát JES</label>
                                         <select id="adresat-jes-bez-eia" onchange="updateSelectedPreview()">
                                             <option value="">Vyberte adresáta...</option>
-                                            <option value="Krajský úřad Středočeského kraje" selected>Krajský úřad Středočeského kraje</option>
+                                            <option value="Krajský úřad Středočeského kraje">Krajský úřad Středočeského kraje</option>
                                             <option value="MŽP">Ministerstvo životního prostředí</option>
                                         </select>
                                     </div>
@@ -438,7 +438,7 @@
                                         <label>Adresát (HZS)</label>
                                         <select onchange="updateAdresat('pozarni', this.value)">
                                             <option value="">Vyberte...</option>
-                                            <option value="HZS Středočeského kraje" selected>HZS Středočeského kraje</option>
+                                            <option value="HZS Středočeského kraje">HZS Středočeského kraje</option>
                                             <option value="HZS hl. m. Prahy">HZS hl. m. Prahy</option>
                                         </select>
                                     </div>
@@ -452,7 +452,7 @@
                                         <label>Adresát (KHS)</label>
                                         <select onchange="updateAdresat('zdravi', this.value)">
                                             <option value="">Vyberte...</option>
-                                            <option value="KHS Středočeského kraje" selected>KHS Středočeského kraje</option>
+                                            <option value="KHS Středočeského kraje">KHS Středočeského kraje</option>
                                             <option value="Hygienická stanice hl. m. Prahy">Hygienická stanice hl. m. Prahy</option>
                                         </select>
                                     </div>
@@ -784,7 +784,7 @@
     <script>
         // State
         var state = {
-            jes: 'jes-bez-eia',
+            jes: null,
             stanoviska: {}
         };
 
@@ -811,10 +811,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             loadIdentity();
             startAutosaveTimer();
-            applyJESLogic(); // Apply initial JES logic
-            // Pre-select some for demo (only non-JES items since JES is selected)
-            toggleStanovisko('obrana');
-            toggleStanovisko('energetika');
+            updateSelectedPreview(); // Update empty preview
         });
 
         function loadIdentity() {
