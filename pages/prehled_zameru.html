@@ -712,6 +712,8 @@
         </div>
     </div>
 
+    <script src="../js/app-state.js"></script>
+    <script src="../js/header-helper.js"></script>
     <script>
         // ===== MOCK DATA - ZÁMĚRY PRO RŮZNÉ IDENTITY =====
         const zameryData = {
@@ -747,7 +749,7 @@
             ],
 
             // OSVČ - Ing. Aleš Krupa (vlastní záměry + zastupování klientů)
-            "OSVČ": [
+            "OSVC": [
                 {
                     id: "Z/2025/35126",
                     nazev: "Revize formuláře 1",
@@ -942,52 +944,83 @@
         // Mapování typu identity na klíč v datech
         const identityToDataKey = {
             "FO": "FO",
-            "OSVČ": "OSVČ",
+            "OSVC": "OSVC",
             "PO": null // Bude určeno podle názvu
         };
 
         // ===== FUNKCE =====
         
         function loadIdentity() {
-            const stored = localStorage.getItem('selectedIdentity');
-            
-            if (stored) {
-                const identity = JSON.parse(stored);
-                
-                // Aktualizace hlavičky
-                document.getElementById('userDisplayName').textContent = identity.name.toUpperCase();
-                let detailText = identity.type;
-                if (identity.detail) {
-                    detailText += ' · ' + identity.detail;
-                }
-                document.getElementById('userDisplayDetail').textContent = detailText;
-                
-                // Aktualizace dropdown menu
-                document.getElementById('dropdownName').textContent = identity.name;
-                document.getElementById('dropdownDetail').textContent = identity.detail;
-                document.getElementById('dropdownBadge').textContent = identity.badge;
-                
-                // Načtení záměrů pro danou identitu
-                loadZamery(identity);
-            } else {
-                // Výchozí - FO
-                loadZamery({ type: "FO", name: "Aleš Krupa" });
+            // Kontrola přihlášení
+            if (!PortalStavebnika.isLoggedIn()) {
+                window.location.href = '../index.html';
+                return;
             }
+            
+            // Načtení hlavičky
+            HeaderHelper.loadHeaderData();
+            
+            // Získání aktuální identity
+            var identityKey = PortalStavebnika.getCurrentIdentityKey();
+            var identity = PortalStavebnika.getCurrentIdentity();
+            var identities = PortalStavebnika.getIdentities();
+            var user = PortalStavebnika.getUser();
+            
+            // Sestavení objektu pro loadZamery
+            var identityObj = {
+                type: identityKey,
+                name: identity ? (identity.type === 'FO' ? user.name : identity.name) : user.name
+            };
+            
+            // Pro firmy přiřadit správný klíč
+            if (identityKey.startsWith('po_')) {
+                identityObj.type = 'PO';
+                var company = identities.companies.find(function(c) { return c.id === identityKey; });
+                if (company) {
+                    identityObj.name = company.name;
+                    identityObj.companyId = identityKey;
+                }
+            }
+            
+            // Načtení záměrů pro danou identitu
+            loadZamery(identityObj);
         }
 
         function loadZamery(identity) {
-            let dataKey = identity.type;
+            var dataKey = identity.type;
             
             // Pro PO určit konkrétní společnost
             if (identity.type === "PO") {
-                if (identity.name.includes("ALMANI")) {
+                if (identity.name.toLowerCase().includes("testovací projekční")) {
+                    dataKey = "PO_PRVNI";
+                } else if (identity.name.toLowerCase().includes("partners")) {
+                    dataKey = "PO_ALMANI";
+                } else if (identity.name.includes("ALMANI")) {
                     dataKey = "PO_ALMANI";
                 } else if (identity.name.includes("První projektová")) {
                     dataKey = "PO_PRVNI";
                 }
             }
             
-            const zamery = zameryData[dataKey] || [];
+            // Získání záměrů z mock dat nebo centrálního stavu
+            var zamery = zameryData[dataKey] || [];
+            
+            // Přidat záměry z centrálního stavu
+            var storedZamery = PortalStavebnika.getZamery();
+            if (storedZamery && storedZamery.length > 0) {
+                // Konverze záměrů z centrálního stavu do formátu mock dat
+                storedZamery.forEach(function(z) {
+                    zamery.push({
+                        id: z.cislo || z.id,
+                        nazev: z.nazev,
+                        stavebnik: z.stavebnik || identity.name,
+                        stav: z.status === 'rozpracovano' ? 'Aktivní' : 'Ukončený',
+                        dokumentace: z.dokumentace || '-',
+                        datum: PortalStavebnika.formatDate(z.vytvoreno),
+                        role: 'stavebnik'
+                    });
+                });
+            }
             
             // Naplnění selectu stavebníků
             populateStavebnikFilter(zamery);
@@ -1064,19 +1097,46 @@
             const roleFilter = document.getElementById('roleSelect').value;
             const stavebnikFilter = document.getElementById('stavebnikSelect').value;
             
-            const stored = localStorage.getItem('selectedIdentity');
-            let identity = stored ? JSON.parse(stored) : { type: "FO" };
+            // Získání aktuální identity z centrálního stavu
+            var identityKey = PortalStavebnika.getCurrentIdentityKey();
+            var identity = PortalStavebnika.getCurrentIdentity();
+            var identities = PortalStavebnika.getIdentities();
+            var user = PortalStavebnika.getUser();
             
-            let dataKey = identity.type;
-            if (identity.type === "PO") {
-                if (identity.name && identity.name.includes("ALMANI")) {
-                    dataKey = "PO_ALMANI";
-                } else if (identity.name && identity.name.includes("První projektová")) {
-                    dataKey = "PO_PRVNI";
+            var dataKey = identityKey;
+            var identityName = identity ? (identity.type === 'FO' ? user.name : identity.name) : (user ? user.name : 'Unknown');
+            
+            // Pro firmy přiřadit správný klíč
+            if (identityKey.startsWith('po_')) {
+                dataKey = 'PO';
+                var company = identities.companies.find(function(c) { return c.id === identityKey; });
+                if (company) {
+                    identityName = company.name;
+                    if (identityName.toLowerCase().includes("testovací projekční")) {
+                        dataKey = "PO_PRVNI";
+                    } else if (identityName.toLowerCase().includes("partners")) {
+                        dataKey = "PO_ALMANI";
+                    }
                 }
             }
             
             let zamery = [...(zameryData[dataKey] || [])];
+            
+            // Přidat záměry z centrálního stavu
+            var storedZamery = PortalStavebnika.getZamery();
+            if (storedZamery && storedZamery.length > 0) {
+                storedZamery.forEach(function(z) {
+                    zamery.push({
+                        id: z.cislo || z.id,
+                        nazev: z.nazev,
+                        stavebnik: z.stavebnik || identityName,
+                        stav: z.status === 'rozpracovano' ? 'Aktivní' : 'Ukončený',
+                        dokumentace: z.dokumentace || '-',
+                        datum: PortalStavebnika.formatDate(z.vytvoreno),
+                        role: 'stavebnik'
+                    });
+                });
+            }
             
             // Filtrování podle vyhledávání
             if (searchTerm) {
