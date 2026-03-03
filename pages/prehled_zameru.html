@@ -1523,7 +1523,10 @@
 
         function closeZamerDetail() { document.getElementById('zamerDetailModal').classList.remove('show'); }
         function toggleModalFolder(el) { el.parentElement.classList.toggle('open'); }
-        document.getElementById('zamerDetailModal').addEventListener('click', function(e) { if (e.target === this) { closeZamerDetail(); } });
+        document.addEventListener('DOMContentLoaded', function() {
+            var modal = document.getElementById('zamerDetailModal');
+            if (modal) { modal.addEventListener('click', function(e) { if (e.target === this) { closeZamerDetail(); } }); }
+        });
         document.addEventListener('keydown', function(e) { if (e.key === 'Escape') { closeZamerDetail(); } });
     </script>
 
