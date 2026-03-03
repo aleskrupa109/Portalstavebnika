@@ -178,6 +178,9 @@
         .gov-radio input:checked + .gov-radio-circle::after { content: ''; width: 10px; height: 10px; background: var(--gov-primary); border-radius: 50%; }
         .gov-radio-content { flex: 1; }
         .gov-radio-label { font-size: 14px; color: var(--gov-neutral-900); }
+        .gov-radio.disabled { cursor: not-allowed; opacity: 0.5; pointer-events: none; }
+        .gov-radio.disabled .gov-radio-circle { border-color: var(--gov-neutral-200); }
+        .gov-radio.disabled .gov-radio-label { color: var(--gov-neutral-400); }
 
         /* ===== FORM INPUTS ===== */
         .gov-form-group { margin-bottom: 20px; }
@@ -417,9 +420,9 @@
                     </div>
 
                     <div class="gov-radio-group">
-                        <label class="gov-radio"><input type="radio" name="docSource" value="existujici" onchange="setDocSource('existujici')"><span class="gov-radio-circle"></span><div class="gov-radio-content"><div class="gov-radio-label">použít nejnovější podanou verzi dokumentace</div></div></label>
+                        <label class="gov-radio disabled"><input type="radio" name="docSource" value="existujici" disabled><span class="gov-radio-circle"></span><div class="gov-radio-content"><div class="gov-radio-label">použít nejnovější podanou verzi dokumentace</div></div></label>
                         <label class="gov-radio"><input type="radio" name="docSource" value="nahrat" checked onchange="setDocSource('nahrat')"><span class="gov-radio-circle"></span><div class="gov-radio-content"><div class="gov-radio-label">dokumentaci nahraji zde</div></div></label>
-                        <label class="gov-radio"><input type="radio" name="docSource" value="listinna" onchange="setDocSource('listinna')"><span class="gov-radio-circle"></span><div class="gov-radio-content"><div class="gov-radio-label">dokumentaci doručím na úřad v listinné podobě</div></div></label>
+                        <label class="gov-radio disabled"><input type="radio" name="docSource" value="listinna" disabled><span class="gov-radio-circle"></span><div class="gov-radio-content"><div class="gov-radio-label">dokumentaci doručím na úřad v listinné podobě</div></div></label>
                     </div>
 
                     <div class="gov-alert gov-alert-info" style="margin-bottom: 16px;">
