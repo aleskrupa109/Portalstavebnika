@@ -1304,11 +1304,13 @@
         </div>
     </div>
 
+    <script src="../js/app-state.js"></script>
+    <script src="../js/header-helper.js"></script>
     <script>
         // ===== GLOBÁLNÍ PROMĚNNÉ =====
-        let selectedZamery = [];
-        let currentIdentity = null;
-        let formData = {
+        var selectedZamery = [];
+        var currentIdentity = null;
+        var formData = {
             rozsah: '',
             zastupceTyp: '',
             zastupce: {},
@@ -1319,113 +1321,132 @@
             platnostDo: ''
         };
 
-        // ===== DATA ZASTUPOVANÝCH DLE IDENTITY =====
-        const zastupovanyData = {
-            "FO": {
-                jmeno: "Aleš Krupa",
-                identifikator: "Nar.: 19.04.1968",
-                identifikatorTyp: "narozeni",
-                adresa: "Okrsek 591, 289 22 Lysá nad Labem"
-            },
-            "OSVČ": {
-                jmeno: "Ing. Aleš Krupa",
-                identifikator: "IČO: 15104418",
-                identifikatorTyp: "ico",
-                adresa: "Okrsek 591, 289 22 Lysá nad Labem"
-            },
-            "PO_ALMANI": {
-                jmeno: "ALMANI s.r.o.",
-                identifikator: "IČO: 28765432",
-                identifikatorTyp: "ico",
-                adresa: "Počernická 264, 250 73 Radonice"
-            },
-            "PO_PRVNI": {
-                jmeno: "První projektová a.s.",
-                identifikator: "IČO: 45678901",
-                identifikatorTyp: "ico",
-                adresa: "Václavské náměstí 1, 110 00 Praha 1"
-            }
-        };
-
         // ===== NAČTENÍ IDENTITY =====
         function loadIdentity() {
-            const stored = localStorage.getItem('selectedIdentity');
-
-            if (stored) {
-                currentIdentity = JSON.parse(stored);
-
-                // Aktualizace hlavičky
-                document.getElementById('userDisplayName').textContent = currentIdentity.name.toUpperCase();
-                let detailText = currentIdentity.type;
-                if (currentIdentity.detail) {
-                    detailText += ' · ' + currentIdentity.detail;
-                }
-                document.getElementById('userDisplayDetail').textContent = detailText;
-
-                document.getElementById('dropdownName').textContent = currentIdentity.name;
-                document.getElementById('dropdownDetail').textContent = currentIdentity.detail;
-                document.getElementById('dropdownBadge').textContent = currentIdentity.badge;
-
-                // Načtení údajů zastupovaného
-                loadZastupovanyData();
+            // Kontrola přihlášení
+            if (!PortalStavebnika.isLoggedIn()) {
+                window.location.href = '../index.html';
+                return;
             }
+
+            // Načtení hlavičky
+            HeaderHelper.loadHeaderData();
+            
+            // Získání aktuální identity
+            var user = PortalStavebnika.getUser();
+            var identity = PortalStavebnika.getCurrentIdentity();
+            var identityKey = PortalStavebnika.getCurrentIdentityKey();
+            var identities = PortalStavebnika.getIdentities();
+            
+            // Sestavení currentIdentity pro kompatibilitu
+            currentIdentity = {
+                type: identityKey,
+                name: identity ? (identity.type === 'FO' ? user.name : identity.name) : user.name,
+                detail: identity ? identity.detail : '',
+                badge: identity ? (identity.type === 'FO' ? 'Fyzická osoba' : (identity.type === 'OSVC' ? 'OSVČ' : 'Právnická osoba')) : 'Fyzická osoba'
+            };
+            
+            // Pro firmy
+            if (identityKey.startsWith('po_')) {
+                var company = identities.companies.find(function(c) { return c.id === identityKey; });
+                if (company) {
+                    currentIdentity.name = company.name;
+                    currentIdentity.detail = 'IČO: ' + company.ico;
+                    currentIdentity.ico = company.ico;
+                    currentIdentity.address = company.address;
+                }
+            }
+            
+            // Načtení údajů zastupovaného
+            loadZastupovanyData();
         }
 
         function loadZastupovanyData() {
-            let dataKey = currentIdentity.type;
-
-            // Pro PO určit konkrétní společnost
-            if (currentIdentity.type === "PO") {
-                if (currentIdentity.name.includes("ALMANI")) {
-                    dataKey = "PO_ALMANI";
-                } else if (currentIdentity.name.includes("První projektová")) {
-                    dataKey = "PO_PRVNI";
+            var user = PortalStavebnika.getUser();
+            var identity = PortalStavebnika.getCurrentIdentity();
+            var identityKey = PortalStavebnika.getCurrentIdentityKey();
+            var identities = PortalStavebnika.getIdentities();
+            
+            var data = {
+                jmeno: user.name,
+                identifikator: 'Nar.: ' + user.birthDate,
+                identifikatorTyp: 'narozeni',
+                adresa: 'Adresa z registru'
+            };
+            
+            if (identityKey === 'OSVC' && identities.OSVC) {
+                data = {
+                    jmeno: identities.OSVC.name,
+                    identifikator: 'IČO: ' + identities.OSVC.ico,
+                    identifikatorTyp: 'ico',
+                    adresa: identities.OSVC.address
+                };
+            } else if (identityKey.startsWith('po_')) {
+                var company = identities.companies.find(function(c) { return c.id === identityKey; });
+                if (company) {
+                    data = {
+                        jmeno: company.name,
+                        identifikator: 'IČO: ' + company.ico,
+                        identifikatorTyp: 'ico',
+                        adresa: company.address
+                    };
                 }
             }
 
-            const data = zastupovanyData[dataKey];
-            if (!data) return;
-
             // Aktualizace zobrazení v hlavičce sekce
-            document.getElementById('zastupovanyDisplay').textContent = data.jmeno + ', ' + data.identifikator;
+            var zastupovanyDisplay = document.getElementById('zastupovanyDisplay');
+            if (zastupovanyDisplay) {
+                zastupovanyDisplay.textContent = data.jmeno + ', ' + data.identifikator;
+            }
 
             // Aktualizace tabulky v kroku 2
-            document.getElementById('zastupovany-jmeno').textContent = data.jmeno;
-            document.getElementById('zastupovany-adresa').textContent = data.adresa;
+            var zastupovanyJmeno = document.getElementById('zastupovany-jmeno');
+            var zastupovanyAdresa = document.getElementById('zastupovany-adresa');
+            if (zastupovanyJmeno) zastupovanyJmeno.textContent = data.jmeno;
+            if (zastupovanyAdresa) zastupovanyAdresa.textContent = data.adresa;
 
             // Zobrazit správný typ identifikátoru
+            var icoRow = document.getElementById('zastupovany-ico-row');
+            var narozeniRow = document.getElementById('zastupovany-narozeni-row');
+            
             if (data.identifikatorTyp === 'ico') {
-                document.getElementById('zastupovany-ico-row').style.display = '';
-                document.getElementById('zastupovany-narozeni-row').style.display = 'none';
-                document.getElementById('zastupovany-ico').textContent = data.identifikator.replace('IČO: ', '');
+                if (icoRow) icoRow.style.display = '';
+                if (narozeniRow) narozeniRow.style.display = 'none';
+                var icoEl = document.getElementById('zastupovany-ico');
+                if (icoEl) icoEl.textContent = data.identifikator.replace('IČO: ', '');
             } else {
-                document.getElementById('zastupovany-ico-row').style.display = 'none';
-                document.getElementById('zastupovany-narozeni-row').style.display = '';
-                document.getElementById('zastupovany-narozeni').textContent = data.identifikator.replace('Nar.: ', '');
+                if (icoRow) icoRow.style.display = 'none';
+                if (narozeniRow) narozeniRow.style.display = '';
+                var narozeniEl = document.getElementById('zastupovany-narozeni');
+                if (narozeniEl) narozeniEl.textContent = data.identifikator.replace('Nar.: ', '');
             }
 
             // Aktualizace rekapitulace
-            document.getElementById('summary-zastupovany').textContent = 
-                data.jmeno + ', ' + data.identifikator + ', ' + data.adresa;
+            var summaryZastupovany = document.getElementById('summary-zastupovany');
+            if (summaryZastupovany) {
+                summaryZastupovany.textContent = data.jmeno + ', ' + data.identifikator + ', ' + data.adresa;
+            }
         }
 
         // ===== ACCORDION =====
         function toggleAccordion(header) {
-            const item = header.parentElement;
-            const wasActive = item.classList.contains('active');
-            document.querySelectorAll('.accordion-item').forEach(i => i.classList.remove('active'));
+            var item = header.parentElement;
+            var wasActive = item.classList.contains('active');
+            document.querySelectorAll('.accordion-item').forEach(function(i) { i.classList.remove('active'); });
             if (!wasActive) {
                 item.classList.add('active');
             }
         }
 
         function goToStep(step) {
-            document.querySelectorAll('.accordion-item').forEach(i => i.classList.remove('active'));
-            document.querySelector(`[data-step="${step}"]`).classList.add('active');
+            document.querySelectorAll('.accordion-item').forEach(function(i) { i.classList.remove('active'); });
+            var stepEl = document.querySelector('[data-step="' + step + '"]');
+            if (stepEl) stepEl.classList.add('active');
         }
 
         function completeStep(step) {
-            document.getElementById(`status-${step}`).textContent = '✓ Vyplněno';
+            var statusEl = document.getElementById('status-' + step);
+            if (statusEl) statusEl.textContent = '✓ Vyplněno';
             updateFormData(step);
             if (step === 6) {
                 updateSummary();
@@ -1438,7 +1459,8 @@
         function updateFormData(step) {
             switch(step) {
                 case 1:
-                    formData.rozsah = document.getElementById('rozsah-select').value;
+                    var rozsahSelect = document.getElementById('rozsah-select');
+                    if (rozsahSelect) formData.rozsah = rozsahSelect.value;
                     break;
                 case 3:
                     if (formData.zastupceTyp === 'fo') {
@@ -1457,16 +1479,21 @@
                     }
                     break;
                 case 4:
-                    formData.zameryOmezeni = document.querySelector('input[name="zamer-omezeni"]:checked').value;
+                    var zameryRadio = document.querySelector('input[name="zamer-omezeni"]:checked');
+                    if (zameryRadio) formData.zameryOmezeni = zameryRadio.value;
                     break;
                 case 5:
-                    formData.postoupeni = document.getElementById('postoupeni-souhlas').checked;
+                    var postoupeniCheck = document.getElementById('postoupeni-souhlas');
+                    if (postoupeniCheck) formData.postoupeni = postoupeniCheck.checked;
                     break;
                 case 6:
-                    formData.platnost = document.querySelector('input[name="platnost"]:checked').value;
+                    var platnostRadio = document.querySelector('input[name="platnost"]:checked');
+                    if (platnostRadio) formData.platnost = platnostRadio.value;
                     if (formData.platnost === 'omezena') {
-                        formData.platnostOd = document.getElementById('platnost-od').value;
-                        formData.platnostDo = document.getElementById('platnost-do').value;
+                        var odInput = document.getElementById('platnost-od');
+                        var doInput = document.getElementById('platnost-do');
+                        if (odInput) formData.platnostOd = odInput.value;
+                        if (doInput) formData.platnostDo = doInput.value;
                     }
                     break;
             }
@@ -1474,82 +1501,101 @@
 
         // ===== ROZSAH PLNÉ MOCI =====
         function updateRozsahInfo() {
-            const select = document.getElementById('rozsah-select');
-            const infoBox = document.getElementById('rozsah-info');
-            const infoText = document.getElementById('rozsah-info-text');
+            var select = document.getElementById('rozsah-select');
+            var infoBox = document.getElementById('rozsah-info');
+            var infoText = document.getElementById('rozsah-info-text');
 
-            const texts = {
+            var texts = {
                 'poverena': 'Plná moc pro osobu pověřenou stavebníkem nebo zástupcem stavebníka ke všem elektronickým úkonům prostřednictvím Portálu stavebníka, jako je například technické podání žádosti nebo nahrání dokumentace.<br><br><strong>Pověřená osoba nepůsobí jako zástupce stavebníka ve správním řízení.</strong>',
                 'zastupce': 'Plná moc pro zástupce stavebníka ve správním řízení. Zástupce jedná za stavebníka v celém rozsahu řízení, je mu doručováno a může činit veškeré procesní úkony.<br><br><strong>Zástupce může rovněž provádět úkony na Portálu stavebníka.</strong>',
                 'administrator': 'Plná moc pro administrátora plných mocí. Administrátor může za zastupovaného zakládat, upravovat a ukončovat plné moci.<br><br><strong>Administrátor sám nevystupuje jako zástupce ve správním řízení.</strong>'
             };
 
-            if (select.value && texts[select.value]) {
-                infoText.innerHTML = texts[select.value];
-                infoBox.style.display = 'flex';
+            if (select && select.value && texts[select.value]) {
+                if (infoText) infoText.innerHTML = texts[select.value];
+                if (infoBox) infoBox.style.display = 'flex';
             } else {
-                infoBox.style.display = 'none';
+                if (infoBox) infoBox.style.display = 'none';
             }
         }
 
         // ===== ZÁSTUPCE =====
         function switchZastupceTyp(typ) {
             formData.zastupceTyp = typ;
-            document.getElementById('zastupce-fo-form').classList.toggle('hidden', typ !== 'fo');
-            document.getElementById('zastupce-po-form').classList.toggle('hidden', typ !== 'po');
-            document.getElementById('ico-verification').classList.remove('show');
+            var foForm = document.getElementById('zastupce-fo-form');
+            var poForm = document.getElementById('zastupce-po-form');
+            var icoVerif = document.getElementById('ico-verification');
+            
+            if (foForm) foForm.classList.toggle('hidden', typ !== 'fo');
+            if (poForm) poForm.classList.toggle('hidden', typ !== 'po');
+            if (icoVerif) icoVerif.classList.remove('show');
         }
 
         function verifyICO() {
-            const ico = document.getElementById('zastupce-ico').value;
-            if (ico === '27408043') {
-                document.getElementById('verified-nazev').textContent = 'ALMANI s.r.o.';
-                document.getElementById('verified-sidlo').textContent = 'Počernická 264, 250 73 Radonice';
-                document.getElementById('ico-verification').classList.add('show');
-            } else if (ico) {
-                alert('IČO nebylo nalezeno v ROS. Zkontrolujte prosím zadané údaje.');
+            var ico = document.getElementById('zastupce-ico').value;
+            var verification = document.getElementById('ico-verification');
+            var loading = document.getElementById('ico-loading');
+            var result = document.getElementById('ico-result');
+
+            if (!ico || ico.length !== 8) {
+                alert('Zadejte platné IČO (8 číslic)');
+                return;
             }
+
+            verification.classList.add('show');
+            loading.style.display = 'flex';
+            result.style.display = 'none';
+
+            setTimeout(function() {
+                loading.style.display = 'none';
+                result.style.display = 'block';
+                document.getElementById('verified-nazev').textContent = 'Projektová kancelář ' + ico.substring(0, 4) + ' s.r.o.';
+                document.getElementById('verified-sidlo').textContent = 'Testovací ' + ico.substring(4) + ', 110 00 Praha 1';
+            }, 1500);
         }
 
         // ===== ZÁMĚRY =====
         function toggleZamerySection() {
-            const value = document.querySelector('input[name="zamer-omezeni"]:checked').value;
-            document.getElementById('zamery-section').classList.toggle('show', value === 'vybrat');
-            document.getElementById('zamer-info-bez').style.display = value === 'bez' ? 'flex' : 'none';
+            var value = document.querySelector('input[name="zamer-omezeni"]:checked').value;
+            var section = document.getElementById('zamery-selection');
+            if (section) section.classList.toggle('hidden', value === 'bez');
         }
 
-        function addExistingZamer() {
-            const select = document.getElementById('existujici-zamer');
-            if (!select.value) return;
-            const option = select.options[select.selectedIndex];
-            const text = option.text;
-            const parts = text.split(' - ');
-            const zamer = { cislo: parts[0], nazev: parts[1], stav: 'Existující' };
-            if (!selectedZamery.find(z => z.cislo === zamer.cislo)) {
-                selectedZamery.push(zamer);
-                renderZameryTable();
+        function selectZamer(radio) {
+            var row = radio.closest('tr');
+            var zamery = [
+                { cislo: 'Z/2025/35201', nazev: 'Rodinný dům Modřany', stav: 'Aktivní' },
+                { cislo: 'Z/2025/34890', nazev: 'Přístavba garáže', stav: 'Aktivní' },
+                { cislo: 'Z/2024/28765', nazev: 'Rekonstrukce koupelny', stav: 'Ukončený' }
+            ];
+
+            var existingIndex = selectedZamery.findIndex(function(z) { return z.cislo === zamery[row.rowIndex - 1].cislo; });
+            if (radio.checked && existingIndex === -1) {
+                selectedZamery.push(zamery[row.rowIndex - 1]);
+            } else if (!radio.checked && existingIndex !== -1) {
+                selectedZamery.splice(existingIndex, 1);
             }
-            select.value = '';
+            renderZameryTable();
         }
 
-        function createNewZamer() {
-            const nazev = document.getElementById('novy-zamer-nazev').value;
+        function zalozitNovyZamer() {
+            var nazev = document.getElementById('novy-zamer-nazev').value;
             if (!nazev) {
                 alert('Zadejte název záměru');
                 return;
             }
 
-            document.getElementById('novy-zamer-loading').style.display = 'block';
-            document.getElementById('btn-zalozit-zamer').disabled = true;
+            var btn = document.getElementById('btn-zalozit-zamer');
+            btn.disabled = true;
+            btn.textContent = 'Zakládám...';
 
-            setTimeout(() => {
-                const randomNum = Math.floor(Math.random() * 900000) + 100000;
-                const cisloZameru = 'Z/2025/' + randomNum;
+            setTimeout(function() {
+                btn.textContent = 'Založit záměr';
+                btn.disabled = false;
 
-                document.getElementById('novy-zamer-loading').style.display = 'none';
-                document.getElementById('btn-zalozit-zamer').disabled = false;
+                var cisloZameru = 'Z/' + new Date().getFullYear() + '/' + (Math.floor(Math.random() * 90000) + 10000);
 
-                const zamer = { cislo: cisloZameru, nazev: nazev, stav: 'Nový' };
+                var zamer = { cislo: cisloZameru, nazev: nazev, stav: 'Nový' };
                 selectedZamery.push(zamer);
                 renderZameryTable();
 
@@ -1558,15 +1604,17 @@
         }
 
         function renderZameryTable() {
-            const tbody = document.getElementById('zamery-tbody');
-            tbody.innerHTML = selectedZamery.map((z, i) => `
-                <tr>
-                    <td>${z.cislo}</td>
-                    <td>${z.nazev}</td>
-                    <td>${z.stav}</td>
-                    <td><button class="btn btn-secondary btn-sm" onclick="removeZamer(${i})">Odebrat</button></td>
-                </tr>
-            `).join('');
+            var tbody = document.getElementById('zamery-tbody');
+            if (!tbody) return;
+            
+            tbody.innerHTML = selectedZamery.map(function(z, i) {
+                return '<tr>' +
+                    '<td>' + z.cislo + '</td>' +
+                    '<td>' + z.nazev + '</td>' +
+                    '<td>' + z.stav + '</td>' +
+                    '<td><button class="btn btn-secondary btn-sm" onclick="removeZamer(' + i + ')">Odebrat</button></td>' +
+                '</tr>';
+            }).join('');
         }
 
         function removeZamer(index) {
@@ -1576,54 +1624,64 @@
 
         // ===== PLATNOST =====
         function toggleDateInputs() {
-            const value = document.querySelector('input[name="platnost"]:checked').value;
-            document.getElementById('date-inputs').classList.toggle('show', value === 'omezena');
+            var radio = document.querySelector('input[name="platnost"]:checked');
+            var dateInputs = document.getElementById('date-inputs');
+            if (radio && dateInputs) {
+                dateInputs.classList.toggle('show', radio.value === 'omezena');
+            }
         }
 
         // ===== REKAPITULACE =====
         function updateSummary() {
-            const rozsahTexts = {
+            var rozsahTexts = {
                 'poverena': 'Osoba pověřená pro úkony na Portálu stavebníka',
                 'zastupce': 'Zástupce stavebníka ve správním řízení',
                 'administrator': 'Administrátor plných mocí'
             };
-            document.getElementById('summary-rozsah').textContent = rozsahTexts[formData.rozsah] || 'Nevyplněno';
+            var summaryRozsah = document.getElementById('summary-rozsah');
+            if (summaryRozsah) summaryRozsah.textContent = rozsahTexts[formData.rozsah] || 'Nevyplněno';
 
             // Zástupce
-            let zastupceText = 'Nevyplněno';
+            var zastupceText = 'Nevyplněno';
             if (formData.zastupceTyp === 'fo') {
-                const prukazTypes = {'op': 'občanský průkaz', 'pas': 'cestovní pas', 'pobyt': 'povolení k pobytu'};
-                zastupceText = `${formData.zastupce.jmeno || ''} ${formData.zastupce.prijmeni || ''}, ${prukazTypes[formData.zastupce.prukazTyp] || ''} č. ${formData.zastupce.prukazCislo || ''}`;
+                var prukazTypes = {'op': 'občanský průkaz', 'pas': 'cestovní pas', 'pobyt': 'povolení k pobytu'};
+                zastupceText = (formData.zastupce.jmeno || '') + ' ' + (formData.zastupce.prijmeni || '') + ', ' + (prukazTypes[formData.zastupce.prukazTyp] || '') + ' č. ' + (formData.zastupce.prukazCislo || '');
             } else if (formData.zastupceTyp === 'po') {
-                zastupceText = `${formData.zastupce.nazev || ''}, IČO: ${formData.zastupce.ico || ''}`;
+                zastupceText = (formData.zastupce.nazev || '') + ', IČO: ' + (formData.zastupce.ico || '');
             }
-            document.getElementById('summary-zastupce').textContent = zastupceText;
+            var summaryZastupce = document.getElementById('summary-zastupce');
+            if (summaryZastupce) summaryZastupce.textContent = zastupceText;
 
             // Záměry
-            const zameryContainer = document.getElementById('summary-zamery');
-            if (formData.zameryOmezeni === 'bez') {
-                zameryContainer.textContent = 'Bez omezení';
-            } else if (selectedZamery.length > 0) {
-                zameryContainer.textContent = selectedZamery.map(z => `${z.cislo} – ${z.nazev}`).join('; ');
-            } else {
-                zameryContainer.textContent = 'Žádné záměry nevybrány';
+            var zameryContainer = document.getElementById('summary-zamery');
+            if (zameryContainer) {
+                if (formData.zameryOmezeni === 'bez') {
+                    zameryContainer.textContent = 'Bez omezení';
+                } else if (selectedZamery.length > 0) {
+                    zameryContainer.textContent = selectedZamery.map(function(z) { return z.cislo + ' – ' + z.nazev; }).join('; ');
+                } else {
+                    zameryContainer.textContent = 'Žádné záměry nevybrány';
+                }
             }
 
             // Postoupení
-            document.getElementById('summary-postoupeni').textContent = formData.postoupeni ? 'Ano' : 'Ne';
+            var summaryPostoupeni = document.getElementById('summary-postoupeni');
+            if (summaryPostoupeni) summaryPostoupeni.textContent = formData.postoupeni ? 'Ano' : 'Ne';
 
             // Platnost
-            const platnostContainer = document.getElementById('summary-platnost');
-            if (formData.platnost === 'neomezena') {
-                platnostContainer.textContent = 'Časově neomezená';
-            } else {
-                platnostContainer.textContent = `${formatDate(formData.platnostOd)} – ${formatDate(formData.platnostDo)}`;
+            var platnostContainer = document.getElementById('summary-platnost');
+            if (platnostContainer) {
+                if (formData.platnost === 'neomezena') {
+                    platnostContainer.textContent = 'Časově neomezená';
+                } else {
+                    platnostContainer.textContent = formatDate(formData.platnostOd) + ' – ' + formatDate(formData.platnostDo);
+                }
             }
         }
 
         function formatDate(dateStr) {
             if (!dateStr) return '-';
-            const date = new Date(dateStr);
+            var date = new Date(dateStr);
             return date.toLocaleDateString('cs-CZ');
         }
 
@@ -1633,27 +1691,66 @@
         }
 
         function createPM() {
-            const modal = document.getElementById('modal');
-            modal.classList.add('show');
-            setTimeout(() => {
-                modal.classList.remove('show');
-                window.location.href = 'reza_setup.html';
+            // Sestavení dat plné moci pro uložení
+            var rozsahTexts = {
+                'poverena': 'Pověřená osoba pro úkony na Portálu stavebníka',
+                'zastupce': 'Zástupce stavebníka ve správním řízení',
+                'administrator': 'Administrátor plných mocí'
+            };
+            
+            var zmocnenecData = {};
+            if (formData.zastupceTyp === 'fo') {
+                zmocnenecData = {
+                    name: (formData.zastupce.jmeno || '') + ' ' + (formData.zastupce.prijmeni || ''),
+                    birthDate: 'Nezadáno',
+                    address: 'Nezadáno'
+                };
+            } else if (formData.zastupceTyp === 'po') {
+                zmocnenecData = {
+                    name: formData.zastupce.nazev || 'Nezadáno',
+                    ico: formData.zastupce.ico || '',
+                    address: formData.zastupce.sidlo || 'Nezadáno'
+                };
+            }
+            
+            var pmData = {
+                type: formData.rozsah === 'poverena' ? 'povereni' : 'plna_moc',
+                status: 'pending',
+                zmocnenec: zmocnenecData,
+                rozsah: rozsahTexts[formData.rozsah] || formData.rozsah,
+                zamery: formData.zameryOmezeni === 'bez' ? null : selectedZamery.map(function(z) { return z.cislo + ' – ' + z.nazev; }),
+                platnostOd: PortalStavebnika.formatDate(new Date()),
+                platnostDo: formData.platnost === 'neomezena' ? 'Časově neomezená' : formatDate(formData.platnostDo),
+                postoupeni: formData.postoupeni
+            };
+            
+            // Uložení do centrálního stavu
+            var savedPM = PortalStavebnika.addIssuedPM(pmData);
+            console.log('Plná moc uložena:', savedPM);
+            
+            // Zobrazení modalu
+            var modal = document.getElementById('modal');
+            if (modal) modal.classList.add('show');
+            
+            setTimeout(function() {
+                if (modal) modal.classList.remove('show');
+                window.location.href = 'reza_issued.html';
             }, 2500);
         }
 
         // ===== USER MENU =====
         function toggleUserMenu() {
-            const btn = document.querySelector('.gov-header-user-btn');
-            const dropdown = document.getElementById('userDropdown');
+            var btn = document.querySelector('.gov-header-user-btn');
+            var dropdown = document.getElementById('userDropdown');
             if (btn) btn.classList.toggle('active');
             if (dropdown) dropdown.classList.toggle('show');
         }
 
         document.addEventListener('click', function(e) {
-            const userSection = document.querySelector('.gov-header-user');
+            var userSection = document.querySelector('.gov-header-user');
             if (userSection && !userSection.contains(e.target)) {
-                const btn = document.querySelector('.gov-header-user-btn');
-                const dropdown = document.getElementById('userDropdown');
+                var btn = document.querySelector('.gov-header-user-btn');
+                var dropdown = document.getElementById('userDropdown');
                 if (btn) btn.classList.remove('active');
                 if (dropdown) dropdown.classList.remove('show');
             }
