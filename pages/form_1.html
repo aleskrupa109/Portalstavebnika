@@ -838,7 +838,16 @@
                 
                 if (reza.zamery && reza.zamery.length > 0) {
                     state.canCreateNew = false;
-                    state.availableZamery = reza.zamery.map(function(z) { return { id: z.id, nazev: z.nazev, adresa: '-', stav: 'aktivni' }; });
+                    // Záměry jsou uloženy jako stringy "Z/2026/123456 – Název záměru"
+                    state.availableZamery = reza.zamery.map(function(z) {
+                        // Pokud je to string, parsovat
+                        if (typeof z === 'string') {
+                            var parts = z.split(' – ');
+                            return { id: parts[0] || z, nazev: parts[1] || 'Záměr', adresa: '-', stav: 'aktivni' };
+                        }
+                        // Pokud je to objekt, použít přímo
+                        return { id: z.id || z.cislo || '-', nazev: z.nazev || 'Záměr', adresa: z.adresa || '-', stav: 'aktivni' };
+                    });
                 } else {
                     state.availableZamery = zameryDB.stavebnik[stavebnikName] || [];
                 }
