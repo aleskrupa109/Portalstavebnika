@@ -502,15 +502,10 @@
         </div>
     </div>
 
+    <script src="../js/app-state.js"></script>
+    <script src="../js/header-helper.js"></script>
     <script>
         // === DATABÁZE ===
-        var osobyDB = {
-            'FO': { type: 'FO', typLabel: 'Fyzická osoba', name: 'Aleš Krupa', birthDate: '19.04.1968', address: 'Nad Štolou 1510/5, Praha 7, 170 00', ds: 'abc1234' },
-            'OSVC': { type: 'OSVČ', typLabel: 'OSVČ', name: 'Ing. Aleš Krupa', ico: '15104418', birthDate: '19.04.1968', address: 'Nad Štolou 1510/5, Praha 7, 170 00', ds: 'abc1234' },
-            'PO_ALMANI': { type: 'PO', typLabel: 'Právnická osoba', name: 'ALMANI s.r.o.', ico: '28765432', address: 'Vodičkova 710/31, Praha 1, 110 00', ds: 'xyz5678' },
-            'PO_PRVNI': { type: 'PO', typLabel: 'Právnická osoba', name: 'První projektová a.s.', ico: '45678901', address: 'Thákurova 531/4, Praha 6, 160 00', ds: 'ppj9012' }
-        };
-
         var zmocniteleDB = {
             'Město Beroun': { type: 'PO', typLabel: 'Právnická osoba', name: 'Město Beroun', ico: '00233129', address: 'Husovo nám. 68, Beroun, 266 01', ds: 'qbebvbr' },
             'ABC Development s.r.o.': { type: 'PO', typLabel: 'Právnická osoba', name: 'ABC Development s.r.o.', ico: '12345678', address: 'Pražská 123, Praha 1, 110 00', ds: 'dev1234' },
@@ -545,11 +540,18 @@
             zamerType: 'existujici',
             selectedZamer: null,
             availableZamery: [],
-            canCreateNew: true
+            canCreateNew: true,
+            currentUserData: null
         };
 
         // === INIT ===
         document.addEventListener('DOMContentLoaded', function() {
+            // Kontrola přihlášení
+            if (!PortalStavebnika.isLoggedIn()) {
+                window.location.href = '../index.html';
+                return;
+            }
+            
             loadIdentifikace();
             renderForm();
             updateDropdownInfo();
@@ -559,24 +561,63 @@
         });
 
         function loadIdentifikace() {
+            // Načtení hlavičky přes HeaderHelper
+            HeaderHelper.loadHeaderData();
+            
+            // Získání dat z centrálního stavu
+            var user = PortalStavebnika.getUser();
+            var identityKey = PortalStavebnika.getCurrentIdentityKey();
+            var identities = PortalStavebnika.getIdentities();
+            
+            // Sestavení dat aktuálního uživatele
+            var userData = {
+                type: 'FO',
+                typLabel: 'Fyzická osoba',
+                name: user.name,
+                birthDate: user.birthDate,
+                address: 'Adresa z registru',
+                ds: null
+            };
+            
+            if (identityKey === 'OSVC' && identities.OSVC) {
+                userData = {
+                    type: 'OSVČ',
+                    typLabel: 'OSVČ',
+                    name: identities.OSVC.name,
+                    ico: identities.OSVC.ico,
+                    birthDate: user.birthDate,
+                    address: identities.OSVC.address,
+                    ds: null
+                };
+            } else if (identityKey.startsWith('po_')) {
+                var company = identities.companies.find(function(c) { return c.id === identityKey; });
+                if (company) {
+                    userData = {
+                        type: 'PO',
+                        typLabel: 'Právnická osoba',
+                        name: company.name,
+                        ico: company.ico,
+                        address: company.address,
+                        ds: null
+                    };
+                }
+            }
+            
+            state.currentUserData = userData;
+            
+            // Načtení formIdentifikace z localStorage (pokud existuje)
             var stored = localStorage.getItem('formIdentifikace');
             if (stored) {
                 state.identifikace = JSON.parse(stored);
             } else {
                 // Default - stavebník sám
                 state.identifikace = {
-                    identity: 'FO',
+                    identity: identityKey,
                     isRepresentative: false,
                     authMethod: null,
                     selectedReza: null,
                     stavebnik: null
                 };
-            }
-            // Update header
-            var osoba = osobyDB[state.identifikace.identity];
-            if (osoba) {
-                document.getElementById('headerUserName').textContent = osoba.name.toUpperCase();
-                document.getElementById('headerUserDetail').textContent = osoba.type + (osoba.ico ? ' · IČO: ' + osoba.ico : ' · Nar.: ' + osoba.birthDate);
             }
         }
 

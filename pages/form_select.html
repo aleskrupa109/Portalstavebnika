@@ -560,6 +560,8 @@
         </div>
     </div>
 
+    <script src="../js/app-state.js"></script>
+    <script src="../js/header-helper.js"></script>
     <script>
         // Form data
         var forms = {
@@ -633,21 +635,14 @@
         });
 
         function loadIdentity() {
-            var stored = localStorage.getItem('formIdentifikace');
-            if (stored) {
-                var data = JSON.parse(stored);
-                var osobyDB = { 
-                    'FO': { name: 'Aleš Krupa', type: 'FO', birthDate: '19.04.1968' }, 
-                    'OSVC': { name: 'Ing. Aleš Krupa', type: 'OSVČ', ico: '15104418' }, 
-                    'PO_ALMANI': { name: 'ALMANI s.r.o.', type: 'PO', ico: '28765432' }, 
-                    'PO_PRVNI': { name: 'První projektová a.s.', type: 'PO', ico: '45678901' } 
-                };
-                var osoba = osobyDB[data.identity];
-                if (osoba) {
-                    document.getElementById('headerUserName').textContent = osoba.name.toUpperCase();
-                    document.getElementById('headerUserDetail').textContent = osoba.type + (osoba.ico ? ' · IČO: ' + osoba.ico : ' · Nar.: ' + osoba.birthDate);
-                }
+            // Kontrola přihlášení
+            if (!PortalStavebnika.isLoggedIn()) {
+                window.location.href = '../index.html';
+                return;
             }
+            
+            // Načtení hlavičky přes HeaderHelper
+            HeaderHelper.loadHeaderData();
         }
 
         // Tab switching
