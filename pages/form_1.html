@@ -541,7 +541,7 @@
                         <div class="ps-toggle-row">
                             <div>
                                 <label class="gov-form-label" for="vyhrazenaToggle">Předmětem záměru je vyhrazená stavba</label>
-                                <p class="gov-form-hint">Vyhrazenými stavbami jsou dálnice, dráhy, energetická infrastruktura a bytové domy nad 10 000 m².</p>
+                                <p class="gov-form-hint">Orientačně sem patří dálnice, dráhy a civilní letecké stavby, velká energetická a přenosová infrastruktura (elektřina, plyn, teplo, produktovody, větší obnovitelné zdroje), jaderná a radioaktivní zařízení, stavby pro výbušniny, těžba ložisek, ukládání CO₂ a stavby pro hromadné bydlení. Úplný výčet je v příloze č. 3 stavebního zákona.</p>
                             </div>
                             <label class="ps-switch">
                                 <input type="checkbox" id="vyhrazenaToggle" onchange="setVyhrazena(this.checked)">
@@ -569,10 +569,10 @@
                         <div class="ps-urad-box" id="uradBox" style="display: none;">
                             <div class="ps-urad-title">
                                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
-                                Příslušný úřad (určeno automaticky podle obce)
+                                <span id="uradTitleText">Příslušný úřad (určeno automaticky podle obce)</span>
                             </div>
                             <div id="uradBody"></div>
-                            <p class="ps-urad-note">Systém podle obce zadaných pozemků sám určí příslušný krajský Úřad rozvoje území (ÚRÚ) a jeho detašované pracoviště. Žádost už neadresujete konkrétnímu pracovišti.</p>
+                            <p class="ps-urad-note" id="uradNote">Systém podle obce zadaných pozemků sám určí příslušný krajský Úřad rozvoje území (ÚRÚ) a jeho detašované pracoviště. Žádost už neadresujete konkrétnímu pracovišti.</p>
                         </div>
                     </div>
 
@@ -1246,13 +1246,20 @@
         function updateUradBox() {
             var box = document.getElementById('uradBox');
             var body = document.getElementById('uradBody');
+            var titleText = document.getElementById('uradTitleText');
+            var note = document.getElementById('uradNote');
             var pozemky = psState().pozemky;
-            if (!pozemky.length) { box.style.display = 'none'; return; }
-            box.style.display = 'block';
             if (psState().vyhrazena) {
-                body.innerHTML = '<div class="ps-urad-line">U <strong>vyhrazené stavby</strong> (dálnice, dráhy, energetická infrastruktura, velké bytové domy) se příslušnost řídí zvláštní úpravou a neurčuje se podle obce.</div>';
+                box.style.display = 'block';
+                if (titleText) titleText.textContent = 'Příslušný úřad (vyhrazená stavba)';
+                body.innerHTML = '<div class="ps-urad-line"><strong>Úřad rozvoje území ČR (ÚRÚ ČR)</strong></div>';
+                if (note) note.textContent = 'U vyhrazené stavby je příslušnost jasná — žádost povoluje přímo ústřední ÚRÚ ČR a neurčuje se podle obce zadaných pozemků.';
                 return;
             }
+            if (!pozemky.length) { box.style.display = 'none'; return; }
+            box.style.display = 'block';
+            if (titleText) titleText.textContent = 'Příslušný úřad (určeno automaticky podle obce)';
+            if (note) note.textContent = 'Systém podle obce zadaných pozemků sám určí příslušný krajský Úřad rozvoje území (ÚRÚ) a jeho detašované pracoviště. Žádost už neadresujete konkrétnímu pracovišti.';
             var seen = {};
             var lines = [];
             pozemky.forEach(function(p) {
@@ -1285,7 +1292,7 @@
     </script>
 
     <script>
-    window.DEMO_CONFIG = {"about": {"title": "O tomto prototypu", "html": "<p>Toto je <strong>klikací prototyp</strong> Portálu stavebníka určený k návrhu a testování obrazovek a procesů. Neběží proti žádnému reálnému systému a nikam neodesílá data.</p><h3>Co je na této obrazovce simulované</h3><ul><li>Formulář vychází ze stávající struktury PS; údaje se neodesílají.</li></ul><h3>Kde se drží data</h3><p>Vše je uloženo pouze ve vašem prohlížeči (localStorage) — zůstane i po zavření okna. Přihlášení, zvolené postavení, plné moci i záměry se „pamatují“ mezi stránkami.</p><h3>Jak procházet prototyp</h3><p>Tlačítkem <strong>Nápověda</strong> vpravo dole zapnete vysvětlivky — u klíčových prvků se objeví značky <strong>i</strong> s vysvětlením, co se simuluje a co daný krok znamená.</p>"}, "annotations": [{"selector": ".gov-page-header", "label": "Formulář žádosti o povolení stavby", "simulace": "Formulář vychází ze stávající struktury Portálu stavebníka. Vyplněné údaje se nikam neodesílají, drží se jen v prohlížeči.", "vyznam": "Toto je vlastní obsah žádosti podle stavebního zákona (č. 283/2021 Sb.). Prototyp ho zachovává, aby na něj navazovaly připravované změny."}, {"selector": ".gov-form-section-title", "label": "Žadatel (stavebník)", "simulace": "Tato část je v prototypu jen shrnutí bez možnosti editace — zvolená role se přebírá z předchozího kroku (Identifikace osoby při nové žádosti) a už se tu nevybírá.", "vyznam": "V současném Portálu stavebníka se role žadatele fakticky vybírá až zde, v této části. Prototyp tento výběr přesunul dopředu, takže tu zůstává pouze přehledné vypsání dříve zvolené role."}, {"selector": "#radioExistujici", "label": "Existující záměr", "simulace": "V prototypu se u existujících záměrů nabízí zjednodušený seznam — přesné filtrování nabídky podle zvoleného postavení a role tu není domodelováno (bylo by to zbytečně složité).", "vyznam": "V cílovém systému by vyhledávač u existujícího záměru nabídl jen záměry odpovídající zvolenému postavení a roli — tedy ty, ke kterým má osoba v daném postavení a roli přístup."}, {"selector": ".ps-pozemky", "label": "Pozemky a příslušný úřad", "simulace": "Zadávání pozemků i určení úřadu je simulované nad ukázkovým seznamem obcí (Praha, Brno, Plzeň…). Import ze souboru je jen naznačený.", "vyznam": "Simuluje stav po vzniku jednoho stavebního úřadu — Úřadu rozvoje území (ÚRÚ) s krajskými pobočkami a detašovanými pracovišti v obcích s rozšířenou působností. Podle obce zadaného pozemku systém sám určí příslušný krajský ÚRÚ a detašované pracoviště, takže žadatel už žádost neadresuje konkrétnímu pracovišti."}]};
+    window.DEMO_CONFIG = {"about": {"title": "O tomto prototypu", "html": "<p>Toto je <strong>klikací prototyp</strong> Portálu stavebníka určený k návrhu a testování obrazovek a procesů. Neběží proti žádnému reálnému systému a nikam neodesílá data.</p><h3>Co je na této obrazovce simulované</h3><ul><li>Formulář vychází ze stávající struktury PS; údaje se neodesílají.</li></ul><h3>Kde se drží data</h3><p>Vše je uloženo pouze ve vašem prohlížeči (localStorage) — zůstane i po zavření okna. Přihlášení, zvolené postavení, plné moci i záměry se „pamatují“ mezi stránkami.</p><h3>Jak procházet prototyp</h3><p>Tlačítkem <strong>Nápověda</strong> vpravo dole zapnete vysvětlivky — u klíčových prvků se objeví značky <strong>i</strong> s vysvětlením, co se simuluje a co daný krok znamená.</p>"}, "annotations": [{"selector": ".gov-page-header", "label": "Formulář žádosti o povolení stavby", "simulace": "Formulář vychází ze stávající struktury Portálu stavebníka. Vyplněné údaje se nikam neodesílají, drží se jen v prohlížeči.", "vyznam": "Toto je vlastní obsah žádosti podle stavebního zákona (č. 283/2021 Sb.). Prototyp ho zachovává, aby na něj navazovaly připravované změny."}, {"selector": ".gov-form-section-title", "label": "Žadatel (stavebník)", "simulace": "Tato část je v prototypu jen shrnutí bez možnosti editace — zvolená role se přebírá z předchozího kroku (Identifikace osoby při nové žádosti) a už se tu nevybírá.", "vyznam": "V současném Portálu stavebníka se role žadatele fakticky vybírá až zde, v této části. Prototyp tento výběr přesunul dopředu, takže tu zůstává pouze přehledné vypsání dříve zvolené role."}, {"selector": "#radioExistujici", "label": "Existující záměr", "simulace": "V prototypu se u existujících záměrů nabízí zjednodušený seznam — přesné filtrování nabídky podle zvoleného postavení a role tu není domodelováno (bylo by to zbytečně složité).", "vyznam": "V cílovém systému by vyhledávač u existujícího záměru nabídl jen záměry odpovídající zvolenému postavení a roli — tedy ty, ke kterým má osoba v daném postavení a roli přístup."}, {"selector": ".ps-pozemky", "label": "Pozemky a příslušný úřad", "simulace": "Zadávání pozemků i určení úřadu je simulované nad ukázkovým seznamem obcí (Praha, Brno, Plzeň…). Import ze souboru je jen naznačený.", "vyznam": "Simuluje stav po vzniku jednoho stavebního úřadu — Úřadu rozvoje území (ÚRÚ) s krajskými pobočkami a detašovanými pracovišti v obcích s rozšířenou působností. Podle obce zadaného pozemku systém sám určí příslušný krajský ÚRÚ a detašované pracoviště, takže žadatel už žádost neadresuje konkrétnímu pracovišti."}, {"selector": ".ps-toggle-row", "label": "Vyhrazená stavba", "simulace": "Přepínač je v prototypu funkční — jeho zapnutí rovnou změní určený úřad v modrém panelu níže.", "vyznam": "Vyhrazené stavby (příloha č. 3 stavebního zákona — dálnice, dráhy, velká energetická infrastruktura, jaderná zařízení, stavby pro hromadné bydlení aj.) povoluje přímo Úřad rozvoje území ČR. Zapnutím této volby proto žádost automaticky směřuje na ÚRÚ ČR, nikoli na krajskou pobočku podle obce."}]};
     </script>
     <script src="../js/demo-helper.js"></script>
 </body>
