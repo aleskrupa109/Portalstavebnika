@@ -251,6 +251,21 @@ var PortalStavebnika = (function() {
         },
 
         /**
+         * Obnova výchozích testovacích dat se zachováním přihlášení a identit.
+         * Smaže záměry/žádosti/plné moci vytvořené během používání a nasype
+         * zpět výchozí demo sadu (default PM a záměry).
+         */
+        resetData: function() {
+            var user = this.getUser();
+            saveToStorage(STORAGE_KEYS.ISSUED_PM, getDefaultIssuedPM());
+            saveToStorage(STORAGE_KEYS.RECEIVED_PM, getDefaultReceivedPM());
+            var zamery = getDefaultZamery();
+            if (user) zamery[0].stavebnik = user.name;
+            saveToStorage(STORAGE_KEYS.ZAMERY, zamery);
+            saveToStorage(STORAGE_KEYS.ZADOSTI, []);
+        },
+
+        /**
          * Zjistí, zda je uživatel přihlášen
          */
         isLoggedIn: function() {
