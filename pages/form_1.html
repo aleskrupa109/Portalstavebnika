@@ -235,6 +235,62 @@
             .gov-sidebar { width: 100%; }
             .gov-data-grid { grid-template-columns: 1fr; }
         }
+        /* ===== Vyhrazená stavba – přepínač ===== */
+        .ps-toggle-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; }
+        .ps-switch { display: inline-flex; align-items: center; gap: 10px; cursor: pointer; flex-shrink: 0; padding-top: 2px; }
+        .ps-switch input { position: absolute; opacity: 0; width: 0; height: 0; }
+        .ps-switch-track { width: 44px; height: 24px; border-radius: 12px; background: var(--gov-neutral-300); position: relative; transition: background .2s; display: inline-block; }
+        .ps-switch-thumb { position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; border-radius: 50%; background: #fff; transition: left .2s; box-shadow: 0 1px 3px rgba(0,0,0,.3); }
+        .ps-switch input:checked + .ps-switch-track { background: var(--gov-primary); }
+        .ps-switch input:checked + .ps-switch-track .ps-switch-thumb { left: 22px; }
+        .ps-switch-state { font-size: 14px; font-weight: 500; color: var(--gov-neutral-700); min-width: 24px; }
+
+        /* ===== Pozemky ===== */
+        .ps-subhead { font-size: 18px; font-weight: 500; margin: 4px 0 14px; color: var(--gov-neutral-900); }
+        .ps-pozemky-actions { display: flex; gap: 16px; }
+        .ps-btn-wide { flex: 1; justify-content: center; }
+        .ps-pozemek-list { margin-top: 16px; display: flex; flex-direction: column; gap: 10px; }
+        .ps-pozemek-item { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 16px; border: 1px solid var(--gov-neutral-200); border-radius: var(--gov-radius); background: #fff; }
+        .ps-pozemek-main { font-size: 14px; color: var(--gov-neutral-900); }
+        .ps-pozemek-sub { font-size: 13px; color: var(--gov-neutral-500); margin-top: 2px; }
+        .ps-pozemek-remove { background: none; border: none; color: var(--gov-error-600); cursor: pointer; font-size: 13px; display: inline-flex; align-items: center; gap: 4px; font-family: var(--gov-font); }
+        .ps-pozemek-remove svg { width: 16px; height: 16px; }
+
+        /* ===== Příslušný úřad (ÚRÚ) ===== */
+        .ps-urad-box { margin-top: 18px; border: 1px solid var(--gov-primary-100); background: var(--gov-primary-50); border-radius: var(--gov-radius-lg); padding: 16px 18px; }
+        .ps-urad-title { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; color: var(--gov-primary); margin-bottom: 10px; }
+        .ps-urad-title svg { width: 18px; height: 18px; }
+        .ps-urad-line { font-size: 14px; color: var(--gov-neutral-900); margin-bottom: 4px; }
+        .ps-urad-note { font-size: 13px; color: var(--gov-neutral-600); font-style: italic; margin-top: 10px; }
+
+        /* ===== Modál Přidat pozemek ===== */
+        .ps-modal-overlay { position: fixed; inset: 0; background: rgba(20,30,50,.55); display: none; align-items: flex-start; justify-content: center; z-index: 3000; padding: 40px 16px; overflow-y: auto; }
+        .ps-modal-overlay.show { display: flex; }
+        .ps-modal { background: var(--gov-neutral-50); border-radius: var(--gov-radius-lg); width: 100%; max-width: 760px; box-shadow: 0 20px 50px rgba(0,0,0,.3); }
+        .ps-modal-head { display: flex; align-items: center; justify-content: space-between; padding: 24px 28px 8px; }
+        .ps-modal-head h2 { font-size: 24px; font-weight: 600; color: var(--gov-neutral-900); }
+        .ps-modal-close { background: none; border: none; font-size: 28px; line-height: 1; color: var(--gov-neutral-500); cursor: pointer; }
+        .ps-modal-body { padding: 8px 28px 24px; }
+        .ps-modal-grid { display: grid; grid-template-columns: 1.05fr .95fr; gap: 4px 40px; align-items: start; }
+        .ps-modal-col { min-width: 0; }
+        .ps-modal-note { font-size: 14px; color: var(--gov-neutral-600); font-style: italic; line-height: 1.6; padding-top: 30px; }
+        .ps-obec-wrap { position: relative; }
+        .ps-suggest { position: absolute; top: 100%; left: 0; right: 0; background: #fff; border: 1px solid var(--gov-neutral-200); border-top: none; border-radius: 0 0 var(--gov-radius) var(--gov-radius); max-height: 200px; overflow-y: auto; z-index: 10; display: none; box-shadow: 0 6px 16px rgba(0,0,0,.12); }
+        .ps-suggest.show { display: block; }
+        .ps-suggest-item { padding: 10px 14px; font-size: 14px; cursor: pointer; }
+        .ps-suggest-item:hover { background: var(--gov-primary-50); }
+        .ps-select { appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='%232c5a8c' viewBox='0 0 24 24'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; background-size: 18px; padding-right: 40px; }
+        .ps-select:disabled { background-color: var(--gov-neutral-50); color: var(--gov-neutral-400); cursor: not-allowed; }
+        .ps-parc-row { display: flex; align-items: center; gap: 12px; max-width: 320px; }
+        .ps-parc-sep { font-size: 18px; color: var(--gov-neutral-500); }
+        .ps-modal-actions { display: flex; align-items: center; gap: 12px; margin-top: 20px; }
+        .ps-modal-cancel { margin-left: auto; }
+        .gov-btn-secondary:disabled { opacity: .5; cursor: not-allowed; }
+        @media (max-width: 640px) {
+            .ps-modal-grid { grid-template-columns: 1fr; }
+            .ps-modal-note { padding-top: 0; }
+            .ps-pozemky-actions { flex-direction: column; }
+        }
     </style>
 </head>
 <body>
@@ -480,6 +536,46 @@
                         </div>
                     </div>
 
+                    <!-- Vyhrazená stavba -->
+                    <div class="gov-form-group">
+                        <div class="ps-toggle-row">
+                            <div>
+                                <label class="gov-form-label" for="vyhrazenaToggle">Předmětem záměru je vyhrazená stavba</label>
+                                <p class="gov-form-hint">Vyhrazenými stavbami jsou dálnice, dráhy, energetická infrastruktura a bytové domy nad 10 000 m².</p>
+                            </div>
+                            <label class="ps-switch">
+                                <input type="checkbox" id="vyhrazenaToggle" onchange="setVyhrazena(this.checked)">
+                                <span class="ps-switch-track"><span class="ps-switch-thumb"></span></span>
+                                <span class="ps-switch-state" id="vyhrazenaState">Ne</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Pozemky -->
+                    <div class="gov-form-group ps-pozemky">
+                        <h3 class="ps-subhead">Pozemky</h3>
+                        <div class="ps-pozemky-actions">
+                            <button type="button" class="gov-btn gov-btn-secondary ps-btn-wide" onclick="openPozemekModal()">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                                Přidat pozemek
+                            </button>
+                            <button type="button" class="gov-btn gov-btn-secondary ps-btn-wide" onclick="importPozemky()">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M12 15V4m0 0L8 8m4-4l4 4"/></svg>
+                                Import
+                            </button>
+                        </div>
+                        <p class="gov-form-hint" id="importHint" style="display: none;">Import pozemků ze souboru je v prototypu simulovaný.</p>
+                        <div class="ps-pozemek-list" id="pozemekList"></div>
+                        <div class="ps-urad-box" id="uradBox" style="display: none;">
+                            <div class="ps-urad-title">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                                Příslušný úřad (určeno automaticky podle obce)
+                            </div>
+                            <div id="uradBody"></div>
+                            <p class="ps-urad-note">Systém podle obce zadaných pozemků sám určí příslušný krajský Úřad rozvoje území (ÚRÚ) a jeho detašované pracoviště. Žádost už neadresujete konkrétnímu pracovišti.</p>
+                        </div>
+                    </div>
+
                     <div class="gov-form-actions">
                         <a href="form_new.html" class="gov-btn gov-btn-secondary">
                             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
@@ -514,6 +610,57 @@
                     <div class="gov-osnova-toggle"><a href="#">Rozbalit</a></div>
                 </div>
             </aside>
+        </div>
+    </div>
+
+    <!-- ===== MODÁL: PŘIDAT POZEMEK ===== -->
+    <div class="ps-modal-overlay" id="pozemekModalOverlay">
+        <div class="ps-modal">
+            <div class="ps-modal-head">
+                <h2>Přidat pozemek</h2>
+                <button type="button" class="ps-modal-close" onclick="closePozemekModal()" aria-label="Zavřít">&times;</button>
+            </div>
+            <div class="ps-modal-body">
+                <div class="ps-modal-grid">
+                    <div class="ps-modal-col">
+                        <div class="gov-form-group">
+                            <label class="gov-form-label">Obec (povinné)</label>
+                            <div class="gov-form-input-icon ps-obec-wrap">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                                <input type="text" class="gov-form-input" id="obecInput" autocomplete="off" oninput="onObecInput(this.value)" onfocus="onObecInput(this.value)">
+                                <div class="ps-suggest" id="obecSuggest"></div>
+                            </div>
+                        </div>
+                        <div class="gov-form-group">
+                            <label class="gov-form-label">Katastrální území</label>
+                            <select class="gov-form-input ps-select" id="kuSelect" disabled>
+                                <option value="">Vyberte</option>
+                            </select>
+                        </div>
+                        <div class="gov-form-group">
+                            <label class="gov-form-label">Typ parcely</label>
+                            <div class="gov-radio-group">
+                                <label class="gov-radio"><input type="radio" name="typParcely" value="Pozemková" checked><span class="gov-radio-circle"></span><span class="gov-radio-label">Pozemková</span></label>
+                                <label class="gov-radio"><input type="radio" name="typParcely" value="Stavební"><span class="gov-radio-circle"></span><span class="gov-radio-label">Stavební</span></label>
+                            </div>
+                        </div>
+                        <div class="gov-form-group">
+                            <label class="gov-form-label">Parcelní číslo</label>
+                            <div class="ps-parc-row">
+                                <input type="text" class="gov-form-input" id="parcKmen" inputmode="numeric" oninput="validatePozemek()">
+                                <span class="ps-parc-sep">/</span>
+                                <input type="text" class="gov-form-input" id="parcPod" inputmode="numeric">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ps-modal-note">Zadání obce je povinné. Portál následně dohledá všechny názvy katastrálních území pro zadanou obec.</div>
+                </div>
+                <div class="ps-modal-actions">
+                    <button type="button" class="gov-btn gov-btn-primary" id="pozemekAddBtn" onclick="addPozemek(false)" disabled>Přidat</button>
+                    <button type="button" class="gov-btn gov-btn-secondary" id="pozemekAddNextBtn" onclick="addPozemek(true)" disabled>Přidat další</button>
+                    <button type="button" class="gov-btn gov-btn-secondary ps-modal-cancel" onclick="closePozemekModal()">Zrušit</button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -972,7 +1119,173 @@
 
     <!-- ===== NÁPOVĚDA K PROTOTYPU ===== -->
     <script>
-    window.DEMO_CONFIG = {"about": {"title": "O tomto prototypu", "html": "<p>Toto je <strong>klikací prototyp</strong> Portálu stavebníka určený k návrhu a testování obrazovek a procesů. Neběží proti žádnému reálnému systému a nikam neodesílá data.</p><h3>Co je na této obrazovce simulované</h3><ul><li>Formulář vychází ze stávající struktury PS; údaje se neodesílají.</li></ul><h3>Kde se drží data</h3><p>Vše je uloženo pouze ve vašem prohlížeči (localStorage) — zůstane i po zavření okna. Přihlášení, zvolené postavení, plné moci i záměry se „pamatují“ mezi stránkami.</p><h3>Jak procházet prototyp</h3><p>Tlačítkem <strong>Nápověda</strong> vpravo dole zapnete vysvětlivky — u klíčových prvků se objeví značky <strong>i</strong> s vysvětlením, co se simuluje a co daný krok znamená.</p>"}, "annotations": [{"selector": ".gov-page-header", "label": "Formulář žádosti o povolení stavby", "simulace": "Formulář vychází ze stávající struktury Portálu stavebníka. Vyplněné údaje se nikam neodesílají, drží se jen v prohlížeči.", "vyznam": "Toto je vlastní obsah žádosti podle stavebního zákona (č. 283/2021 Sb.). Prototyp ho zachovává, aby na něj navazovaly připravované změny."}, {"selector": ".gov-form-section-title", "label": "Žadatel (stavebník)", "simulace": "Tato část je v prototypu jen shrnutí bez možnosti editace — zvolená role se přebírá z předchozího kroku (Identifikace osoby při nové žádosti) a už se tu nevybírá.", "vyznam": "V současném Portálu stavebníka se role žadatele fakticky vybírá až zde, v této části. Prototyp tento výběr přesunul dopředu, takže tu zůstává pouze přehledné vypsání dříve zvolené role."}, {"selector": "#radioExistujici", "label": "Existující záměr", "simulace": "V prototypu se u existujících záměrů nabízí zjednodušený seznam — přesné filtrování nabídky podle zvoleného postavení a role tu není domodelováno (bylo by to zbytečně složité).", "vyznam": "V cílovém systému by vyhledávač u existujícího záměru nabídl jen záměry odpovídající zvolenému postavení a roli — tedy ty, ke kterým má osoba v daném postavení a roli přístup."}]};
+        // ===== POZEMKY + SIMULACE PŘÍSLUŠNOSTI ÚRÚ =====
+        var PS_OBCE = [
+            { obec: 'Praha', kraj: 'Hlavní město Praha', urad: 'Krajská pobočka ÚRÚ – Praha', orp: 'Praha', ku: ['Vinohrady','Nusle','Modřany','Smíchov','Žižkov'] },
+            { obec: 'Brno', kraj: 'Jihomoravský kraj', urad: 'Krajská pobočka ÚRÚ – Brno', orp: 'Brno', ku: ['Brno-město','Žabovřesky','Královo Pole','Bystrc'] },
+            { obec: 'Ostrava', kraj: 'Moravskoslezský kraj', urad: 'Krajská pobočka ÚRÚ – Ostrava', orp: 'Ostrava', ku: ['Moravská Ostrava','Poruba','Vítkovice'] },
+            { obec: 'Plzeň', kraj: 'Plzeňský kraj', urad: 'Krajská pobočka ÚRÚ – Plzeň', orp: 'Plzeň', ku: ['Plzeň','Bolevec','Doudlevce'] },
+            { obec: 'Olomouc', kraj: 'Olomoucký kraj', urad: 'Krajská pobočka ÚRÚ – Olomouc', orp: 'Olomouc', ku: ['Olomouc-město','Hejčín','Nová Ulice'] },
+            { obec: 'Liberec', kraj: 'Liberecký kraj', urad: 'Krajská pobočka ÚRÚ – Liberec', orp: 'Liberec', ku: ['Liberec','Ruprechtice','Rochlice u Liberce'] },
+            { obec: 'Kladno', kraj: 'Středočeský kraj', urad: 'Krajská pobočka ÚRÚ – Střední Čechy', orp: 'Kladno', ku: ['Kladno','Kročehlavy','Rozdělov'] },
+            { obec: 'Beroun', kraj: 'Středočeský kraj', urad: 'Krajská pobočka ÚRÚ – Střední Čechy', orp: 'Beroun', ku: ['Beroun','Zdejcina','Jarov u Berouna'] },
+            { obec: 'Hradec Králové', kraj: 'Královéhradecký kraj', urad: 'Krajská pobočka ÚRÚ – Hradec Králové', orp: 'Hradec Králové', ku: ['Hradec Králové','Kukleny','Pouchov'] },
+            { obec: 'České Budějovice', kraj: 'Jihočeský kraj', urad: 'Krajská pobočka ÚRÚ – České Budějovice', orp: 'České Budějovice', ku: ['České Budějovice 1','České Budějovice 2','Čtyři Dvory'] }
+        ];
+
+        function psState() { if (typeof state === 'undefined') { window.state = {}; } if (!state.pozemky) state.pozemky = []; return state; }
+        var psSelectedObec = null;
+
+        function setVyhrazena(checked) {
+            psState().vyhrazena = checked;
+            document.getElementById('vyhrazenaState').textContent = checked ? 'Ano' : 'Ne';
+            updateUradBox();
+        }
+
+        function psNorm(s) { return (s || '').trim().toLowerCase(); }
+        function psFindObec(name) {
+            var n = psNorm(name);
+            for (var i = 0; i < PS_OBCE.length; i++) { if (psNorm(PS_OBCE[i].obec) === n) return PS_OBCE[i]; }
+            return null;
+        }
+
+        function openPozemekModal() {
+            psSelectedObec = null;
+            document.getElementById('obecInput').value = '';
+            var ku = document.getElementById('kuSelect');
+            ku.innerHTML = '<option value="">Vyberte</option>'; ku.disabled = true;
+            document.getElementById('parcKmen').value = '';
+            document.getElementById('parcPod').value = '';
+            var poz = document.querySelector('input[name="typParcely"][value="Pozemková"]'); if (poz) poz.checked = true;
+            document.getElementById('obecSuggest').classList.remove('show');
+            validatePozemek();
+            document.getElementById('pozemekModalOverlay').classList.add('show');
+            document.getElementById('obecInput').focus();
+        }
+        function closePozemekModal() {
+            document.getElementById('pozemekModalOverlay').classList.remove('show');
+        }
+
+        function onObecInput(val) {
+            psSelectedObec = psFindObec(val);
+            var box = document.getElementById('obecSuggest');
+            var n = psNorm(val);
+            var matches = PS_OBCE.filter(function(o) { return psNorm(o.obec).indexOf(n) === 0; });
+            if (n && matches.length && !psSelectedObec) {
+                box.innerHTML = matches.map(function(o) { return '<div class="ps-suggest-item" onclick="selectObec(\'' + o.obec + '\')">' + o.obec + '</div>'; }).join('');
+                box.classList.add('show');
+            } else {
+                box.classList.remove('show');
+            }
+            if (psSelectedObec) { psFillKu(psSelectedObec); }
+            else { var ku = document.getElementById('kuSelect'); ku.innerHTML = '<option value="">Vyberte</option>'; ku.disabled = true; }
+            validatePozemek();
+        }
+        function selectObec(name) {
+            document.getElementById('obecInput').value = name;
+            document.getElementById('obecSuggest').classList.remove('show');
+            psSelectedObec = psFindObec(name);
+            if (psSelectedObec) psFillKu(psSelectedObec);
+            validatePozemek();
+        }
+        function psFillKu(o) {
+            var ku = document.getElementById('kuSelect');
+            ku.innerHTML = '<option value="">Vyberte</option>' + o.ku.map(function(k) { return '<option value="' + k + '">' + k + '</option>'; }).join('');
+            ku.disabled = false;
+        }
+
+        function validatePozemek() {
+            var obec = document.getElementById('obecInput').value.trim();
+            var kmen = document.getElementById('parcKmen').value.trim();
+            var ok = obec.length > 0 && kmen.length > 0;
+            document.getElementById('pozemekAddBtn').disabled = !ok;
+            document.getElementById('pozemekAddNextBtn').disabled = !ok;
+        }
+
+        function addPozemek(another) {
+            var obec = document.getElementById('obecInput').value.trim();
+            var kmen = document.getElementById('parcKmen').value.trim();
+            if (!obec || !kmen) return;
+            var pod = document.getElementById('parcPod').value.trim();
+            var ku = document.getElementById('kuSelect').value;
+            var typEl = document.querySelector('input[name="typParcely"]:checked');
+            var parcelniCislo = kmen + (pod ? '/' + pod : '');
+            psState().pozemky.push({ obec: obec, ku: ku, typ: typEl ? typEl.value : 'Pozemková', parc: parcelniCislo });
+            renderPozemky();
+            updateUradBox();
+            if (another) {
+                document.getElementById('parcKmen').value = '';
+                document.getElementById('parcPod').value = '';
+                validatePozemek();
+                document.getElementById('parcKmen').focus();
+            } else {
+                closePozemekModal();
+            }
+        }
+
+        function removePozemek(i) {
+            psState().pozemky.splice(i, 1);
+            renderPozemky();
+            updateUradBox();
+        }
+
+        function renderPozemky() {
+            var list = document.getElementById('pozemekList');
+            var pozemky = psState().pozemky;
+            list.innerHTML = pozemky.map(function(p, i) {
+                var sub = [p.typ + ' parcela', p.ku ? 'k.ú. ' + p.ku : null].filter(Boolean).join(' · ');
+                return '<div class="ps-pozemek-item">' +
+                    '<div><div class="ps-pozemek-main">' + p.obec + ' — parc. č. ' + p.parc + '</div>' +
+                    '<div class="ps-pozemek-sub">' + sub + '</div></div>' +
+                    '<button type="button" class="ps-pozemek-remove" onclick="removePozemek(' + i + ')">' +
+                    '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>Odebrat</button>' +
+                    '</div>';
+            }).join('');
+        }
+
+        function updateUradBox() {
+            var box = document.getElementById('uradBox');
+            var body = document.getElementById('uradBody');
+            var pozemky = psState().pozemky;
+            if (!pozemky.length) { box.style.display = 'none'; return; }
+            box.style.display = 'block';
+            if (psState().vyhrazena) {
+                body.innerHTML = '<div class="ps-urad-line">U <strong>vyhrazené stavby</strong> (dálnice, dráhy, energetická infrastruktura, velké bytové domy) se příslušnost řídí zvláštní úpravou a neurčuje se podle obce.</div>';
+                return;
+            }
+            var seen = {};
+            var lines = [];
+            pozemky.forEach(function(p) {
+                if (seen[p.obec]) return; seen[p.obec] = true;
+                var o = psFindObec(p.obec);
+                if (o) {
+                    lines.push('<div class="ps-urad-line"><strong>' + o.urad + '</strong>, detašované pracoviště ' + o.orp + ' <span style="color:var(--gov-neutral-500)">(obec ' + p.obec + ')</span></div>');
+                } else {
+                    lines.push('<div class="ps-urad-line">Obec <strong>' + p.obec + '</strong> — příslušný krajský ÚRÚ a detašované pracoviště by se určily podle obce (tato obec není v ukázkovém seznamu prototypu).</div>');
+                }
+            });
+            body.innerHTML = lines.join('');
+        }
+
+        function importPozemky() {
+            var h = document.getElementById('importHint');
+            if (h) h.style.display = 'block';
+        }
+
+        document.addEventListener('click', function(e) {
+            var wrap = document.querySelector('.ps-obec-wrap');
+            if (wrap && !wrap.contains(e.target)) {
+                var s = document.getElementById('obecSuggest'); if (s) s.classList.remove('show');
+            }
+        });
+        (function () {
+            var ov = document.getElementById('pozemekModalOverlay');
+            if (ov) ov.addEventListener('click', function(e) { if (e.target === this) closePozemekModal(); });
+        })();
+    </script>
+
+    <script>
+    window.DEMO_CONFIG = {"about": {"title": "O tomto prototypu", "html": "<p>Toto je <strong>klikací prototyp</strong> Portálu stavebníka určený k návrhu a testování obrazovek a procesů. Neběží proti žádnému reálnému systému a nikam neodesílá data.</p><h3>Co je na této obrazovce simulované</h3><ul><li>Formulář vychází ze stávající struktury PS; údaje se neodesílají.</li></ul><h3>Kde se drží data</h3><p>Vše je uloženo pouze ve vašem prohlížeči (localStorage) — zůstane i po zavření okna. Přihlášení, zvolené postavení, plné moci i záměry se „pamatují“ mezi stránkami.</p><h3>Jak procházet prototyp</h3><p>Tlačítkem <strong>Nápověda</strong> vpravo dole zapnete vysvětlivky — u klíčových prvků se objeví značky <strong>i</strong> s vysvětlením, co se simuluje a co daný krok znamená.</p>"}, "annotations": [{"selector": ".gov-page-header", "label": "Formulář žádosti o povolení stavby", "simulace": "Formulář vychází ze stávající struktury Portálu stavebníka. Vyplněné údaje se nikam neodesílají, drží se jen v prohlížeči.", "vyznam": "Toto je vlastní obsah žádosti podle stavebního zákona (č. 283/2021 Sb.). Prototyp ho zachovává, aby na něj navazovaly připravované změny."}, {"selector": ".gov-form-section-title", "label": "Žadatel (stavebník)", "simulace": "Tato část je v prototypu jen shrnutí bez možnosti editace — zvolená role se přebírá z předchozího kroku (Identifikace osoby při nové žádosti) a už se tu nevybírá.", "vyznam": "V současném Portálu stavebníka se role žadatele fakticky vybírá až zde, v této části. Prototyp tento výběr přesunul dopředu, takže tu zůstává pouze přehledné vypsání dříve zvolené role."}, {"selector": "#radioExistujici", "label": "Existující záměr", "simulace": "V prototypu se u existujících záměrů nabízí zjednodušený seznam — přesné filtrování nabídky podle zvoleného postavení a role tu není domodelováno (bylo by to zbytečně složité).", "vyznam": "V cílovém systému by vyhledávač u existujícího záměru nabídl jen záměry odpovídající zvolenému postavení a roli — tedy ty, ke kterým má osoba v daném postavení a roli přístup."}, {"selector": ".ps-pozemky", "label": "Pozemky a příslušný úřad", "simulace": "Zadávání pozemků i určení úřadu je simulované nad ukázkovým seznamem obcí (Praha, Brno, Plzeň…). Import ze souboru je jen naznačený.", "vyznam": "Simuluje stav po vzniku jednoho stavebního úřadu — Úřadu rozvoje území (ÚRÚ) s krajskými pobočkami a detašovanými pracovišti v obcích s rozšířenou působností. Podle obce zadaného pozemku systém sám určí příslušný krajský ÚRÚ a detašované pracoviště, takže žadatel už žádost neadresuje konkrétnímu pracovišti."}]};
     </script>
     <script src="../js/demo-helper.js"></script>
 </body>
