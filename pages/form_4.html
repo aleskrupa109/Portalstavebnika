@@ -991,5 +991,11 @@
             HeaderHelper.logout();
         }
     </script>
+
+    <!-- ===== NÁPOVĚDA K PROTOTYPU ===== -->
+    <script>
+    window.DEMO_CONFIG = {"about": {"title": "O tomto prototypu", "html": "<p>Toto je <strong>klikací prototyp</strong> Portálu stavebníka určený k návrhu a testování obrazovek a procesů. Neběží proti žádnému reálnému systému a nikam neodesílá data.</p><h3>Co je na této obrazovce simulované</h3><ul><li>Kontrolní souhrn skládá dříve zadané údaje z prohlížeče.</li><li>Odeslání je simulované — na úřad se nic neposílá.</li></ul><h3>Kde se drží data</h3><p>Vše je uloženo pouze ve vašem prohlížeči (localStorage) — zůstane i po zavření okna. Přihlášení, zvolené postavení, plné moci i záměry se „pamatují“ mezi stránkami.</p><h3>Jak procházet prototyp</h3><p>Tlačítkem <strong>Nápověda</strong> vpravo dole zapnete vysvětlivky — u klíčových prvků se objeví značky <strong>i</strong> s vysvětlením, co se simuluje a co daný krok znamená.</p>"}, "annotations": [{"selector": ".gov-page-header", "label": "Souhrn a odeslání", "simulace": "Kontrolní souhrn skládá dříve zadané údaje z prohlížeče.", "vyznam": "Poslední krok před podáním — kontrola všech údajů žádosti."}, {"selector": "#actionsSection", "label": "Odeslání žádosti", "simulace": "Odeslání je simulované: po potvrzení se zobrazí úspěch a v přehledu se založí záměr; na úřad se nic neposílá.", "vyznam": "Podáním žádosti vzniká záměr navázaný na tuto žádost a řízení by přešlo na příslušný stavební úřad."}]};
+    </script>
+    <script src="../js/demo-helper.js"></script>
 </body>
 </html>

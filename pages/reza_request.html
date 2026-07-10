@@ -1898,5 +1898,11 @@
         // ===== INIT =====
         document.addEventListener('DOMContentLoaded', loadIdentity);
     </script>
+
+    <!-- ===== NÁPOVĚDA K PROTOTYPU ===== -->
+    <script>
+    window.DEMO_CONFIG = {"about": {"title": "O tomto prototypu", "html": "<p>Toto je <strong>klikací prototyp</strong> Portálu stavebníka určený k návrhu a testování obrazovek a procesů. Neběží proti žádnému reálnému systému a nikam neodesílá data.</p><h3>Co je na této obrazovce simulované</h3><ul><li>Odeslání návrhu klientovi ke schválení je simulované (žádný e-mail).</li><li>Stav návrhu se mění jen v prohlížeči.</li></ul><h3>Kde se drží data</h3><p>Vše je uloženo pouze ve vašem prohlížeči (localStorage) — zůstane i po zavření okna. Přihlášení, zvolené postavení, plné moci i záměry se „pamatují“ mezi stránkami.</p><h3>Jak procházet prototyp</h3><p>Tlačítkem <strong>Nápověda</strong> vpravo dole zapnete vysvětlivky — u klíčových prvků se objeví značky <strong>i</strong> s vysvětlením, co se simuluje a co daný krok znamená.</p>"}, "annotations": [{"selector": ".section-header", "label": "Žádost o plnou moc (zmocněnec)", "simulace": "Jste v roli budoucího zmocněnce. Odeslání návrhu klientovi ke schválení je simulované — žádný e-mail se neodesílá.", "vyznam": "Opačná logika než vytvoření PM: zmocněnec sestaví návrh plné moci a odešle ho zmocniteli ke schválení."}, {"selector": ".info-box", "label": "Jak funguje schválení", "simulace": "Stav návrhu se mění jen v prohlížeči; v prototypu si zmocnitel návrh zobrazí v sekci vydaných plných mocí.", "vyznam": "Návrh musí zmocnitel schválit, teprve pak plná moc platí. Zmocněnec vidí průběžný stav u přijatých plných mocí."}]};
+    </script>
+    <script src="../js/demo-helper.js"></script>
 </body>
 </html>

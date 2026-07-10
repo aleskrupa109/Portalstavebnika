@@ -1859,5 +1859,11 @@
         // ===== INICIALIZACE =====
         document.addEventListener('DOMContentLoaded', loadIdentity);
     </script>
+
+    <!-- ===== NÁPOVĚDA K PROTOTYPU ===== -->
+    <script>
+    window.DEMO_CONFIG = {"about": {"title": "O tomto prototypu", "html": "<p>Toto je <strong>klikací prototyp</strong> Portálu stavebníka určený k návrhu a testování obrazovek a procesů. Neběží proti žádnému reálnému systému a nikam neodesílá data.</p><h3>Co je na této obrazovce simulované</h3><ul><li>Uložená plná moc vznikne jen v prohlížeči, nikam se neregistruje.</li><li>Ověření IČO i výběr záměru pracují nad testovacími daty.</li></ul><h3>Kde se drží data</h3><p>Vše je uloženo pouze ve vašem prohlížeči (localStorage) — zůstane i po zavření okna. Přihlášení, zvolené postavení, plné moci i záměry se „pamatují“ mezi stránkami.</p><h3>Jak procházet prototyp</h3><p>Tlačítkem <strong>Nápověda</strong> vpravo dole zapnete vysvětlivky — u klíčových prvků se objeví značky <strong>i</strong> s vysvětlením, co se simuluje a co daný krok znamená.</p>"}, "annotations": [{"selector": ".section-header", "label": "Vytvoření plné moci (zmocnitel)", "simulace": "Jste v roli zmocnitele. Uložením vznikne plná moc jen ve vašem prohlížeči, nikam se neregistruje.", "vyznam": "Zmocnitel zde vytváří plnou moc nebo pověření pro konkrétního zmocněnce a vymezuje rozsah a platnost."}, {"selector": ".accordion", "label": "Krokový formulář", "simulace": "Ověření IČO i výběr záměru pracují nad testovacími daty.", "vyznam": "Postupně se určuje zmocněnec, rozsah oprávnění (např. jen technické podání vs. zastupování v řízení), platnost a případné povolení dalšího postoupení."}]};
+    </script>
+    <script src="../js/demo-helper.js"></script>
 </body>
 </html>

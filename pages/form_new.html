@@ -1277,5 +1277,11 @@
             if (e.target === this) closeModal();
         });
     </script>
+
+    <!-- ===== NÁPOVĚDA K PROTOTYPU ===== -->
+    <script>
+    window.DEMO_CONFIG = {"about": {"title": "O tomto prototypu", "html": "<p>Toto je <strong>klikací prototyp</strong> Portálu stavebníka určený k návrhu a testování obrazovek a procesů. Neběží proti žádnému reálnému systému a nikam neodesílá data.</p><h3>Co je na této obrazovce simulované</h3><ul><li>Nahrání papírové plné moci i načtení zmocnění z REZA jsou simulované.</li><li>Řetězení zastoupení se skládá ručně krok po kroku.</li></ul><h3>Kde se drží data</h3><p>Vše je uloženo pouze ve vašem prohlížeči (localStorage) — zůstane i po zavření okna. Přihlášení, zvolené postavení, plné moci i záměry se „pamatují“ mezi stránkami.</p><h3>Jak procházet prototyp</h3><p>Tlačítkem <strong>Nápověda</strong> vpravo dole zapnete vysvětlivky — u klíčových prvků se objeví značky <strong>i</strong> s vysvětlením, co se simuluje a co daný krok znamená.</p>"}, "annotations": [{"selector": ".gov-page-header", "label": "Za koho a na základě čeho jednáte", "simulace": "Celý průchod běží nad daty v prohlížeči. Nahrání dokumentu (papírová plná moc) i načtení zmocnění z REZA jsou simulované.", "vyznam": "Tady prototyp zjišťuje vaši roli v řízení — zda jednáte sám za sebe, jako <strong>pověřená osoba</strong> (jen technické podání), nebo jako <strong>zplnomocněný zástupce</strong>, a případně řeší řetězení až ke stavebníkovi."}, {"selector": "#cardRole", "label": "Volba role", "simulace": "Nabídka rolí a navazující kroky jsou předpřipravené větve prototypu.", "vyznam": "Rozlišuje se, zda podáváte sám za sebe, nebo za někoho jiného — od toho se odvíjí, jestli a jak se řeší zmocnění."}, {"selector": "#addChainSection", "label": "Řetězení zastoupení", "simulace": "Řetězení se v prototypu skládá ručně. V ostrém provozu by ho u elektronického zmocnění systém načetl automaticky.", "vyznam": "Nastává, když ten, koho zastupujete, sám není stavebníkem, ale zastoupení dostal od někoho dalšího. Model musí dojít až k finálnímu stavebníkovi."}]};
+    </script>
+    <script src="../js/demo-helper.js"></script>
 </body>
 </html>

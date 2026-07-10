@@ -1897,5 +1897,11 @@
         // ===== INICIALIZACE =====
         document.addEventListener('DOMContentLoaded', loadIdentity);
     </script>
+
+    <!-- ===== NÁPOVĚDA K PROTOTYPU ===== -->
+    <script>
+    window.DEMO_CONFIG = {"about": {"title": "O tomto prototypu", "html": "<p>Toto je <strong>klikací prototyp</strong> Portálu stavebníka určený k návrhu a testování obrazovek a procesů. Neběží proti žádnému reálnému systému a nikam neodesílá data.</p><h3>Co je na této obrazovce simulované</h3><ul><li>Přijaté PM i stav odeslaných návrhů jsou testovací data.</li><li>Filtry pracují nad pevným seznamem.</li></ul><h3>Kde se drží data</h3><p>Vše je uloženo pouze ve vašem prohlížeči (localStorage) — zůstane i po zavření okna. Přihlášení, zvolené postavení, plné moci i záměry se „pamatují“ mezi stránkami.</p><h3>Jak procházet prototyp</h3><p>Tlačítkem <strong>Nápověda</strong> vpravo dole zapnete vysvětlivky — u klíčových prvků se objeví značky <strong>i</strong> s vysvětlením, co se simuluje a co daný krok znamená.</p>"}, "annotations": [{"selector": ".section-header", "label": "Obdržené plné moci (zmocněnec)", "simulace": "Seznam přijatých plných mocí i stav odeslaných návrhů jsou testovací data.", "vyznam": "Pohled zmocněnce na plné moci, které mu byly uděleny, a na jím odeslané návrhy čekající na schválení zmocnitelem."}, {"selector": ".filters", "label": "Filtrování podle stavu", "simulace": "Filtry pracují nad pevným seznamem v prototypu.", "vyznam": "Plné moci mají stav (aktivní, čeká na schválení…), podle kterého se dají třídit."}]};
+    </script>
+    <script src="../js/demo-helper.js"></script>
 </body>
 </html>

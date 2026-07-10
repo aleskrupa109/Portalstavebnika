@@ -798,5 +798,11 @@
             if (btn) btn.classList.toggle('active');
         }
     </script>
+
+    <!-- ===== NÁPOVĚDA K PROTOTYPU ===== -->
+    <script>
+    window.DEMO_CONFIG = {"about": {"title": "O tomto prototypu", "html": "<p>Toto je <strong>klikací prototyp</strong> Portálu stavebníka určený k návrhu a testování obrazovek a procesů. Neběží proti žádnému reálnému systému a nikam neodesílá data.</p><h3>Co je na této obrazovce simulované</h3><ul><li>Nabídka typů žádostí je zúžená na dva proklikatelné typy.</li><li>Vyhledávání a kategorie pracují nad pevným seznamem.</li></ul><h3>Kde se drží data</h3><p>Vše je uloženo pouze ve vašem prohlížeči (localStorage) — zůstane i po zavření okna. Přihlášení, zvolené postavení, plné moci i záměry se „pamatují“ mezi stránkami.</p><h3>Jak procházet prototyp</h3><p>Tlačítkem <strong>Nápověda</strong> vpravo dole zapnete vysvětlivky — u klíčových prvků se objeví značky <strong>i</strong> s vysvětlením, co se simuluje a co daný krok znamená.</p>"}, "annotations": [{"selector": ".gov-page-header", "label": "Výběr typu žádosti", "simulace": "Nabídka je zúžená — proklikat lze žádost o povolení stavby a žádost o závazné stanovisko dotčeného orgánu.", "vyznam": "Zvolený typ určuje, který formulář se otevře. Struktura vychází ze stávajících formulářů Portálu stavebníka."}, {"selector": "#searchInput", "label": "Vyhledávání agendy", "simulace": "Vyhledávání i kategorie pracují nad pevným seznamem, nenačítají se z číselníku agend.", "vyznam": "Pomáhá najít správný typ podání mezi mnoha agendami stavebního úřadu."}]};
+    </script>
+    <script src="../js/demo-helper.js"></script>
 </body>
 </html>

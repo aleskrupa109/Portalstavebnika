@@ -698,5 +698,11 @@
 
         document.addEventListener('DOMContentLoaded', loadIdentityToHeader);
     </script>
+
+    <!-- ===== NÁPOVĚDA K PROTOTYPU ===== -->
+    <script>
+    window.DEMO_CONFIG = {"about": {"title": "O tomto prototypu", "html": "<p>Toto je <strong>klikací prototyp</strong> Portálu stavebníka určený k návrhu a testování obrazovek a procesů. Neběží proti žádnému reálnému systému a nikam neodesílá data.</p><h3>Co je na této obrazovce simulované</h3><ul><li>Zastupovaný a navázané údaje (jméno, IČO) jsou testovací hodnoty.</li><li>Dlaždice vedou na obrazovky prototypu, nesynchronizují se s AIS REZA.</li></ul><h3>Kde se drží data</h3><p>Vše je uloženo pouze ve vašem prohlížeči (localStorage) — zůstane i po zavření okna. Přihlášení, zvolené postavení, plné moci i záměry se „pamatují“ mezi stránkami.</p><h3>Jak procházet prototyp</h3><p>Tlačítkem <strong>Nápověda</strong> vpravo dole zapnete vysvětlivky — u klíčových prvků se objeví značky <strong>i</strong> s vysvětlením, co se simuluje a co daný krok znamená.</p>"}, "annotations": [{"selector": ".section-header", "label": "Správa plných mocí a zastoupení", "simulace": "Zastupovaný i navázané údaje (jméno, IČO) jsou testovací hodnoty z prohlížeče.", "vyznam": "Rozcestník <strong>explicitní REZA</strong> — odtud buď plnou moc vytváříte (jako zmocnitel), nebo o ni žádáte (jako zmocněnec), a spravujete vydané i přijaté plné moci."}, {"selector": ".tiles", "label": "Čtyři cesty správy PM", "simulace": "Dlaždice vedou na jednotlivé obrazovky prototypu; žádná data se nesynchronizují s reálným AIS REZA.", "vyznam": "Rozlišuje se pohled zmocnitele (kdo zmocnění uděluje) a zmocněnce (kdo je dostává), a zvlášť vytvoření vs. žádost o plnou moc."}]};
+    </script>
+    <script src="../js/demo-helper.js"></script>
 </body>
 </html>
