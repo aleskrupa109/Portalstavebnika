@@ -143,6 +143,10 @@
         .gov-form-item-btn:hover { background: var(--gov-primary-700); }
         .gov-form-item-btn.disabled { background: var(--gov-neutral-300); color: var(--gov-neutral-500); cursor: not-allowed; pointer-events: none; }
 
+        /* Neaktivní volby (bez zpracované simulace) — světlejší, aby funkční volby na první pohled vynikly */
+        .gov-form-item:has(.gov-form-item-btn.disabled) { opacity: 0.5; }
+        .gov-wizard-result:has(.gov-wizard-result-btn.disabled) { opacity: 0.55; }
+
         /* ===== POPULAR SECTION ===== */
         .gov-popular { background: var(--gov-primary-50); border: 1px solid var(--gov-primary-100); border-radius: var(--gov-radius-lg); padding: 20px; margin-bottom: 24px; }
         .gov-popular-title { font-size: 14px; font-weight: 600; color: var(--gov-primary); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
