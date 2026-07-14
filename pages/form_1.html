@@ -541,7 +541,7 @@
                         <div class="ps-toggle-row">
                             <div>
                                 <label class="gov-form-label" for="vyhrazenaToggle">Předmětem záměru je vyhrazená stavba</label>
-                                <p class="gov-form-hint">Orientačně sem patří dálnice, dráhy a civilní letecké stavby, velká energetická a přenosová infrastruktura (elektřina, plyn, teplo, produktovody, větší obnovitelné zdroje), jaderná a radioaktivní zařízení, stavby pro výbušniny, těžba ložisek, ukládání CO₂ a stavby pro hromadné bydlení. Úplný výčet je v příloze č. 3 stavebního zákona.</p>
+                                <p class="gov-form-hint">Dálnice, dráhy a civilní letecké stavby, velká energetická a přenosová infrastruktura (elektřina, plyn, teplo, produktovody, větší obnovitelné zdroje), jaderná a radioaktivní zařízení, stavby pro výbušniny, těžba ložisek, ukládání CO₂ a stavby pro hromadné bydlení. Úplný výčet je v příloze č. 3 stavebního zákona.</p>
                             </div>
                             <label class="ps-switch">
                                 <input type="checkbox" id="vyhrazenaToggle" onchange="setVyhrazena(this.checked)">
@@ -1253,13 +1253,13 @@
                 box.style.display = 'block';
                 if (titleText) titleText.textContent = 'Příslušný úřad (vyhrazená stavba)';
                 body.innerHTML = '<div class="ps-urad-line"><strong>Úřad rozvoje území ČR (ÚRÚ ČR)</strong></div>';
-                if (note) note.textContent = 'U vyhrazené stavby je příslušnost jasná — žádost povoluje přímo ústřední ÚRÚ ČR a neurčuje se podle obce zadaných pozemků.';
+                if (note) { note.textContent = ''; note.style.display = 'none'; }
                 return;
             }
             if (!pozemky.length) { box.style.display = 'none'; return; }
             box.style.display = 'block';
             if (titleText) titleText.textContent = 'Příslušný úřad (určeno automaticky podle obce)';
-            if (note) note.textContent = 'Systém podle obce zadaných pozemků sám určí příslušný krajský Úřad rozvoje území (ÚRÚ) a jeho detašované pracoviště. Žádost už neadresujete konkrétnímu pracovišti.';
+            if (note) { note.style.display = ''; note.textContent = 'Systém podle obce zadaných pozemků sám určí příslušný krajský Úřad rozvoje území (ÚRÚ) a jeho detašované pracoviště. Žádost už neadresujete konkrétnímu pracovišti.'; }
             var seen = {};
             var lines = [];
             pozemky.forEach(function(p) {
