@@ -1261,18 +1261,21 @@
             box.style.display = 'block';
             if (titleText) titleText.textContent = 'Příslušný úřad (určeno automaticky podle obce)';
             if (note) { note.style.display = ''; note.textContent = 'Systém podle obce zadaných pozemků sám určí příslušný krajský Úřad rozvoje území (ÚRÚ) a jeho detašované pracoviště. Žádost už neadresujete konkrétnímu pracovišti.'; }
-            var seen = {};
-            var lines = [];
-            pozemky.forEach(function(p) {
-                if (seen[p.obec]) return; seen[p.obec] = true;
-                var o = psFindObec(p.obec);
-                if (o) {
-                    lines.push('<div class="ps-urad-line"><strong>' + o.urad + '</strong>, detašované pracoviště ' + o.orp + ' <span style="color:var(--gov-neutral-500)">(obec ' + p.obec + ')</span></div>');
-                } else {
-                    lines.push('<div class="ps-urad-line">Obec <strong>' + p.obec + '</strong> — příslušný krajský ÚRÚ a detašované pracoviště by se určily podle obce (tato obec není v ukázkovém seznamu prototypu).</div>');
-                }
-            });
-            body.innerHTML = lines.join('');
+            var first = pozemky[0];
+            var distinct = {};
+            pozemky.forEach(function(p) { distinct[p.obec] = true; });
+            var multiObce = Object.keys(distinct).length > 1;
+            var o = psFindObec(first.obec);
+            var html;
+            if (o) {
+                html = '<div class="ps-urad-line"><strong>' + o.urad + '</strong>, detašované pracoviště ' + o.orp + ' <span style="color:var(--gov-neutral-500)">(podle obce ' + first.obec + ')</span></div>';
+            } else {
+                html = '<div class="ps-urad-line">Obec <strong>' + first.obec + '</strong> — příslušný krajský ÚRÚ a detašované pracoviště by se určily podle obce (tato obec není v ukázkovém seznamu prototypu).</div>';
+            }
+            if (multiObce) {
+                html += '<div class="ps-urad-line" style="color:var(--gov-neutral-600);font-size:13px;">Pozemky jsou z více obcí — v prototypu se příslušnost určuje podle prvního zadaného pozemku. Ve skutečném systému by konkrétní určení řešil jeho algoritmus.</div>';
+            }
+            body.innerHTML = html;
         }
 
         function importPozemky() {
