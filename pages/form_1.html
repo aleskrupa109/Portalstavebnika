@@ -630,6 +630,7 @@
                                 <input type="text" class="gov-form-input" id="obecInput" autocomplete="off" oninput="onObecInput(this.value)" onfocus="onObecInput(this.value)">
                                 <div class="ps-suggest" id="obecSuggest"></div>
                             </div>
+                            <p class="gov-form-hint" id="obecHint"></p>
                         </div>
                         <div class="gov-form-group">
                             <label class="gov-form-label">Katastrální území</label>
@@ -1171,7 +1172,7 @@
             var box = document.getElementById('obecSuggest');
             var n = psNorm(val);
             var matches = PS_OBCE.filter(function(o) { return psNorm(o.obec).indexOf(n) === 0; });
-            if (n && matches.length && !psSelectedObec) {
+            if (matches.length && !psSelectedObec) {
                 box.innerHTML = matches.map(function(o) { return '<div class="ps-suggest-item" onclick="selectObec(\'' + o.obec + '\')">' + o.obec + '</div>'; }).join('');
                 box.classList.add('show');
             } else {
@@ -1288,6 +1289,8 @@
         (function () {
             var ov = document.getElementById('pozemekModalOverlay');
             if (ov) ov.addEventListener('click', function(e) { if (e.target === this) closePozemekModal(); });
+            var oh = document.getElementById('obecHint');
+            if (oh) oh.textContent = 'V prototypu vyberte z obcí: ' + PS_OBCE.map(function(o){ return o.obec; }).join(', ') + '.';
         })();
     </script>
 
