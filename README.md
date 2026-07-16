@@ -1,128 +1,60 @@
-# ISSŘ Maketa
+# Portál stavebníka — maketa
 
-Maketa Informačního systému stavebního řízení pro testování a prezentace.
+Klikací prototyp Portálu stavebníka (Portál stavební správy) pro návrh a testování obrazovek a procesů — přihlášení, volba postavení, REZA (plné moci a pověření) a podání žádosti. Neběží proti žádnému reálnému systému; veškerá data jsou simulována a ukládána pouze v prohlížeči (localStorage).
 
 ## Struktura projektu
 
 ```
-issr-maketa/
-├── index.html              # Přihlašovací stránka
-├── dokumenty.html          # Seznam dokumentů/řízení
-├── css/
-│   └── styles.css          # Hlavní styly
-├── js/
-│   └── app.js              # JavaScript (načítání komponent)
-├── components/
-│   └── header.html         # Sdílená hlavička
+Portalstavebnika/
+├── index.html                  # Přihlašovací stránka (klon Portálu stavební správy)
 ├── images/
-│   └── ...                 # Obrázky a loga
+│   ├── landing-bg.jpg          # Pozadí úvodní stránky
+│   ├── logo-lev.png            # Státní znak (barevný)
+│   └── logo-lev-white.png      # Státní znak (bílý, do hlavičky)
+├── js/
+│   ├── app-state.js            # Centrální stav (uživatel, identity, plné moci, záměry) — localStorage
+│   ├── header-helper.js        # Kontrola přihlášení, naplnění hlavičky, user menu, odhlášení
+│   └── demo-helper.js          # Nápověda k prototypu (FAB, anotace, panel „O prototypu", reset dat)
 └── pages/
-    ├── detail-rizeni.html      # Detail řízení s kontrolním panelem
-    └── kontrola-prislusnost.html  # Kontrola příslušnosti
+    ├── reza_implicitni.html    # Výběr postavení po přihlášení (FO / OSVČ / firmy)
+    ├── prehled_zameru.html     # Přehled záměrů
+    ├── reza_setup.html         # Rozcestník REZA (plné moci a zastoupení)
+    ├── reza_new.html           # Vytvoření plné moci / pověření (zmocnitel)
+    ├── reza_request.html       # Žádost o plnou moc (zmocněnec)
+    ├── reza_issued.html        # Vydané plné moci
+    ├── reza_received.html      # Přijaté plné moci a odeslané návrhy
+    ├── form_new.html           # Nová žádost — vstup
+    ├── form_select.html        # Výběr typu žádosti
+    └── form_1–form_4, form_11  # Kroky formuláře žádosti o povolení stavby
+```
+
+## Architektura
+
+- **Sdílený stav** — modul `PortalStavebnika` (`js/app-state.js`) drží přihlášeného uživatele, jeho identity, plné moci, záměry a žádosti v localStorage (klíče s prefixem `ps_`). Data přežívají mezi stránkami i po zavření prohlížeče.
+- **Hlavička** — je zkopírována přímo do každé stránky (kvůli fungování bez serveru); dynamická data (jméno, postavení) doplňuje `HeaderHelper.init()` z `js/header-helper.js`. Pořadí skriptů: `app-state.js` → `header-helper.js` → `demo-helper.js`.
+- **Nápověda** — každá stránka definuje `window.DEMO_CONFIG` (panel „O prototypu" + anotace prvků) a připojuje `js/demo-helper.js`, který vykreslí plovoucí tlačítko Nápověda a značky „i".
+
+## Lokální spuštění
+
+Maketa nevyžaduje server — stačí otevřít `index.html` v prohlížeči. Pro čistší chování (relativní cesty, localStorage per-origin) lze použít lokální server:
+
+```bash
+python -m http.server 8000
+# poté http://localhost:8000
 ```
 
 ## Publikování na GitHub Pages
 
-### Krok 1: Vytvořte GitHub repozitář
+1. Nahrajte obsah do repozitáře na GitHubu (root = tato složka).
+2. Settings → Pages → Source: branch **main**, folder **/ (root)** → Save.
+3. Maketa bude do 1–2 minut na `https://UZIVATEL.github.io/NAZEV-REPOZITARE/`.
 
-1. Jděte na [github.com](https://github.com) a přihlaste se
-2. Klikněte na **"New repository"** (zelené tlačítko)
-3. Pojmenujte repozitář např. `issr-maketa`
-4. Nechte **Public** (pro GitHub Pages zdarma)
-5. Klikněte **"Create repository"**
+## Testovací data a reset
 
-### Krok 2: Nahrajte soubory
+Po přihlášení (stačí zadat libovolné jméno) se vygenerují fiktivní identity (FO, OSVČ, dvě firmy) a výchozí demo sada plných mocí a záměrů. Reset do výchozího stavu: tlačítko **i** vpravo dole → „Obnovit demo data" (smaže localStorage a vrátí na přihlášení).
 
-**Varianta A - Přes webové rozhraní (jednodušší):**
-1. V novém repozitáři klikněte na **"uploading an existing file"**
-2. Přetáhněte všechny soubory a složky z `issr-maketa/`
-3. Klikněte **"Commit changes"**
+## Přidání nové stránky
 
-**Varianta B - Přes Git (pro pokročilé):**
-```bash
-cd issr-maketa
-git init
-git add .
-git commit -m "Initial commit"
-git remote add origin https://github.com/VASE-JMENO/issr-maketa.git
-git push -u origin main
-```
-
-### Krok 3: Zapněte GitHub Pages
-
-1. V repozitáři jděte do **Settings** (ozubené kolečko)
-2. V levém menu klikněte na **Pages**
-3. V sekci "Source" vyberte:
-   - Branch: **main**
-   - Folder: **/ (root)**
-4. Klikněte **Save**
-
-### Krok 4: Počkejte na publikování
-
-- GitHub Pages potřebuje 1-2 minuty na první publikování
-- Vaše maketa bude dostupná na:
-  ```
-  https://VASE-JMENO.github.io/issr-maketa/
-  ```
-
-## Aktualizace makety
-
-Po každé změně souborů:
-
-**Přes webové rozhraní:**
-1. Nahrajte změněné soubory přes "Add file" → "Upload files"
-2. Změny se automaticky publikují během 1-2 minut
-
-**Přes Git:**
-```bash
-git add .
-git commit -m "Popis změny"
-git push
-```
-
-## Lokální testování
-
-Pro testování na vlastním počítači potřebujete lokální server (kvůli načítání komponent).
-
-**S Pythonem:**
-```bash
-cd issr-maketa
-python -m http.server 8000
-```
-Pak otevřete http://localhost:8000
-
-**S Node.js:**
-```bash
-npx serve issr-maketa
-```
-
-**Nebo jednoduše:** Otevřete soubory přímo v prohlížeči - hlavička se v tomto případě nenačte dynamicky, ale zbytek stránky bude fungovat.
-
-## Přidání nových stránek
-
-1. Vytvořte nový HTML soubor ve složce `pages/`
-2. Zkopírujte strukturu z existující stránky
-3. Upravte cestu k CSS: `../css/styles.css`
-4. Upravte cestu k obrázkům: `../images/...`
-
-## Úprava hlavičky
-
-Hlavička je definována v `components/header.html`. Změna se projeví na všech stránkách, které ji načítají dynamicky.
-
-Pro stránky v `pages/` složce je hlavička zkopírována přímo do HTML (kvůli relativním cestám k obrázkům).
-
-## Barvy a styly
-
-Hlavní barvy jsou definované jako CSS proměnné v `css/styles.css`:
-
-```css
---issr-primary: #004289;     /* Hlavní modrá */
---issr-accent: #0066cc;      /* Akcentová modrá */
---issr-success: #28a745;     /* Zelená pro úspěch */
---issr-warning: #ffc107;     /* Žlutá pro upozornění */
---issr-danger: #dc3545;      /* Červená pro chyby */
-```
-
-## Kontakt
-
-Pro dotazy a připomínky kontaktujte správce projektu.
+1. Zkopírujte strukturu existující stránky z `pages/` (včetně hlavičky a bloku skriptů na konci).
+2. Upravte `window.DEMO_CONFIG` (text „O prototypu" a anotace pro danou obrazovku).
+3. Cesty: obrázky `../images/...`, skripty `../js/...`, návrat na přihlášení `../index.html`.
