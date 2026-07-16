@@ -247,6 +247,8 @@
 
         /* ===== Pozemky ===== */
         .ps-subhead { font-size: 18px; font-weight: 500; margin: 4px 0 14px; color: var(--gov-neutral-900); }
+        .ps-req-mark { font-size: 14px; font-weight: 400; color: var(--gov-neutral-500); }
+        .ps-req-hint { font-size: 13px; color: var(--gov-error-600); margin-top: 10px; }
         .ps-pozemky-actions { display: flex; gap: 16px; }
         .ps-btn-wide { flex: 1; justify-content: center; }
         .ps-pozemek-list { margin-top: 16px; display: flex; flex-direction: column; gap: 10px; }
@@ -553,7 +555,7 @@
 
                     <!-- Pozemky -->
                     <div class="gov-form-group ps-pozemky">
-                        <h3 class="ps-subhead">Pozemky</h3>
+                        <h3 class="ps-subhead">Pozemky <span id="pozemkyReqMark" class="ps-req-mark">(povinné)</span></h3>
                         <div class="ps-pozemky-actions">
                             <button type="button" class="gov-btn gov-btn-secondary ps-btn-wide" onclick="openPozemekModal()">
                                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
@@ -565,6 +567,7 @@
                             </button>
                         </div>
                         <p class="gov-form-hint" id="importHint" style="display: none;">Import pozemků ze souboru je v prototypu simulovaný.</p>
+                        <p class="ps-req-hint" id="pozemkyReqHint" style="display: none;">Zadejte alespoň jeden pozemek — bez něj nelze pokračovat a systém by neurčil příslušný úřad.</p>
                         <div class="ps-pozemek-list" id="pozemekList"></div>
                         <div class="ps-urad-box" id="uradBox" style="display: none;">
                             <div class="ps-urad-title">
@@ -1065,7 +1068,12 @@
                 // Nový záměr - povolit pokračovat (název je nepovinný pro mockup)
                 isValid = true;
             }
+            // U nevyhrazené stavby je povinné zadat alespoň jeden pozemek
+            var ostatniOk = isValid;
+            var chybiPozemek = !state.vyhrazena && !(state.pozemky && state.pozemky.length);
+            if (chybiPozemek) isValid = false;
             document.getElementById('continueBtn').disabled = !isValid;
+            if (typeof updatePozemkyRequired === 'function') updatePozemkyRequired(ostatniOk && chybiPozemek);
         }
 
         function goToNext() {
@@ -1137,10 +1145,19 @@
         function psState() { if (typeof state === 'undefined') { window.state = {}; } if (!state.pozemky) state.pozemky = []; return state; }
         var psSelectedObec = null;
 
+        function updatePozemkyRequired(zobrazUpozorneni) {
+            var mark = document.getElementById('pozemkyReqMark');
+            var hint = document.getElementById('pozemkyReqHint');
+            var vyhrazena = psState().vyhrazena;
+            if (mark) mark.style.display = vyhrazena ? 'none' : '';
+            if (hint) hint.style.display = zobrazUpozorneni ? 'block' : 'none';
+        }
+
         function setVyhrazena(checked) {
             psState().vyhrazena = checked;
             document.getElementById('vyhrazenaState').textContent = checked ? 'Ano' : 'Ne';
             updateUradBox();
+            if (typeof updateContinueButton === 'function') updateContinueButton();
         }
 
         function psNorm(s) { return (s || '').trim().toLowerCase(); }
@@ -1214,6 +1231,7 @@
             psState().pozemky.push({ obec: obec, ku: ku, typ: typEl ? typEl.value : 'Pozemková', parc: parcelniCislo });
             renderPozemky();
             updateUradBox();
+            if (typeof updateContinueButton === 'function') updateContinueButton();
             if (another) {
                 document.getElementById('parcKmen').value = '';
                 document.getElementById('parcPod').value = '';
@@ -1228,6 +1246,7 @@
             psState().pozemky.splice(i, 1);
             renderPozemky();
             updateUradBox();
+            if (typeof updateContinueButton === 'function') updateContinueButton();
         }
 
         function renderPozemky() {
