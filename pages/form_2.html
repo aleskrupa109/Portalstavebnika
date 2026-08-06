@@ -349,6 +349,24 @@
             .gov-layout { flex-direction: column-reverse; }
             .gov-sidebar { width: 100%; position: static; max-height: none; overflow-y: visible; }
         }
+        /* ===== KONTROLA DOKUMENTŮ ===== */
+        .doc-chip { display: inline-flex; align-items: center; gap: 5px; padding: 2px 9px; border-radius: 999px; font-size: 11px; font-weight: 600; white-space: nowrap; }
+        .doc-chip.ok { background: var(--gov-success-50, #e8f5e9); color: var(--gov-success-600); }
+        .doc-chip.bad { background: var(--gov-error-50, #fdecea); color: var(--gov-error-600); }
+        .doc-chip.checking { background: #eef1f4; color: var(--gov-neutral-500, #6b7280); }
+        .doc-reason { font-size: 11px; color: var(--gov-error-600); margin-top: 4px; }
+        .gov-uploaded-file.bad { background: var(--gov-error-50, #fdecea); border-color: var(--gov-error-600); }
+        .gov-uploaded-file.bad > svg { color: var(--gov-error-600) !important; }
+        .gov-uploaded-file-replace { padding: 4px 10px; font-size: 11px; font-family: var(--gov-font); border: 1px solid var(--gov-primary); border-radius: var(--gov-radius); background: #fff; color: var(--gov-primary); cursor: pointer; white-space: nowrap; }
+        .gov-uploaded-file-replace:hover { background: var(--gov-primary-50); }
+        .doc-spin { width: 12px; height: 12px; border: 2px solid var(--gov-neutral-200, #e5e8eb); border-top-color: var(--gov-primary); border-radius: 50%; display: inline-block; animation: doc-rot .7s linear infinite; }
+        @keyframes doc-rot { to { transform: rotate(360deg); } }
+        .doc-banner { display: none; align-items: flex-start; gap: 12px; padding: 14px 16px; background: var(--gov-error-50, #fdecea); border: 1px solid var(--gov-error-600); border-radius: var(--gov-radius); margin-bottom: 16px; }
+        .doc-banner.show { display: flex; }
+        .doc-banner > svg { width: 20px; height: 20px; color: var(--gov-error-600); flex-shrink: 0; margin-top: 1px; }
+        .doc-banner-text { font-size: 13px; color: var(--gov-neutral-700); line-height: 1.5; }
+        .doc-banner-text strong { color: var(--gov-error-600); }
+        .gov-btn:disabled { opacity: .5; cursor: not-allowed; }
     </style>
 </head>
 <body>
@@ -550,9 +568,14 @@
                         </div>
                     </div>
 
+                    <div class="doc-banner" id="docCheckBanner">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
+                        <div class="doc-banner-text"><strong id="docBannerCount">0</strong> dokument(ů) nesplňuje podmínky pro podání (formát PDF/A-3b, není uzamčen, autorizační razítko EAR, časové razítko). Nahraďte je vyhovujícími dokumenty — rozpracovaná žádost zůstane zachována. Vadné soubory jsou v seznamu zvýrazněné červeně a mají tlačítko <strong>Nahradit</strong>.</div>
+                    </div>
+
                     <div class="gov-form-actions">
                         <a href="form_1.html" class="gov-btn gov-btn-secondary"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>Zpět</a>
-                        <button type="button" class="gov-btn gov-btn-primary" onclick="goToNext()">Dokladová část<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg></button>
+                        <button type="button" class="gov-btn gov-btn-primary" id="toDokladovaBtn" onclick="goToNext()">Dokladová část<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg></button>
                     </div>
                 </div>
             </main>
@@ -1033,21 +1056,91 @@
         function handleDragOver(event) { event.preventDefault(); event.currentTarget.classList.add('dragover'); }
         function handleDragLeave(event) { event.currentTarget.classList.remove('dragover'); }
 
+        // ===== KONTROLA DOKUMENTŮ (stejná jako na stránce Ověření dokumentace) =====
+        function checkDoc(name) {
+            if (!/\.pdf$/i.test(name)) {
+                return { pdfa: false, notLocked: false, ear: false, timestamp: false, ok: false, reason: 'Dokument musí být ve formátu PDF/A-3b.' };
+            }
+            var h = 0; for (var i = 0; i < name.length; i++) { h = (h * 31 + name.charCodeAt(i)) >>> 0; }
+            var pdfa = (h % 100) < 45, notLocked = (Math.floor(h / 7) % 100) < 85, ear = (Math.floor(h / 13) % 100) < 78, timestamp = (Math.floor(h / 29) % 100) < 72;
+            var reason = '';
+            if (!pdfa) reason = 'Dokument není ve formátu PDF/A-3b.';
+            else if (!notLocked) reason = 'Dokument je uzamčen proti změnám.';
+            else if (!ear) reason = 'Chybí autorizační razítko (EAR).';
+            else if (!timestamp) reason = 'Chybí časové razítko.';
+            return { pdfa: pdfa, notLocked: notLocked, ear: ear, timestamp: timestamp, ok: (pdfa && notLocked && ear && timestamp), reason: reason };
+        }
+
+        // progresivní odhalování výsledků
+        var _docQueue = [], _docTimer = null;
+        function enqueueCheck(fileObj) { _docQueue.push(fileObj); if (!_docTimer) _docTimer = setTimeout(docStep, 300); }
+        function docStep() {
+            if (!_docQueue.length) { _docTimer = null; return; }
+            var f = _docQueue.shift();
+            f._checking = false;
+            renderFiles(f._key);
+            updateDocValidity();
+            _docTimer = _docQueue.length ? setTimeout(docStep, 300) : null;
+        }
+
+        var _docReplace = null;
+        function replaceFile(key, index) {
+            _docReplace = { key: key, index: index };
+            var input = document.getElementById('upload-' + key);
+            triggerUpload(key);
+            var cleanup = function () {
+                setTimeout(function () { if (input && !input.value) { _docReplace = null; } window.removeEventListener('focus', cleanup); }, 500);
+            };
+            window.addEventListener('focus', cleanup);
+        }
+
+        function docCounts() {
+            var faulty = 0, checking = 0;
+            Object.keys(state.files).forEach(function (k) {
+                (state.files[k] || []).forEach(function (f) {
+                    if (f._checking) checking++;
+                    else if (f.check && !f.check.ok) faulty++;
+                });
+            });
+            return { faulty: faulty, checking: checking };
+        }
+        function updateDocValidity() {
+            var c = docCounts();
+            var btn = document.getElementById('toDokladovaBtn');
+            if (btn) btn.disabled = (c.faulty > 0 || c.checking > 0);
+            var banner = document.getElementById('docCheckBanner');
+            if (banner) {
+                if (c.faulty > 0) { document.getElementById('docBannerCount').textContent = c.faulty; banner.classList.add('show'); }
+                else banner.classList.remove('show');
+            }
+        }
+
         function addFiles(key, fileList, isFolder) {
             if (!state.files[key]) state.files[key] = [];
             var now = new Date().toISOString();
+            var replaceInfo = _docReplace; _docReplace = null;
             for (var i = 0; i < fileList.length; i++) { 
                 var file = fileList[i];
                 var path = isFolder && file.webkitRelativePath ? file.webkitRelativePath : file.name;
-                state.files[key].push({ 
+                var obj = { 
                     name: file.name, 
                     size: file.size, 
                     path: path,
                     type: file.type || getFileTypeFromName(file.name),
-                    addedAt: now
-                }); 
+                    addedAt: now,
+                    check: checkDoc(file.name),
+                    _checking: true,
+                    _key: key
+                };
+                state.files[key].push(obj); 
+                enqueueCheck(obj);
+            }
+            // nahrazení vadného souboru: odeber původní na uložené pozici
+            if (replaceInfo && replaceInfo.key === key && state.files[key][replaceInfo.index]) {
+                state.files[key].splice(replaceInfo.index, 1);
             }
             renderFiles(key);
+            updateDocValidity();
         }
         
         function getFileTypeFromName(filename) {
@@ -1091,11 +1184,19 @@
                     var isInFolder = displayName.indexOf('/') > -1;
                     var folderIcon = isInFolder ? '<svg style="width:14px;height:14px;margin-right:4px;color:#666;flex-shrink:0;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>' : '';
                     
-                    html += '<div class="gov-uploaded-file">';
+                    var chk = file.check;
+                    var chip = file._checking
+                        ? '<span class="doc-chip checking"><span class="doc-spin"></span>Kontroluji…</span>'
+                        : (chk && chk.ok ? '<span class="doc-chip ok">✓ Vyhovuje</span>' : '<span class="doc-chip bad">✗ Nevyhovuje</span>');
+                    var isBad = !file._checking && chk && !chk.ok;
+
+                    html += '<div class="gov-uploaded-file' + (isBad ? ' bad' : '') + '" style="flex-wrap:wrap">';
                     html += '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>';
                     html += '<span class="gov-uploaded-file-name">' + folderIcon + displayName + '</span>';
+                    html += chip;
                     html += '<span class="gov-uploaded-file-size">' + formatFileSize(file.size) + '</span>';
                     html += '<div class="gov-uploaded-file-actions">';
+                    if (isBad) { html += '<button class="gov-uploaded-file-replace" onclick="replaceFile(\'' + key + '\', ' + index + ')">Nahradit</button>'; }
                     html += '<button class="gov-uploaded-file-view" onclick="openFilePreview(\'' + key + '\', ' + index + ')" title="Zobrazit detail">';
                     html += '<svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>';
                     html += '</button>';
@@ -1103,6 +1204,7 @@
                     html += '<svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>';
                     html += '</button>';
                     html += '</div>';
+                    if (isBad && chk.reason) { html += '<div class="doc-reason" style="flex-basis:100%">' + chk.reason + '</div>'; }
                     html += '</div>';
                 });
             }
@@ -1124,12 +1226,14 @@
             
             state.files[key] = [];
             renderFiles(key);
+            updateDocValidity();
         }
 
         function removeFile(key, index) { 
             if (state.files[key]) { 
                 state.files[key].splice(index, 1); 
                 renderFiles(key); 
+                updateDocValidity();
             } 
         }
         
@@ -1229,7 +1333,17 @@
             if (e.key === 'Escape') closeFilePreview();
         });
         function formatFileSize(bytes) { if (bytes < 1024) return bytes + ' B'; if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB'; return (bytes / (1024 * 1024)).toFixed(1) + ' MB'; }
-        function goToNext() { localStorage.setItem('formDokumentace', JSON.stringify(state)); window.location.href = 'form_3.html'; }
+        function goToNext() {
+            var c = docCounts();
+            if (c.faulty > 0 || c.checking > 0) {
+                updateDocValidity();
+                var banner = document.getElementById('docCheckBanner');
+                if (c.faulty > 0 && banner) { banner.classList.add('show'); banner.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+                return;
+            }
+            localStorage.setItem('formDokumentace', JSON.stringify(state));
+            window.location.href = 'form_3.html';
+        }
         function toggleUserMenu() { var btn = document.querySelector('.gov-header-user-btn'); var dropdown = document.getElementById('userDropdown'); if (btn) btn.classList.toggle('active'); if (dropdown) dropdown.classList.toggle('show'); }
         document.addEventListener('click', function(e) { var userSection = document.querySelector('.gov-header-user'); if (userSection && !userSection.contains(e.target)) { var btn = document.querySelector('.gov-header-user-btn'); var dropdown = document.getElementById('userDropdown'); if (btn) btn.classList.remove('active'); if (dropdown) dropdown.classList.remove('show'); } });
         function startAutosaveTimer() { var s = 3; setInterval(function() { document.getElementById('autosaveTime').textContent = ++s; }, 1000); }
@@ -1442,12 +1556,13 @@
             startAutosaveTimer(); 
             renderStavby();
             updateDokumentaceTree();
+            updateDocValidity();
         });
     </script>
 
     <!-- ===== NÁPOVĚDA K PROTOTYPU ===== -->
     <script>
-    window.DEMO_CONFIG = {"about": {"title": "O tomto prototypu", "html": "<p>Toto je <strong>klikací prototyp</strong> Portálu stavebníka určený k návrhu a testování obrazovek a procesů. Neběží proti žádnému reálnému systému a nikam neodesílá data.</p><h3>Co je na této obrazovce simulované</h3><ul><li>Nahrávání dokumentace je simulované — soubory se reálně neukládají.</li></ul><h3>Kde se drží data</h3><p>Vše je uloženo pouze ve vašem prohlížeči (localStorage) — zůstane i po zavření okna. Přihlášení, zvolené postavení, plné moci i záměry se „pamatují“ mezi stránkami.</p><h3>Jak procházet prototyp</h3><p>Tlačítkem <strong>Nápověda</strong> vpravo dole zapnete vysvětlivky — u klíčových prvků se objeví značky <strong>i</strong> s vysvětlením, co se simuluje a co daný krok znamená.</p>"}, "annotations": [{"selector": ".gov-page-header", "label": "Dokumentace k žádosti", "simulace": "Nahrávání dokumentace je simulované — soubory se reálně neukládají.", "vyznam": "Část žádosti, kde stavebník přikládá projektovou dokumentaci a přílohy vyžadované vyhláškou."}]};
+    window.DEMO_CONFIG = {"about": {"title": "O tomto prototypu", "html": "<p>Toto je <strong>klikací prototyp</strong> Portálu stavebníka určený k návrhu a testování obrazovek a procesů. Neběží proti žádnému reálnému systému a nikam neodesílá data.</p><h3>Co je na této obrazovce simulované</h3><ul><li>Nahrávání dokumentace je simulované — soubory se reálně neukládají.</li><li>Kontrola každého dokumentu (PDF/A-3b, uzamčení, autorizační a časové razítko) je nasimulovaná podle názvu souboru.</li></ul><h3>Kde se drží data</h3><p>Vše je uloženo pouze ve vašem prohlížeči (localStorage) — zůstane i po zavření okna. Přihlášení, zvolené postavení, plné moci i záměry se „pamatují“ mezi stránkami.</p><h3>Jak procházet prototyp</h3><p>Tlačítkem <strong>Nápověda</strong> vpravo dole zapnete vysvětlivky — u klíčových prvků se objeví značky <strong>i</strong> s vysvětlením, co se simuluje a co daný krok znamená.</p>"}, "annotations": [{"selector": ".gov-page-header", "label": "Dokumentace k žádosti", "simulace": "Nahrávání je simulované — soubory se neukládají a čtyři kontroly (PDF/A-3b, uzamčení, autorizační razítko EAR, časové razítko) se u každého souboru nasimulují podle názvu.", "vyznam": "Stavebník sem přikládá projektovou dokumentaci. Každý dokument musí splnit všechny čtyři podmínky — dokud některý nevyhovuje, nelze pokračovat na dokladovou část. Vadný dokument lze tlačítkem Nahradit vyměnit za správný, aniž byste ztratili rozpracovanou žádost."}]};
     </script>
     <script src="../js/demo-helper.js"></script>
 </body>
