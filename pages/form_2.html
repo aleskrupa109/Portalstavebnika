@@ -367,6 +367,23 @@
         .doc-banner-text { font-size: 13px; color: var(--gov-neutral-700); line-height: 1.5; }
         .doc-banner-text strong { color: var(--gov-error-600); }
         .gov-btn:disabled { opacity: .5; cursor: not-allowed; }
+        /* přehledový pruh + export */
+        .doc-results-bar { display: none; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding: 12px 16px; background: var(--gov-neutral-50); border: 1px solid var(--gov-neutral-200); border-radius: var(--gov-radius); margin-bottom: 16px; }
+        .doc-results-summary { font-size: 13px; color: var(--gov-neutral-700); }
+        .doc-export-btn { display: inline-flex; align-items: center; gap: 8px; background: var(--gov-primary); color: #fff; border: none; border-radius: var(--gov-radius); padding: 8px 14px; font-size: 13px; font-weight: 600; font-family: var(--gov-font); cursor: pointer; }
+        .doc-export-btn svg { width: 16px; height: 16px; }
+        .doc-export-btn:hover { background: var(--gov-primary-700, #234a75); }
+        /* detail výsledku v modalu */
+        .doc-detail { margin-top: 18px; border-top: 1px solid var(--gov-neutral-200); padding-top: 16px; }
+        .doc-detail-title { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .3px; color: var(--gov-neutral-500); margin-bottom: 10px; }
+        .doc-check { display: flex; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--gov-neutral-100); }
+        .doc-check:last-child { border-bottom: none; }
+        .doc-check-ic { flex-shrink: 0; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #fff; }
+        .doc-check-ic.ok { background: var(--gov-success-600); }
+        .doc-check-ic.bad { background: var(--gov-error-600); }
+        .doc-check-label { font-size: 13px; font-weight: 500; }
+        .doc-check-reason { font-size: 12px; color: var(--gov-error-600); margin-top: 2px; }
+        .doc-detail .doc-chip { margin-bottom: 12px; }
     </style>
 </head>
 <body>
@@ -450,6 +467,14 @@
                     </div>
 
                     <p class="gov-data-limit">📊 <a href="#">Datový limit dokumentace je 10 GB</a></p>
+
+                    <div class="doc-results-bar" id="docResultsBar">
+                        <span class="doc-results-summary" id="docResultsSummary"></span>
+                        <button type="button" class="doc-export-btn" onclick="exportDocCsv()">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 15V3"/></svg>
+                            Export výsledků (CSV)
+                        </button>
+                    </div>
 
                     <div id="uploadSections">
                         <!-- A - Průvodní list -->
@@ -656,6 +681,7 @@
                         <span class="gov-modal-info-value" id="previewFileDate">-</span>
                     </div>
                 </div>
+                <div id="previewCheck"></div>
             </div>
             <div class="gov-modal-footer">
                 <button class="gov-modal-btn gov-modal-btn-secondary" onclick="closeFilePreview()">Zavřít</button>
@@ -1095,14 +1121,16 @@
         }
 
         function docCounts() {
-            var faulty = 0, checking = 0;
+            var faulty = 0, checking = 0, ok = 0, total = 0;
             Object.keys(state.files).forEach(function (k) {
                 (state.files[k] || []).forEach(function (f) {
+                    total++;
                     if (f._checking) checking++;
                     else if (f.check && !f.check.ok) faulty++;
+                    else if (f.check && f.check.ok) ok++;
                 });
             });
-            return { faulty: faulty, checking: checking };
+            return { faulty: faulty, checking: checking, ok: ok, total: total };
         }
         function updateDocValidity() {
             var c = docCounts();
@@ -1113,6 +1141,77 @@
                 if (c.faulty > 0) { document.getElementById('docBannerCount').textContent = c.faulty; banner.classList.add('show'); }
                 else banner.classList.remove('show');
             }
+            var bar = document.getElementById('docResultsBar');
+            if (bar) {
+                if (c.total > 0) {
+                    var done = c.total - c.checking;
+                    document.getElementById('docResultsSummary').textContent =
+                        'Zkontrolováno ' + done + ' z ' + c.total + ' dokumentů — vyhovuje ' + c.ok + ', nevyhovuje ' + c.faulty + (c.checking ? ' · kontrola probíhá…' : '');
+                    bar.style.display = 'flex';
+                } else bar.style.display = 'none';
+            }
+        }
+
+        // popisky sekcí pro export
+        function docKeyLabel(key) {
+            var map = { A: 'A - Průvodní list', B: 'B - Souhrnná technická zpráva', C1: 'C1 - Širší vztahy', C2: 'C2 - Katastrální', C3: 'C3 - Koordinační', C4: 'C4 - Speciální', C5: 'C5 - Dělení pozemků' };
+            if (map[key]) return map[key];
+            if (/^D1-/.test(key)) return 'D1 - Stavební';
+            if (/^D2-/.test(key)) return 'D2 - Konstrukční';
+            if (/^D3-/.test(key)) return 'D3 - Požární';
+            return key;
+        }
+        function docCsvCell(v) { v = (v == null ? '' : String(v)); if (/[;"\n]/.test(v)) { v = '"' + v.replace(/"/g, '""') + '"'; } return v; }
+        function exportDocCsv() {
+            var head = ['Sekce', 'Nazev souboru', 'Cesta', 'Stav', 'PDF/A-3b', 'Neni uzamcen', 'Autorizacni razitko (EAR)', 'Casove razitko', 'Duvod'];
+            var lines = [head.join(';')];
+            var any = false;
+            Object.keys(state.files).forEach(function (k) {
+                (state.files[k] || []).forEach(function (f) {
+                    if (f._checking) return;
+                    var c = f.check || {};
+                    any = true;
+                    lines.push([
+                        docKeyLabel(k), f.name, (f.path || f.name),
+                        c.ok ? 'Vyhovuje' : 'Nevyhovuje',
+                        c.pdfa ? 'Ano' : 'Ne', c.notLocked ? 'Ano' : 'Ne',
+                        c.ear ? 'Ano' : 'Ne', c.timestamp ? 'Ano' : 'Ne',
+                        c.ok ? '' : (c.reason || '')
+                    ].map(docCsvCell).join(';'));
+                });
+            });
+            if (!any) return;
+            var csv = '\ufeff' + lines.join('\r\n');
+            var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            var url = URL.createObjectURL(blob);
+            var a = document.createElement('a');
+            a.href = url; a.download = 'kontrola_dokumentace.csv';
+            document.body.appendChild(a); a.click(); document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        // detail výsledku v náhledovém modalu
+        function renderPreviewCheck(file) {
+            var el = document.getElementById('previewCheck');
+            if (!el) return;
+            if (file._checking) {
+                el.innerHTML = '<div class="doc-detail"><div class="doc-detail-title">Výsledek kontroly</div><span class="doc-chip checking"><span class="doc-spin"></span>Kontroluji…</span></div>';
+                return;
+            }
+            var chk = file.check;
+            if (!chk) { el.innerHTML = ''; return; }
+            function row(ok, label, reason) {
+                return '<div class="doc-check"><span class="doc-check-ic ' + (ok ? 'ok' : 'bad') + '">' + (ok ? '✓' : '✗') + '</span>' +
+                    '<div><div class="doc-check-label">' + label + '</div>' + (!ok && reason ? '<div class="doc-check-reason">' + reason + '</div>' : '') + '</div></div>';
+            }
+            var badge = chk.ok ? '<span class="doc-chip ok">✓ Vyhovuje</span>' : '<span class="doc-chip bad">✗ Nevyhovuje</span>';
+            var html = '<div class="doc-detail"><div class="doc-detail-title">Výsledek kontroly</div>' + badge;
+            html += row(chk.pdfa, 'Formát PDF/A-3b', 'Dokument není ve formátu PDF/A-3b.');
+            html += row(chk.notLocked, 'Dokument není uzamčen', 'Dokument je uzamčen proti změnám.');
+            html += row(chk.ear, 'Autorizační razítko (EAR)', 'Chybí autorizační razítko (EAR).');
+            html += row(chk.timestamp, 'Časové razítko', 'Chybí časové razítko.');
+            html += '</div>';
+            el.innerHTML = html;
         }
 
         function addFiles(key, fileList, isFolder) {
@@ -1256,6 +1355,8 @@
             // Nastavit ikonu podle typu souboru
             var iconEl = document.getElementById('previewIcon');
             iconEl.innerHTML = getFileIconPath(file.name);
+            
+            renderPreviewCheck(file);
             
             // Zobrazit modal
             document.getElementById('filePreviewModal').classList.add('show');
