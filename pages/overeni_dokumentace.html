@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ověření dokumentace – Portál stavebníka</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --gov-primary: #2c5a8c;
+            --gov-primary-light: #3a7ab8;
+            --gov-text-light: #ffffff;
+            --gov-yellow: #f5a623;
+            --gov-bg: #f5f7fa;
+            --gov-border: #e0e0e0;
+            --gov-neutral-50: #f9fafb;
+            --gov-neutral-100: #f1f3f5;
+            --gov-neutral-200: #e5e8eb;
+            --gov-neutral-400: #9aa5b1;
+            --gov-neutral-500: #6b7280;
+            --gov-neutral-700: #374151;
+            --gov-neutral-900: #1a1a1a;
+            --gov-success: #1f8b4c;
+            --gov-success-bg: #e7f5ec;
+            --gov-error: #c53030;
+            --gov-error-bg: #fdecea;
+            --gov-radius: 6px;
+        }
+        body { font-family: 'Roboto', -apple-system, sans-serif; background: var(--gov-bg); color: var(--gov-neutral-900); line-height: 1.5; }
+
+        /* ===== HLAVIČKA (shodná s ostatními stránkami) ===== */
+        .gov-header { background: var(--gov-primary); position: sticky; top: 0; z-index: 1000; }
+        .gov-header-top { padding: 14px 40px; }
+        .gov-header-top-content { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
+        .gov-header-brand { display: flex; align-items: center; gap: 14px; text-decoration: none; color: var(--gov-text-light); }
+        .gov-header-logo { height: 38px; width: auto; }
+        .gov-header-title { font-size: 18px; font-weight: 400; letter-spacing: 0.3px; color: var(--gov-text-light); }
+        .gov-header-user { position: relative; }
+        .gov-header-user-btn { display: flex; align-items: center; gap: 10px; padding: 8px 16px; background: transparent; border: 1px solid rgba(255,255,255,0.5); border-radius: 4px; color: var(--gov-text-light); font-size: 13px; cursor: pointer; transition: all 0.2s ease; }
+        .gov-header-user-btn:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.8); }
+        .gov-header-user-btn svg.user-icon { width: 18px; height: 18px; flex-shrink: 0; }
+        .gov-header-user-btn .chevron { width: 12px; height: 12px; transition: transform 0.2s ease; flex-shrink: 0; }
+        .gov-header-user-btn.active .chevron { transform: rotate(180deg); }
+        .gov-header-user-info { display: flex; flex-direction: column; align-items: flex-start; line-height: 1.25; text-align: left; }
+        .gov-header-user-name { font-weight: 500; font-size: 13px; }
+        .gov-header-user-detail { font-size: 11px; opacity: 0.85; }
+        .gov-header-user-dropdown { position: absolute; top: calc(100% + 8px); right: 0; min-width: 280px; background: white; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); opacity: 0; visibility: hidden; transform: translateY(-10px); transition: all 0.2s ease; z-index: 100; }
+        .gov-header-user-dropdown.show { opacity: 1; visibility: visible; transform: translateY(0); }
+        .gov-header-user-dropdown-header { padding: 16px; border-bottom: 1px solid #eee; background: #f9fafb; border-radius: 8px 8px 0 0; }
+        .gov-header-user-dropdown-name { font-weight: 600; color: #1a1a1a; font-size: 14px; }
+        .gov-header-user-dropdown-detail { font-size: 12px; color: #666; margin-top: 2px; }
+        .gov-header-user-dropdown-badge { display: inline-block; background: #e8f4fc; color: #2362a2; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 500; margin-top: 6px; }
+        .gov-header-user-dropdown a { display: flex; align-items: center; gap: 12px; padding: 12px 16px; color: #333; text-decoration: none; font-size: 14px; transition: background 0.15s ease; }
+        .gov-header-user-dropdown a:last-child { border-radius: 0 0 8px 8px; border-top: 1px solid #eee; color: #c53030; }
+        .gov-header-user-dropdown a:hover { background: #f5f7fa; }
+        .gov-header-user-dropdown svg { width: 18px; height: 18px; color: #666; }
+        .gov-header-user-dropdown a:last-child svg { color: #c53030; }
+        .gov-header-nav { padding: 0 40px; }
+        .gov-header-nav-content { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
+        .gov-nav-menu { display: flex; align-items: center; gap: 0; list-style: none; }
+        .gov-nav-link { position: relative; display: block; padding: 14px 20px; color: var(--gov-text-light); text-decoration: none; font-size: 13px; font-weight: 500; letter-spacing: 0.5px; text-transform: uppercase; transition: all 0.2s ease; border-top: 3px solid transparent; }
+        .gov-nav-link:hover { background: rgba(255,255,255,0.1); }
+        .gov-nav-link.active { border-top-color: var(--gov-text-light); }
+        .gov-nav-link.disabled { color: rgba(255,255,255,0.4); cursor: default; pointer-events: none; }
+        .gov-nav-link[data-tooltip]:hover::after { content: attr(data-tooltip); position: absolute; top: 100%; left: 50%; transform: translateX(-50%); background: #1a1a2e; color: #fff; padding: 10px 14px; border-radius: 6px; font-size: 12px; font-weight: 400; text-transform: none; letter-spacing: 0; white-space: normal; width: 280px; line-height: 1.5; z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.3); margin-top: 8px; }
+        .gov-nav-link[data-tooltip]:hover::before { content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border: 6px solid transparent; border-bottom-color: #1a1a2e; margin-top: -4px; z-index: 1001; }
+        .gov-nav-cta { display: flex; align-items: center; gap: 8px; padding: 8px 16px; background: transparent; border: none; color: var(--gov-text-light); text-decoration: none; font-size: 13px; font-weight: 500; letter-spacing: 0.5px; transition: all 0.2s ease; position: relative; }
+        .gov-nav-cta:hover { opacity: 0.8; }
+        .gov-nav-cta svg { width: 18px; height: 18px; }
+        .gov-nav-cta[data-tooltip]:hover::after { content: attr(data-tooltip); position: absolute; top: 100%; right: 0; background: #1a1a2e; color: #fff; padding: 10px 14px; border-radius: 6px; font-size: 12px; font-weight: 400; text-transform: none; letter-spacing: 0; white-space: normal; width: 320px; line-height: 1.5; z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.3); margin-top: 8px; }
+        .gov-nav-cta[data-tooltip]:hover::before { content: ''; position: absolute; top: 100%; right: 20px; border: 6px solid transparent; border-bottom-color: #1a1a2e; margin-top: -4px; z-index: 1001; }
+
+        /* ===== OBSAH ===== */
+        .container { max-width: 1200px; margin: 0 auto; padding: 28px 40px; }
+        .od-pagehead h1 { font-size: 26px; font-weight: 600; color: var(--gov-neutral-900); }
+        .od-subtitle { font-size: 15px; color: var(--gov-neutral-500); margin-top: 6px; max-width: 820px; }
+
+        .od-checks-info { display: flex; flex-wrap: wrap; gap: 10px; margin: 18px 0 22px; }
+        .od-check-chip { display: flex; align-items: center; gap: 8px; background: #fff; border: 1px solid var(--gov-border); border-radius: 999px; padding: 7px 14px; font-size: 13px; color: var(--gov-neutral-700); }
+        .od-check-chip svg { width: 16px; height: 16px; color: var(--gov-primary); }
+
+        /* Dropzone */
+        .od-dropzone { border: 2px dashed var(--gov-primary-light); border-radius: 8px; background: #fff; padding: 26px 24px; display: flex; align-items: center; justify-content: center; gap: 18px; flex-wrap: wrap; transition: background .15s, border-color .15s; }
+        .od-dropzone.drag { background: #eef4fb; border-color: var(--gov-primary); }
+        .od-dropzone-text { display: flex; align-items: center; gap: 12px; color: var(--gov-neutral-700); font-size: 15px; }
+        .od-dropzone-text svg { width: 26px; height: 26px; color: var(--gov-primary); }
+        .od-btn { display: inline-flex; align-items: center; gap: 8px; border-radius: var(--gov-radius); padding: 10px 18px; font-size: 13px; font-weight: 600; font-family: inherit; cursor: pointer; text-transform: uppercase; letter-spacing: .3px; border: 1px solid var(--gov-primary); }
+        .od-btn svg { width: 16px; height: 16px; }
+        .od-btn-primary { background: var(--gov-primary); color: #fff; }
+        .od-btn-primary:hover { background: var(--gov-primary-light); }
+        .od-btn-outline { background: #fff; color: var(--gov-primary); }
+        .od-btn-outline:hover { background: #eef4fb; }
+
+        /* Progress */
+        .od-progress { margin-top: 16px; }
+        .od-progress-bar { height: 6px; border-radius: 3px; background: var(--gov-neutral-200); overflow: hidden; }
+        .od-progress-fill { height: 100%; width: 0; background: var(--gov-primary); transition: width .2s ease; }
+        .od-progress-label { font-size: 13px; color: var(--gov-neutral-500); margin-top: 6px; }
+
+        /* Panel s tabulkou */
+        .od-panel { background: #fff; border: 1px solid var(--gov-border); border-radius: 8px; margin-top: 22px; }
+        .od-toolbar { display: flex; align-items: center; gap: 16px; padding: 16px 18px; border-bottom: 1px solid var(--gov-neutral-100); }
+        .od-search { position: relative; flex: 0 0 320px; max-width: 45%; }
+        .od-search svg { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 18px; height: 18px; color: var(--gov-neutral-400); }
+        .od-search input { width: 100%; padding: 9px 12px 9px 38px; border: 1px solid var(--gov-border); border-radius: var(--gov-radius); font-size: 14px; font-family: inherit; }
+        .od-search input:focus { outline: none; border-color: var(--gov-primary); }
+        .od-summary { flex: 1; font-size: 13px; color: var(--gov-neutral-500); }
+        .od-export { display: inline-flex; align-items: center; gap: 8px; background: var(--gov-primary); color: #fff; border: none; border-radius: var(--gov-radius); padding: 9px 16px; font-size: 13px; font-weight: 600; font-family: inherit; cursor: pointer; text-transform: uppercase; letter-spacing: .3px; }
+        .od-export svg { width: 16px; height: 16px; }
+        .od-export:hover { background: var(--gov-primary-light); }
+        .od-export:disabled { background: var(--gov-neutral-200); color: var(--gov-neutral-400); cursor: not-allowed; }
+
+        .od-table-wrap { overflow-x: auto; }
+        .od-table { width: 100%; border-collapse: collapse; }
+        .od-table th { text-align: left; font-size: 12px; font-weight: 600; color: var(--gov-neutral-500); text-transform: uppercase; letter-spacing: .3px; padding: 12px 16px; border-bottom: 1px solid var(--gov-neutral-200); white-space: nowrap; }
+        .od-table td { padding: 12px 16px; font-size: 14px; border-bottom: 1px solid var(--gov-neutral-100); vertical-align: middle; }
+        .od-table tr:last-child td { border-bottom: none; }
+        .od-fname { font-weight: 500; color: var(--gov-neutral-900); max-width: 340px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .od-yes { color: var(--gov-success); font-weight: 500; white-space: nowrap; }
+        .od-no { color: var(--gov-error); font-weight: 500; white-space: nowrap; }
+        .od-badge { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; white-space: nowrap; }
+        .od-badge-ok { background: var(--gov-success-bg); color: var(--gov-success); }
+        .od-badge-bad { background: var(--gov-error-bg); color: var(--gov-error); }
+        .od-pending-cell { color: var(--gov-neutral-400); font-style: italic; }
+        .od-spin { display: inline-block; width: 16px; height: 16px; border: 2px solid var(--gov-neutral-200); border-top-color: var(--gov-primary); border-radius: 50%; animation: od-rot .7s linear infinite; }
+        @keyframes od-rot { to { transform: rotate(360deg); } }
+        .od-empty { padding: 60px 16px; text-align: center; color: var(--gov-neutral-400); font-size: 15px; }
+
+        .od-pagination { display: flex; align-items: center; justify-content: flex-end; gap: 16px; padding: 12px 18px; border-top: 1px solid var(--gov-neutral-100); font-size: 13px; color: var(--gov-neutral-500); }
+        .od-pagination select { padding: 4px 8px; border: 1px solid var(--gov-border); border-radius: 4px; font-family: inherit; font-size: 13px; }
+        .od-page-btn { background: none; border: none; cursor: pointer; color: var(--gov-neutral-700); padding: 4px 8px; border-radius: 4px; font-size: 18px; line-height: 1; }
+        .od-page-btn:hover:not(:disabled) { background: var(--gov-neutral-100); }
+        .od-page-btn:disabled { color: var(--gov-neutral-200); cursor: default; }
+    </style>
+</head>
+<body>
+    <header class="gov-header">
+        <div class="gov-header-top">
+            <div class="gov-header-top-content">
+                <a href="../index.html" class="gov-header-brand">
+                    <img src="../images/logo-lev-white.png" alt="Státní znak" class="gov-header-logo">
+                    <span class="gov-header-title">Portál stavebníka</span>
+                </a>
+                <div class="gov-header-user">
+                    <button class="gov-header-user-btn" onclick="toggleUserMenu()">
+                        <svg class="user-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                        <div class="gov-header-user-info">
+                            <span class="gov-header-user-name" id="userDisplayName">ALEŠ KRUPA</span>
+                            <span class="gov-header-user-detail" id="userDisplayDetail">FO · Nar.: 19.04.1968</span>
+                        </div>
+                        <svg class="chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="gov-header-user-dropdown" id="userDropdown">
+                        <div class="gov-header-user-dropdown-header">
+                            <div class="gov-header-user-dropdown-name" id="dropdownName">Aleš Krupa</div>
+                            <div class="gov-header-user-dropdown-detail" id="dropdownDetail">Nar.: 19.04.1968</div>
+                            <div class="gov-header-user-dropdown-badge" id="dropdownBadge">Fyzická osoba</div>
+                        </div>
+                        <a href="reza_implicitni.html">
+                            <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
+                            Změnit postavení
+                        </a>
+                        <a href="#">
+                            <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                            Nastavení
+                        </a>
+                        <a href="../index.html">
+                            <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+                            Odhlásit se
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <nav class="gov-header-nav">
+            <div class="gov-header-nav-content">
+                <ul class="gov-nav-menu">
+                    <li class="gov-nav-item"><a href="#" class="gov-nav-link disabled">Úvod</a></li>
+                    <li class="gov-nav-item"><a href="#" class="gov-nav-link disabled">Záměry</a></li>
+                    <li class="gov-nav-item"><a href="#" class="gov-nav-link disabled">Řízení</a></li>
+                    <li class="gov-nav-item"><a href="#" class="gov-nav-link disabled">Žádosti</a></li>
+                    <li class="gov-nav-item"><a href="#" class="gov-nav-link disabled">Stavby</a></li>
+                    <li class="gov-nav-item"><a href="#" class="gov-nav-link disabled">Dokumentace</a></li>
+                    <li class="gov-nav-item"><a href="overeni_dokumentace.html" class="gov-nav-link active" data-tooltip="Ověření, zda dokumenty splňují formát PDF/A-3b, nejsou uzamčené a mají autorizační (EAR) i časové razítko">Ověření dokumentace</a></li>
+                    <li class="gov-nav-item"><a href="reza_setup.html" class="gov-nav-link" data-tooltip="Simulace administrace elektronických plných mocí v Registru elektronického zastupování (REZA)">Plné moci</a></li>
+                </ul>
+                <a href="form_new.html" class="gov-nav-cta" data-tooltip="Simulace vytvoření nové žádosti o povolení stavby se strukturovanou dokumentací a oddělenou dokladovou částí, nebo hromadné žádosti o stanovisko dotčených orgánů">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                    NOVÁ ŽÁDOST
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="od-pagehead">
+            <h1>Ověření dokumentace</h1>
+            <p class="od-subtitle">Nástroj pro projektanty a stavebníky. Ověří, zda dokumenty v dokumentaci splňují požadované parametry pro elektronické podání. Přetáhněte PDF soubory nebo vyberte složku.</p>
+        </div>
+
+        <div class="od-checks-info" id="odChecks">
+            <div class="od-check-chip"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Formát PDF/A-3b</div>
+            <div class="od-check-chip"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 11V7a4 4 0 118 0m-9 4h10a2 2 0 012 2v6a2 2 0 01-2 2H7a2 2 0 01-2-2v-6a2 2 0 012-2z"/></svg>Dokument není uzamčen</div>
+            <div class="od-check-chip"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>Autorizační razítko (EAR)</div>
+            <div class="od-check-chip"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Časové razítko</div>
+        </div>
+
+        <div class="od-dropzone" id="dropzone">
+            <div class="od-dropzone-text">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M12 15V4m0 0L8 8m4-4l4 4"/></svg>
+                <span>Přetáhněte PDF soubory nebo složku</span>
+            </div>
+            <button type="button" class="od-btn od-btn-primary" onclick="document.getElementById('fileInput').click()">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+                Soubory
+            </button>
+            <button type="button" class="od-btn od-btn-outline" onclick="document.getElementById('folderInput').click()">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V7z"/></svg>
+                Složka
+            </button>
+            <input type="file" id="fileInput" accept=".pdf,application/pdf" multiple hidden>
+            <input type="file" id="folderInput" webkitdirectory directory multiple hidden>
+        </div>
+
+        <div class="od-progress" id="progress" style="display: none;">
+            <div class="od-progress-bar"><div class="od-progress-fill" id="progressFill"></div></div>
+            <div class="od-progress-label" id="progressLabel"></div>
+        </div>
+
+        <div class="od-panel">
+            <div class="od-toolbar">
+                <div class="od-search">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                    <input type="text" id="searchInput" placeholder="Hledat podle názvu nebo podpisu…" oninput="renderTable()">
+                </div>
+                <div class="od-summary" id="summary"></div>
+                <button type="button" class="od-export" id="exportBtn" onclick="exportCsv()" disabled>
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 15V3"/></svg>
+                    Export (CSV)
+                </button>
+            </div>
+            <div class="od-table-wrap">
+                <table class="od-table">
+                    <thead>
+                        <tr>
+                            <th>Stav</th>
+                            <th>Název souboru</th>
+                            <th>PDF/A-3b</th>
+                            <th>Není uzamčen</th>
+                            <th>Autorizační razítko (EAR)</th>
+                            <th>Časové razítko</th>
+                            <th>Podepsal</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody"></tbody>
+                </table>
+                <div class="od-empty" id="emptyState">Žádné záznamy</div>
+            </div>
+            <div class="od-pagination">
+                <span>Řádků na stránce:</span>
+                <select id="pageSize" onchange="pageIndex=0; renderTable();">
+                    <option>10</option>
+                    <option selected>25</option>
+                    <option>50</option>
+                    <option>100</option>
+                </select>
+                <span id="pageInfo">0–0 z 0</span>
+                <button type="button" class="od-page-btn" id="prevBtn" onclick="pageIndex--; renderTable();" disabled>&lsaquo;</button>
+                <button type="button" class="od-page-btn" id="nextBtn" onclick="pageIndex++; renderTable();" disabled>&rsaquo;</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/app-state.js"></script>
+    <script src="../js/header-helper.js"></script>
+    <script>
+        // ===== HLAVIČKA =====
+        document.addEventListener('DOMContentLoaded', function () {
+            if (!PortalStavebnika.isLoggedIn()) { window.location.href = '../index.html'; return; }
+            if (window.HeaderHelper && HeaderHelper.loadHeaderData) HeaderHelper.loadHeaderData();
+            setupDropzone();
+            renderTable();
+        });
+        function toggleUserMenu() {
+            document.querySelector('.gov-header-user-btn').classList.toggle('active');
+            document.getElementById('userDropdown').classList.toggle('show');
+        }
+        document.addEventListener('click', function (e) {
+            var us = document.querySelector('.gov-header-user');
+            if (us && !us.contains(e.target)) {
+                document.querySelector('.gov-header-user-btn').classList.remove('active');
+                document.getElementById('userDropdown').classList.remove('show');
+            }
+        });
+
+        // ===== OVĚŘENÍ DOKUMENTACE (simulace) =====
+        var rows = [];
+        var pageIndex = 0;
+        var SIGNERS = ['Ing. Vladislav Adamiec', 'Ing. Jan Šelepa', 'Ing. Petra Nováková', 'Ing. Martin Dvořák', 'Ing. Eva Horáková'];
+
+        function setupDropzone() {
+            var dz = document.getElementById('dropzone');
+            ['dragenter', 'dragover'].forEach(function (ev) {
+                dz.addEventListener(ev, function (e) { e.preventDefault(); dz.classList.add('drag'); });
+            });
+            ['dragleave', 'drop'].forEach(function (ev) {
+                dz.addEventListener(ev, function (e) { e.preventDefault(); dz.classList.remove('drag'); });
+            });
+            dz.addEventListener('drop', function (e) { if (e.dataTransfer) handleFiles(e.dataTransfer.files); });
+            document.getElementById('fileInput').addEventListener('change', function () { handleFiles(this.files); this.value = ''; });
+            document.getElementById('folderInput').addEventListener('change', function () { handleFiles(this.files); this.value = ''; });
+        }
+
+        function handleFiles(fileList) {
+            var added = [];
+            for (var i = 0; i < fileList.length; i++) {
+                var f = fileList[i];
+                if (/\.pdf$/i.test(f.name)) {
+                    added.push({ name: f.name, path: (f.webkitRelativePath || f.name), pending: true });
+                }
+            }
+            if (!added.length) return;
+            var from = rows.length;
+            rows = rows.concat(added);
+            renderTable();
+            processQueue(from, rows.length);
+        }
+
+        function processQueue(from, to) {
+            showProgress(true);
+            var i = from;
+            var batch = to - from;
+            var delay = Math.max(40, Math.min(160, Math.floor(2500 / Math.max(1, batch))));
+            function step() {
+                if (i >= to) { updateProgress(); setTimeout(function () { showProgress(false); }, 500); renderTable(); return; }
+                resolveRow(rows[i]); i++;
+                updateProgress(); renderTable();
+                setTimeout(step, delay);
+            }
+            step();
+        }
+
+        function showProgress(on) { document.getElementById('progress').style.display = on ? 'block' : 'none'; }
+        function updateProgress() {
+            var total = rows.length;
+            var done = rows.filter(function (r) { return !r.pending; }).length;
+            var pct = total ? Math.round(done / total * 100) : 0;
+            document.getElementById('progressFill').style.width = pct + '%';
+            document.getElementById('progressLabel').textContent = 'Hotovo: ' + pct + ' % — ' + done + ' z ' + total + ' souborů';
+        }
+
+        function hashStr(s) { var h = 0; for (var i = 0; i < s.length; i++) { h = (h * 31 + s.charCodeAt(i)) >>> 0; } return h; }
+        function resolveRow(r) {
+            var h = hashStr(r.name);
+            r.pdfa = (h % 100) < 45;
+            r.notLocked = (Math.floor(h / 7) % 100) < 85;
+            r.ear = (Math.floor(h / 13) % 100) < 78;
+            r.timestamp = (Math.floor(h / 29) % 100) < 72;
+            r.signer = r.ear ? SIGNERS[h % SIGNERS.length] : '';
+            r.ok = r.pdfa && r.notLocked && r.ear && r.timestamp;
+            r.pending = false;
+        }
+
+        function esc(s) { return (s || '').replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+        function chk(v) { return v ? '<span class="od-yes">✓ Ano</span>' : '<span class="od-no">✗ Ne</span>'; }
+        function rowHtml(r) {
+            if (r.pending) {
+                return '<tr><td><span class="od-spin"></span></td><td class="od-fname" title="' + esc(r.path) + '">' + esc(r.name) + '</td><td class="od-pending-cell" colspan="5">Ověřuji…</td></tr>';
+            }
+            var badge = r.ok ? '<span class="od-badge od-badge-ok">Vyhovuje</span>' : '<span class="od-badge od-badge-bad">Nevyhovuje</span>';
+            return '<tr>' +
+                '<td>' + badge + '</td>' +
+                '<td class="od-fname" title="' + esc(r.path) + '">' + esc(r.name) + '</td>' +
+                '<td>' + chk(r.pdfa) + '</td>' +
+                '<td>' + chk(r.notLocked) + '</td>' +
+                '<td>' + chk(r.ear) + '</td>' +
+                '<td>' + chk(r.timestamp) + '</td>' +
+                '<td>' + (r.signer ? esc(r.signer) : '—') + '</td>' +
+                '</tr>';
+        }
+
+        function renderTable() {
+            var q = (document.getElementById('searchInput').value || '').trim().toLowerCase();
+            var filtered = rows.filter(function (r) {
+                return !q || r.name.toLowerCase().indexOf(q) > -1 || (r.signer && r.signer.toLowerCase().indexOf(q) > -1);
+            });
+            var size = parseInt(document.getElementById('pageSize').value, 10) || 25;
+            var total = filtered.length;
+            var pages = Math.max(1, Math.ceil(total / size));
+            if (pageIndex >= pages) pageIndex = pages - 1;
+            if (pageIndex < 0) pageIndex = 0;
+            var start = pageIndex * size;
+            var slice = filtered.slice(start, start + size);
+            document.getElementById('tableBody').innerHTML = slice.map(rowHtml).join('');
+            document.getElementById('emptyState').style.display = total ? 'none' : 'block';
+
+            var done = rows.filter(function (r) { return !r.pending; });
+            var okc = done.filter(function (r) { return r.ok; }).length;
+            document.getElementById('summary').textContent = rows.length
+                ? ('Zpracováno ' + done.length + ' z ' + rows.length + ' — vyhovuje ' + okc + ', nevyhovuje ' + (done.length - okc))
+                : '';
+            var fromN = total ? start + 1 : 0;
+            var toN = Math.min(start + size, total);
+            document.getElementById('pageInfo').textContent = fromN + '–' + toN + ' z ' + total;
+            document.getElementById('exportBtn').disabled = !done.length;
+            document.getElementById('prevBtn').disabled = pageIndex <= 0;
+            document.getElementById('nextBtn').disabled = pageIndex >= pages - 1;
+        }
+
+        function csvCell(v) { v = (v == null ? '' : String(v)); if (/[;"\n]/.test(v)) { v = '"' + v.replace(/"/g, '""') + '"'; } return v; }
+        function exportCsv() {
+            var done = rows.filter(function (r) { return !r.pending; });
+            if (!done.length) return;
+            var head = ['Stav', 'Nazev souboru', 'Cesta', 'PDF/A-3b', 'Neni uzamcen', 'Autorizacni razitko (EAR)', 'Casove razitko', 'Podepsal'];
+            var lines = [head.join(';')];
+            done.forEach(function (r) {
+                lines.push([
+                    r.ok ? 'Vyhovuje' : 'Nevyhovuje', r.name, r.path,
+                    r.pdfa ? 'Ano' : 'Ne', r.notLocked ? 'Ano' : 'Ne',
+                    r.ear ? 'Ano' : 'Ne', r.timestamp ? 'Ano' : 'Ne', r.signer || ''
+                ].map(csvCell).join(';'));
+            });
+            var csv = '\ufeff' + lines.join('\r\n');
+            var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            var url = URL.createObjectURL(blob);
+            var a = document.createElement('a');
+            a.href = url; a.download = 'overeni_dokumentace.csv';
+            document.body.appendChild(a); a.click(); document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+    </script>
+
+    <!-- ===== NÁPOVĚDA K PROTOTYPU ===== -->
+    <script>
+    window.DEMO_CONFIG = {"about": {"title": "O tomto prototypu", "html": "<p>Toto je <strong>klikací prototyp</strong> Portálu stavebníka. Neběží proti žádnému reálnému systému a nikam neodesílá data.</p><h3>Co je na této obrazovce simulované</h3><ul><li>Soubory se nikam nenahrávají — prototyp převezme jen názvy vybraných PDF.</li><li>Výsledky čtyř kontrol (PDF/A-3b, uzamčení, autorizační a časové razítko) jsou nasimulované ukázkové hodnoty.</li></ul><h3>Kde se drží data</h3><p>Nic se neukládá na server. Vybrané soubory zpracuje prohlížeč jen v paměti; po zavření stránky výsledky zmizí.</p><h3>Jak procházet prototyp</h3><p>Tlačítkem <strong>Nápověda</strong> vpravo dole zapnete vysvětlivky — u klíčových prvků se objeví značky <strong>i</strong> s vysvětlením, co se simuluje a co daný krok znamená.</p>"}, "annotations": [{"selector": ".od-dropzone", "label": "Nahrání dokumentů", "simulace": "Soubory se nenahrávají ani se reálně neověřují. Prototyp z vybraných PDF převezme jen názvy a ke každému výsledek čtyř kontrol nasimuluje (deterministicky podle názvu, ať je stabilní).", "vyznam": "Sem projektant nebo stavebník přetáhne PDF dokumentace. Skutečný systém by u každého dokumentu ověřil formát PDF/A-3b, zda není uzamčen, autorizační razítko (EAR) a časové razítko."}, {"selector": ".od-panel", "label": "Výsledky ověření", "simulace": "Hodnoty Ano/Ne i jména podepsaných jsou vygenerované ukázkové výsledky. Export ale vytvoří skutečný CSV soubor otevřitelný v Excelu.", "vyznam": "Dokument vyhovuje, jen když splní všechny čtyři podmínky. Nevyhovující dokumenty je potřeba před podáním opravit (převést do PDF/A-3b, odemknout, doplnit autorizační nebo časové razítko)."}]};
+    </script>
+    <script src="../js/demo-helper.js"></script>
+</body>
+</html>
