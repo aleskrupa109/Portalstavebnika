@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portál stavební správy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&family=Open+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ===== RESET & BASE ===== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { min-height: 100%; }
+        body {
+            font-family: 'Roboto', 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background-color: #fff;
+            color: #1a1a1a;
+            line-height: 1.5;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* ===== MODRÁ HLAVIČKA ===== */
+        .ps-topbar {
+            background: #2362a2;
+            color: #fff;
+            height: 72px;
+            display: flex;
+            align-items: center;
+            flex-shrink: 0;
+        }
+        .ps-topbar-inner {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 0 40px;
+        }
+        .ps-topbar-logo { height: 40px; width: auto; }
+        .ps-topbar-title { font-size: 19px; font-weight: 400; letter-spacing: .2px; }
+
+        /* ===== HERO ===== */
+        .ps-hero {
+            position: relative;
+            flex: 1;
+            display: flex;
+            background-image: url("images/landing-bg.jpg");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            min-height: calc(100vh - 72px);
+        }
+        /* jemné zesvětlení kvůli čitelnosti textu vlevo */
+        .ps-hero::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, rgba(255,255,255,.75) 0%, rgba(255,255,255,.35) 38%, rgba(255,255,255,0) 60%);
+            pointer-events: none;
+        }
+        .ps-hero-inner {
+            position: relative;
+            width: 100%;
+            max-width: 1360px;
+            margin: 0 auto;
+            padding: 48px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 40px;
+        }
+        .ps-hero-text { max-width: 460px; }
+        .ps-hero-lead {
+            font-size: 20px;
+            color: #3a3a3a;
+            margin-bottom: 22px;
+            line-height: 1.5;
+        }
+        .ps-hero-big {
+            font-size: 38px;
+            font-weight: 400;
+            color: #2b2b2b;
+        }
+
+        /* ===== PŘIHLAŠOVACÍ KARTA ===== */
+        .ps-login-card {
+            width: 360px;
+            max-width: 100%;
+            background: #fff;
+            border-radius: 6px;
+            box-shadow: 0 12px 40px rgba(0,0,0,.18);
+            padding: 24px 26px 8px;
+            flex-shrink: 0;
+        }
+        .ps-notice {
+            background: #f4b731;
+            color: #3d3115;
+            border-radius: 4px;
+            padding: 16px 18px;
+            font-size: 13.5px;
+            line-height: 1.55;
+        }
+        .ps-notice a { color: #1c4e86; text-decoration: underline; }
+        .ps-login-title {
+            text-align: center;
+            font-size: 20px;
+            font-weight: 400;
+            color: #444;
+            margin: 26px 0 6px;
+        }
+        .ps-login-row {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 18px 4px;
+            border-top: 1px solid #e6e6e6;
+            text-decoration: none;
+            color: #1a1a1a;
+            cursor: pointer;
+            transition: background .15s;
+        }
+        .ps-login-row:hover { background: #f6f9fc; }
+        .ps-login-row .ps-row-label { flex: 1; font-size: 16px; color: #333; }
+        .ps-login-row .ps-row-chevron { color: #2362a2; display: inline-flex; }
+        .ps-login-row .ps-row-chevron svg { width: 20px; height: 20px; }
+        .ps-id-tile {
+            width: 40px; height: 40px;
+            background: #1f5aa0;
+            border-radius: 4px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .ps-id-tile img { height: 26px; width: auto; }
+        .ps-help-icon {
+            width: 40px; height: 40px;
+            display: inline-flex; align-items: center; justify-content: center;
+            flex-shrink: 0; color: #2362a2;
+        }
+        .ps-help-icon svg { width: 28px; height: 28px; }
+
+        @media (max-width: 900px) {
+            .ps-hero-inner { flex-direction: column; align-items: stretch; }
+            .ps-hero-text { max-width: 100%; }
+            .ps-login-card { width: 100%; }
+            .ps-hero::before { background: rgba(255,255,255,.7); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Modrá hlavička -->
+    <header class="ps-topbar">
+        <div class="ps-topbar-inner">
+            <img src="images/logo-lev-white.png" alt="Státní znak" class="ps-topbar-logo">
+            <span class="ps-topbar-title">Portál stavební správy</span>
+        </div>
+    </header>
+
+    <!-- Hero s přihlášením -->
+    <main class="ps-hero">
+        <div class="ps-hero-inner">
+            <div class="ps-hero-text">
+                <p class="ps-hero-lead">Podejte žádost, zkontrolujte stav řízení,<br>či se jen podívejte, co se ve vašem okolí plánuje...</p>
+                <p class="ps-hero-big">... jednoduše on-line!</p>
+            </div>
+
+            <div class="ps-login-card">
+                <div class="ps-notice">
+                    Vážení uživatelé,<br>
+                    v současné době evidujeme občasné potíže s nahráváním dokumentace. Pro podrobnosti a informace <a href="#" onclick="return false;">klikněte zde</a>. Omlouváme se za případné komplikace a děkujeme za pochopení.<br>
+                    Tým DSŘ
+                </div>
+
+                <h2 class="ps-login-title">Přihlásit se</h2>
+
+                <a href="pages/reza_implicitni.html" class="ps-login-row btn-login">
+                    <span class="ps-id-tile"><img src="images/logo-lev.png" alt=""></span>
+                    <span class="ps-row-label">Identitou občana</span>
+                    <span class="ps-row-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg></span>
+                </a>
+
+                <a href="https://chcidatovku.gov.cz/identita-obcana" target="_blank" rel="noopener" class="ps-login-row">
+                    <span class="ps-help-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path stroke-linecap="round" stroke-linejoin="round" d="M9.5 9.5a2.5 2.5 0 114 2c-1 .8-1.5 1.2-1.5 2.2"/><circle cx="12" cy="17" r="1" fill="currentColor" stroke="none"/></svg></span>
+                    <span class="ps-row-label">Nevím jak se přihlásit</span>
+                    <span class="ps-row-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg></span>
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Přihlašovací modal -->
+    <div class="login-modal-overlay" id="loginModal">
+        <div class="login-modal">
+            <div class="login-modal-header">
+                <div class="login-modal-icon">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+                    </svg>
+                </div>
+                <h2>Simulace přihlášení</h2>
+                <p>Zadejte jméno pro simulaci přihlášení přes Identitu občana</p>
+            </div>
+            <div class="login-modal-body">
+                <div class="login-form-group">
+                    <label for="loginName">Jméno a příjmení</label>
+                    <input type="text" id="loginName" placeholder="např. Jan Novák" autocomplete="off">
+                </div>
+                <div class="login-form-group">
+                    <label for="loginBirthDate">Datum narození</label>
+                    <input type="text" id="loginBirthDate" placeholder="např. 15. 3. 1980" value="1. 1. 1980">
+                </div>
+                <div class="login-info">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+                    <span>Po přihlášení budou automaticky načtena vaše postavení z rejstříků (simulace: Testovací projekční s.r.o. a OSVČ)</span>
+                </div>
+            </div>
+            <div class="login-modal-footer">
+                <button class="btn-cancel" onclick="closeLoginModal()">Zrušit</button>
+                <button class="btn-submit" onclick="submitLogin()">Přihlásit se</button>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        /* Login Modal Styles */
+        .login-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .login-modal-overlay.visible { display: flex; }
+        .login-modal {
+            background: white;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 440px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        .login-modal-header {
+            background: linear-gradient(135deg, #2362a2 0%, #1a4a7a 100%);
+            color: white;
+            padding: 32px 32px 28px;
+            text-align: center;
+        }
+        .login-modal-icon {
+            width: 64px; height: 64px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 16px;
+        }
+        .login-modal-icon svg { width: 36px; height: 36px; }
+        .login-modal-header h2 { font-size: 22px; font-weight: 600; margin-bottom: 8px; }
+        .login-modal-header p { font-size: 14px; opacity: 0.9; }
+        .login-modal-body { padding: 28px 32px; }
+        .login-form-group { margin-bottom: 20px; }
+        .login-form-group label {
+            display: block; font-size: 13px; font-weight: 500; color: #333; margin-bottom: 6px;
+        }
+        .login-form-group input {
+            width: 100%; padding: 12px 14px; font-size: 15px;
+            border: 2px solid #e0e0e0; border-radius: 8px;
+            font-family: inherit; transition: border-color 0.2s;
+        }
+        .login-form-group input:focus { outline: none; border-color: #2362a2; }
+        .login-info {
+            display: flex; align-items: flex-start; gap: 10px;
+            padding: 12px 14px; background: #f0f7ff; border-radius: 8px;
+            font-size: 13px; color: #555;
+        }
+        .login-info svg { width: 18px; height: 18px; flex-shrink: 0; fill: #2362a2; margin-top: 1px; }
+        .login-modal-footer {
+            padding: 20px 32px 28px; display: flex; gap: 12px;
+            justify-content: flex-end; border-top: 1px solid #eee;
+        }
+        .btn-cancel {
+            padding: 12px 24px; font-size: 14px; font-weight: 500;
+            background: white; border: 1px solid #ccc; border-radius: 8px;
+            cursor: pointer; font-family: inherit; transition: all 0.2s;
+        }
+        .btn-cancel:hover { background: #f5f5f5; }
+        .btn-submit {
+            padding: 12px 28px; font-size: 14px; font-weight: 600;
+            background: #2362a2; color: white; border: none; border-radius: 8px;
+            cursor: pointer; font-family: inherit; transition: all 0.2s;
+        }
+        .btn-submit:hover { background: #1a5090; }
+    </style>
+
+    <script src="js/app-state.js"></script>
+    <script>
+        // Kontrola, zda je uživatel již přihlášen
+        document.addEventListener('DOMContentLoaded', function() {
+            var loginBtn = document.querySelector('.btn-login');
+
+            if (PortalStavebnika.isLoggedIn()) {
+                if (loginBtn) {
+                    var user = PortalStavebnika.getUser();
+                    loginBtn.innerHTML = '<span class="ps-id-tile"><img src="images/logo-lev.png" alt=""></span><span class="ps-row-label">Pokračovat jako ' + user.name + '</span><span class="ps-row-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg></span>';
+                    loginBtn.onclick = function(e) {
+                        e.preventDefault();
+                        window.location.href = 'pages/reza_implicitni.html';
+                    };
+                }
+            } else {
+                if (loginBtn) {
+                    loginBtn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        openLoginModal();
+                    });
+                }
+            }
+        });
+
+        function openLoginModal() {
+            document.getElementById('loginModal').classList.add('visible');
+            document.getElementById('loginName').focus();
+        }
+
+        function closeLoginModal() {
+            document.getElementById('loginModal').classList.remove('visible');
+        }
+
+        function submitLogin() {
+            var name = document.getElementById('loginName').value.trim();
+            var birthDate = document.getElementById('loginBirthDate').value.trim();
+
+            if (!name) {
+                alert('Prosím zadejte jméno a příjmení');
+                return;
+            }
+
+            PortalStavebnika.login(name, birthDate);
+            window.location.href = 'pages/reza_implicitni.html';
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') { closeLoginModal(); }
+            if (e.key === 'Enter' && document.getElementById('loginModal').classList.contains('visible')) {
+                submitLogin();
+            }
+        });
+
+        document.getElementById('loginModal').addEventListener('click', function(e) {
+            if (e.target === this) { closeLoginModal(); }
+        });
+    </script>
+
+    <!-- ===== NÁPOVĚDA K PROTOTYPU ===== -->
+    <script>
+    window.DEMO_CONFIG = {"about": {"title": "O tomto prototypu", "html": "<p>Toto je <strong>klikací prototyp</strong> Portálu stavebníka na půdorysu stávajícího řešení. Domovská stránka je vizuální klon aktuálního Portálu; nové funkce (REZA, oddělení dokumentace a dokladové části) přibývají uvnitř. Neběží proti žádnému reálnému systému a nikam neodesílá data.</p><h3>Co je na této obrazovce simulované</h3><ul><li>Přihlášení přes Identitu občana — stačí zadat jméno.</li><li>Načtení vašich identit (FO, OSVČ, firmy) z rejstříků.</li><li>Provozní upozornění a odkazy jsou jen ilustrativní součástí klonu.</li></ul><h3>Kde se drží data</h3><p>Vše je uloženo pouze ve vašem prohlížeči (localStorage) — zůstane i po zavření okna. Přihlášení, zvolené postavení, plné moci i záměry se „pamatují“ mezi stránkami.</p><h3>Jak procházet prototyp</h3><p>Tlačítkem <strong>Nápověda</strong> vpravo dole zapnete vysvětlivky — u klíčových prvků se objeví značky <strong>i</strong> s vysvětlením, co se simuluje a co daný krok znamená.</p>"}, "annotations": [{"selector": ".ps-login-card", "label": "Přihlášení Identitou občana", "simulace": "Přihlášení je jen naoko — po kliknutí na „Identitou občana“ zadáte jméno; žádné ověření vůči Identitě občana ani NIA neprobíhá.", "vyznam": "V ostrém provozu byste se přihlásili přes Identitu občana. Zadané jméno prototyp použije k vygenerování vašich fiktivních identit (FO, OSVČ, firmy), ze kterých pak vyberete postavení."}, {"selector": ".ps-notice", "label": "Provozní upozornění", "simulace": "Text je převzatý z aktuálního Portálu jako součást vizuálního klonu — v prototypu nikam neodkazuje.", "vyznam": "Na ostrém Portálu tudy provozovatel (DSŘ) informuje o výpadcích a omezeních provozu."}]};
+    </script>
+    <script src="js/demo-helper.js?v=2"></script>
+</body>
+</html>
