@@ -97,7 +97,26 @@
             '.ds-reset{margin-top:18px;padding-top:14px;border-top:1px solid var(--gov-neutral-200,#e0e0e0);}',
             '.ds-reset button{background:#fff;color:#b91c1c;border:1px solid #b91c1c;border-radius:6px;padding:8px 12px;font-size:13px;font-weight:600;cursor:pointer;}',
             '.ds-reset button:hover{background:#b91c1c;color:#fff;}',
-            '@media print{.ds-fab,.ds-hint,.ds-marker,.ds-pop,.ds-overlay,.ds-panel{display:none!important;}}'
+            '.ds-pr-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(20,30,50,.5);z-index:22500;display:none;align-items:flex-start;justify-content:center;padding:40px 16px;overflow-y:auto;font-family:"Roboto",sans-serif;}',
+            '.ds-pr-overlay.ds-show{display:flex;}',
+            '.ds-pr-modal{background:#fff;border-radius:10px;width:100%;max-width:640px;box-shadow:0 20px 50px rgba(0,0,0,.3);overflow:hidden;}',
+            '.ds-pr-head{display:flex;align-items:center;justify-content:space-between;padding:20px 24px;background:var(--gov-primary,#2c5a8c);color:#fff;}',
+            '.ds-pr-head h2{font-size:18px;font-weight:600;margin:0;}',
+            '.ds-pr-close{background:transparent;border:none;color:#fff;font-size:26px;line-height:1;cursor:pointer;}',
+            '.ds-pr-body{padding:20px 24px;color:#1f2937;}',
+            '.ds-pr-intro{font-size:14px;color:var(--gov-neutral-600,#555);margin:0 0 18px;line-height:1.5;}',
+            '.ds-pr-item{display:flex;gap:14px;padding:14px 0;border-top:1px solid var(--gov-neutral-100,#f0f0f0);}',
+            '.ds-pr-item:first-of-type{border-top:none;padding-top:0;}',
+            '.ds-pr-num{flex-shrink:0;width:28px;height:28px;border-radius:8px;background:var(--gov-primary,#2c5a8c);color:#fff;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;}',
+            '.ds-pr-title{font-size:15px;font-weight:600;color:var(--gov-neutral-900,#1a1a1a);margin-bottom:3px;}',
+            '.ds-pr-desc{font-size:13.5px;color:var(--gov-neutral-600,#555);line-height:1.5;}',
+            '.ds-pr-foot{padding:14px 24px;border-top:1px solid var(--gov-neutral-100,#f0f0f0);text-align:right;}',
+            '.ds-pr-foot button{background:var(--gov-primary,#2c5a8c);color:#fff;border:none;border-radius:6px;padding:8px 18px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;}',
+            '.gov-nav-priority-btn{background:transparent;border:none;cursor:pointer;color:#fff;padding:14px 16px;display:flex;align-items:center;opacity:.8;transition:opacity .2s,background .2s;position:relative;}',
+            '.gov-nav-priority-btn:hover{opacity:1;background:rgba(255,255,255,.1);}',
+            '.gov-nav-priority-btn svg{width:20px;height:20px;}',
+            '.gov-nav-priority-btn[data-tooltip]:hover::after{content:attr(data-tooltip);position:absolute;top:100%;left:50%;transform:translateX(-50%);background:#1a1a2e;color:#fff;padding:8px 12px;border-radius:6px;font-size:12px;font-weight:400;white-space:nowrap;z-index:1000;margin-top:6px;}',
+            '@media print{.ds-fab,.ds-hint,.ds-marker,.ds-pop,.ds-overlay,.ds-panel,.ds-pr-overlay{display:none!important;}}'
         ].join('\n');
         var style = document.createElement('style');
         style.id = 'ds-styles';
@@ -342,18 +361,65 @@
         closePopover();
     }
     function onKey(e) {
-        if (e.key === 'Escape') { closePopover(); closeAbout(); }
+        if (e.key === 'Escape') { closePopover(); closeAbout(); closePriorities(); }
     }
     function onReflow() {
         if (openPopoverAnn) positionPopover(openPopoverAnn);
     }
 
     // ---------- init ----------
+    // ---------- modal Priority vývoje ----------
+    function buildPriorities() {
+        var items = [
+            ['REZA', 'Kompletní simulace administrace a použití implicitní a explicitní REZA.'],
+            ['Validátor dokumentace', 'Simulace ověření dokumentace před nahráváním i v jeho průběhu.'],
+            ['Struktura dokumentace', 'Simulace nového flexibilního členění dokumentace.'],
+            ['Ostatní', 'Simulace určování adresáta žádosti (po 1. 1. 2028) a výběru žádostí (průvodce / seznam).']
+        ];
+        var itemsHtml = items.map(function (it, i) {
+            return '<div class="ds-pr-item"><div class="ds-pr-num">' + (i + 1) + '</div><div><div class="ds-pr-title">' + it[0] + '</div><div class="ds-pr-desc">' + it[1] + '</div></div></div>';
+        }).join('');
+        var overlay = document.createElement('div');
+        overlay.className = 'ds-pr-overlay';
+        overlay.innerHTML =
+            '<div class="ds-pr-modal">' +
+            '<div class="ds-pr-head"><h2>Priority vývoje Portálu stavebníka</h2><button type="button" class="ds-pr-close" aria-label="Zavřít">&times;</button></div>' +
+            '<div class="ds-pr-body"><p class="ds-pr-intro">Tato maketa slouží jako podklad pro prioritizaci vývoje. Klíčové oblasti simulace:</p>' + itemsHtml + '</div>' +
+            '<div class="ds-pr-foot"><button type="button">Zavřít</button></div>' +
+            '</div>';
+        document.body.appendChild(overlay);
+        overlay.addEventListener('click', function (e) { if (e.target === overlay) closePriorities(); });
+        overlay.querySelector('.ds-pr-close').addEventListener('click', closePriorities);
+        overlay.querySelector('.ds-pr-foot button').addEventListener('click', closePriorities);
+        els.prOverlay = overlay;
+    }
+    function openPriorities() { if (els.prOverlay) els.prOverlay.classList.add('ds-show'); }
+    function closePriorities() { if (els.prOverlay) els.prOverlay.classList.remove('ds-show'); }
+
+    // vloží malou ikonku do horizontálního menu (jen tam, kde menu existuje)
+    function injectNavIcon() {
+        var menu = document.querySelector('.gov-nav-menu');
+        if (!menu || menu.querySelector('.gov-nav-priority-btn')) return;
+        var li = document.createElement('li');
+        li.className = 'gov-nav-item';
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'gov-nav-priority-btn';
+        btn.setAttribute('data-tooltip', 'Priority vývoje');
+        btn.setAttribute('aria-label', 'Priority vývoje Portálu stavebníka');
+        btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>';
+        btn.addEventListener('click', openPriorities);
+        li.appendChild(btn);
+        menu.appendChild(li);
+    }
+
     function init() {
         injectStyles();
         buildFab();
         buildPopover();
         buildAbout();
+        buildPriorities();
+        injectNavIcon();
 
         document.addEventListener('click', onDocClick, true);
         document.addEventListener('keydown', onKey);
@@ -382,8 +448,10 @@
             toggle: toggleHelp,
             setHelp: setHelp,
             openAbout: openAbout,
+            openPriorities: openPriorities,
             rescan: scanAndAttach
         };
+        window.openPriorities = openPriorities;
     }
 
     if (document.readyState === 'loading') {
