@@ -396,12 +396,8 @@
     function openPriorities() { if (els.prOverlay) els.prOverlay.classList.add('ds-show'); }
     function closePriorities() { if (els.prOverlay) els.prOverlay.classList.remove('ds-show'); }
 
-    // vloží malou ikonku do horizontálního menu (jen tam, kde menu existuje)
-    function injectNavIcon() {
-        var menu = document.querySelector('.gov-nav-menu');
-        if (!menu || menu.querySelector('.gov-nav-priority-btn')) return;
-        var li = document.createElement('li');
-        li.className = 'gov-nav-item';
+    // vytvoří tlačítko s vlaječkou
+    function makePriorityBtn() {
         var btn = document.createElement('button');
         btn.type = 'button';
         btn.className = 'gov-nav-priority-btn';
@@ -409,8 +405,27 @@
         btn.setAttribute('aria-label', 'Priority vývoje Portálu stavebníka');
         btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>';
         btn.addEventListener('click', openPriorities);
-        li.appendChild(btn);
-        menu.appendChild(li);
+        return btn;
+    }
+
+    // vloží ikonku do horizontálního menu; na homepage bez menu do horní lišty
+    function injectNavIcon() {
+        var menu = document.querySelector('.gov-nav-menu');
+        if (menu) {
+            if (menu.querySelector('.gov-nav-priority-btn')) return;
+            var li = document.createElement('li');
+            li.className = 'gov-nav-item';
+            li.appendChild(makePriorityBtn());
+            menu.appendChild(li);
+            return;
+        }
+        var bar = document.querySelector('.ps-topbar-inner');
+        if (bar && !bar.querySelector('.gov-nav-priority-btn')) {
+            bar.style.width = '100%';
+            var b = makePriorityBtn();
+            b.style.marginLeft = 'auto';
+            bar.appendChild(b);
+        }
     }
 
     function init() {
