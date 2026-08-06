@@ -61,7 +61,7 @@
         .gov-nav-menu { display: flex; align-items: center; gap: 0; list-style: none; }
         .gov-nav-link { position: relative; display: block; padding: 14px 20px; color: var(--gov-text-light); text-decoration: none; font-size: 13px; font-weight: 500; letter-spacing: 0.5px; text-transform: uppercase; transition: all 0.2s ease; border-top: 3px solid transparent; }
         .gov-nav-link:hover { background: rgba(255,255,255,0.1); }
-        .gov-nav-link.active { border-top-color: var(--gov-text-light); }
+        .gov-nav-link.active { border-top-color: transparent; } /* bez horní linky – shodně s aktuálním PS */
         .gov-nav-link.disabled { color: rgba(255,255,255,0.4); cursor: default; pointer-events: none; }
         .gov-nav-link[data-tooltip]:hover::after { content: attr(data-tooltip); position: absolute; top: 100%; left: 50%; transform: translateX(-50%); background: #1a1a2e; color: #fff; padding: 10px 14px; border-radius: 6px; font-size: 12px; font-weight: 400; text-transform: none; letter-spacing: 0; white-space: normal; width: 280px; line-height: 1.5; z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.3); margin-top: 8px; }
         .gov-nav-link[data-tooltip]:hover::before { content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border: 6px solid transparent; border-bottom-color: #1a1a2e; margin-top: -4px; z-index: 1001; }
@@ -132,6 +132,39 @@
         .od-page-btn { background: none; border: none; cursor: pointer; color: var(--gov-neutral-700); padding: 4px 8px; border-radius: 4px; font-size: 18px; line-height: 1; }
         .od-page-btn:hover:not(:disabled) { background: var(--gov-neutral-100); }
         .od-page-btn:disabled { color: var(--gov-neutral-200); cursor: default; }
+
+        /* Klikací řádky + detail kontroly */
+        .od-row-clickable { cursor: pointer; }
+        .od-row-clickable:hover td { background: var(--gov-neutral-50); }
+        .od-modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(20,30,50,.5); display: none; align-items: flex-start; justify-content: center; z-index: 3000; padding: 40px 16px; overflow-y: auto; }
+        .od-modal-overlay.show { display: flex; }
+        .od-modal { background: #fff; border-radius: 8px; width: 100%; max-width: 680px; box-shadow: 0 20px 50px rgba(0,0,0,.3); }
+        .od-modal-head { display: flex; align-items: center; justify-content: space-between; padding: 20px 24px; border-bottom: 1px solid var(--gov-neutral-100); }
+        .od-modal-head h2 { font-size: 20px; font-weight: 600; }
+        .od-modal-close { background: none; border: none; color: var(--gov-primary); font-size: 13px; font-weight: 600; cursor: pointer; text-transform: uppercase; letter-spacing: .3px; }
+        .od-modal-body { padding: 20px 24px; }
+        .od-modal-foot { padding: 14px 24px; border-top: 1px solid var(--gov-neutral-100); text-align: right; }
+        .od-modal-closebtn { background: none; border: none; color: var(--gov-primary); font-size: 13px; font-weight: 600; cursor: pointer; text-transform: uppercase; letter-spacing: .3px; }
+        .od-d-file { font-size: 15px; font-weight: 500; word-break: break-all; margin-bottom: 8px; }
+        .od-d-sec { margin-top: 22px; }
+        .od-d-sec-title { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: .3px; color: var(--gov-neutral-500); margin-bottom: 10px; }
+        .od-d-check { display: flex; gap: 12px; padding: 11px 0; border-bottom: 1px solid var(--gov-neutral-100); }
+        .od-d-check:last-child { border-bottom: none; }
+        .od-d-check-ic { flex-shrink: 0; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #fff; }
+        .od-d-check-ic.ok { background: var(--gov-success); }
+        .od-d-check-ic.bad { background: var(--gov-error); }
+        .od-d-check-main { flex: 1; }
+        .od-d-check-label { font-size: 14px; font-weight: 500; }
+        .od-d-check-desc { font-size: 13px; color: var(--gov-neutral-500); margin-top: 2px; }
+        .od-d-check-reason { font-size: 13px; color: var(--gov-error); margin-top: 4px; }
+        .od-d-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 24px; }
+        .od-d-field-label { font-size: 12px; color: var(--gov-neutral-500); }
+        .od-d-field-val { font-size: 14px; margin-top: 1px; word-break: break-word; }
+        .od-d-note { font-size: 12px; color: var(--gov-neutral-400); font-style: italic; margin-top: 22px; }
+        .od-d-badges-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+        .od-d-badge { display: inline-block; padding: 3px 11px; border-radius: 999px; font-size: 12px; font-weight: 600; color: #fff; }
+        .od-d-badge.green { background: var(--gov-success); }
+        .od-d-badge.blue { background: var(--gov-primary); }
     </style>
 </head>
 <body>
@@ -272,6 +305,18 @@
         </div>
     </div>
 
+    <!-- ===== DETAIL KONTROLY ===== -->
+    <div class="od-modal-overlay" id="detailOverlay">
+        <div class="od-modal">
+            <div class="od-modal-head">
+                <h2>Detail kontroly</h2>
+                <button type="button" class="od-modal-close" onclick="closeDetail()">✕ Zavřít</button>
+            </div>
+            <div class="od-modal-body" id="detailBody"></div>
+            <div class="od-modal-foot"><button type="button" class="od-modal-closebtn" onclick="closeDetail()">Zavřít</button></div>
+        </div>
+    </div>
+
     <script src="../js/app-state.js"></script>
     <script src="../js/header-helper.js"></script>
     <script>
@@ -298,6 +343,13 @@
         var rows = [];
         var pageIndex = 0;
         var SIGNERS = ['Ing. Vladislav Adamiec', 'Ing. Jan Šelepa', 'Ing. Petra Nováková', 'Ing. Martin Dvořák', 'Ing. Eva Horáková'];
+        var CAS = ['PostSignum Qualified CA 4', 'PostSignum Qualified CA 5', 'I.CA Qualified 2 CA/RSA'];
+        var PDFA_ERRORS = [
+            '6.2.5: Slovník ExtGState nesmí obsahovat klíč TR',
+            '6.1.7: Dokument obsahuje nevložené písmo',
+            '6.3.4: Chybí výstupní barevný profil (OutputIntent)',
+            '6.1.13: Použit nepovolený filtr (LZWDecode)'
+        ];
 
         function setupDropzone() {
             var dz = document.getElementById('dropzone');
@@ -307,34 +359,86 @@
             ['dragleave', 'drop'].forEach(function (ev) {
                 dz.addEventListener(ev, function (e) { e.preventDefault(); dz.classList.remove('drag'); });
             });
-            dz.addEventListener('drop', function (e) { if (e.dataTransfer) handleFiles(e.dataTransfer.files); });
+            dz.addEventListener('drop', function (e) { handleDrop(e); });
             document.getElementById('fileInput').addEventListener('change', function () { handleFiles(this.files); this.value = ''; });
             document.getElementById('folderInput').addEventListener('change', function () { handleFiles(this.files); this.value = ''; });
         }
 
-        function handleFiles(fileList) {
-            var added = [];
-            for (var i = 0; i < fileList.length; i++) {
-                var f = fileList[i];
-                if (/\.pdf$/i.test(f.name)) {
-                    added.push({ name: f.name, path: (f.webkitRelativePath || f.name), pending: true });
+        // Přetažení souborů i SLOŽKY (rekurzivní procházení adresářů)
+        function handleDrop(e) {
+            var items = e.dataTransfer && e.dataTransfer.items;
+            if (items && items.length && items[0].webkitGetAsEntry) {
+                var entries = [];
+                for (var i = 0; i < items.length; i++) {
+                    var en = items[i].webkitGetAsEntry ? items[i].webkitGetAsEntry() : null;
+                    if (en) entries.push(en);
                 }
+                if (!entries.length) { handleFiles(e.dataTransfer.files); return; }
+                var collected = [];
+                var pending = entries.length;
+                entries.forEach(function (en) {
+                    traverseEntry(en, collected, function () { pending--; if (pending === 0) handleFiles(collected); });
+                });
+            } else {
+                handleFiles(e.dataTransfer.files);
             }
-            if (!added.length) return;
-            var from = rows.length;
-            rows = rows.concat(added);
-            renderTable();
-            processQueue(from, rows.length);
+        }
+        function traverseEntry(entry, out, done) {
+            if (entry.isFile) {
+                entry.file(function (f) {
+                    out.push({ name: f.name, path: (entry.fullPath ? entry.fullPath.replace(/^\//, '') : f.name) });
+                    done();
+                }, done);
+            } else if (entry.isDirectory) {
+                var reader = entry.createReader();
+                var all = [];
+                (function readAll() {
+                    reader.readEntries(function (batch) {
+                        if (batch.length) { all = all.concat(batch); readAll(); }
+                        else {
+                            var idx = 0;
+                            (function next() {
+                                if (idx >= all.length) { done(); return; }
+                                traverseEntry(all[idx++], out, next);
+                            })();
+                        }
+                    }, done);
+                })();
+            } else { done(); }
         }
 
-        function processQueue(from, to) {
+        var _rowSeq = 0;
+        function handleFiles(list) {
+            var added = [];
+            for (var i = 0; i < list.length; i++) {
+                var it = list[i];
+                var nm = it.name;
+                if (!/\.pdf$/i.test(nm)) continue;
+                added.push({ _id: ++_rowSeq, name: nm, path: (it.path || it.webkitRelativePath || nm), pending: true });
+            }
+            if (!added.length) return;
+            rows = rows.concat(added);
+            renderTable();
+            startProcessing();
+        }
+
+        // Postupné (progresivní) zpracování – jeden dokument za druhým
+        var _processing = false;
+        function startProcessing() {
+            if (_processing) return;
+            _processing = true;
             showProgress(true);
-            var i = from;
-            var batch = to - from;
-            var delay = Math.max(40, Math.min(160, Math.floor(2500 / Math.max(1, batch))));
             function step() {
-                if (i >= to) { updateProgress(); setTimeout(function () { showProgress(false); }, 500); renderTable(); return; }
-                resolveRow(rows[i]); i++;
+                var next = null;
+                for (var i = 0; i < rows.length; i++) { if (rows[i].pending) { next = rows[i]; break; } }
+                if (!next) {
+                    _processing = false; updateProgress(); renderTable();
+                    setTimeout(function () { showProgress(false); }, 600);
+                    return;
+                }
+                var remaining = rows.filter(function (r) { return r.pending; }).length;
+                var delay = Math.max(60, Math.min(300, Math.floor(3000 / Math.max(1, remaining))));
+                resolveRow(next);
                 updateProgress(); renderTable();
                 setTimeout(step, delay);
             }
@@ -351,6 +455,7 @@
         }
 
         function hashStr(s) { var h = 0; for (var i = 0; i < s.length; i++) { h = (h * 31 + s.charCodeAt(i)) >>> 0; } return h; }
+        function pad2(n) { return (n < 10 ? '0' : '') + n; }
         function resolveRow(r) {
             var h = hashStr(r.name);
             r.pdfa = (h % 100) < 45;
@@ -359,6 +464,15 @@
             r.timestamp = (Math.floor(h / 29) % 100) < 72;
             r.signer = r.ear ? SIGNERS[h % SIGNERS.length] : '';
             r.ok = r.pdfa && r.notLocked && r.ear && r.timestamp;
+            // detailní (simulovaná) data
+            r.ca = CAS[Math.floor(h / 3) % CAS.length];
+            var mo = 1 + (Math.floor(h / 5) % 12), da = 1 + (Math.floor(h / 11) % 27);
+            var hh = 8 + (Math.floor(h / 17) % 9), mi = Math.floor(h / 23) % 60;
+            r.signDate = da + '. ' + mo + '. 2025 ' + pad2(hh) + ':' + pad2(mi);
+            r.certFrom = '21. 5. 2024';
+            r.certTo = '10. 6. 2027';
+            r.tsa = 'PostSignum, Česká pošta, s.p.';
+            r.pdfaError = r.pdfa ? '' : PDFA_ERRORS[Math.floor(h / 13) % PDFA_ERRORS.length];
             r.pending = false;
         }
 
@@ -369,7 +483,7 @@
                 return '<tr><td><span class="od-spin"></span></td><td class="od-fname" title="' + esc(r.path) + '">' + esc(r.name) + '</td><td class="od-pending-cell" colspan="5">Ověřuji…</td></tr>';
             }
             var badge = r.ok ? '<span class="od-badge od-badge-ok">Vyhovuje</span>' : '<span class="od-badge od-badge-bad">Nevyhovuje</span>';
-            return '<tr>' +
+            return '<tr class="od-row-clickable" onclick="openDetail(' + r._id + ')">' +
                 '<td>' + badge + '</td>' +
                 '<td class="od-fname" title="' + esc(r.path) + '">' + esc(r.name) + '</td>' +
                 '<td>' + chk(r.pdfa) + '</td>' +
@@ -429,6 +543,51 @@
             document.body.appendChild(a); a.click(); document.body.removeChild(a);
             URL.revokeObjectURL(url);
         }
+
+        // ===== DETAIL KONTROLY =====
+        function odCheckRow(ok, label, desc, reason) {
+            return '<div class="od-d-check">' +
+                '<span class="od-d-check-ic ' + (ok ? 'ok' : 'bad') + '">' + (ok ? '✓' : '✗') + '</span>' +
+                '<div class="od-d-check-main"><div class="od-d-check-label">' + label + '</div>' +
+                '<div class="od-d-check-desc">' + desc + '</div>' +
+                (!ok && reason ? '<div class="od-d-check-reason">' + reason + '</div>' : '') +
+                '</div></div>';
+        }
+        function odField(l, v) { return '<div><div class="od-d-field-label">' + l + '</div><div class="od-d-field-val">' + esc(v) + '</div></div>'; }
+        function openDetail(id) {
+            var r = null;
+            for (var i = 0; i < rows.length; i++) { if (rows[i]._id === id) { r = rows[i]; break; } }
+            if (!r || r.pending) return;
+            var badge = r.ok ? '<span class="od-badge od-badge-ok">Vyhovuje</span>' : '<span class="od-badge od-badge-bad">Nevyhovuje</span>';
+            var html = '<div class="od-d-file">' + esc(r.name) + '</div>' + badge;
+            html += '<div class="od-d-sec"><div class="od-d-sec-title">Kontrolované parametry</div>';
+            html += odCheckRow(r.pdfa, 'Formát PDF/A-3b', 'Formát pro dlouhodobou archivaci a strojové zpracování dokumentu.', r.pdfaError);
+            html += odCheckRow(r.notLocked, 'Dokument není uzamčen', 'Otevřený pro připojení dalších podpisů a příloh.', r.notLocked ? '' : 'Dokument je uzamčen proti změnám.');
+            html += odCheckRow(r.ear, 'Autorizační razítko (EAR)', 'Elektronické autorizační razítko autorizované osoby (ČKAIT / ČKA).', r.ear ? '' : 'Dokument neobsahuje autorizační razítko.');
+            html += odCheckRow(r.timestamp, 'Časové razítko', 'Kvalifikované časové razítko dokládající čas podpisu.', r.timestamp ? '' : 'Chybí kvalifikované časové razítko.');
+            html += '</div>';
+            if (r.ear) {
+                html += '<div class="od-d-sec"><div class="od-d-sec-title">Autorizační razítko</div>' +
+                    '<div class="od-d-badges-row"><span class="od-d-badge green">Platný</span><span class="od-d-badge blue">Kvalifikovaný</span><span class="od-d-badge green">Aut. razítko</span><span class="od-d-badge green">EU TSL</span></div>' +
+                    '<div class="od-d-grid">' +
+                    odField('Podepsal', r.signer) + odField('Datum podpisu', r.signDate) +
+                    odField('Certifikát vydal', r.ca) + odField('Platnost certifikátu', r.certFrom + ' – ' + r.certTo) +
+                    '</div></div>';
+            }
+            if (r.timestamp) {
+                html += '<div class="od-d-sec"><div class="od-d-sec-title">Časové razítko</div>' +
+                    '<div class="od-d-badges-row"><span class="od-d-badge green">Ano</span><span class="od-d-badge blue">Kvalifikované</span><span class="od-d-badge green">EU TSL</span></div>' +
+                    '<div class="od-d-grid">' +
+                    odField('Autorita časového razítka', r.tsa) + odField('Čas', r.signDate) +
+                    '</div></div>';
+            }
+            html += '<div class="od-d-note">Ukázková (simulovaná) data prototypu. Skutečný systém by hodnoty načetl z ověření dokumentu.</div>';
+            document.getElementById('detailBody').innerHTML = html;
+            document.getElementById('detailOverlay').classList.add('show');
+        }
+        function closeDetail() { document.getElementById('detailOverlay').classList.remove('show'); }
+        document.getElementById('detailOverlay').addEventListener('click', function (e) { if (e.target === this) closeDetail(); });
+        document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeDetail(); });
     </script>
 
     <!-- ===== NÁPOVĚDA K PROTOTYPU ===== -->
